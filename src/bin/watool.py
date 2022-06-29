@@ -9,18 +9,19 @@
 # See the README for documentation.
 #
 
+import json
 import os
 import sys
-import json
-from uuid import uuid4
+
 from textwrap import indent
+from uuid import uuid4
 
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from ibm_watson import AssistantV2
 from ruamel.yaml import YAML
 
 
-def get_assistant_service(config_fn='config.json'):
+def get_assistant_service(config_fn="config.json"):
     # Credentials are read from a file
     with open(config_fn) as file:
         config = json.load(file)
@@ -43,34 +44,34 @@ def match_response(pattern, output, context):
     if not pattern:
         return matches
 
-    intent = output['intents'][0]
-    if intent['confidence'] < 0.5:
-        if output['entities']:
+    intent = output["intents"][0]
+    if intent["confidence"] < 0.5:
+        if output["entities"]:
             intent = {
-                'intent': 'entity_recognition',
-                'confidence': 1,
+                "intent": "entity_recognition",
+                "confidence": 1,
             }
         else:
             intent = {
-                'intent': None,
-                'confidence': 1 - intent['confidence'],
+                "intent": None,
+                "confidence": 1 - intent["confidence"],
             }
 
     print(f"<MATCH>: {intent} <-> {pattern}")
-    if 'intent' in pattern:
-        matches = matches and intent['intent'] == pattern['intent']
+    if "intent" in pattern:
+        matches = matches and intent["intent"] == pattern["intent"]
 
-    if 'confidence' in pattern:
-        matches = matches and intent['confidence'] >= pattern['confidence']
+    if "confidence" in pattern:
+        matches = matches and intent["confidence"] >= pattern["confidence"]
 
-    if 'entities' in pattern:
-        entities = {e['entity']: e for e in output['entities']}
-        for pat in pattern['entities']:
-            if pat['name'] in entities:
-                if 'value' in pat:
-                    matches = matches and entities[pat['name']]['value'] == pat['value']
-                if 'confidence' in pat:
-                    matches = matches and entities[pat['name']]['confidence'] >= pat['confidence']
+    if "entities" in pattern:
+        entities = {e["entity"]: e for e in output["entities"]}
+        for pat in pattern["entities"]:
+            if pat["name"] in entities:
+                if "value" in pat:
+                    matches = matches and entities[pat["name"]]["value"] == pat["value"]
+                if "confidence" in pat:
+                    matches = matches and entities[pat["name"]]["confidence"] >= pat["confidence"]
             else:
                 matches = False
 
@@ -81,41 +82,41 @@ def match_response(pattern, output, context):
 
 def get_text(output):
     generic = get_generic(output)[0]
-    title = generic.get('title', '')
-    return '\n'.join([title] + [response_to_str(o) for o in get_responses(output)])
+    title = generic.get("title", "")
+    return "\n".join([title] + [response_to_str(o) for o in get_responses(output)])
 
 
 def get_generic(output):
-    generic = output['generic']
+    generic = output["generic"]
 
-    if 'suggestions' in generic[0]:
-        generic = generic['suggestions'][0]['output']['generic']
+    if "suggestions" in generic[0]:
+        generic = generic["suggestions"][0]["output"]["generic"]
 
     return generic
 
 
 def get_responses(output):
-    generic = output['generic'][0]
+    generic = output["generic"][0]
 
-    if 'suggestions' in generic:
-        return generic['suggestions'][0]['output']['generic']
+    if "suggestions" in generic:
+        return generic["suggestions"][0]["output"]["generic"]
 
     return [generic]
 
 
 def response_to_str(response):
-    if 'text' in response:
-        return response['text']
+    if "text" in response:
+        return response["text"]
 
-    if 'options' in response:
+    if "options" in response:
         return f"<OPTIONS>: {', '.join(o['label'] for o in response['options'])}"
 
-    return '<UNK>'
+    return "<UNK>"
 
 
 # Start a dialog and converse with Watson
 def run_test(assistant_service, assistant_id, uuid, test):
-    context = test.get('initial_context', {}).copy()
+    context = test.get("initial_context", {}).copy()
 
     # create a new session
     response = assistant_service.create_session(assistant_id=assistant_id).get_result()
@@ -126,10 +127,10 @@ def run_test(assistant_service, assistant_id, uuid, test):
     os.makedirs(log_dn, exist_ok=False)
 
     # Now loop to chat
-    for step_n, step in enumerate(test['steps']):
+    for step_n, step in enumerate(test["steps"]):
         print(f"step {step_n}: {step}\n")
         # get some input
-        minput = step['query']
+        minput = step["query"]
         # if we catch a "bye" then exit after deleting the session
         if minput == "bye":
             response = assistant_service.delete_session(assistant_id=assistant_id, session_id=session_id).get_result()
@@ -149,12 +150,12 @@ def run_test(assistant_service, assistant_id, uuid, test):
             context = resp["context"]
 
         # Dump the returned answer
-        with open(f"{log_dn}/{step_n:03d}-response.json", 'w') as file:
+        with open(f"{log_dn}/{step_n:03d}-response.json", "w") as file:
             print(f"logging step response into {file.name} ...")
             json.dump(resp, file, indent=2, ensure_ascii=False)
 
         # Dump the returned answer
-        with open(f"{log_dn}/{step_n:03d}-context.json", 'w') as file:
+        with open(f"{log_dn}/{step_n:03d}-context.json", "w") as file:
             print(f"logging step context into {file.name} ...\n")
             json.dump(context, file, indent=2, ensure_ascii=False)
 
@@ -192,9 +193,9 @@ def run_test(assistant_service, assistant_id, uuid, test):
         print(f"<INTENTS>: {', '.join([i['intent'] + ':' + str(i['confidence']) for i in output['intents']])}")
         print(f"<ENTITIES>: {', '.join([e['entity'] + ':' + e['value'] + ':' + str(e['confidence']) for e in output['entities']])}")
 
-        print('\n')
-        assert match_response(step.get('response', None), output, context)
-        print('\n')
+        print("\n")
+        assert match_response(step.get("response", None), output, context)
+        print("\n")
 
 
 def main():
@@ -202,15 +203,15 @@ def main():
     assistant_service = get_assistant_service()
     test_fn = sys.argv[1]
 
-    yaml = YAML(typ='safe')   # default, if not specfied, is 'rt' (round-trip)
+    yaml = YAML(typ="safe")  # default, if not specfied, is 'rt' (round-trip)
     with open(test_fn) as file:
         tests = yaml.load(file)
 
     print(tests)
 
     uuid = uuid4()
-    for test in tests['tests']:
-        run_test(assistant_service, tests['config']['assistant_id'], uuid, test)
+    for test in tests["tests"]:
+        run_test(assistant_service, tests["config"]["assistant_id"], uuid, test)
 
 
 if __name__ == "__main__":
