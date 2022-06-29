@@ -1,7 +1,32 @@
 config:
   assistant_id: 75ee9c37-df5d-47fc-bf2e-123b8aad578d
 
-tests:
+entities:
+  tipo_dieta:
+    Dieta ovolacteovegetariana:
+      - ovolacteovegetariano
+      - ovolacteo
+      - huevos y leche pero no carne
+      - vegetariano pero con huevos y leche
+    Dieta vegana:
+      - vegana
+      - veggie
+      - vegano puro y duro
+      - del animal nada de nada
+    no consumo carne:
+      - no consumo carne
+      - no como carne
+      - la carne no me mola
+      - la carne me da asco
+      - la carne me causa indigestión
+    No, mi dieta no tiene ninguna particularidad:
+      - nada
+      - ninguna
+      - no
+      - soy normalito del montón
+      - lo que caiga
+
+dialogs:
 
   - name: dont_understand
     initial_context: {}
@@ -42,7 +67,7 @@ tests:
         response:
           intent: entity_recognition
           confidence: 0.7
-      - query: no carne
+      - query: no como carne
         response:
           intent: entity_recognition
           confidence: 0.7

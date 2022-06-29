@@ -11,10 +11,10 @@
 
 import json
 import os
-import sys
 
 from textwrap import indent
 from uuid import uuid4
+import typer
 
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from ibm_watson import AssistantV2
@@ -115,6 +115,59 @@ def response_to_str(response):
 
 
 # Start a dialog and converse with Watson
+def run_entity_test(assistant_service, assistant_id, uuid, entity, test):
+    # create a new session
+    response = assistant_service.create_session(assistant_id=assistant_id).get_result()
+    session_id = response["session_id"]
+    print("Session created!\n")
+
+    log_dn = f"./logs/{uuid}/{session_id}"
+    os.makedirs(log_dn, exist_ok=False)
+
+    good = 0
+    total = 0
+
+    # Now loop to chat
+    for step_n, (label, texts) in enumerate(test.items()):
+        print(f"entity {entity} -> {label}: {texts}\n")
+        total += len(texts)
+
+        for minput in texts:
+            # if we catch a "bye" then exit after deleting the session
+            if minput == "bye":
+                response = assistant_service.delete_session(assistant_id=assistant_id, session_id=session_id).get_result()
+                print("Session deleted. Bye...")
+                break
+
+            # send the input to Watson Assistant
+            # Set alternate_intents to False for less output
+            resp = assistant_service.message(
+                assistant_id=assistant_id,
+                session_id=session_id,
+                input={"text": minput, "options": {"alternate_intents": True, "return_context": True, "debug": True}},
+            ).get_result()
+
+            # Dump the returned answer
+            with open(f"{log_dn}/{step_n:03d}-response.json", "w") as file:
+                print(f"logging step response into {file.name} ...")
+                json.dump(resp, file, indent=2, ensure_ascii=False)
+
+            output = resp["output"]
+            print(f"<ENTITIES>: {', '.join([e['entity'] + ':' + e['value'] + ':' + str(e['confidence']) for e in output['entities']])}")
+
+            has_intent = output['intents'][0]['confidence'] >= 0.5
+            entity_value = next((e for e in output['entities'] if e['entity'] == entity), None)
+            print(f"{entity}: {label}: {minput} -> {entity_value['value'] if entity_value else None}")
+            if entity_value and entity_value['value'] == label and not has_intent:
+                good += 1
+    response = assistant_service.delete_session(assistant_id=assistant_id, session_id=session_id).get_result()
+
+    if good != test:
+        return f"Accuracy for @{entity}: {good} / {total} = {100*good/total:.1f}%"
+    return
+
+
+# Start a dialog and converse with Watson
 def run_test(assistant_service, assistant_id, uuid, test):
     context = test.get("initial_context", {}).copy()
 
@@ -127,7 +180,7 @@ def run_test(assistant_service, assistant_id, uuid, test):
     os.makedirs(log_dn, exist_ok=False)
 
     # Now loop to chat
-    for step_n, step in enumerate(test["steps"]):
+    for step_n, step in enumerate(test['steps']):
         print(f"step {step_n}: {step}\n")
         # get some input
         minput = step["query"]
@@ -194,25 +247,49 @@ def run_test(assistant_service, assistant_id, uuid, test):
         print(f"<ENTITIES>: {', '.join([e['entity'] + ':' + e['value'] + ':' + str(e['confidence']) for e in output['entities']])}")
 
         print("\n")
-        assert match_response(step.get("response", None), output, context)
+        if not match_response(step.get("response", None), output, context):
+            print("\n")
+            return f"error in step {step_n} with query '{minput}'"
         print("\n")
+    return
 
 
-def main():
+def main(test_fn: str):
+    typer.echo(f"Processing {test_fn}")
+
     # load configuration and initialize Watson
     assistant_service = get_assistant_service()
-    test_fn = sys.argv[1]
 
     yaml = YAML(typ="safe")  # default, if not specfied, is 'rt' (round-trip)
     with open(test_fn) as file:
         tests = yaml.load(file)
 
-    print(tests)
-
     uuid = uuid4()
-    for test in tests["tests"]:
-        run_test(assistant_service, tests["config"]["assistant_id"], uuid, test)
+
+    results = []
+
+    for entity, test in tests["entities"].items():
+        reason = run_entity_test(assistant_service, tests["config"]["assistant_id"], uuid, entity, test)
+        if reason:
+            formatted = typer.style(f"✗ test for entity '@{entity}' failed: {reason}", fg=typer.colors.RED, bold=True)
+        else:
+            formatted = typer.style(f"✔ test for entity '@{entity}' succeeded.", fg=typer.colors.GREEN, bold=True)
+        results.append(formatted)
+        typer.echo(formatted)
+
+    for test in tests["dialogs"]:
+        reason = run_test(assistant_service, tests["config"]["assistant_id"], uuid, test)
+        if reason:
+            formatted = typer.style(f"✗ test for dialog '{test['name']}' failed: {reason}", fg=typer.colors.RED, bold=True)
+        else:
+            formatted = typer.style(f"✔ test for dialog '{test['name']}' succeeded.", fg=typer.colors.GREEN, bold=True)
+        results.append(formatted)
+        typer.echo(formatted)
+
+    typer.echo(typer.style("\nSummary:", fg=typer.colors.WHITE, bold=True))
+    for test in results:
+        typer.echo(test)
 
 
 if __name__ == "__main__":
-    main()
+    typer.run(main)
