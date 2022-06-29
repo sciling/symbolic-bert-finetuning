@@ -1,0 +1,61 @@
+config:
+  assistant_id: 75ee9c37-df5d-47fc-bf2e-123b8aad578d
+
+tests:
+
+  - name: dont_understand
+    initial_context: {}
+    steps:
+      - query: el trabajo del trilero
+        response:
+          intent: null
+      - query: bye
+
+  - name: basic
+    initial_context: {}
+    steps:
+      - query: ¡Comenzar!
+        response:
+          intent: welcome
+          confidence: 0.7
+      - query: vamos
+        response:
+          intent: onboarding
+          confidence: 0.7
+      - query: "175"
+        response:
+          intent: entity_recognition
+          confidence: 0.7
+      - query: 80 kilos
+        response:
+          intent: entity_recognition
+          confidence: 0.7
+      - query: 60cm, tengo un figurín de escándalo
+        response:
+          intent: entity_recognition
+          confidence: 0.7
+      - query: 60 centímetros atontao
+        response:
+          intent: entity_recognition
+          confidence: 0.7
+      - query: "90"
+        response:
+          intent: entity_recognition
+          confidence: 0.7
+      - query: no carne
+        response:
+          intent: entity_recognition
+          confidence: 0.7
+          entities:
+            - name: tipo_dieta
+              value: no consumo carne
+              confidence: 0.7
+      - query: no que yo sepa
+        response:
+          intent: entity_recognition
+          confidence: 0.7
+          entities:
+            - name: alergia
+              value: no
+              confidence: 0.7
+      - query: bye

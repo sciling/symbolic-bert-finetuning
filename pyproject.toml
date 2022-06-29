@@ -1,0 +1,140 @@
+[tool.poetry]
+name = "ibm_watson_test"
+version = "0.1.0"
+description = ""
+authors = ["Vicent Alabau <valabau@sciling.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+ibm-watson = "^6.0.0"
+"ruamel.yaml" = "^0.17.21"
+
+[tool.poetry.dev-dependencies]
+autopep8 = "==1.5.7"
+bandit = "==1.7.0"
+black = "==22.3.0"
+boto3-stubs = {version= '==1.18.30', extras= ['s3', 'sqs', 'essential', 'iam', 'eks', 'organizations']}
+coverage = "==5.5"
+dependency-check = "==0.6.0"
+flake8 = "==3.9.2"
+isort = "==5.10.1"
+ipykernel = "5.5.6"
+liccheck = "==0.6.5"
+moto = "==2.2.16"
+mypy = "==0.961"
+pylint = "==3.0.0a4"
+pytest = "==6.2.4"
+pytest-cov = "==2.12.1"
+pytest-mock = "==3.6.1"
+pytest-reraise = "==2.1.1"
+pytest-xdist = "==2.3.0"
+safety = "==1.10.3"
+twine = "==3.6.0"
+poethepoet = "==0.13.1"
+kaleido = "==0.2.1"
+plotly-express = "==0.4.1"
+pre-commit = "==2.19.0"
+packaging = "==21.3"
+shellcheck-py = "==0.8.0.4"
+types-python-dateutil = "==2.8.17"
+CairoSVG = "==2.5.2"
+python-sonarqube-api = "==1.3.0"
+cfn-lint = "==0.60.0"
+cfn-flip = "==1.3.0"
+"ruamel.yaml" = "==0.17.21"
+toml = "==0.10.2"
+PyInquirer = "==1.0.3"
+ipython = "==5.8.0"
+prompt-toolkit = "==1.0.14"
+aws-lambda-powertools = "==1.26.1"
+coloredlogs = "==15.0.1"
+simple-term-menu = "==1.4.1"
+eks = "==0.1.1"
+
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+profile = "black"
+sections = ['FUTURE', 'STDLIB', 'THIRDPARTY', 'FIRSTPARTY', 'LOCALFOLDER']
+force_single_line = true
+atomic = true
+include_trailing_comma = true
+lines_after_imports = 2
+lines_between_types = 1
+use_parentheses = true
+skip_glob = ["/setup.py"]
+filter_files = true
+
+
+[tool.black]
+line-length = 160
+include = '.pyi?$'
+
+[tool.coverage.run]
+omit = [
+  ".venv/*",
+  "tests/*",
+  "**/__main__.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:"
+]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "--cov=. --cov-report xml:.reports/coverage.xml --cov-report html:.reports/htmlcov  --verbose --capture=no -p no:sugar"
+testpaths = [
+    "tests",
+]
+
+
+[tool.liccheck]
+# Authorized and unauthorized licenses in LOWER CASE
+authorized_licenses = [
+    "bsd",
+    "new bsd",
+    "bsd license",
+    "new bsd license",
+    "simplified bsd",
+    "3-clause bsd",
+    "BSD-3-Clause",
+    "apache",
+    "apache 2.0",
+    "apache license 2.0",
+    "apache software license",
+    "asl",
+    "asl 2",
+    "apache-software",
+    "apache software",
+    "gnu lgpl",
+    "lgpl",
+    "lgpl with exceptions or zpl",
+    "GNU Library or Lesser General Public License (LGPL)",
+    "lgplv2",
+    "lgplv2+",
+    "GNU Lesser General Public License v2 or later (LGPLv2+)",
+    "isc license",
+    "isc license (iscl)",
+    "mit",
+    "mit license",
+    "mozilla public license 1.1 (mpl 1.1)",
+    "mozilla public license 2.0 (mpl 2.0)",
+    "mpl-2.0",
+    "python software foundation license",
+    "python software foundation",
+    "psf",
+    "public domain <http://unlicense.org>",
+    "zpl 2.1",
+]
+
+unauthorized_licenses = [
+    "gpl v2",
+    "gpl v3",
+    "gpl version 2",
+]
