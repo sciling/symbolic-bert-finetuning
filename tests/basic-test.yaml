@@ -34,7 +34,6 @@ dialogs:
       - query: el trabajo del trilero
         response:
           intent: null
-      - query: bye
 
   - name: basic
     initial_context: {}
@@ -83,4 +82,3 @@ dialogs:
             - name: alergia
               value: no
               confidence: 0.7
-      - query: bye

@@ -14,6 +14,7 @@ import os
 
 from textwrap import indent
 from uuid import uuid4
+
 import typer
 
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
@@ -127,6 +128,7 @@ def run_entity_test(assistant_service, assistant_id, uuid, entity, test):
     good = 0
     total = 0
 
+    error = None
     # Now loop to chat
     for step_n, (label, texts) in enumerate(test.items()):
         print(f"entity {entity} -> {label}: {texts}\n")
@@ -155,16 +157,16 @@ def run_entity_test(assistant_service, assistant_id, uuid, entity, test):
             output = resp["output"]
             print(f"<ENTITIES>: {', '.join([e['entity'] + ':' + e['value'] + ':' + str(e['confidence']) for e in output['entities']])}")
 
-            has_intent = output['intents'][0]['confidence'] >= 0.5
-            entity_value = next((e for e in output['entities'] if e['entity'] == entity), None)
+            has_intent = output["intents"][0]["confidence"] >= 0.5
+            entity_value = next((e for e in output["entities"] if e["entity"] == entity), None)
             print(f"{entity}: {label}: {minput} -> {entity_value['value'] if entity_value else None}")
-            if entity_value and entity_value['value'] == label and not has_intent:
+            if entity_value and entity_value["value"] == label and not has_intent:
                 good += 1
     response = assistant_service.delete_session(assistant_id=assistant_id, session_id=session_id).get_result()
 
     if good != test:
-        return f"Accuracy for @{entity}: {good} / {total} = {100*good/total:.1f}%"
-    return
+        error = f"Accuracy for @{entity}: {good} / {total} = {100*good/total:.1f}%"
+    return error
 
 
 # Start a dialog and converse with Watson
@@ -175,20 +177,16 @@ def run_test(assistant_service, assistant_id, uuid, test):
     response = assistant_service.create_session(assistant_id=assistant_id).get_result()
     session_id = response["session_id"]
     print("Session created!\n")
+    error = None
 
     log_dn = f"./logs/{uuid}/{session_id}"
     os.makedirs(log_dn, exist_ok=False)
 
     # Now loop to chat
-    for step_n, step in enumerate(test['steps']):
+    for step_n, step in enumerate(test["steps"]):
         print(f"step {step_n}: {step}\n")
         # get some input
         minput = step["query"]
-        # if we catch a "bye" then exit after deleting the session
-        if minput == "bye":
-            response = assistant_service.delete_session(assistant_id=assistant_id, session_id=session_id).get_result()
-            print("Session deleted. Bye...")
-            break
 
         # send the input to Watson Assistant
         # Set alternate_intents to False for less output
@@ -249,9 +247,14 @@ def run_test(assistant_service, assistant_id, uuid, test):
         print("\n")
         if not match_response(step.get("response", None), output, context):
             print("\n")
-            return f"error in step {step_n} with query '{minput}'"
+            error = f"error in step {step_n} with query '{minput}'"
+            break
         print("\n")
-    return
+
+    # if we catch a "bye" then exit after deleting the session
+    response = assistant_service.delete_session(assistant_id=assistant_id, session_id=session_id).get_result()
+    print("Session deleted. Bye...")
+    return error
 
 
 def main(test_fn: str):
