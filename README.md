@@ -12,8 +12,12 @@ config.json
 }
 ```
 
-```
+```bash
 make virtual-environment
 poetry run src/bin/watool.py test tests/basic-test.yaml
 ```
 
+Convert template into watson assistant compatible json:
+```bash
+poetry run src/bin/watool.py apply chatbots/cu2-contamos-contigo/sections/faq.yml --flatten --to-json
+```
