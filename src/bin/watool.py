@@ -583,8 +583,8 @@ def apply(config_fn: str, to_json: bool = False, flatten: bool = False):
 
     env = Environment(
         extensions=[
-            "jinja2_ansible_filters.AnsibleCoreFiltersExtension",
             "jinja2.ext.do",
+            "jinja2_ansible_filters.AnsibleCoreFiltersExtension",
         ],
         loader=FileSystemLoader("templates"),
         autoescape=select_autoescape(),
