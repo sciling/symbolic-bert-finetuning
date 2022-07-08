@@ -1,0 +1,112 @@
+{%- set faqs = {} %}
+{%- for question in questions %}
+  {%- do faqs.update({question.id: question}) %}
+{%- endfor %}
+type: standard
+title: {{title}}
+output:
+  generic:
+    - title: {{description}}
+      response_type: option
+      options:
+        {%- for suggestion in suggestions %}
+        {%- set option = faqs.get(suggestion)  %}
+        {% if not option %}
+        < missing question: {{option}} >
+        {%  endif -%}
+        - label: {{option.title}}
+          value:
+            input:
+              text: {{suggestion}}
+        {% endfor %}
+    - title: ''
+      description: ''
+      options:
+        - label: Quiero dar mi opinión 🤔
+          value:
+            input:
+              text: Dar opinión
+        - label: Volver al inicio
+          value:
+            input:
+              text: ir a inicio
+      response_type: option
+context:
+  know_more: 0
+  {%- if context %}
+  {{context | to_nice_yaml}}
+  {% endif %}
+conditions: '#{{intent.name}}'
+dialog_node: faq_node_{{intent.name}}
+children:
+{%- for question in questions %}
+  - type: standard
+    title: {{question.title}}
+    dialog_node: faq_node_{{intent.name}}_{{question.intent.name}}
+    metadata:
+      _customization:
+        mcr: true
+    conditions: '#{{question.intent.name}}'
+    children:
+      - type: response_condition
+        conditions: $know_more:0
+        dialog_node: faq_node_{{intent.name}}_{{question.intent.name}}_response
+        output:
+          generic:
+            {%- for response in question.response %}
+            {%- if response.text %}
+            - response_type: text
+              selection_policy: sequential
+              values:
+                - text: {{response.text | tojson }}
+            {% elif response.pause -%}
+            - response_type: pause
+              time: {{response.pause}}
+              typing: true
+            {% endif %}
+            {% endfor %}
+            {% if question.followup %}
+            - title: ''
+              response_type: option
+              options:
+                {% for suggestion in question.followup %}
+                {% set option = faqs.get(suggestion)  %}
+                {% if not option %}
+                < missing question: {{suggestion}} >
+                {% endif %}
+                - label: {{option.title}}
+                  value:
+                    input:
+                      text: {{suggestion}}
+                {% endfor %}
+                - label: Quiero volver al inicio
+                  value:
+                    input:
+                      text: ¿Para qué sirve este asistente?
+            {% endif %}
+      {%- if question.followup %}
+      - type: response_condition
+        output:
+          generic:
+            - title: ¿Quieres más información?
+              response_type: option
+              options:
+                {% for suggestion in question.followup %}
+                {% set option = faqs.get(suggestion)  %}
+                {% if not option %}
+                < missing question: {{suggestion}} >
+                {%  endif %}
+                - label: {{option.title}}
+                  value:
+                    input:
+                      text: {{suggestion}}
+                {% endfor %}
+                - label: Quiero volver al inicio
+                  value:
+                    input:
+                      text: ¿Para qué sirve este asistente?
+        conditions: $know_more:1
+        dialog_node: faq_node_{{intent.name}}_{{question.intent.name}}_more_info
+        previous_sibling: faq_node_{{intent.name}}_{{question.intent.name}}_response
+      {%- endif %}
+{%- endfor %}

@@ -1,39 +1,40 @@
-config:
-  assistant_id: 75ee9c37-df5d-47fc-bf2e-123b8aad578d
+---
+config  :
+    assistant_id: 75ee9c37-df5d-47fc-bf2e-123b8aad578d
 
 entities:
-  tipo_dieta:
-    Dieta ovolacteovegetariana:
-      - ovolacteovegetariano
-      - ovolacteo
-      - huevos y leche pero no carne
-      - vegetariano pero con huevos y leche
-    Dieta vegana:
-      - vegana
-      - veggie
-      - vegano puro y duro
-      - del animal nada de nada
-    no consumo carne:
-      - no consumo carne
-      - no como carne
-      - la carne no me mola
-      - la carne me da asco
-      - la carne me causa indigestión
-    No, mi dieta no tiene ninguna particularidad:
-      - nada
-      - ninguna
-      - no
-      - soy normalito del montón
-      - lo que caiga
+    tipo_dieta:
+        Dieta ovolacteovegetariana:
+          - ovolacteovegetariano
+          - ovolacteo
+          - huevos y leche pero no carne
+          - vegetariano pero con huevos y leche
+        Dieta vegana:
+          - vegana
+          - veggie
+          - vegano puro y duro
+          - del animal nada de nada
+        no consumo carne:
+          - no consumo carne
+          - no como carne
+          - la carne no me mola
+          - la carne me da asco
+          - la carne me causa indigestión
+        No, mi dieta no tiene ninguna particularidad:
+          - nada
+          - ninguna
+          - no
+          - soy normalito del montón
+          - lo que caiga
 
-dialogs:
+dialogs :
 
   - name: dont_understand
     initial_context: {}
     steps:
       - query: el trabajo del trilero
         response:
-          intent: null
+          intent:
 
   - name: basic
     initial_context: {}
@@ -46,7 +47,7 @@ dialogs:
         response:
           intent: onboarding
           confidence: 0.7
-      - query: "175"
+      - query: '175'
         response:
           intent: entity_recognition
           confidence: 0.7
@@ -62,7 +63,7 @@ dialogs:
         response:
           intent: entity_recognition
           confidence: 0.7
-      - query: "90"
+      - query: '90'
         response:
           intent: entity_recognition
           confidence: 0.7

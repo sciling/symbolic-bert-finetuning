@@ -6,7 +6,7 @@ config.json
     "credentials": {
         "version": "2017-05-26",
         "versionV2": "2018-11-08",
-        "apikey": "XXXXXX",
+        "apikey": "XXXXXX",  # pragma: allowlist secret
         "url": "https://XXXXXX.watson.cloud.ibm.com/instances/XXXXXX"
     }
 }
@@ -14,6 +14,6 @@ config.json
 
 ```
 make virtual-environment
-poetry run src/bin/watool.py tests/basic-test.yaml
+poetry run src/bin/watool.py test tests/basic-test.yaml
 ```
 

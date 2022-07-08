@@ -1,0 +1,128 @@
+type: standard
+title: {{title}}
+output:
+  generic:
+    - values:
+        {%- if description is string %}
+        - text: {{description}}
+        {%- else %}
+        {%- for text in description %}
+        - text: {{text}}
+        {%- endfor %}
+        {%- endif %}
+      response_type: text
+      selection_policy: sequential
+context:
+  {{context | to_nice_yaml}}
+next_step:
+  behavior: skip_user_input
+conditions: '#par_q || true'
+digress_in: does_not_return
+dialog_node: {{id}}-base-node
+disambiguation_opt_out: true
+children:
+  {%- set qs = {} %}
+  {%- for question in questions %}
+    {%- do qs.update({loop.index: question}) %}
+  {%- endfor %}
+
+  {%- for question in questions %}
+  {%- if loop.last %}
+    {%- set next = id + "-exit" %}
+  {%- else %}
+    {%- set next = id + "-node-question-" + loop.index|string %}
+  {%- endif %}
+  - type: standard
+    title: {{question.title}}
+    output:
+      generic:
+        - title: {{question.title}}
+          options:
+            - label: Sí
+              value:
+                input:
+                  text: '@bool:Sí'
+            - label: No
+              value:
+                input:
+                  text: '@bool:No'
+          response_type: option
+    conditions: 'true'
+    dialog_node: {{id}}-node-question-{{loop.index}}
+    children:
+      - type: frame
+        title: Guardar respuesta
+        output:
+          generic: []
+        context:
+          {{question.context | to_nice_yaml}}
+        next_step:
+          behavior: jump_to
+          selector: condition
+          dialog_node: {{next}}
+        conditions: 'true'
+        dialog_node: {{id}}-node-question-{{loop.index}}-store-answer
+        disambiguation_opt_out: true
+        children:
+          - type: slot
+            output: {}
+            variable: {{question.variable}}
+            dialog_node: {{id}}-node-question-{{loop.index}}-slot
+            children:
+              - type: event_handler
+                output: {}
+                context:
+                  bool1: '@bool'
+                conditions: '@bool'
+                event_name: input
+                dialog_node: {{id}}-node-question-{{loop.index}}-handler-1
+              - type: event_handler
+                output:
+                  generic:
+                    - title: No te he entendido bien, responde sí o no. {{question.title}}
+                      options:
+                        - label: Sí
+                          value:
+                            input:
+                              text: '@bool:Sí'
+                        - label: No
+                          value:
+                            input:
+                              text: '@bool:No'
+                      response_type: option
+                event_name: focus
+                dialog_node: {{id}}-node-question-{{loop.index}}-handler-2
+                previous_sibling: {{id}}-node-question-{{loop.index}}-handler-1
+  {%- endfor %}
+  - type: standard
+    title: Fin {{title}}
+    metadata:
+      _customization:
+        mcr: true
+    next_step:
+      behavior: jump_to
+      selector: condition
+      dialog_node: {{exit_to}}
+    conditions: 'true'
+    dialog_node: {{id}}-exit
+    previous_sibling: {{id}}-node-question-{{questions|length|string}}
+    disambiguation_opt_out: true
+    children:
+      {%- for response in responses %}
+      - type: response_condition
+        output:
+          generic:
+            - values:
+                {%- for text in response.messages %}
+                - text: {{text}}
+                {%- endfor %}
+              response_type: text
+              selection_policy: multiline
+        context:
+          inicio: true
+        conditions: {{response.condition}}
+        dialog_node: {{id}}-node-response-{{loop.index}}
+        {%- if not loop.first %}
+        previous_sibling: {{id}}-node-response-{{loop.index - 1}}
+        {%- endif %}
+      {%- endfor %}

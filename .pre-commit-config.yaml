@@ -60,14 +60,18 @@ repos:
   #     - id: mypy
   #       args: [--ignore-missing-imports]
 
-  - repo: https://github.com/pre-commit/mirrors-pylint
-    rev: v3.0.0a4
+  - repo: local
     hooks:
       - id: pylint
+        name: pylint
+        entry: pylint
+        types: [python]
+        language: python
         args:
           - --rcfile=.pylintrc
           - --reports=no
           - --disable=W
+        include: ^.*\.py$
 
   - repo: https://github.com/python-poetry/poetry
     rev: '1.2.0b2'
