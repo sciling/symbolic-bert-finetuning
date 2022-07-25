@@ -16,7 +16,10 @@ import sys
 from collections import OrderedDict
 from collections import defaultdict
 from graphlib import TopologicalSorter
+from pathlib import Path
 from textwrap import indent
+from typing import List
+from typing import Optional
 from uuid import uuid4
 
 import ruamel.yaml
@@ -279,8 +282,8 @@ def run_test(assistant_service, assistant_id, uuid, test):
 
 
 @app.command(name="test")
-def test_cmd(test_fn: str):
-    typer.echo(f"Processing {test_fn}")
+def test_cmd(test_fn: Path, enabled_tests: Optional[List[str]] = typer.Argument(None)):
+    typer.echo(f"Processing {test_fn} -> {enabled_tests}")
 
     # load configuration and initialize Watson
     assistant_service = get_assistant_service()
@@ -294,6 +297,8 @@ def test_cmd(test_fn: str):
     results = []
 
     for entity, test in tests["entities"].items():
+        if enabled_tests and entity not in enabled_tests:
+            continue
         reason = run_entity_test(assistant_service, tests["config"]["assistant_id"], uuid, entity, test)
         if reason:
             formatted = typer.style(f"✗ test for entity '@{entity}' failed: {reason}", fg=typer.colors.RED, bold=True)
@@ -303,6 +308,8 @@ def test_cmd(test_fn: str):
         typer.echo(formatted)
 
     for test in tests["dialogs"]:
+        if enabled_tests and test["name"] not in enabled_tests:
+            continue
         reason = run_test(assistant_service, tests["config"]["assistant_id"], uuid, test)
         if reason:
             formatted = typer.style(f"✗ test for dialog '{test['name']}' failed: {reason}", fg=typer.colors.RED, bold=True)
