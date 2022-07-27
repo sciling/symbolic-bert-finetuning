@@ -1,0 +1,96 @@
+id: cu5
+name: cu5
+config:
+  assistant_id: f8923f44-6edb-45bb-ba8f-605e4d537826
+entities:
+  bool:
+    No: []
+    Si: []
+  cantidad_indeterminada:
+    algunas:
+      - alguna
+      - algunas veces
+      - alguno
+      - algunos
+      - alguns
+      - a veces
+      - aveces
+    bastantes:
+      - bastant
+      - bastante
+      - bstante
+    mucho:
+      - mcha
+      - mcho
+      - much
+      - muchas
+      - muchos
+    nada:
+      - nad
+      - nda
+    ninguna:
+      - cero
+      - ningun
+    pocas:
+      - poc
+      - poca
+      - poco
+  onboarding_habilidades_dificultades:
+    Conocer gente nueva:
+      - conocer gente
+      - gente nueva
+      - me da corte conocer gente nueva
+      - me da miedo conocer gente nueva
+      - me da palo conocer gente nueva
+      - me intimida conocer gente nueva
+      - me pongo nerviosa al conocer gente nueva
+      - me pongo nervioso al conocer gente nueva
+      - mu cesta conocer gente nueva
+      - no me atrevo a conocer gente nueva
+    Empezar conversaciones:
+      - conversaciones
+      - empezar conv
+      - empezar las conversaciones
+      - 'me bloqueo '
+      - me paralizo
+      - me pone nerviosa el silencio
+      - me pone nervioso el silencio
+      - me ponen nerviosa los silencios
+      - me ponen nervioso los silencios
+      - Nose que decir cuando la gente habla
+    Entender a los demás:
+      - a los demás
+      - 'entender '
+      - entender demás
+    Experimento nerviosismo:
+      - me pongo nerviosa
+      - me pongo nervioso
+      - nervios
+      - nerviosismo
+    Expresar lo que siento:
+      - expresar
+      - expresar lo que siento
+      - expresarse
+      - lo que siente
+      - lo que siento
+    Me siento diferente:
+      - algo diferente
+      - diferente
+      - soy diferente
+    Pedir Favores:
+      - ' da corte pedir favores'
+      - favores
+      - las personas fuertes no piden ayuda
+      - me da vergüenza pedir favores
+      - no debo pedir favores
+      - no me guta pedir favores
+      - no pido favores
+      - pedir un favor
+    Pedir información:
+      - información
+      - me da corte pedir informacion
+      - me da vergüenza pedir informacion
+      - 'no '
+      - no me entienden cuando hablo
+      - no se como pedir informacion
+      - pedir info

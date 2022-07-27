@@ -9,6 +9,7 @@
 # See the README for documentation.
 #
 
+import datetime
 import json
 import os
 import sys
@@ -22,6 +23,7 @@ from typing import List
 from typing import Optional
 from uuid import uuid4
 
+import requests
 import ruamel.yaml
 import typer
 import unidecode
@@ -58,10 +60,11 @@ def get_assistant_service(config_fn="config.json"):
 
     # Authentication via IAM
     authenticator = IAMAuthenticator(config_wa["apikey"])
+    print(authenticator)
 
     assistant_service = AssistantV2(authenticator=authenticator, version=config_wa["versionV2"])
     assistant_service.set_service_url(config_wa["url"])
-    return assistant_service
+    return assistant_service, config
 
 
 def match_response(pattern, output, context):
@@ -144,7 +147,7 @@ def run_entity_test(assistant_service, assistant_id, uuid, entity, test):
     # create a new session
     response = assistant_service.create_session(assistant_id=assistant_id).get_result()
     session_id = response["session_id"]
-    print("Session created!\n")
+    print(f"Session created ({session_id})!\n")
 
     log_dn = f"./logs/{uuid}/{session_id}"
     os.makedirs(log_dn, exist_ok=False)
@@ -186,9 +189,12 @@ def run_entity_test(assistant_service, assistant_id, uuid, entity, test):
             print(f"{entity}: {label}: {minput} -> {entity_value['value'] if entity_value else None}")
             if entity_value and entity_value["value"] == label and not has_intent:
                 good += 1
-    response = assistant_service.delete_session(assistant_id=assistant_id, session_id=session_id).get_result()
+    # response = assistant_service.delete_session(assistant_id=assistant_id, session_id=session_id).get_result()
 
-    if good != test:
+    if total == 0:
+        return None
+
+    if good != total:
         error = f"Accuracy for @{entity}: {good} / {total} = {100*good/total:.1f}%"
     return error
 
@@ -286,7 +292,7 @@ def test_cmd(test_fn: Path, enabled_tests: Optional[List[str]] = typer.Argument(
     typer.echo(f"Processing {test_fn} -> {enabled_tests}")
 
     # load configuration and initialize Watson
-    assistant_service = get_assistant_service()
+    assistant_service, _ = get_assistant_service()
 
     yaml = YAML(typ="safe")  # default, if not specfied, is 'rt' (round-trip)
     with open(test_fn) as file:
@@ -617,6 +623,130 @@ def apply(config_fn: str, to_json: bool = False, flatten: bool = False):
         yaml.Representer = MyRepresenter
         yaml.indent(mapping=2, sequence=4, offset=2)
         yaml.dump(result, sys.stdout)
+
+
+def call_ibm_cloud_api(assistant_sid, url, data=None, headers=None, params=None):
+    # place to set default headers
+    _headers = {}
+    if headers:
+        _headers.update(headers)
+
+    # place to set default params
+    _params = {}
+
+    if params:
+        _params.update(params)
+
+    cookies = {
+        "assistant.sid": assistant_sid,
+    }
+
+    if data is not None:
+        # print('POST', url, data, _headers, _params, cookies)
+        res = requests.post(url, json=data, headers=_headers, params=_params, cookies=cookies)
+    else:
+        # print('GET', url, _headers, _params, cookies)
+        res = requests.get(url, headers=headers, params=params, cookies=cookies)
+
+    return res.json()
+
+
+@app.command()
+def logs(chatbot_id: str):
+    # Credentials are read from a file
+    with open("config.json") as file:
+        config = json.load(file)
+        assistant_sid = config["credentials"]["assistant.sid"]
+        assistant_id = config["chatbots"][chatbot_id]["assistant_id"]
+
+    data = {
+        "type": "conversationLogs",
+        "options": {
+            "language": "es",
+            "assistant_id": assistant_id,
+            "version": "v2",
+            "start_time": "2022-03-01T00:00:00.000Z",
+            "end_time": datetime.datetime.now().isoformat(),
+            "interval": "1d",
+            "time_zone": "+02:00",
+            "order": "desc",
+            "intents": [],
+            "sample_size": 300,
+            "topics": [],
+            "conversational_skill_state": "coexistence",
+        },
+    }
+    url = f"https://eu-de.assistant.watson.cloud.ibm.com/rest/v2/tooling/assistants/{assistant_id}/reports"
+    response = call_ibm_cloud_api(assistant_sid, url, data=data)
+    print(json.dumps(response, indent=2))
+
+
+@app.command()
+def update_dialogs():
+
+    # Credentials are read from a file
+    with open("config.json") as file:
+        config = json.load(file)
+        assistant_sid = config["credentials"]["assistant.sid"]
+        chatbots = config["chatbots"]
+
+    params = {
+        "include_audit": "true",
+        "verbose": "false",
+        "export": "true",
+        "sort": "stable",
+    }
+
+    for name, chatbot in chatbots.items():
+        url = f'https://eu-de.assistant.watson.cloud.ibm.com/rest/v2/skills/{chatbot["skill_id"]}'
+        filename = f"dialogs/{name}.json"
+        print(f"Downloading chatbot {name} from {url} into {filename}")
+        response = call_ibm_cloud_api(assistant_sid, url, params=params)
+        with open(filename, "w") as file:
+            json.dump(response, file, indent=2)
+
+
+def create_auto_test(name, chatbot):
+    filename = f"dialogs/{name}.json"
+    with open(filename) as file:
+        dialog = json.load(file)
+
+    entities = {}
+    for entity in dialog["workspace"]["entities"]:
+        if entity["entity"].startswith("sys-"):
+            continue
+
+        ent_test = {v["value"]: v["synonyms"][:10] if "synonyms" in v else [] for v in entity["values"]}
+        entities[entity["entity"]] = ent_test
+
+    test = {
+        "id": name,
+        "name": name,
+        "config": {"assistant_id": chatbot["assistant_id"]},
+        "entities": entities,
+    }
+
+    return test
+
+
+@app.command()
+def update_auto_tests():
+
+    update_dialogs()
+
+    # Credentials are read from a file
+    with open("config.json") as file:
+        config = json.load(file)
+        chatbots = config["chatbots"]
+
+    for name, chatbot in chatbots.items():
+        test = create_auto_test(name, chatbot)
+        test_fn = f"tests/auto-{name}.yaml"
+        with open(test_fn, "w") as file:
+            yaml = YAML()
+            yaml.Representer = MyRepresenter
+            yaml.indent(mapping=2, sequence=4, offset=2)
+            yaml.dump(test, file)
 
 
 if __name__ == "__main__":

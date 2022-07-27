@@ -1,0 +1,2718 @@
+{
+  "name": "CU4.1 - Alcohol-dialog",
+  "type": "dialog",
+  "valid": true,
+  "status": "Available",
+  "created": "2022-07-12T09:15:16.888Z",
+  "updated": "2022-07-26T10:11:17.879Z",
+  "language": "es",
+  "skill_id": "61d88831-0573-4bf4-acb3-4735d8798574",
+  "workspace": {
+    "intents": [
+      {
+        "intent": "get_context_variables",
+        "examples": [
+          {
+            "text": "get payload and user id"
+          }
+        ]
+      },
+      {
+        "intent": "get_patient",
+        "examples": [
+          {
+            "text": "get patient"
+          }
+        ]
+      },
+      {
+        "intent": "onboarding",
+        "examples": [
+          {
+            "text": "\u00a1Adelante!"
+          },
+          {
+            "text": "Adelante"
+          },
+          {
+            "text": "hacer onboarding"
+          },
+          {
+            "text": "Vamos"
+          }
+        ]
+      },
+      {
+        "intent": "onboarding_comenzar",
+        "examples": [
+          {
+            "text": "cuestionario inicial"
+          },
+          {
+            "text": "Empezar a utilizar el asistente"
+          },
+          {
+            "text": "informaci\u00f3n inicial"
+          }
+        ]
+      },
+      {
+        "intent": "volver_inicio",
+        "examples": [
+          {
+            "text": "mas tarde"
+          },
+          {
+            "text": "mejor mas tarde"
+          },
+          {
+            "text": "quiero volver al inicio"
+          },
+          {
+            "text": "volver al inicio"
+          },
+          {
+            "text": "vuelta al inicio"
+          }
+        ]
+      },
+      {
+        "intent": "welcome",
+        "examples": [
+          {
+            "text": "\u00a1Bienvenido!"
+          },
+          {
+            "text": "\u00a1Comenzar!"
+          },
+          {
+            "text": "welcome"
+          }
+        ]
+      }
+    ],
+    "entities": [
+      {
+        "entity": "bool",
+        "values": [
+          {
+            "type": "synonyms",
+            "value": "No",
+            "synonyms": []
+          },
+          {
+            "type": "synonyms",
+            "value": "Si",
+            "synonyms": []
+          }
+        ]
+      },
+      {
+        "entity": "metodo_uso",
+        "values": [
+          {
+            "type": "synonyms",
+            "value": "Conocer m\u00e1s cosas sobre el consumo de alcohol",
+            "synonyms": [
+              "conocer m\u00e1s",
+              "seguimiento"
+            ]
+          },
+          {
+            "type": "synonyms",
+            "value": "Eliminar el consumo de alcohol",
+            "synonyms": [
+              "dejar",
+              "dejar de consumir",
+              "eliminar"
+            ]
+          },
+          {
+            "type": "synonyms",
+            "value": "Reducir el consumo de alcohol",
+            "synonyms": [
+              "bajar",
+              "reducir"
+            ]
+          }
+        ],
+        "fuzzy_match": true
+      },
+      {
+        "entity": "sys-number",
+        "values": [],
+        "fuzzy_match": true
+      }
+    ],
+    "metadata": {
+      "api_version": {
+        "major_version": "v2",
+        "minor_version": "2018-11-08"
+      }
+    },
+    "webhooks": [
+      {
+        "url": "https://eu-de.functions.appdomain.cloud/api/v1/web/aebee2c2-76ed-4086-8c56-f81ffe589315/default/CU4.1.json",
+        "name": "main_webhook",
+        "headers": [
+          {
+            "name": "X-Require-Whisk-Auth",
+            "value": "8153325801976201"
+          },
+          {
+            "name": "Accept",
+            "value": "application/json"
+          }
+        ]
+      }
+    ],
+    "dialog_nodes": [
+      {
+        "type": "standard",
+        "title": "Bienvenido",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "Hola \ud83d\udc4b"
+                },
+                {
+                  "text": "Soy tu asistente virtual y voy a ayudarte con tu relaci\u00f3n con el alcohol."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "multiline"
+            }
+          ]
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "body",
+          "dialog_node": "node_3_1657714575004"
+        },
+        "conditions": "welcome || #welcome",
+        "dialog_node": "Bienvenido",
+        "previous_sibling": "node_1_1658730637381"
+      },
+      {
+        "type": "standard",
+        "title": "En otras cosas",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "No le he entendido. Intente reformular la consulta."
+                },
+                {
+                  "text": "\u00bfPuede expresarse con otras palabras? No le he entendido."
+                },
+                {
+                  "text": "No entend\u00ed el significado."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "conditions": "anything_else",
+        "dialog_node": "En otras cosas",
+        "previous_sibling": "node_4_1657714555669",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Enviar Onboarding",
+        "parent": "node_4_1657714591515",
+        "actions": [
+          {
+            "name": "main_webhook",
+            "type": "webhook",
+            "parameters": {
+              "data": "$onboarding_info",
+              "action": "cu4_1_patient_post_onboarding",
+              "user_id": "<? $patient.id.toString() ?>",
+              "Authority": "<? $integrations.chat.private.jwt?>",
+              "Authorization_token": "TmFiZWxpYVN5c3RlbTpKZWFsekQxc3RyQnV0cjY2Ng=="
+            },
+            "result_variable": "onboarding_respond"
+          }
+        ],
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "conditions": "true",
+        "dialog_node": "node_10_1657790389867",
+        "previous_sibling": "node_1_1657789346937",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "\u00bfCu\u00e1ntas copas (100ml) de vino?",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "\u00bfCu\u00e1ntas copas (100ml) de vino?"
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_2_1657714832909",
+        "conditions": "true",
+        "dialog_node": "node_1_1657715503783",
+        "previous_sibling": "node_61_1657716067358"
+      },
+      {
+        "type": "standard",
+        "title": "Bebe cada semana",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "A continuaci\u00f3n ind\u00edcame cu\u00e1nto bebes m\u00e1s o menos cada semana seg\u00fan el tipo de alcohol."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_9_1657714631352",
+        "metadata": {
+          "_customization": {
+            "mcr": false
+          }
+        },
+        "next_step": {
+          "behavior": "skip_user_input"
+        },
+        "conditions": "@bool:No",
+        "dialog_node": "node_1_1657785468839",
+        "previous_sibling": "node_2_1657714832909"
+      },
+      {
+        "type": "standard",
+        "title": "Calcular y guardar UBE dia",
+        "output": {},
+        "parent": "node_2_1657714832909",
+        "context": {
+          "onboarding_info": {
+            "dailyUBE": "<? (($x1 + $x2 + $x3) * 1) + (($x4 + $x5) * 3)  ?>"
+          }
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_9_1657787923130"
+        },
+        "conditions": "true",
+        "dialog_node": "node_1_1657785698597",
+        "previous_sibling": "node_76_1657716659405",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Calcular y guardar UBE semana",
+        "output": {},
+        "parent": "node_1_1657785468839",
+        "context": {
+          "onboarding_info": {
+            "weeklyUBE": "<? (($x1 + $x2 + $x3) * 1) + (($x4 + $x5) * 3)  ?>"
+          }
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_9_1657787923130"
+        },
+        "conditions": "true",
+        "dialog_node": "node_1_1657787880431",
+        "previous_sibling": "node_22_1657785468841",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "\u00bfCu\u00e1l es tu objetivo personal en este programa?",
+        "output": {
+          "generic": [
+            {
+              "title": "\u00bfCu\u00e1l es tu objetivo personal en este programa?",
+              "options": [
+                {
+                  "label": "Dejar de consumir",
+                  "value": {
+                    "input": {
+                      "text": "@metodo_uso:(Eliminar el consumo de alcohol)"
+                    }
+                  }
+                },
+                {
+                  "label": "Reducir el consumo",
+                  "value": {
+                    "input": {
+                      "text": "@metodo_uso:(Reducir el consumo de alcohol)"
+                    }
+                  }
+                },
+                {
+                  "label": "S\u00f3lo hacer un seguimiento del mi consumo",
+                  "value": {
+                    "input": {
+                      "text": "@metodo_uso:(Conocer m\u00e1s cosas sobre el consumo de alcohol)"
+                    }
+                  }
+                }
+              ],
+              "description": "",
+              "response_type": "option"
+            }
+          ]
+        },
+        "parent": "node_4_1657714591515",
+        "conditions": "true",
+        "dialog_node": "node_1_1657789346937",
+        "previous_sibling": "node_27_1657789295920"
+      },
+      {
+        "type": "standard",
+        "title": "\u00bfOnboarding hecho?",
+        "output": {},
+        "actions": [
+          {
+            "name": "main_webhook",
+            "type": "webhook",
+            "parameters": {
+              "action": "cu4_1_patient_get_subscription",
+              "user_id": "<? $patient.id ?>",
+              "Authority": "<? $integrations.chat.private.jwt?>",
+              "Authorization_token": "TmFiZWxpYVN5c3RlbTpKZWFsekQxc3RyQnV0cjY2Ng=="
+            },
+            "result_variable": "wh_get_subscription"
+          }
+        ],
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "Bienvenido"
+        },
+        "conditions": "#get_patient",
+        "dialog_node": "node_1_1658730637381",
+        "previous_sibling": "node_6_1657798508152",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "\u00bfCu\u00e1ntos carajillos?",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "\u00bfCu\u00e1ntos carajillos?"
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_1_1657785468839",
+        "conditions": "true",
+        "dialog_node": "node_12_1657785468841",
+        "previous_sibling": "node_7_1657785468841"
+      },
+      {
+        "type": "standard",
+        "title": "\u00bfAlguna vez se siente culpable por beber?  ",
+        "output": {
+          "generic": [
+            {
+              "title": "\u00bfAlguna vez se siente culpable por beber?  ",
+              "options": [
+                {
+                  "label": "S\u00ed",
+                  "value": {
+                    "input": {
+                      "text": "@bool:Si"
+                    }
+                  }
+                },
+                {
+                  "label": "No",
+                  "value": {
+                    "input": {
+                      "text": "@bool:No"
+                    }
+                  }
+                }
+              ],
+              "response_type": "option"
+            }
+          ]
+        },
+        "parent": "node_9_1657787923130",
+        "conditions": "true",
+        "dialog_node": "node_12_1657788235146",
+        "previous_sibling": "node_17_1657788236867"
+      },
+      {
+        "type": "standard",
+        "title": "Guardar respuesta",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_12_1657785468841",
+        "context": {
+          "x3": "@sys-number",
+          "repeticiones": 0
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_17_1657785468841"
+        },
+        "conditions": "@sys-number || @sys-number == 0",
+        "dialog_node": "node_13_1657785468841",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Guardar respuesta",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_12_1657788235146",
+        "context": {
+          "puntos_cage": "<? @bool:No ? $puntos_cage : $puntos_cage + 1 ?>",
+          "repeticiones": 0,
+          "onboarding_info": {
+            "cageTestGuilty": "<? @bool.toList()[@bool.toList().size()-1]  == 'No' ? false : true ?>"
+          }
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_7_1657788233626"
+        },
+        "conditions": "@bool",
+        "dialog_node": "node_13_1657788235147",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Respuesta inv\u00e1lida",
+        "output": {},
+        "parent": "node_12_1657785468841",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "conditions": "anything_else",
+        "dialog_node": "node_14_1657785468841",
+        "previous_sibling": "node_13_1657785468841",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Respuesta inv\u00e1lida",
+        "output": {},
+        "parent": "node_12_1657788235146",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "conditions": "anything_else",
+        "dialog_node": "node_14_1657788235147",
+        "previous_sibling": "node_13_1657788235147",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "\u00bfCu\u00e1ntas copas de licor (gin tonic, cuba libre...)?",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "\u00bfCu\u00e1ntas copas de licor (gin tonic, cuba libre...)?"
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_1_1657785468839",
+        "conditions": "true",
+        "dialog_node": "node_17_1657785468841",
+        "previous_sibling": "node_12_1657785468841"
+      },
+      {
+        "type": "standard",
+        "title": "\u00bfSe siente molesto cuando lo critican por beber?  ",
+        "output": {
+          "generic": [
+            {
+              "title": "\u00bfSe siente molesto cuando lo critican por beber?  ",
+              "options": [
+                {
+                  "label": "S\u00ed",
+                  "value": {
+                    "input": {
+                      "text": "@bool:Si"
+                    }
+                  }
+                },
+                {
+                  "label": "No",
+                  "value": {
+                    "input": {
+                      "text": "@bool:No"
+                    }
+                  }
+                }
+              ],
+              "response_type": "option"
+            }
+          ]
+        },
+        "parent": "node_9_1657787923130",
+        "conditions": "true",
+        "dialog_node": "node_17_1657788236867",
+        "previous_sibling": "node_2_1657788081522"
+      },
+      {
+        "type": "standard",
+        "title": "Guardar respuesta",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_17_1657785468841",
+        "context": {
+          "x4": "@sys-number",
+          "repeticiones": 0
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_22_1657785468841"
+        },
+        "conditions": "@sys-number || @sys-number == 0",
+        "dialog_node": "node_18_1657785468841",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Guardar respuesta",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_17_1657788236867",
+        "context": {
+          "puntos_cage": "<? @bool:No ? $puntos_cage : $puntos_cage + 1 ?>",
+          "repeticiones": 0,
+          "onboarding_info": {
+            "cageTestAnnoyed": "<? @bool.toList()[@bool.toList().size()-1]  == 'No' ? false : true ?>"
+          }
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_12_1657788235146"
+        },
+        "conditions": "@bool",
+        "dialog_node": "node_18_1657788236869",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Respuesta inv\u00e1lida",
+        "output": {},
+        "parent": "node_17_1657785468841",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "conditions": "anything_else",
+        "dialog_node": "node_19_1657785468841",
+        "previous_sibling": "node_18_1657785468841",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Respuesta inv\u00e1lida",
+        "output": {},
+        "parent": "node_17_1657788236867",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "conditions": "anything_else",
+        "dialog_node": "node_19_1657788236869",
+        "previous_sibling": "node_18_1657788236869",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Bebe cada d\u00eda",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "A continuaci\u00f3n ind\u00edcame cu\u00e1nto bebes m\u00e1s o menos cada d\u00eda seg\u00fan el tipo de alcohol."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_9_1657714631352",
+        "metadata": {
+          "_customization": {
+            "mcr": false
+          }
+        },
+        "next_step": {
+          "behavior": "skip_user_input"
+        },
+        "conditions": "@bool:Si",
+        "dialog_node": "node_2_1657714832909",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "\u00bfCu\u00e1ntos vasos (250ml) de cerveza o vino con gaseosa? - copy 1",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "\u00bfCu\u00e1ntos vasos (250ml) de cerveza o vino con gaseosa?"
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_1_1657785468839",
+        "conditions": "true",
+        "dialog_node": "node_2_1657785468841"
+      },
+      {
+        "type": "standard",
+        "title": "\u00bfAlguna vez ha sentido que deber\u00eda reducir su consumo de alcohol?",
+        "output": {
+          "generic": [
+            {
+              "title": "\u00bfAlguna vez ha sentido que deber\u00eda reducir su consumo de alcohol?",
+              "options": [
+                {
+                  "label": "S\u00ed",
+                  "value": {
+                    "input": {
+                      "text": "@bool:Si"
+                    }
+                  }
+                },
+                {
+                  "label": "No",
+                  "value": {
+                    "input": {
+                      "text": "@bool:No"
+                    }
+                  }
+                }
+              ],
+              "response_type": "option"
+            }
+          ]
+        },
+        "parent": "node_9_1657787923130",
+        "conditions": "true",
+        "dialog_node": "node_2_1657788081522"
+      },
+      {
+        "type": "standard",
+        "title": "Guardar respuesta",
+        "parent": "node_1_1657789346937",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_10_1657790389867"
+        },
+        "conditions": "@metodo_uso",
+        "dialog_node": "node_2_1657789346938",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "conversation_start",
+        "output": {
+          "generic": []
+        },
+        "context": {
+          "onboarding_info": {
+            "cageTest": 0,
+            "personalGoal": "Conocer m\u00e1s cosas sobre el consumo de alcohol",
+            "cageTestGuilty": false,
+            "cageTestAnnoyed": false,
+            "cageTestCutDown": false,
+            "emotionalSideEffects": false,
+            "socialLaborAftereffects": false,
+            "cageTestEarlyMorningDrink": false
+          }
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "body",
+          "dialog_node": "node_6_1657798508152"
+        },
+        "conditions": "conversation_start",
+        "digress_in": "does_not_return",
+        "dialog_node": "node_2_1657798465278",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "\u00bfCu\u00e1ntos chupitos de licor (whisky, vodka, ron, brandy, tequila, aguardiente...)?",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "\u00bfCu\u00e1ntos chupitos de licor (whisky, vodka, ron, brandy, tequila, aguardiente...)?"
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_1_1657785468839",
+        "conditions": "true",
+        "dialog_node": "node_22_1657785468841",
+        "previous_sibling": "node_17_1657785468841"
+      },
+      {
+        "type": "standard",
+        "title": "\u00bfAlguna vez el consumo de alcohol ha afectado a tu rendimiento en el trabajo y/o tus relaciones personales? ",
+        "output": {
+          "generic": [
+            {
+              "title": "\u00bfAlguna vez el consumo de alcohol ha afectado a tu rendimiento en el trabajo y/o tus relaciones personales? ",
+              "options": [
+                {
+                  "label": "S\u00ed",
+                  "value": {
+                    "input": {
+                      "text": "@bool:Si"
+                    }
+                  }
+                },
+                {
+                  "label": "No",
+                  "value": {
+                    "input": {
+                      "text": "@bool:No"
+                    }
+                  }
+                }
+              ],
+              "response_type": "option"
+            }
+          ]
+        },
+        "parent": "node_4_1657714591515",
+        "conditions": "true",
+        "dialog_node": "node_22_1657788602265",
+        "previous_sibling": "node_9_1657787923130"
+      },
+      {
+        "type": "standard",
+        "title": "Guardar respuesta",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_22_1657785468841",
+        "context": {
+          "x5": "@sys-number",
+          "repeticiones": 0
+        },
+        "conditions": "@sys-number || @sys-number == 0",
+        "dialog_node": "node_23_1657785468841",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Guardar respuesta",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_22_1657788602265",
+        "context": {
+          "repeticiones": 0,
+          "onboarding_info": {
+            "socialLaborAftereffects": "<? @bool.toList()[@bool.toList().size()-1]  == 'No' ? false : true ?>"
+          }
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_27_1657789295920"
+        },
+        "conditions": "@bool",
+        "dialog_node": "node_23_1657788602267",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Respuesta inv\u00e1lida",
+        "output": {},
+        "parent": "node_22_1657785468841",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "conditions": "anything_else",
+        "dialog_node": "node_24_1657785468841",
+        "previous_sibling": "node_23_1657785468841",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Respuesta inv\u00e1lida",
+        "output": {},
+        "parent": "node_22_1657788602265",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "conditions": "anything_else",
+        "dialog_node": "node_24_1657788602267",
+        "previous_sibling": "node_23_1657788602267",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "\u00bfAlguna vez despu\u00e9s de haber consumido alcohol te has sentido m\u00e1s triste, ansioso, temeroso o preocupado? ",
+        "output": {
+          "generic": [
+            {
+              "title": "\u00bfAlguna vez despu\u00e9s de haber consumido alcohol te has sentido m\u00e1s triste, ansioso, temeroso o preocupado? ",
+              "options": [
+                {
+                  "label": "S\u00ed",
+                  "value": {
+                    "input": {
+                      "text": "@bool:Si"
+                    }
+                  }
+                },
+                {
+                  "label": "No",
+                  "value": {
+                    "input": {
+                      "text": "@bool:No"
+                    }
+                  }
+                }
+              ],
+              "response_type": "option"
+            }
+          ]
+        },
+        "parent": "node_4_1657714591515",
+        "conditions": "true",
+        "dialog_node": "node_27_1657789295920",
+        "previous_sibling": "node_22_1657788602265"
+      },
+      {
+        "type": "standard",
+        "title": "Guardar respuesta",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_27_1657789295920",
+        "context": {
+          "repeticiones": 0,
+          "onboarding_info": {
+            "emotionalSideEffects": "<? @bool.toList()[@bool.toList().size()-1]  == 'No' ? false : true ?>"
+          }
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_1_1657789346937"
+        },
+        "conditions": "@bool",
+        "dialog_node": "node_28_1657789295923",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Respuesta inv\u00e1lida",
+        "output": {},
+        "parent": "node_9_1657714631352",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "conditions": "anything_else",
+        "dialog_node": "node_29_1657785500311",
+        "previous_sibling": "node_1_1657785468839",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Respuesta inv\u00e1lida",
+        "output": {},
+        "parent": "node_27_1657789295920",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "conditions": "anything_else",
+        "dialog_node": "node_29_1657789295923",
+        "previous_sibling": "node_28_1657789295923",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "\u00a1Comenzar!",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "Antes de empezar quiero hacerte unas preguntas para conocer informaci\u00f3n sobre tu adicci\u00f3n al alcohol."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            },
+            {
+              "title": "",
+              "options": [
+                {
+                  "label": "\u00a1Adelante!",
+                  "value": {
+                    "input": {
+                      "text": "hacer onboarding"
+                    }
+                  }
+                },
+                {
+                  "label": "Mejor m\u00e1s tarde",
+                  "value": {
+                    "input": {
+                      "text": "Volver al inicio"
+                    }
+                  }
+                }
+              ],
+              "response_type": "option"
+            }
+          ]
+        },
+        "context": {},
+        "conditions": "#onboarding_comenzar",
+        "dialog_node": "node_3_1657714575004",
+        "previous_sibling": "Bienvenido"
+      },
+      {
+        "type": "standard",
+        "title": "Guardar respuesta",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_2_1657785468841",
+        "context": {
+          "x1": "@sys-number",
+          "repeticiones": 0
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_7_1657785468841"
+        },
+        "conditions": "@sys-number || @sys-number == 0",
+        "dialog_node": "node_3_1657785468841",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Guardar respuesta",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_2_1657788081522",
+        "context": {
+          "puntos_cage": "<? @bool:No ? $puntos_cage : $puntos_cage + 1 ?>",
+          "repeticiones": 0,
+          "onboarding_info": {
+            "cageTestCutDown": "<? @bool.toList()[@bool.toList().size()-1]  == 'No' ? false : true ?>"
+          }
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_17_1657788236867"
+        },
+        "conditions": "@bool",
+        "dialog_node": "node_3_1657788081524",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Respuesta inv\u00e1lida",
+        "output": {},
+        "parent": "node_1_1657789346937",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "conditions": "anything_else",
+        "dialog_node": "node_3_1657789346938",
+        "previous_sibling": "node_2_1657789346938",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Inicio",
+        "output": {
+          "generic": [
+            {
+              "title": "\u00bfQu\u00e9 puedo hacer por ti?",
+              "options": [
+                {
+                  "label": "A\u00f1adir informaci\u00f3n inicial",
+                  "value": {
+                    "input": {
+                      "text": "cuestionario inicial"
+                    }
+                  }
+                }
+              ],
+              "response_type": "option"
+            }
+          ]
+        },
+        "conditions": "#volver_inicio",
+        "digress_in": "does_not_return",
+        "dialog_node": "node_4_1657714555669",
+        "previous_sibling": "node_3_1657714575004"
+      },
+      {
+        "type": "standard",
+        "title": "\u00a1Adelante!",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_3_1657714575004",
+        "next_step": {
+          "behavior": "skip_user_input"
+        },
+        "conditions": "#onboarding",
+        "dialog_node": "node_4_1657714591515"
+      },
+      {
+        "type": "standard",
+        "title": "Guardar respuesta",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_1_1657715503783",
+        "context": {
+          "x2": "@sys-number",
+          "repeticiones": 0
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_66_1657716310234"
+        },
+        "conditions": "@sys-number || @sys-number == 0",
+        "dialog_node": "node_4_1657715665301",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Respuesta inv\u00e1lida",
+        "output": {},
+        "parent": "node_2_1657785468841",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "conditions": "anything_else",
+        "dialog_node": "node_4_1657785468841",
+        "previous_sibling": "node_3_1657785468841",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Respuesta inv\u00e1lida",
+        "output": {},
+        "parent": "node_2_1657788081522",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "conditions": "anything_else",
+        "dialog_node": "node_4_1657788081524",
+        "previous_sibling": "node_3_1657788081524",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "\u00bfCu\u00e1ntos vasos (250ml) de cerveza o vino con gaseosa?",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "\u00bfCu\u00e1ntos vasos (250ml) de cerveza o vino con gaseosa?"
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_2_1657714832909",
+        "conditions": "true",
+        "dialog_node": "node_61_1657716067358"
+      },
+      {
+        "type": "standard",
+        "title": "Respuesta inv\u00e1lida",
+        "parent": "node_1_1657715503783",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "conditions": "anything_else",
+        "dialog_node": "node_6_1657715678060",
+        "previous_sibling": "node_4_1657715665301",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Obtener paciente",
+        "actions": [
+          {
+            "name": "main_webhook",
+            "type": "webhook",
+            "parameters": {
+              "action": "cu4_1_patient_get_user_id",
+              "user_id": "<? $metadata.user_id.toString() ?>",
+              "Authority": "<? $integrations.chat.private.jwt?>",
+              "Authorization_token": "TmFiZWxpYVN5c3RlbTpKZWFsekQxc3RyQnV0cjY2Ng=="
+            },
+            "result_variable": "wh_get_patient"
+          }
+        ],
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "body",
+          "dialog_node": "node_1_1658730637381"
+        },
+        "conditions": "#get_patient",
+        "digress_in": "does_not_return",
+        "dialog_node": "node_6_1657798508152",
+        "previous_sibling": "node_2_1657798465278",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Guardar respuesta",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_61_1657716067358",
+        "context": {
+          "x1": "@sys-number",
+          "repeticiones": 0
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_1_1657715503783"
+        },
+        "conditions": "@sys-number || @sys-number == 0",
+        "dialog_node": "node_62_1657716067359",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Respuesta inv\u00e1lida",
+        "parent": "node_61_1657716067358",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "conditions": "anything_else",
+        "dialog_node": "node_63_1657716067359",
+        "previous_sibling": "node_62_1657716067359",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "\u00bfCu\u00e1ntos carajillos?",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "\u00bfCu\u00e1ntos carajillos?"
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_2_1657714832909",
+        "conditions": "true",
+        "dialog_node": "node_66_1657716310234",
+        "previous_sibling": "node_1_1657715503783"
+      },
+      {
+        "type": "standard",
+        "title": "Guardar respuesta",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_66_1657716310234",
+        "context": {
+          "x3": "@sys-number",
+          "repeticiones": 0
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_71_1657716472964"
+        },
+        "conditions": "@sys-number || @sys-number == 0",
+        "dialog_node": "node_67_1657716310235",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Respuesta inv\u00e1lida",
+        "parent": "node_66_1657716310234",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "conditions": "anything_else",
+        "dialog_node": "node_68_1657716310235",
+        "previous_sibling": "node_67_1657716310235",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "\u00bfCu\u00e1ntas copas de licor (gin tonic, cuba libre...)?",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "\u00bfCu\u00e1ntas copas de licor (gin tonic, cuba libre...)?"
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_2_1657714832909",
+        "conditions": "true",
+        "dialog_node": "node_71_1657716472964",
+        "previous_sibling": "node_66_1657716310234"
+      },
+      {
+        "type": "standard",
+        "title": "\u00bfCu\u00e1ntas copas (100ml) de vino?",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "\u00bfCu\u00e1ntas copas (100ml) de vino?"
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_1_1657785468839",
+        "conditions": "true",
+        "dialog_node": "node_7_1657785468841",
+        "previous_sibling": "node_2_1657785468841"
+      },
+      {
+        "type": "standard",
+        "title": "\u00bfAlguna vez toma alcohol por la ma\u00f1ana para arrancar el d\u00eda o para curar la resaca (\"un clavo saca otro clavo\")?  ",
+        "output": {
+          "generic": [
+            {
+              "title": "\u00bfAlguna vez toma alcohol por la ma\u00f1ana para arrancar el d\u00eda o para curar la resaca (\"un clavo saca otro clavo\")?  ",
+              "options": [
+                {
+                  "label": "S\u00ed",
+                  "value": {
+                    "input": {
+                      "text": "@bool:Si"
+                    }
+                  }
+                },
+                {
+                  "label": "No",
+                  "value": {
+                    "input": {
+                      "text": "@bool:No"
+                    }
+                  }
+                }
+              ],
+              "response_type": "option"
+            }
+          ]
+        },
+        "parent": "node_9_1657787923130",
+        "conditions": "true",
+        "dialog_node": "node_7_1657788233626",
+        "previous_sibling": "node_12_1657788235146"
+      },
+      {
+        "type": "standard",
+        "title": "Guardar respuesta",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_71_1657716472964",
+        "context": {
+          "x4": "@sys-number",
+          "repeticiones": 0
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_76_1657716659405"
+        },
+        "conditions": "@sys-number || @sys-number == 0",
+        "dialog_node": "node_72_1657716472965",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Respuesta inv\u00e1lida",
+        "parent": "node_71_1657716472964",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "conditions": "anything_else",
+        "dialog_node": "node_73_1657716472965",
+        "previous_sibling": "node_72_1657716472965",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "\u00bfCu\u00e1ntos chupitos de licor (whisky, vodka, ron, brandy, tequila, aguardiente...)?",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "\u00bfCu\u00e1ntos chupitos de licor (whisky, vodka, ron, brandy, tequila, aguardiente...)?"
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_2_1657714832909",
+        "conditions": "true",
+        "dialog_node": "node_76_1657716659405",
+        "previous_sibling": "node_71_1657716472964"
+      },
+      {
+        "type": "standard",
+        "title": "Guardar respuesta",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_76_1657716659405",
+        "context": {
+          "x5": "@sys-number",
+          "repeticiones": 0
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_1_1657785698597"
+        },
+        "conditions": "@sys-number || @sys-number == 0",
+        "dialog_node": "node_77_1657716659406",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Respuesta inv\u00e1lida",
+        "parent": "node_76_1657716659405",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "conditions": "anything_else",
+        "dialog_node": "node_78_1657716659406",
+        "previous_sibling": "node_77_1657716659406",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Guardar respuesta",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_7_1657785468841",
+        "context": {
+          "x2": "@sys-number",
+          "repeticiones": 0
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_2_1657785468841"
+        },
+        "conditions": "@sys-number || @sys-number == 0",
+        "dialog_node": "node_8_1657785468841",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Guardar respuesta",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_7_1657788233626",
+        "context": {
+          "repeticiones": 0,
+          "onboarding_info": {
+            "cageTest": "<? @bool:No ? $puntos_cage : $puntos_cage + 1 ?>",
+            "cageTestEarlyMorningDrink": "<? @bool.toList()[@bool.toList().size()-1]  == 'No' ? false : true ?>"
+          }
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_22_1657788602265"
+        },
+        "conditions": "@bool",
+        "dialog_node": "node_8_1657788233627",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "\u00bfBebes alcohol a diario?",
+        "output": {
+          "generic": [
+            {
+              "title": "\u00bfBebes alcohol a diario?",
+              "options": [
+                {
+                  "label": "S\u00ed",
+                  "value": {
+                    "input": {
+                      "text": "@bool:Si"
+                    }
+                  }
+                },
+                {
+                  "label": "No",
+                  "value": {
+                    "input": {
+                      "text": "@bool:No"
+                    }
+                  }
+                }
+              ],
+              "response_type": "option"
+            }
+          ]
+        },
+        "parent": "node_4_1657714591515",
+        "conditions": "true",
+        "dialog_node": "node_9_1657714631352",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Respuesta inv\u00e1lida",
+        "output": {},
+        "parent": "node_7_1657785468841",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "conditions": "anything_else",
+        "dialog_node": "node_9_1657785468841",
+        "previous_sibling": "node_8_1657785468841",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Test CAGE",
+        "parent": "node_4_1657714591515",
+        "context": {
+          "puntos_cage": 0
+        },
+        "next_step": {
+          "behavior": "skip_user_input"
+        },
+        "conditions": "true",
+        "dialog_node": "node_9_1657787923130",
+        "previous_sibling": "node_9_1657714631352",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Respuesta inv\u00e1lida",
+        "output": {},
+        "parent": "node_7_1657788233626",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "conditions": "anything_else",
+        "dialog_node": "node_9_1657788233627",
+        "previous_sibling": "node_8_1657788233627",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Redirigir seg\u00fan onboarding",
+        "parent": "Bienvenido",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "conditions": "true",
+        "dialog_node": "node_9_1658749047803",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_2_1657714832909",
+        "disabled": true,
+        "conditions": "@bool:No",
+        "dialog_node": "response_10_1657715287786",
+        "previous_sibling": "response_1_1657715263802"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "No te he entendido bien. Dime una cantidad."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_6_1657715678060",
+        "context": {
+          "repeticiones": {
+            "": "<? $repeticiones + 1 ?>"
+          }
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_1_1657715503783"
+        },
+        "conditions": "anything_else",
+        "dialog_node": "response_10_1657715980896",
+        "previous_sibling": "response_5_1657715969147"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              "Lo siento, no te he entendido. Volvamos al inicio."
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_9_1657785468841",
+        "conditions": "repeticiones >= 3",
+        "dialog_node": "response_10_1657785468841"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              "Lo siento, no te he entendido. Volvamos al inicio."
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_9_1657788233627",
+        "conditions": "repeticiones >= 3",
+        "dialog_node": "response_10_1657788233627"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "Gracias por tus respuestas \ud83d\ude0a\u200b "
+                },
+                {
+                  "text": "A partir de ahora, registra en la aplicaci\u00f3n los d\u00edas que nos consumes y consulta diariamente la informaci\u00f3n y consejos que te propondr\u00e9 para cumplir tu objetivo."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "multiline"
+            }
+          ]
+        },
+        "parent": "node_10_1657790389867",
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "body",
+          "dialog_node": "node_4_1657714555669"
+        },
+        "conditions": "$onboarding_respond",
+        "dialog_node": "response_10_1657790426453"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_6_1657798508152",
+        "context": {
+          "patient": "<? $wh_get_patient.message ?>"
+        },
+        "conditions": "$wh_get_patient",
+        "dialog_node": "response_10_1657798564562"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "No te he entendido bien. Dime una cantidad."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_9_1657785468841",
+        "context": {
+          "repeticiones": {
+            "": "<? $repeticiones + 1 ?>"
+          }
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_7_1657785468841"
+        },
+        "conditions": "anything_else",
+        "dialog_node": "response_11_1657785468841",
+        "previous_sibling": "response_10_1657785468841"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "No te he entendido bien. Contesta s\u00ed o no."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_9_1657788233627",
+        "context": {
+          "repeticiones": "<? $repeticiones + 1 ?>"
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_7_1657788233626"
+        },
+        "conditions": "anything_else",
+        "dialog_node": "response_11_1657788233627",
+        "previous_sibling": "response_10_1657788233627"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "A continuaci\u00f3n ind\u00edcame cu\u00e1nto bebes m\u00e1s o menos cada d\u00eda seg\u00fan el tipo de alcohol."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_2_1657714832909",
+        "disabled": true,
+        "conditions": "@bool:Si",
+        "dialog_node": "response_1_1657715263802",
+        "previous_sibling": "node_1_1657785698597"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              "He encontrado un error al recoger informaci\u00f3n del servidor. "
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_6_1657798508152",
+        "conditions": "anything_else",
+        "dialog_node": "response_1_1657798565240",
+        "previous_sibling": "response_10_1657798564562"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              "Lo siento, no te he entendido. Volvamos al inicio."
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_14_1657785468841",
+        "conditions": "repeticiones >= 3",
+        "dialog_node": "response_15_1657785468841"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              "Lo siento, no te he entendido. Volvamos al inicio."
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_14_1657788235147",
+        "conditions": "repeticiones >= 3",
+        "dialog_node": "response_15_1657788235147"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "No te he entendido bien. Dime una cantidad."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_14_1657785468841",
+        "context": {
+          "repeticiones": "<? $repeticiones + 1 ?>"
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_12_1657785468841"
+        },
+        "conditions": "anything_else",
+        "dialog_node": "response_16_1657785468841",
+        "previous_sibling": "response_15_1657785468841"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "No te he entendido bien. Contesta s\u00ed o no."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_14_1657788235147",
+        "context": {
+          "repeticiones": "<? $repeticiones + 1 ?>"
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_12_1657788235146"
+        },
+        "conditions": "anything_else",
+        "dialog_node": "response_16_1657788235147",
+        "previous_sibling": "response_15_1657788235147"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              "Lo siento, no te he entendido. Volvamos al inicio."
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_19_1657785468841",
+        "conditions": "repeticiones >= 3",
+        "dialog_node": "response_20_1657785468841"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              "Lo siento, no te he entendido. Volvamos al inicio."
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_19_1657788236869",
+        "conditions": "repeticiones >= 3",
+        "dialog_node": "response_20_1657788236869"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "No te he entendido bien. Dime una cantidad."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_19_1657785468841",
+        "context": {
+          "repeticiones": "<? $repeticiones + 1 ?>"
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_17_1657785468841"
+        },
+        "conditions": "anything_else",
+        "dialog_node": "response_21_1657785468841",
+        "previous_sibling": "response_20_1657785468841"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "No te he entendido bien. Contesta s\u00ed o no."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_19_1657788236869",
+        "context": {
+          "repeticiones": "<? $repeticiones + 1 ?>"
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_17_1657788236867"
+        },
+        "conditions": "anything_else",
+        "dialog_node": "response_21_1657788236869",
+        "previous_sibling": "response_20_1657788236869"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "\u00a1Gran decisi\u00f3n! \u200b\ud83d\ude42\u200b"
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_2_1657789346938",
+        "context": {
+          "repeticiones": 0,
+          "onboarding_info": {
+            "personalGoal": "@metodo_uso"
+          }
+        },
+        "conditions": "@metodo_uso:(Reducir el consumo de alcohol)",
+        "dialog_node": "response_2_1657789838066",
+        "previous_sibling": "response_9_1657789836162"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_1_1658730637381",
+        "context": {
+          "onboarding_hecho": "<? $wh_get_patient.message.addAlcoholOnboarding ?>"
+        },
+        "conditions": "$wh_get_subscription",
+        "dialog_node": "response_2_1658730637383"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_9_1658749047803",
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "body",
+          "dialog_node": "node_4_1657714555669"
+        },
+        "conditions": "anything_else",
+        "dialog_node": "response_2_1658749085557",
+        "previous_sibling": "response_7_1658749075275"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              "Lo siento, no te he entendido. Volvamos al inicio."
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_24_1657785468841",
+        "conditions": "repeticiones >= 3",
+        "dialog_node": "response_25_1657785468841"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              "Lo siento, no te he entendido. Volvamos al inicio."
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_24_1657788602267",
+        "conditions": "repeticiones >= 3",
+        "dialog_node": "response_25_1657788602267"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "No te he entendido bien. Dime una cantidad."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_24_1657785468841",
+        "context": {
+          "repeticiones": "<? $repeticiones + 1 ?>"
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_22_1657785468841"
+        },
+        "conditions": "anything_else",
+        "dialog_node": "response_26_1657785468841",
+        "previous_sibling": "response_25_1657785468841"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "No te he entendido bien. Contesta s\u00ed o no."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_24_1657788602267",
+        "context": {
+          "repeticiones": "<? $repeticiones + 1 ?>"
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_22_1657788602265"
+        },
+        "conditions": "anything_else",
+        "dialog_node": "response_26_1657788602267",
+        "previous_sibling": "response_25_1657788602267"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "A continuaci\u00f3n ind\u00edcame cu\u00e1nto bebes m\u00e1s o menos cada d\u00eda seg\u00fan el tipo de alcohol."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_1_1657785468839",
+        "disabled": true,
+        "conditions": "@bool:Si",
+        "dialog_node": "response_27_1657785468841",
+        "previous_sibling": "node_1_1657787880431"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_1_1657785468839",
+        "disabled": true,
+        "conditions": "@bool:No",
+        "dialog_node": "response_28_1657785468841",
+        "previous_sibling": "response_27_1657785468841"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              "Lo siento, no te he entendido. Volvamos al inicio."
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_29_1657785500311",
+        "conditions": "repeticiones >= 3",
+        "dialog_node": "response_30_1657785500313"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              "Lo siento, no te he entendido. Volvamos al inicio."
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_29_1657789295923",
+        "conditions": "repeticiones >= 3",
+        "dialog_node": "response_30_1657789295923"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "No te he entendido bien. Contesta s\u00ed o no."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_29_1657785500311",
+        "context": {
+          "repeticiones": "<? $repeticiones + 1 ?>"
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "body",
+          "dialog_node": "node_9_1657714631352"
+        },
+        "conditions": "anything_else",
+        "dialog_node": "response_31_1657785500313",
+        "previous_sibling": "response_30_1657785500313"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "No te he entendido bien. Contesta s\u00ed o no."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_29_1657789295923",
+        "context": {
+          "repeticiones": "<? $repeticiones + 1 ?>"
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_27_1657789295920"
+        },
+        "conditions": "anything_else",
+        "dialog_node": "response_31_1657789295923",
+        "previous_sibling": "response_30_1657789295923"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              "He encontrado un error al recoger informaci\u00f3n del servidor. "
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_1_1658730637381",
+        "conditions": "anything_else",
+        "dialog_node": "response_3_1658730637383",
+        "previous_sibling": "response_2_1658730637383"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              "Lo siento, no te he entendido. Volvamos al inicio."
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_3_1657789346938",
+        "conditions": "repeticiones >= 3",
+        "dialog_node": "response_4_1657789346938"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              "Lo siento, no te he entendido. Volvamos al inicio."
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_6_1657715678060",
+        "conditions": "repeticiones >= 3",
+        "dialog_node": "response_5_1657715969147"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              "Lo siento, no te he entendido. Volvamos al inicio."
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_4_1657785468841",
+        "conditions": "repeticiones >= 3",
+        "dialog_node": "response_5_1657785468841"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              "Lo siento, no te he entendido. Volvamos al inicio."
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_4_1657788081524",
+        "conditions": "repeticiones >= 3",
+        "dialog_node": "response_5_1657788081524"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "No te he entendido bien. Contesta s\u00ed o no."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_3_1657789346938",
+        "context": {
+          "repeticiones": "<? $repeticiones + 1 ?>"
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_1_1657789346937"
+        },
+        "conditions": "anything_else",
+        "dialog_node": "response_5_1657789346938",
+        "previous_sibling": "response_4_1657789346938"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "No te he entendido bien. Dime una cantidad."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_4_1657785468841",
+        "context": {
+          "repeticiones": "<? $repeticiones + 1 ?>"
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_2_1657785468841"
+        },
+        "conditions": "anything_else",
+        "dialog_node": "response_6_1657785468841",
+        "previous_sibling": "response_5_1657785468841"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "No te he entendido bien. Contesta s\u00ed o no."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_4_1657788081524",
+        "context": {
+          "repeticiones": "<? $repeticiones + 1 ?>"
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_2_1657788081522"
+        },
+        "conditions": "anything_else",
+        "dialog_node": "response_6_1657788081524",
+        "previous_sibling": "response_5_1657788081524"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "De acuerdo \ud83d\udc4d\u200b"
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_2_1657789346938",
+        "context": {
+          "repeticiones": 0,
+          "onboarding_info": {
+            "personalGoal": "@metodo_uso"
+          }
+        },
+        "conditions": "@metodo_uso:(Conocer m\u00e1s cosas sobre el consumo de alcohol)",
+        "dialog_node": "response_6_1657789839615",
+        "previous_sibling": "response_2_1657789838066"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              "Lo siento, no te he entendido. Volvamos al inicio."
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_63_1657716067359",
+        "conditions": "repeticiones >= 3",
+        "dialog_node": "response_64_1657716067359"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "No te he entendido bien. Dime una cantidad."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_63_1657716067359",
+        "context": {
+          "repeticiones": "<? $repeticiones + 1 ?>"
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_61_1657716067358"
+        },
+        "conditions": "anything_else",
+        "dialog_node": "response_65_1657716067359",
+        "previous_sibling": "response_64_1657716067359"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              "Lo siento, no te he entendido. Volvamos al inicio."
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_68_1657716310235",
+        "conditions": "repeticiones >= 3",
+        "dialog_node": "response_69_1657716310235"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "No te he entendido bien. Dime una cantidad."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_68_1657716310235",
+        "context": {
+          "repeticiones": "<? $repeticiones + 1 ?>"
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_66_1657716310234"
+        },
+        "conditions": "anything_else",
+        "dialog_node": "response_70_1657716310235",
+        "previous_sibling": "response_69_1657716310235"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              "Algo ha ido mal, no he podido registrar tus preguntas. Int\u00e9ntalo m\u00e1s tarde."
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_10_1657790389867",
+        "conditions": "anything_else",
+        "dialog_node": "response_7_1657790426998",
+        "previous_sibling": "response_10_1657790426453"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_9_1658749047803",
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "body",
+          "dialog_node": "node_3_1657714575004"
+        },
+        "conditions": "$onboarding_hecho == false",
+        "dialog_node": "response_7_1658749075275"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              "Lo siento, no te he entendido. Volvamos al inicio."
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_73_1657716472965",
+        "conditions": "repeticiones >= 3",
+        "dialog_node": "response_74_1657716472965"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "No te he entendido bien. Dime una cantidad."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_73_1657716472965",
+        "context": {
+          "repeticiones": "<? $repeticiones + 1 ?>"
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_71_1657716472964"
+        },
+        "conditions": "anything_else",
+        "dialog_node": "response_75_1657716472965",
+        "previous_sibling": "response_74_1657716472965"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              "Lo siento, no te he entendido. Volvamos al inicio."
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_78_1657716659406",
+        "conditions": "repeticiones >= 3",
+        "dialog_node": "response_79_1657716659406"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "No te he entendido bien. Dime una cantidad."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_78_1657716659406",
+        "context": {
+          "repeticiones": "<? $repeticiones + 1 ?>"
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_76_1657716659405"
+        },
+        "conditions": "anything_else",
+        "dialog_node": "response_80_1657716659406",
+        "previous_sibling": "response_79_1657716659406"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "\u00a1Enhorabuena por tu decisi\u00f3n! \ud83d\udc4f\u200b"
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_2_1657789346938",
+        "context": {
+          "repeticiones": 0,
+          "onboarding_info": {
+            "personalGoal": "@metodo_uso"
+          }
+        },
+        "conditions": "@metodo_uso:(Eliminar el consumo de alcohol)",
+        "dialog_node": "response_9_1657789836162"
+      }
+    ],
+    "counterexamples": [],
+    "system_settings": {
+      "disambiguation": {
+        "prompt": "Quer\u00edas decir:",
+        "enabled": true,
+        "randomize": true,
+        "max_suggestions": 5,
+        "suggestion_text_policy": "title",
+        "none_of_the_above_prompt": "Ninguna de las anteriores"
+      },
+      "human_agent_assist": {
+        "prompt": "Quer\u00edas decir:"
+      },
+      "intent_classification": {
+        "training_backend_version": "v2"
+      }
+    },
+    "learning_opt_out": false
+  },
+  "description": "Adicciones - Alcohol",
+  "assistant_id": "4cca232f-80ff-40f6-91b5-f3c9acec4897",
+  "workspace_id": "61d88831-0573-4bf4-acb3-4735d8798574",
+  "dialog_settings": {},
+  "next_snapshot_version": "1"
+}

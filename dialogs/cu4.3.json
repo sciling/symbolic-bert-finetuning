@@ -1,0 +1,2513 @@
+{
+  "name": "CU4.2 - Tabaco-dialog",
+  "type": "dialog",
+  "valid": true,
+  "status": "Available",
+  "created": "2022-07-12T09:39:29.217Z",
+  "updated": "2022-07-26T07:11:54.330Z",
+  "language": "en",
+  "skill_id": "314b74b7-8d7c-48c1-9460-9bbe63ec2142",
+  "workspace": {
+    "intents": [
+      {
+        "intent": "get_patient",
+        "examples": [
+          {
+            "text": "get patient"
+          },
+          {
+            "text": "obtener paciente"
+          }
+        ]
+      },
+      {
+        "intent": "onboarding",
+        "examples": [
+          {
+            "text": "\u00a1Adelante!"
+          },
+          {
+            "text": "Adelante"
+          },
+          {
+            "text": "hacer onboarding"
+          },
+          {
+            "text": "Vamos"
+          }
+        ]
+      },
+      {
+        "intent": "onboarding_comenzar",
+        "examples": [
+          {
+            "text": "cuestionario inicial"
+          },
+          {
+            "text": "Empezar a utilizar el asistente"
+          },
+          {
+            "text": "informaci\u00f3n inicial"
+          }
+        ]
+      },
+      {
+        "intent": "volver_inicio",
+        "examples": [
+          {
+            "text": "mas tarde"
+          },
+          {
+            "text": "mejor mas tarde"
+          },
+          {
+            "text": "quiero volver al inicio"
+          },
+          {
+            "text": "volver al inicio"
+          },
+          {
+            "text": "vuelta al inicio"
+          }
+        ]
+      },
+      {
+        "intent": "welcome",
+        "examples": [
+          {
+            "text": "\u00a1Bienvenido!"
+          },
+          {
+            "text": "\u00a1Comenzar!"
+          },
+          {
+            "text": "welcome"
+          }
+        ]
+      }
+    ],
+    "entities": [
+      {
+        "entity": "bool",
+        "values": [
+          {
+            "type": "synonyms",
+            "value": "No",
+            "synonyms": []
+          },
+          {
+            "type": "synonyms",
+            "value": "Si",
+            "synonyms": []
+          }
+        ]
+      },
+      {
+        "entity": "metodo_uso",
+        "values": [
+          {
+            "type": "synonyms",
+            "value": "dejar de fumar",
+            "synonyms": [
+              "dejar",
+              "dejar fumar",
+              "dejarlo",
+              "Si",
+              "S\u00ed"
+            ]
+          },
+          {
+            "type": "synonyms",
+            "value": "hacer un registro",
+            "synonyms": [
+              "mismo consumo",
+              "registrar",
+              "registrar consumo",
+              "registro",
+              "registro consumo",
+              "solo registrar"
+            ]
+          },
+          {
+            "type": "synonyms",
+            "value": "reducir consumo",
+            "synonyms": [
+              "consumir menos",
+              "reducir",
+              "reducirlo",
+              "s\u00f3lo reducir consumo"
+            ]
+          }
+        ],
+        "fuzzy_match": true
+      },
+      {
+        "entity": "renuncia_cigarrillo",
+        "values": [
+          {
+            "type": "synonyms",
+            "value": "otro",
+            "synonyms": []
+          },
+          {
+            "type": "synonyms",
+            "value": "primero de la ma\u00f1ana",
+            "synonyms": [
+              "el primero",
+              "por la ma\u00f1ana",
+              "primero"
+            ]
+          }
+        ],
+        "fuzzy_match": true
+      },
+      {
+        "entity": "sys-date",
+        "values": [],
+        "fuzzy_match": true
+      },
+      {
+        "entity": "sys-number",
+        "values": [],
+        "fuzzy_match": true
+      },
+      {
+        "entity": "tratamiento",
+        "values": [
+          {
+            "type": "synonyms",
+            "value": "acupuntura",
+            "synonyms": []
+          },
+          {
+            "type": "synonyms",
+            "value": "f\u00e1rmacos",
+            "synonyms": []
+          },
+          {
+            "type": "synonyms",
+            "value": "otra",
+            "synonyms": []
+          },
+          {
+            "type": "synonyms",
+            "value": "parches de nicotina",
+            "synonyms": []
+          },
+          {
+            "type": "synonyms",
+            "value": "terapia",
+            "synonyms": []
+          },
+          {
+            "type": "synonyms",
+            "value": "vaping",
+            "synonyms": []
+          }
+        ],
+        "fuzzy_match": true
+      }
+    ],
+    "metadata": {
+      "api_version": {
+        "major_version": "v2",
+        "minor_version": "2018-11-08"
+      }
+    },
+    "webhooks": [
+      {
+        "url": "https://eu-de.functions.appdomain.cloud/api/v1/web/aebee2c2-76ed-4086-8c56-f81ffe589315/default/CU4.2.json",
+        "name": "main_webhook",
+        "headers": [
+          {
+            "name": "X-Require-Whisk-Auth",
+            "value": "1234104668133415"
+          },
+          {
+            "name": "Accept",
+            "value": "application/json"
+          }
+        ]
+      }
+    ],
+    "dialog_nodes": [
+      {
+        "type": "standard",
+        "title": "Bienvenido",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "\u00a1Hola! \ud83d\udc4b "
+                },
+                {
+                  "text": "Si ha llegado hasta aqu\u00ed es porque est\u00e1 tomando alg\u00fan psicof\u00e1rmaco (medicaci\u00f3n para los nervios, para la depresi\u00f3n, para la ansiedad, para el trastorno bipolar, para el trastorno obsesivo-compulsivo...) que le ha recetado su m\u00e9dico/a de cabecera o su psiquiatra.  "
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "multiline"
+            }
+          ]
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "body",
+          "dialog_node": "node_3_1657537935978"
+        },
+        "conditions": "welcome || #welcome",
+        "dialog_node": "Bienvenido",
+        "previous_sibling": "node_4_1658747295337"
+      },
+      {
+        "type": "standard",
+        "title": "En otras cosas",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "No le he entendido. Intente reformular la consulta."
+                },
+                {
+                  "text": "\u00bfPuede expresarse con otras palabras? No le he entendido."
+                },
+                {
+                  "text": "No entend\u00ed el significado."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "conditions": "anything_else",
+        "dialog_node": "En otras cosas",
+        "previous_sibling": "node_10_1657539888202",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Inicio",
+        "conditions": "#volver_inicio",
+        "dialog_node": "node_10_1657539888202",
+        "previous_sibling": "node_3_1657537935978"
+      },
+      {
+        "type": "standard",
+        "title": "\u00bfTe resulta dif\u00edcil no fumar en lugares donde est\u00e1 prohibido?",
+        "output": {
+          "generic": [
+            {
+              "title": "\u00bfTe resulta dif\u00edcil no fumar en lugares donde est\u00e1 prohibido?",
+              "options": [
+                {
+                  "label": "S\u00ed",
+                  "value": {
+                    "input": {
+                      "text": "@bool:Si"
+                    }
+                  }
+                },
+                {
+                  "label": "No",
+                  "value": {
+                    "input": {
+                      "text": "@bool:No"
+                    }
+                  }
+                }
+              ],
+              "response_type": "option"
+            }
+          ]
+        },
+        "parent": "node_4_1657697179841",
+        "conditions": "true",
+        "dialog_node": "node_11_1657699207001",
+        "previous_sibling": "node_8_1657698153265"
+      },
+      {
+        "type": "standard",
+        "title": "Respuesta inv\u00e1lida",
+        "parent": "node_5_1657538291641",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "conditions": "anything_else",
+        "dialog_node": "node_1_1657539088874",
+        "previous_sibling": "node_4_1657539068823",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "\u00bfQuieres dejar de fumar?",
+        "output": {
+          "generic": [
+            {
+              "title": "\u00bfQuieres dejar de fumar? ",
+              "options": [
+                {
+                  "label": "S\u00ed",
+                  "value": {
+                    "input": {
+                      "text": "@metodo_uso:(dejar de fumar)"
+                    }
+                  }
+                },
+                {
+                  "label": "No, s\u00f3lo reducir consumo",
+                  "value": {
+                    "input": {
+                      "text": "@metodo_uso:(reducir consumo)"
+                    }
+                  }
+                },
+                {
+                  "label": "No, s\u00f3lo hacer un seguimiento de mi consumo",
+                  "value": {
+                    "input": {
+                      "text": "@metodo_uso:(hacer un registro)"
+                    }
+                  }
+                }
+              ],
+              "response_type": "option"
+            }
+          ]
+        },
+        "parent": "node_4_1657538157433",
+        "conditions": "true",
+        "dialog_node": "node_1_1657539962643",
+        "previous_sibling": "node_5_1657538291641"
+      },
+      {
+        "type": "standard",
+        "title": "\u00bfCuantos cigarrillos fumas al d\u00eda?",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "\u00bfCuantos cigarrillos fumas al d\u00eda?"
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_4_1657697179841",
+        "conditions": "true",
+        "dialog_node": "node_1_1657697512669"
+      },
+      {
+        "type": "standard",
+        "title": "\u00bfCu\u00e1ntos cigarrillos tiene tu paquete de tabaco?",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "\u00bfCu\u00e1ntos cigarrillos tiene tu paquete de tabaco?"
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_4_1657538157433",
+        "conditions": "true",
+        "dialog_node": "node_1_1657700361299",
+        "previous_sibling": "node_2_1657700305997"
+      },
+      {
+        "type": "standard",
+        "title": "Puntos del test de dependencia nicotina",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_4_1657697179841",
+        "context": {
+          "onboarding_info": {
+            "nicotineDependency": "$puntos_test"
+          }
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_2_1657700305997"
+        },
+        "conditions": "true",
+        "dialog_node": "node_1_1657794850464",
+        "previous_sibling": "node_34_1657700218566",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "\u00bfFumas m\u00e1s cantidad en eventos sociales? ",
+        "output": {
+          "generic": [
+            {
+              "title": "\u00bfFumas m\u00e1s cantidad en eventos sociales? ",
+              "options": [
+                {
+                  "label": "S\u00ed",
+                  "value": {
+                    "input": {
+                      "text": "@bool:Si"
+                    }
+                  }
+                },
+                {
+                  "label": "No",
+                  "value": {
+                    "input": {
+                      "text": "@bool:No"
+                    }
+                  }
+                }
+              ],
+              "response_type": "option"
+            }
+          ]
+        },
+        "parent": "node_4_1657538157433",
+        "conditions": "true",
+        "dialog_node": "node_1_1657797194365",
+        "previous_sibling": "node_2_1657700390770"
+      },
+      {
+        "type": "standard",
+        "title": "Guardar respuesta",
+        "output": {},
+        "parent": "node_11_1657699207001",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_20_1657699458848"
+        },
+        "conditions": "@bool",
+        "dialog_node": "node_12_1657699207002",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Respuesta inv\u00e1lida",
+        "output": {},
+        "parent": "node_11_1657699207001",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "conditions": "anything_else",
+        "dialog_node": "node_17_1657699207002",
+        "previous_sibling": "node_12_1657699207002",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "\u00bfA qu\u00e9 cigarrillo de los que fumas durante el d\u00eda te ser\u00eda mas dif\u00edcil renunciar?",
+        "output": {
+          "generic": [
+            {
+              "title": "\u00bfA qu\u00e9 cigarrillo de los que fumas durante el d\u00eda te ser\u00eda mas dif\u00edcil renunciar?",
+              "options": [
+                {
+                  "label": "El primero por la ma\u00f1ana",
+                  "value": {
+                    "input": {
+                      "text": "@renuncia_cigarrillo:(primero por la ma\u00f1ana)"
+                    }
+                  }
+                },
+                {
+                  "label": "Otro",
+                  "value": {
+                    "input": {
+                      "text": "@renuncia_cigarrillo:otro"
+                    }
+                  }
+                }
+              ],
+              "response_type": "option"
+            }
+          ]
+        },
+        "parent": "node_4_1657697179841",
+        "conditions": "true",
+        "dialog_node": "node_20_1657699458848",
+        "previous_sibling": "node_11_1657699207001"
+      },
+      {
+        "type": "standard",
+        "title": "Guardar respuesta",
+        "output": {},
+        "parent": "node_20_1657699458848",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_27_1657699854335"
+        },
+        "conditions": "@renuncia_cigarrillo",
+        "dialog_node": "node_21_1657699458849",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Guardar respuesta",
+        "parent": "node_1_1657539962643",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_4_1657697179841"
+        },
+        "conditions": "@metodo_uso",
+        "dialog_node": "node_2_1657540462002",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Respuesta inv\u00e1lida",
+        "parent": "node_1_1657539962643",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "conditions": "anything_else",
+        "dialog_node": "node_2_1657698012786",
+        "previous_sibling": "node_2_1657540462002",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "\u00bfCu\u00e1ntos a\u00f1os llevas fumando?",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "\u00bfCu\u00e1ntos a\u00f1os llevas fumando?"
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_4_1657538157433",
+        "conditions": "true",
+        "dialog_node": "node_2_1657700305997",
+        "previous_sibling": "node_4_1657697179841"
+      },
+      {
+        "type": "standard",
+        "title": "\u00bfCual es el coste de un paquete de tu marca de tabaco?",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "\u00bfCual es el coste de un paquete de tu marca de tabaco?"
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_4_1657538157433",
+        "context": {},
+        "conditions": "true",
+        "dialog_node": "node_2_1657700390770",
+        "previous_sibling": "node_1_1657700361299"
+      },
+      {
+        "type": "standard",
+        "title": "Guardar respuesta",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_1_1657797194365",
+        "context": {
+          "repeticiones": 0,
+          "onboarding_info": "<? @bool:No ? false : true ?>"
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_8_1657700446703"
+        },
+        "conditions": "@bool",
+        "dialog_node": "node_2_1657797194367"
+      },
+      {
+        "type": "standard",
+        "title": "Respuesta inv\u00e1lida",
+        "output": {},
+        "parent": "node_20_1657699458848",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "conditions": "anything_else",
+        "dialog_node": "node_24_1657699458849",
+        "previous_sibling": "node_21_1657699458849",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "\u00bfFumas con m\u00e1s frecuencia por la ma\u00f1ana que por la tarde?",
+        "output": {
+          "generic": [
+            {
+              "title": "\u00bfFumas con m\u00e1s frecuencia por la ma\u00f1ana que por la tarde?",
+              "options": [
+                {
+                  "label": "S\u00ed",
+                  "value": {
+                    "input": {
+                      "text": "@bool:Si"
+                    }
+                  }
+                },
+                {
+                  "label": "No",
+                  "value": {
+                    "input": {
+                      "text": "@bool:No"
+                    }
+                  }
+                }
+              ],
+              "response_type": "option"
+            }
+          ]
+        },
+        "parent": "node_4_1657697179841",
+        "conditions": "true",
+        "dialog_node": "node_27_1657699854335",
+        "previous_sibling": "node_20_1657699458848"
+      },
+      {
+        "type": "standard",
+        "title": "Guardar respuesta",
+        "output": {},
+        "parent": "node_27_1657699854335",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_34_1657700218566"
+        },
+        "conditions": "@bool",
+        "dialog_node": "node_28_1657699854336",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Respuesta inv\u00e1lida",
+        "output": {},
+        "parent": "node_27_1657699854335",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "conditions": "anything_else",
+        "dialog_node": "node_31_1657699854336",
+        "previous_sibling": "node_28_1657699854336",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "\u00a1Comenzar!",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "Antes de empezar quiero hacerte unas preguntas para conocer tu relaci\u00f3n con el tabaco."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "context": {},
+        "conditions": "#onboarding_comenzar",
+        "digress_in": "does_not_return",
+        "dialog_node": "node_3_1657537935978",
+        "previous_sibling": "Bienvenido"
+      },
+      {
+        "type": "standard",
+        "title": "Guardar respuesta",
+        "parent": "node_1_1657697512669",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_8_1657698153265"
+        },
+        "conditions": "@sys-number",
+        "dialog_node": "node_3_1657697564995",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Respuesta inv\u00e1lida",
+        "output": {},
+        "parent": "node_1_1657797194365",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "conditions": "anything_else",
+        "dialog_node": "node_3_1657797194367",
+        "previous_sibling": "node_2_1657797194367"
+      },
+      {
+        "type": "standard",
+        "title": "Obtener paciente",
+        "actions": [
+          {
+            "name": "main_webhook",
+            "type": "webhook",
+            "parameters": {
+              "action": "cu4_3_patient_get_user_id",
+              "user_id": "<? $metadata.user_id.toString() ?>",
+              "Authority": "<? $integrations.chat.private.jwt?>",
+              "Authorization_token": "TmFiZWxpYVN5c3RlbTpKZWFsekQxc3RyQnV0cjY2Ng=="
+            },
+            "result_variable": "wh_get_patient"
+          }
+        ],
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "body",
+          "dialog_node": "node_4_1658747295337"
+        },
+        "conditions": "#get_patient",
+        "digress_in": "does_not_return",
+        "dialog_node": "node_3_1657797774191",
+        "previous_sibling": "node_8_1657796397282",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "\u00bfFumas cuando est\u00e1s tan enfermo que debes guardar reposo la mayor parte del d\u00eda?",
+        "output": {
+          "generic": [
+            {
+              "title": "\u00bfFumas cuando est\u00e1s tan enfermo que debes guardar reposo la mayor parte del d\u00eda?",
+              "options": [
+                {
+                  "label": "S\u00ed",
+                  "value": {
+                    "input": {
+                      "text": "@bool:Si"
+                    }
+                  }
+                },
+                {
+                  "label": "No",
+                  "value": {
+                    "input": {
+                      "text": "@bool:No"
+                    }
+                  }
+                }
+              ],
+              "response_type": "option"
+            }
+          ]
+        },
+        "parent": "node_4_1657697179841",
+        "conditions": "true",
+        "dialog_node": "node_34_1657700218566",
+        "previous_sibling": "node_27_1657699854335"
+      },
+      {
+        "type": "standard",
+        "title": "Guardar respuesta",
+        "output": {},
+        "parent": "node_34_1657700218566",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_1_1657794850464"
+        },
+        "conditions": "@bool",
+        "dialog_node": "node_35_1657700218568",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Respuesta inv\u00e1lida",
+        "output": {},
+        "parent": "node_34_1657700218566",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "conditions": "anything_else",
+        "dialog_node": "node_38_1657700218568",
+        "previous_sibling": "node_35_1657700218568",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Respuesta inv\u00e1lida",
+        "output": {},
+        "parent": "node_2_1657700305997",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "conditions": "anything_else",
+        "dialog_node": "node_41_1657705283708",
+        "previous_sibling": "node_4_1657705272274",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "\u00a1Adelante!",
+        "parent": "node_3_1657537935978",
+        "context": {},
+        "next_step": {
+          "behavior": "skip_user_input"
+        },
+        "conditions": "#onboarding",
+        "dialog_node": "node_4_1657538157433"
+      },
+      {
+        "type": "standard",
+        "title": "Guardar respuesta",
+        "parent": "node_5_1657538291641",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_1_1657539962643"
+        },
+        "conditions": "@bool",
+        "dialog_node": "node_4_1657539068823",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Test de Fagerstrom",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "A continuaci\u00f3n vamos a realizar un test para evaluar tu adicci\u00f3n al tabaco. Me servir\u00e1 de informaci\u00f3n para ayudarte con el proceso."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_4_1657538157433",
+        "next_step": {
+          "behavior": "skip_user_input"
+        },
+        "conditions": "true",
+        "dialog_node": "node_4_1657697179841",
+        "previous_sibling": "node_1_1657539962643"
+      },
+      {
+        "type": "standard",
+        "title": "Guardar respuesta",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_2_1657700305997",
+        "context": {
+          "repeticiones": 0,
+          "onboarding_info": {
+            "yearsSmoking": "@sys-number"
+          }
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_1_1657700361299"
+        },
+        "conditions": "@sys-number",
+        "dialog_node": "node_4_1657705272274",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "\u00bfOnboarding hecho?",
+        "output": {},
+        "actions": [
+          {
+            "name": "main_webhook",
+            "type": "webhook",
+            "parameters": {
+              "action": "cu4_3_patient_get_subscription",
+              "user_id": "<? $patient.id ?>",
+              "Authority": "<? $integrations.chat.private.jwt?>",
+              "Authorization_token": "TmFiZWxpYVN5c3RlbTpKZWFsekQxc3RyQnV0cjY2Ng=="
+            },
+            "result_variable": "wh_get_patient"
+          }
+        ],
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "Bienvenido"
+        },
+        "conditions": "#get_patient",
+        "dialog_node": "node_4_1658747295337",
+        "previous_sibling": "node_3_1657797774191"
+      },
+      {
+        "type": "standard",
+        "title": "Guardar respuesta",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_1_1657700361299",
+        "context": {
+          "repeticiones": 0,
+          "onboarding_info": {
+            "cigarettesPerPack": "@sys-number"
+          }
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_2_1657700390770"
+        },
+        "conditions": "@sys-number",
+        "dialog_node": "node_44_1657706547664",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Respuesta inv\u00e1lida",
+        "output": {},
+        "parent": "node_1_1657700361299",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "conditions": "anything_else",
+        "dialog_node": "node_45_1657706556256",
+        "previous_sibling": "node_44_1657706547664",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Guardar respuesta",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_2_1657700390770",
+        "context": {
+          "repeticiones": 0,
+          "onboarding_info": {
+            "pricePerPack": "@sys-number"
+          }
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_8_1657700446703"
+        },
+        "conditions": "@sys-number",
+        "dialog_node": "node_48_1657706613117",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Guardar respuesta",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_8_1657700446703",
+        "context": {
+          "repeticiones": 0,
+          "onboarding_info": {
+            "yearsSmoking": "<? @sys-date.reformatDateTime('yyyy/MM/dd') ?>"
+          }
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_2_1657700390770"
+        },
+        "conditions": "@sys-date",
+        "dialog_node": "node_49_1657706614574",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Guardar respuesta",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_6_1657700487133",
+        "context": {
+          "repeticiones": 0,
+          "onboarding_info": {
+            "smokingTreatment": "@tratamiento"
+          }
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_2_1657700390770"
+        },
+        "conditions": "@tratamiento",
+        "dialog_node": "node_50_1657706616061",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "\u00bfEres fumador?",
+        "output": {
+          "generic": [
+            {
+              "title": "\u00bfEres fumador?",
+              "options": [
+                {
+                  "label": "S\u00ed",
+                  "value": {
+                    "input": {
+                      "text": "@bool:Si"
+                    }
+                  }
+                },
+                {
+                  "label": "No",
+                  "value": {
+                    "input": {
+                      "text": "@bool:No"
+                    }
+                  }
+                }
+              ],
+              "response_type": "option"
+            }
+          ]
+        },
+        "parent": "node_4_1657538157433",
+        "conditions": "true",
+        "dialog_node": "node_5_1657538291641"
+      },
+      {
+        "type": "standard",
+        "title": "Respuesta inv\u00e1lida",
+        "output": {},
+        "parent": "node_1_1657697512669",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "conditions": "anything_else",
+        "dialog_node": "node_5_1657698097424",
+        "previous_sibling": "node_3_1657697564995",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Enviar onboarding",
+        "parent": "node_4_1657538157433",
+        "actions": [
+          {
+            "name": "main_webhook",
+            "type": "webhook",
+            "parameters": {
+              "data": "$onboarding_info",
+              "action": "cu4_2_patient_post_onboarding",
+              "user_id": "<? $patient.id.toString() ?>",
+              "Authority": "<? $integrations.chat.private.jwt?>",
+              "Authorization_token": "TmFiZWxpYVN5c3RlbTpKZWFsekQxc3RyQnV0cjY2Ng=="
+            },
+            "result_variable": "onboarding_respond"
+          }
+        ],
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "dialog_node": "node_5_1657706926549",
+        "previous_sibling": "node_6_1657700487133",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Respuesta inv\u00e1lida",
+        "output": {},
+        "parent": "node_2_1657700390770",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "conditions": "anything_else",
+        "dialog_node": "node_52_1657706652032",
+        "previous_sibling": "node_48_1657706613117",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Respuesta inv\u00e1lida",
+        "output": {},
+        "parent": "node_8_1657700446703",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "conditions": "anything_else",
+        "dialog_node": "node_55_1657706653431",
+        "previous_sibling": "node_49_1657706614574",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Respuesta inv\u00e1lida",
+        "output": {},
+        "parent": "node_6_1657700487133",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "conditions": "anything_else",
+        "dialog_node": "node_58_1657706654555",
+        "previous_sibling": "node_50_1657706616061",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "parent": "node_3_1657537935978",
+        "conditions": "anything_else",
+        "dialog_node": "node_6_1657538194922",
+        "previous_sibling": "node_4_1657538157433"
+      },
+      {
+        "type": "standard",
+        "title": "\u00bfQu\u00e9 tratamiento de deshabituaci\u00f3n del tabaco prefieres?",
+        "output": {
+          "generic": [
+            {
+              "title": "\u00bfQu\u00e9 tratamiento de deshabituaci\u00f3n del tabaco prefieres?",
+              "options": [
+                {
+                  "label": "Parches de nicotina",
+                  "value": {
+                    "input": {
+                      "text": "@tratamiento:(parches de nicotina)"
+                    }
+                  }
+                },
+                {
+                  "label": "F\u00e1rmacos",
+                  "value": {
+                    "input": {
+                      "text": "@tratamiento:(f\u00e1rmacos)"
+                    }
+                  }
+                },
+                {
+                  "label": "Vaping",
+                  "value": {
+                    "input": {
+                      "text": "@tratamiento:(vaping)"
+                    }
+                  }
+                },
+                {
+                  "label": "Acupuntura",
+                  "value": {
+                    "input": {
+                      "text": "@tratamiento:(acupuntura)"
+                    }
+                  }
+                },
+                {
+                  "label": "Terapia",
+                  "value": {
+                    "input": {
+                      "text": "@tratamiento:(terapia)"
+                    }
+                  }
+                },
+                {
+                  "label": "Otra",
+                  "value": {
+                    "input": {
+                      "text": "@tratamiento:(otra)"
+                    }
+                  }
+                }
+              ],
+              "response_type": "option"
+            }
+          ]
+        },
+        "parent": "node_4_1657538157433",
+        "conditions": "true",
+        "dialog_node": "node_6_1657700487133",
+        "previous_sibling": "node_8_1657700446703"
+      },
+      {
+        "type": "standard",
+        "title": "Redirigir seg\u00fan onboarding",
+        "parent": "Bienvenido",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "conditions": "true",
+        "dialog_node": "node_7_1658748485426"
+      },
+      {
+        "type": "standard",
+        "title": "\u00bfCu\u00e1nto tiempo, en minutos, pasa desde que te despiertas hasta que te fumas el primer cigarrillo?",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "\u00bfCu\u00e1nto tiempo pasa desde que te despiertas hasta que te fumas el primer cigarrillo?"
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_4_1657697179841",
+        "conditions": "true",
+        "dialog_node": "node_8_1657698153265",
+        "previous_sibling": "node_1_1657697512669"
+      },
+      {
+        "type": "standard",
+        "title": "Respuesta inv\u00e1lida",
+        "output": {},
+        "parent": "node_8_1657698153265",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "conditions": "anything_else",
+        "dialog_node": "node_8_1657698936730",
+        "previous_sibling": "node_9_1657698192249",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "title": "Selecciona tu GRAN D\u00cdA para dejar de fumar",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "Selecciona tu GRAN D\u00cdA para dejar de fumar"
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_4_1657538157433",
+        "conditions": "true",
+        "dialog_node": "node_8_1657700446703",
+        "previous_sibling": "node_1_1657797194365"
+      },
+      {
+        "type": "standard",
+        "title": "coversation_start",
+        "output": {
+          "generic": []
+        },
+        "context": {
+          "onboarding_info": {}
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "body",
+          "dialog_node": "node_3_1657797774191"
+        },
+        "conditions": "conversation_start",
+        "digress_in": "does_not_return",
+        "dialog_node": "node_8_1657796397282"
+      },
+      {
+        "type": "standard",
+        "title": "Guardar respuesta",
+        "parent": "node_8_1657698153265",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_11_1657699207001"
+        },
+        "conditions": "@sys-number",
+        "dialog_node": "node_9_1657698192249",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_3_1657697564995",
+        "context": {
+          "puntos_test": "<? $puntos_test + 3 ?>",
+          "repeticiones": 0,
+          "onboarding_info": {
+            "cigarettesPerDay": "@sys-number"
+          }
+        },
+        "conditions": "@sys-number > 30",
+        "dialog_node": "response_10_1657697669377",
+        "previous_sibling": "response_7_1657697644205"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "No te he entendido bien. Contesta s\u00ed o no."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_8_1657698936730",
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "body",
+          "dialog_node": "node_1_1657539962643"
+        },
+        "conditions": "anything_else",
+        "dialog_node": "response_10_1657698936731",
+        "previous_sibling": "response_9_1657698936731"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_9_1657698192249",
+        "context": {
+          "puntos_test": "<? $puntos_test + 2 ?>",
+          "onboarding_info": {
+            "timeUntilFirstCigarette": "@sys-number"
+          }
+        },
+        "conditions": "@sys-number > 5 && @sys-number <= 30",
+        "dialog_node": "response_1_1657698259611",
+        "previous_sibling": "response_4_1657698209789"
+      },
+      {
+        "type": "response_condition",
+        "output": {},
+        "parent": "node_5_1657706926549",
+        "conditions": "$onboarding_respond",
+        "dialog_node": "response_1_1657791547899"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              "Lo siento, no te entiendo. Mejor, volvamos al inicio."
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_17_1657699207002",
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "body",
+          "dialog_node": "node_10_1657539888202"
+        },
+        "conditions": "$repeticiones >= 3",
+        "dialog_node": "response_18_1657699207002"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "No te he entendido bien. Contesta s\u00ed o no."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_17_1657699207002",
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_11_1657699207001"
+        },
+        "conditions": "anything_else",
+        "dialog_node": "response_19_1657699207002",
+        "previous_sibling": "response_18_1657699207002"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              ""
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_4_1657539068823",
+        "context": {
+          "onboarding_info": {
+            "smoker": true
+          }
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_1_1657539962643"
+        },
+        "conditions": "@bool:Si",
+        "dialog_node": "response_2_1657539129679"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "Muy bien, enhorabuena por tu decisi\u00f3n.  Ahora quiero conocer un poco m\u00e1s de informaci\u00f3n sobre tus h\u00e1bitos como fumador."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_2_1657540462002",
+        "conditions": "@metodo_uso:(reducir consumo)",
+        "dialog_node": "response_2_1657540510582",
+        "previous_sibling": "response_8_1657540495578"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "Muy bien, te animo a que registres cada d\u00eda tus h\u00e1bitos con el tabaco, pero antes, quiero hacerte unas preguntas."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_2_1657540462002",
+        "conditions": "@metodo_uso:(hacer un registro)",
+        "dialog_node": "response_2_1657540527612",
+        "previous_sibling": "response_2_1657540510582"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_3_1657697564995",
+        "context": {
+          "puntos_test": "$puntos_test",
+          "repeticiones": 0,
+          "onboarding_info": {
+            "cigarettesPerDay": "@sys-number"
+          }
+        },
+        "conditions": "@sys-number <= 10",
+        "dialog_node": "response_2_1657697581519"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              "Lo siento, no te entiendo. Mejor, volvamos al inicio."
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_1_1657539088874",
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "body",
+          "dialog_node": "node_10_1657539888202"
+        },
+        "conditions": "$repeticiones >= 3",
+        "dialog_node": "response_2_1657697908753"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_3_1657797774191",
+        "context": {
+          "patient": "<? $wh_get_patient.message ?>"
+        },
+        "conditions": "$wh_get_patient",
+        "dialog_node": "response_2_1657798131740"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_21_1657699458849",
+        "context": {
+          "puntos_test": "<? $puntos_test + 1 ?>",
+          "repeticiones": 0
+        },
+        "conditions": "@renuncia_cigarrillo:(primero de la ma\u00f1ana)",
+        "dialog_node": "response_22_1657699458849"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_21_1657699458849",
+        "context": {
+          "puntos_test": "$puntos_test",
+          "repeticiones": 0
+        },
+        "conditions": "@renuncia_cigarrillo:otro",
+        "dialog_node": "response_23_1657699458849",
+        "previous_sibling": "response_22_1657699458849"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              "Lo siento, no te entiendo. Mejor, volvamos al inicio."
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_24_1657699458849",
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "body",
+          "dialog_node": "node_10_1657539888202"
+        },
+        "conditions": "$repeticiones >= 3",
+        "dialog_node": "response_25_1657699458849"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "No te he entendido bien. Contesta s\u00ed o no."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_24_1657699458849",
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_20_1657699458848"
+        },
+        "conditions": "anything_else",
+        "dialog_node": "response_26_1657699458849",
+        "previous_sibling": "response_25_1657699458849"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_28_1657699854336",
+        "context": {
+          "puntos_test": "<? $puntos_test + 1 ?>",
+          "repeticiones": 0
+        },
+        "conditions": "@bool:Si",
+        "dialog_node": "response_29_1657699854336"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_28_1657699854336",
+        "context": {
+          "puntos_test": "$puntos_test",
+          "repeticiones": 0
+        },
+        "conditions": "@bool:No",
+        "dialog_node": "response_30_1657699854336",
+        "previous_sibling": "response_29_1657699854336"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_3_1657697564995",
+        "context": {
+          "puntos_test": "<? $puntos_test + 1 ?>",
+          "repeticiones": 0,
+          "onboarding_info": {
+            "cigarettesPerDay": "@sys-number"
+          }
+        },
+        "conditions": "@sys-number > 10 && @sys-number <= 20",
+        "dialog_node": "response_3_1657697604904",
+        "previous_sibling": "response_2_1657697581519"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              "Lo siento, no te entiendo. Mejor, volvamos al inicio."
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_2_1657698012786",
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "body",
+          "dialog_node": "node_10_1657539888202"
+        },
+        "conditions": "$repeticiones >= 3",
+        "dialog_node": "response_3_1657698012787"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_12_1657699207002",
+        "context": {
+          "puntos_test": "<? $puntos_test + 1 ?>",
+          "repeticiones": 0
+        },
+        "conditions": "@bool:Si",
+        "dialog_node": "response_3_1657699300848"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              "Lo siento, no te entiendo. Mejor, volvamos al inicio."
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_31_1657699854336",
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "body",
+          "dialog_node": "node_10_1657539888202"
+        },
+        "conditions": "$repeticiones >= 3",
+        "dialog_node": "response_32_1657699854336"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "No te he entendido bien. Contesta s\u00ed o no."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_31_1657699854336",
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_27_1657699854335"
+        },
+        "conditions": "anything_else",
+        "dialog_node": "response_33_1657699854336",
+        "previous_sibling": "response_32_1657699854336"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_35_1657700218568",
+        "context": {
+          "puntos_test": "<? $puntos_test + 1 ?>",
+          "repeticiones": 0
+        },
+        "conditions": "@bool:Si",
+        "dialog_node": "response_36_1657700218568"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_35_1657700218568",
+        "context": {
+          "puntos_test": "$puntos_test",
+          "repeticiones": 0
+        },
+        "conditions": "@bool:No",
+        "dialog_node": "response_37_1657700218568",
+        "previous_sibling": "response_36_1657700218568"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              "Lo siento, no te entiendo. Mejor, volvamos al inicio."
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_38_1657700218568",
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "body",
+          "dialog_node": "node_10_1657539888202"
+        },
+        "conditions": "$repeticiones >= 3",
+        "dialog_node": "response_39_1657700218568"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "No te he entendido bien. Contesta s\u00ed o no."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_38_1657700218568",
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_34_1657700218566"
+        },
+        "conditions": "anything_else",
+        "dialog_node": "response_40_1657700218568",
+        "previous_sibling": "response_39_1657700218568"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "No te he entendido bien. Contesta s\u00ed o no."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_2_1657698012786",
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "body",
+          "dialog_node": "node_1_1657539962643"
+        },
+        "conditions": "anything_else",
+        "dialog_node": "response_4_1657698012787",
+        "previous_sibling": "response_3_1657698012787"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_9_1657698192249",
+        "context": {
+          "puntos_test": "<? $puntos_test + 3 ?>",
+          "repeticiones": 0,
+          "onboarding_info": {
+            "timeUntilFirstCigarette": "@sys-number"
+          }
+        },
+        "conditions": "@sys-number <= 5",
+        "dialog_node": "response_4_1657698209789"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              "Lo siento, no te entiendo. Mejor, volvamos al inicio."
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_3_1657797194367",
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "body",
+          "dialog_node": "node_10_1657539888202"
+        },
+        "conditions": "$repeticiones >= 3",
+        "dialog_node": "response_4_1657797194367"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              "Lo siento, no te entiendo. Mejor, volvamos al inicio."
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_41_1657705283708",
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "body",
+          "dialog_node": "node_10_1657539888202"
+        },
+        "conditions": "$repeticiones >= 3",
+        "dialog_node": "response_42_1657705283710"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "No te he entendido bien. Contesta con un n\u00famero."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_41_1657705283708",
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_2_1657700305997"
+        },
+        "conditions": "anything_else",
+        "dialog_node": "response_43_1657705283710",
+        "previous_sibling": "response_42_1657705283710"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              "Lo siento, no te entiendo. Mejor, volvamos al inicio."
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_45_1657706556256",
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "body",
+          "dialog_node": "node_10_1657539888202"
+        },
+        "conditions": "$repeticiones >= 3",
+        "dialog_node": "response_46_1657706556257"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "No te he entendido bien. Contesta con un n\u00famero."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_45_1657706556256",
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_1_1657700361299"
+        },
+        "conditions": "anything_else",
+        "dialog_node": "response_47_1657706556257",
+        "previous_sibling": "response_46_1657706556257"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_12_1657699207002",
+        "context": {
+          "puntos_test": "$puntos_test",
+          "repeticiones": 0
+        },
+        "conditions": "@bool:No",
+        "dialog_node": "response_5_1657699301719",
+        "previous_sibling": "response_3_1657699300848"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "No te he entendido bien. Contesta con un n\u00famero."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_3_1657797194367",
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_1_1657797194365"
+        },
+        "conditions": "anything_else",
+        "dialog_node": "response_5_1657797194367",
+        "previous_sibling": "response_4_1657797194367"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              "Ha ocurrido un error de conexi\u00f3n con el servidor. Int\u00e9ntalo m\u00e1s tarde."
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_3_1657797774191",
+        "conditions": "anything_else",
+        "dialog_node": "response_5_1657798132488",
+        "previous_sibling": "response_2_1657798131740"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_4_1658747295337",
+        "context": {
+          "onboarding_hecho": "<?$wh_get_patient.message.addTabacoOnboarding ?>"
+        },
+        "conditions": "$wh_get_patient",
+        "dialog_node": "response_5_1658747295338"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              "Lo siento, no te entiendo. Mejor, volvamos al inicio."
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_52_1657706652032",
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "body",
+          "dialog_node": "node_10_1657539888202"
+        },
+        "conditions": "$repeticiones >= 3",
+        "dialog_node": "response_53_1657706652033"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "No te he entendido bien. Contesta con un n\u00famero."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_52_1657706652032",
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_2_1657700390770"
+        },
+        "conditions": "anything_else",
+        "dialog_node": "response_54_1657706652033",
+        "previous_sibling": "response_53_1657706652033"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              "Lo siento, no te entiendo. Mejor, volvamos al inicio."
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_55_1657706653431",
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "body",
+          "dialog_node": "node_10_1657539888202"
+        },
+        "conditions": "$repeticiones >= 3",
+        "dialog_node": "response_56_1657706653433"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "No te he entendido bien. Contesta con una fecha. por ejemplo, ma\u00f1ana o el 12 de agosto."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_55_1657706653431",
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_8_1657700446703"
+        },
+        "conditions": "anything_else",
+        "dialog_node": "response_57_1657706653433",
+        "previous_sibling": "response_56_1657706653433"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              "Lo siento, no te entiendo. Mejor, volvamos al inicio."
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_58_1657706654555",
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "body",
+          "dialog_node": "node_10_1657539888202"
+        },
+        "conditions": "$repeticiones >= 3",
+        "dialog_node": "response_59_1657706654557"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "No te he entendido bien. Contesta con un n\u00famero."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_58_1657706654555",
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_6_1657700487133"
+        },
+        "conditions": "anything_else",
+        "dialog_node": "response_60_1657706654557",
+        "previous_sibling": "response_59_1657706654557"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "\u00a1Felicidades! Sigue as\u00ed. "
+                },
+                {
+                  "text": "Si no eres fumador solo te puedo ayudar si quieres consultar informaci\u00f3n sobre los efectos negatibos del tabaco."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "multiline"
+            }
+          ]
+        },
+        "parent": "node_4_1657539068823",
+        "context": {
+          "onboarding_info": {
+            "smoker": false
+          }
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "body",
+          "dialog_node": "node_10_1657539888202"
+        },
+        "conditions": "@bool:No",
+        "dialog_node": "response_6_1657539206146",
+        "previous_sibling": "response_2_1657539129679"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              "Lo siento, no te entiendo. Mejor, volvamos al inicio."
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_5_1657698097424",
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "body",
+          "dialog_node": "node_10_1657539888202"
+        },
+        "conditions": "$repeticiones >= 3",
+        "dialog_node": "response_6_1657698097425"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_9_1657698192249",
+        "context": {
+          "puntos_test": "$puntos_test",
+          "repeticiones": 0,
+          "onboarding_info": {
+            "timeUntilFirstCigarette": "@sys-number"
+          }
+        },
+        "conditions": "@sys-number > 60",
+        "dialog_node": "response_6_1657698330626",
+        "previous_sibling": "response_8_1657698316924"
+      },
+      {
+        "type": "response_condition",
+        "parent": "node_5_1657706926549",
+        "conditions": "anything_else",
+        "dialog_node": "response_6_1657791548492",
+        "previous_sibling": "response_1_1657791547899"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              "No he podido conectarme con el servidor. Int\u00e9ntalo m\u00e1s tarde."
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_4_1658747295337",
+        "conditions": "anything_else",
+        "dialog_node": "response_6_1658747295338",
+        "previous_sibling": "response_5_1658747295338"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_7_1658748485426",
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "body",
+          "dialog_node": "node_3_1657537935978"
+        },
+        "conditions": "$onboarding_hecho == false",
+        "dialog_node": "response_6_1658748511293"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_7_1658748485426",
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "body",
+          "dialog_node": "node_10_1657539888202"
+        },
+        "conditions": "anything_else",
+        "dialog_node": "response_6_1658748529482",
+        "previous_sibling": "response_6_1658748511293"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_3_1657697564995",
+        "context": {
+          "puntos_test": "<? $puntos_test + 2 ?>",
+          "repeticiones": 0,
+          "onboarding_info": {
+            "cigarettesPerDay": "@sys-number"
+          }
+        },
+        "conditions": "@sys-number > 20 && @sys-number <= 30",
+        "dialog_node": "response_7_1657697644205",
+        "previous_sibling": "response_3_1657697604904"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "No te he entendido bien. Contesta s\u00ed o no."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_5_1657698097424",
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "body",
+          "dialog_node": "node_1_1657539962643"
+        },
+        "conditions": "anything_else",
+        "dialog_node": "response_7_1657698097425",
+        "previous_sibling": "response_6_1657698097425"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              "\u00a1Buen\u00edsima decisi\u00f3n! Ahora voy a hacerte unas preguntas para ayudarte en este proceso."
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_2_1657540462002",
+        "conditions": "@metodo_uso:(dejar de fumar)",
+        "dialog_node": "response_8_1657540495578"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_9_1657698192249",
+        "context": {
+          "puntos_test": "<? $puntos_test + 1 ?>",
+          "repeticiones": 0,
+          "onboarding_info": {
+            "timeUntilFirstCigarette": "@sys-number"
+          }
+        },
+        "conditions": "@sys-number > 30 && @sys-number <= 60",
+        "dialog_node": "response_8_1657698316924",
+        "previous_sibling": "response_1_1657698259611"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "No te he entendido bien. Contesta s\u00ed o no."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "sequential"
+            }
+          ]
+        },
+        "parent": "node_1_1657539088874",
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "condition",
+          "dialog_node": "node_5_1657538291641"
+        },
+        "conditions": "anything_else",
+        "dialog_node": "response_9_1657697926946",
+        "previous_sibling": "response_2_1657697908753"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "text": {
+            "values": [
+              "Lo siento, no te entiendo. Mejor, volvamos al inicio."
+            ],
+            "selection_policy": "sequential"
+          }
+        },
+        "parent": "node_8_1657698936730",
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "body",
+          "dialog_node": "node_10_1657539888202"
+        },
+        "conditions": "$repeticiones >= 3",
+        "dialog_node": "response_9_1657698936731"
+      }
+    ],
+    "counterexamples": [],
+    "system_settings": {
+      "disambiguation": {
+        "prompt": "Quer\u00edas decir:",
+        "enabled": true,
+        "randomize": true,
+        "max_suggestions": 5,
+        "suggestion_text_policy": "title",
+        "none_of_the_above_prompt": "Ninguna de las anteriores"
+      },
+      "human_agent_assist": {
+        "prompt": "Quer\u00edas decir:"
+      },
+      "intent_classification": {
+        "training_backend_version": "v2"
+      }
+    },
+    "learning_opt_out": false
+  },
+  "description": "Adicciones - Tabaco",
+  "assistant_id": "a74ec1a0-9a65-42f4-9e3b-25f2c7ff15e2",
+  "workspace_id": "314b74b7-8d7c-48c1-9460-9bbe63ec2142",
+  "dialog_settings": {},
+  "next_snapshot_version": "1"
+}

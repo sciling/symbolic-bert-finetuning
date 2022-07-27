@@ -1,0 +1,19 @@
+id: cu4.1
+name: cu4.1
+config:
+  assistant_id: 4cca232f-80ff-40f6-91b5-f3c9acec4897
+entities:
+  bool:
+    No: []
+    Si: []
+  metodo_uso:
+    Conocer más cosas sobre el consumo de alcohol:
+      - conocer más
+      - seguimiento
+    Eliminar el consumo de alcohol:
+      - dejar
+      - dejar de consumir
+      - eliminar
+    Reducir el consumo de alcohol:
+      - bajar
+      - reducir

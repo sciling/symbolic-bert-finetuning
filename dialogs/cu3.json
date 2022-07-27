@@ -1,0 +1,1111 @@
+{
+  "name": "CU3-Sonrisa Saludable-dialog",
+  "type": "dialog",
+  "valid": true,
+  "status": "Available",
+  "created": "2022-05-30T10:20:47.533Z",
+  "updated": "2022-07-22T13:19:23.132Z",
+  "language": "es",
+  "skill_id": "78f31774-0591-4112-96be-5d418a415953",
+  "workspace": {
+    "intents": [
+      {
+        "intent": "get_patient",
+        "examples": [
+          {
+            "text": "get patient"
+          },
+          {
+            "text": "get patient info"
+          }
+        ],
+        "description": ""
+      },
+      {
+        "intent": "informacion_buscar",
+        "examples": [
+          {
+            "text": "Buscar informacion"
+          },
+          {
+            "text": "Buscar informaci\u00f3n sobre"
+          },
+          {
+            "text": "Consultar informaci\u00f3n"
+          },
+          {
+            "text": "informacion emociones"
+          },
+          {
+            "text": "Quiero informacion"
+          },
+          {
+            "text": "Quiero informaci\u00f3n sobre"
+          },
+          {
+            "text": "Quiero m\u00e1s informaci\u00f3n"
+          },
+          {
+            "text": "Quiero saber sobre..."
+          }
+        ],
+        "description": ""
+      },
+      {
+        "intent": "mas_tarde",
+        "examples": [
+          {
+            "text": "Mejor mas tarde"
+          },
+          {
+            "text": "Mejor m\u00e1s tarde"
+          }
+        ],
+        "description": ""
+      },
+      {
+        "intent": "onboarding",
+        "examples": [
+          {
+            "text": "\u00a1Adelante!"
+          },
+          {
+            "text": "Adelante"
+          },
+          {
+            "text": "\u00bfC\u00f3mo me siento hoy?"
+          },
+          {
+            "text": "me parece bien"
+          },
+          {
+            "text": "Onboarding"
+          },
+          {
+            "text": "quiero registrar emociones"
+          },
+          {
+            "text": "registrar"
+          },
+          {
+            "text": "registrar emociones"
+          },
+          {
+            "text": "Vamos"
+          }
+        ],
+        "description": ""
+      },
+      {
+        "intent": "onboarding_comenzar",
+        "examples": [
+          {
+            "text": "Comencemos"
+          },
+          {
+            "text": "\u00a1Comenzar!"
+          },
+          {
+            "text": "Comenzar"
+          }
+        ],
+        "description": ""
+      },
+      {
+        "intent": "pagina_ayuda_emociones",
+        "examples": [
+          {
+            "text": "otra"
+          },
+          {
+            "text": "otra ayuda"
+          },
+          {
+            "text": "otras"
+          },
+          {
+            "text": "otras emociones"
+          },
+          {
+            "text": "quiero ver mas"
+          }
+        ],
+        "description": ""
+      },
+      {
+        "intent": "retos",
+        "examples": []
+      },
+      {
+        "intent": "volver_inicio",
+        "examples": [
+          {
+            "text": "ir a inicio"
+          },
+          {
+            "text": "Volver"
+          },
+          {
+            "text": "Volver al inicio"
+          },
+          {
+            "text": "vuelta al inicio"
+          }
+        ]
+      },
+      {
+        "intent": "welcome",
+        "examples": [
+          {
+            "text": "\u00a1Comencemos!"
+          },
+          {
+            "text": "welcome"
+          }
+        ],
+        "description": ""
+      }
+    ],
+    "entities": [
+      {
+        "entity": "bool",
+        "values": [
+          {
+            "type": "synonyms",
+            "value": "No",
+            "synonyms": [
+              "no"
+            ]
+          },
+          {
+            "type": "synonyms",
+            "value": "S\u00ed",
+            "synonyms": [
+              "adelante",
+              "claro",
+              "ok",
+              "Si",
+              "vale"
+            ]
+          }
+        ],
+        "fuzzy_match": true
+      },
+      {
+        "entity": "estado_animo",
+        "values": [
+          {
+            "type": "synonyms",
+            "value": "altibajos emocionales",
+            "synonyms": [
+              "afectiva",
+              "alternancia",
+              "altibajos",
+              "\u00c1nimo cambiante",
+              "bipolar",
+              "cambio r\u00e1pido de un estado a otro,",
+              " cambios de humor",
+              " diferentes emociones en un momento",
+              "humor alterado",
+              "sensible",
+              "triste y enseguida contenta y viceversa"
+            ]
+          },
+          {
+            "type": "synonyms",
+            "value": "dificultad para dormir",
+            "synonyms": [
+              "actividad de noche",
+              "despierta por la noche",
+              "desvelada",
+              "duermo mal",
+              "duermo poco",
+              "espabilada de noche",
+              "insomnio",
+              "me cuesta dormir,",
+              "me despierto antes de la hora",
+              "me despierto por las noches",
+              "nocturna",
+              "no descanso",
+              "no duermo bien",
+              "no me duermo",
+              "no puedo dormir",
+              "parezco un b\u00faho",
+              "parezco un vampiro",
+              "sin conciliar el sue\u00f1o",
+              "somnolencia",
+              "vueltas en la cama"
+            ]
+          },
+          {
+            "type": "synonyms",
+            "value": "embotamiento emocional",
+            "synonyms": [
+              "anhedonia",
+              " colapsado",
+              "cosas que antes me hac\u00edan sentir ahora no lo hacen",
+              "estoy bloqueado, no se c\u00f3mo me siento",
+              "falta de disfrute",
+              "falta de placer",
+              "in emociones",
+              "no siento nada",
+              "pobreza afectiva",
+              "solo siento si es algo intenso",
+              "turbada",
+              "vac\u00edo afectivo",
+              "Ya no puedo sentir nada"
+            ]
+          },
+          {
+            "type": "synonyms",
+            "value": "emociones negativas",
+            "synonyms": [
+              "de pena",
+              "dolido",
+              "fatal",
+              "horrible",
+              "horroroso",
+              "mal",
+              "muy mal"
+            ]
+          },
+          {
+            "type": "synonyms",
+            "value": "emociones positivas",
+            "synonyms": [
+              "aceptaci\u00f3n",
+              "admiraci\u00f3n",
+              "alegr\u00eda",
+              "amor",
+              "apego",
+              "bien",
+              "bondad",
+              "compasi\u00f3n",
+              "confianza",
+              "esperanza",
+              "estoy genial",
+              "felicidad",
+              "generosidad",
+              "gratitud",
+              "inter\u00e9s",
+              "mejor que nunca",
+              "me siento de puta madre",
+              "motivaci\u00f3n",
+              "optimismo",
+              "orgullo",
+              "satisfacci\u00f3n",
+              "seguridad",
+              "serenidad",
+              "ternura"
+            ]
+          },
+          {
+            "type": "synonyms",
+            "value": "estr\u00e9s",
+            "synonyms": [
+              "agobio",
+              "estresada",
+              "no llego a las cosas",
+              "no me da tiempo a hacer nada",
+              "no puedo con todo",
+              " tengo estr\u00e9s",
+              "tengo mucha presi\u00f3n"
+            ]
+          },
+          {
+            "type": "synonyms",
+            "value": "falta de inter\u00e9s",
+            "synonyms": [
+              "abandonada",
+              "aburrimiento",
+              "ap\u00e1tica",
+              "dejada",
+              "dejo de hacer",
+              "descontenta",
+              "descuidada",
+              "desinter\u00e9s",
+              "empiezo algo y no termino",
+              "indiferente",
+              "me aburro",
+              "me da pereza",
+              "nada me satisface",
+              "no disfruto de las cosas como antes",
+              "no me apetece",
+              "no me interesa",
+              "no me nace",
+              "para qu\u00e9",
+              "pasota",
+              "reticente",
+              "tediosa"
+            ]
+          },
+          {
+            "type": "synonyms",
+            "value": "frecuencia pensamientos negativos",
+            "synonyms": [
+              "cosas que no deber\u00eda pensar",
+              "cosas que no tienen sentido",
+              "doy muchas vueltas",
+              "obsesivo",
+              "pensamientos que no quiero tener",
+              "pienso cosas malas",
+              "pienso cosas negativas",
+              "pienso cosas que me dan miedo",
+              "pienso cosas raras",
+              "pienso mucho",
+              "tengo pensamientos negativos",
+              "tengo pensamientos que no me puedo quitar de la cabeza"
+            ]
+          },
+          {
+            "type": "synonyms",
+            "value": "ideas de suicidio",
+            "synonyms": [
+              "acabar con todo",
+              "apartarme definitivamente",
+              "borrarme",
+              "decir adi\u00f3s",
+              "dejar nota,",
+              "descansar para siempre",
+              "despedirme",
+              "desprenderme de",
+              "eliminarme",
+              "inmolarme",
+              "matarme",
+              "morir",
+              "morirme",
+              "muerte",
+              "necesito terminar con todo",
+              "no causar m\u00e1s da\u00f1o",
+              "no le veo sentido a las cosas",
+              "no sufrir m\u00e1s",
+              "pensamiento suicida",
+              "pienso en desaparecer",
+              "quitarme de en medio",
+              "quitarme la vida",
+              "sentirme atrapada",
+              "si no estuviera todo ser\u00eda mejor",
+              "suicida",
+              "suicidio",
+              "testamento"
+            ]
+          },
+          {
+            "type": "synonyms",
+            "value": "intensidad de las ideas suicidas",
+            "synonyms": [
+              "Intensidad suicida"
+            ]
+          },
+          {
+            "type": "synonyms",
+            "value": "irritaci\u00f3n",
+            "synonyms": [
+              "col\u00e9rica",
+              "disforia",
+              "Enfadado",
+              "enojada",
+              "gru\u00f1ona",
+              "iracunda",
+              "irascible",
+              "irritacion",
+              "mal humor",
+              "me cabreo r\u00e1pidamente,",
+              "me irrito,",
+              "no se me puede decir nada",
+              "no se me puede hablar",
+              "salto con facilidad",
+              "susceptible",
+              "todo (casi todo ) me molesta"
+            ]
+          },
+          {
+            "type": "synonyms",
+            "value": "lloro",
+            "synonyms": [
+              "l\u00e1grimas",
+              "l\u00e1grima viva",
+              "llorar",
+              "lloriquear",
+              "pla\u00f1ir",
+              "sollozar"
+            ]
+          },
+          {
+            "type": "synonyms",
+            "value": "miedo",
+            "synonyms": [
+              "alarmada",
+              "cagada",
+              "cauta",
+              "cobarde",
+              "desasosiego",
+              "desconfiada",
+              "espantada",
+              "fobia",
+              "insegura",
+              "inseguridad",
+              "no me atrevo,",
+              "no me siento segura",
+              "p\u00e1nico",
+              "pavor",
+              "poco atrevida",
+              "recelosa",
+              "siento miedo",
+              "sobresaltada",
+              "sospecho",
+              "soy miedosa",
+              "temerosa",
+              "temor",
+              "terror",
+              "t\u00edmida",
+              "todo me da miedo",
+              "y si pasa algo"
+            ]
+          },
+          {
+            "type": "synonyms",
+            "value": "nervioso",
+            "synonyms": [
+              "agitada",
+              "alterada",
+              "angustia",
+              "ansiedad",
+              "Estoy nerviosa",
+              "excitada",
+              "inquieta",
+              "intranquila",
+              "no puedo tranquilizarme",
+              "tensi\u00f3n",
+              "tenso"
+            ]
+          },
+          {
+            "type": "synonyms",
+            "value": "preocupaci\u00f3n",
+            "synonyms": [
+              "me preocupa el futuro",
+              "me preocupo por todo",
+              "me siento preocupado",
+              "pienso mucho en lo que puede pasar",
+              "pienso que me puede pasar cosas malas",
+              "preocupado",
+              "tengo preocupaciones"
+            ]
+          },
+          {
+            "type": "synonyms",
+            "value": "sensaci\u00f3n de ahogo",
+            "synonyms": [
+              "apnea",
+              "asfixiada",
+              "asma",
+              "como si no entrara aire",
+              " como si no pudiera respirar",
+              "dificultad para respirar",
+              "falta de aire",
+              "me ahogo",
+              "no puedo respirar",
+              "opresi\u00f3n",
+              "presi\u00f3n en el pecho",
+              "sensaci\u00f3n de ahogo",
+              " siento que me ahogo",
+              "sobrealiento",
+              "sofocada",
+              "sofoco"
+            ]
+          },
+          {
+            "type": "synonyms",
+            "value": "sensaci\u00f3n de cansancio",
+            "synonyms": [
+              "acabada",
+              "agotada",
+              "arrastrada",
+              "baldada",
+              "cansancio",
+              "cascada",
+              "dejada",
+              "desfallecida",
+              "exhausta",
+              "extenuada",
+              "falta de fuerza,",
+              "falta de voluntad",
+              "fatigada",
+              "harta",
+              "hecha polvo",
+              "me pesa el cuerpo",
+              "molida",
+              "muerta mat\u00e1",
+              "muy cansada",
+              "pesada",
+              "rendida",
+              "reventada",
+              "rota",
+              "sin energ\u00eda"
+            ]
+          },
+          {
+            "type": "synonyms",
+            "value": "sensaci\u00f3n de fracaso",
+            "synonyms": [
+              "defraudada",
+              "derrotada",
+              "desastre",
+              "desenga\u00f1ada",
+              "desgraciada",
+              "fiasco",
+              "frustrada",
+              "infortunio",
+              "las metas que me propongo no salen no las consigo",
+              "malogro",
+              "me siento estancada",
+              "me siento fracasada",
+              "nada de lo que me propongo me sale",
+              "no avanzo",
+              "no consigo las metas que me propongo",
+              "no consigo lo que me propongo",
+              "no consigo objetivos",
+              "no hago nada en mi vida",
+              "no se marcarme objetivos",
+              "no tengo \u00e9xito",
+              "no tengo metas",
+              "perder",
+              "siento que fracaso m\u00e1s que otras personas"
+            ]
+          },
+          {
+            "type": "synonyms",
+            "value": "sentimiento de culpa",
+            "synonyms": [
+              " arrepentimiento",
+              "cargo de conciencia",
+              "Culpable",
+              "desliz",
+              "error",
+              "fallo",
+              "he hecho algo malo",
+              "he sido d\u00e9bil",
+              "me lo merezco",
+              "me pasa con raz\u00f3n",
+              "no deb\u00eda",
+              "pecado",
+              "remordimiento",
+              "si hubiera"
+            ]
+          },
+          {
+            "type": "synonyms",
+            "value": "sentimiento de inutilidad",
+            "synonyms": [
+              "atontada",
+              "d\u00e9bil",
+              "improductiva",
+              "incapaz",
+              "incompetente",
+              "ineficaz",
+              "inepta",
+              "inservible",
+              "me siento in\u00fatil",
+              "nada me sale bien",
+              "no soy \u00fatil",
+              "no tengo valor para",
+              "no valgo para nada",
+              "soy est\u00fapida",
+              "soy patosa",
+              "soy tonta",
+              "soy torpe",
+              "todo me sale mal"
+            ]
+          },
+          {
+            "type": "synonyms",
+            "value": "tristeza",
+            "synonyms": [
+              "abatida",
+              "afligida",
+              "amargura",
+              "deprimente",
+              "deprimida",
+              "desconsolada",
+              "desgraciada",
+              "desilusionada",
+              "destrozada",
+              "dolida",
+              "hundido",
+              "l\u00e1stimosa",
+              "me dan ganas de llorar",
+              "me entristece",
+              "melanc\u00f3lica",
+              "me pone mal",
+              "m\u00edsera",
+              " no me apetece",
+              "pena",
+              "pesadumbre",
+              "pesar",
+              "plof",
+              "sin esperanza",
+              "sin ganas",
+              "sola",
+              "tengo sufrimiento",
+              "triste",
+              "tristeza"
+            ]
+          }
+        ],
+        "fuzzy_match": true
+      },
+      {
+        "entity": "likert_lloro",
+        "values": [
+          {
+            "type": "synonyms",
+            "value": "Apenas",
+            "synonyms": [
+              "a penas",
+              "apenas"
+            ]
+          },
+          {
+            "type": "synonyms",
+            "value": "Bastante",
+            "synonyms": [
+              "bastant",
+              "bastante",
+              "bstante"
+            ]
+          },
+          {
+            "type": "synonyms",
+            "value": "Frecuentemente",
+            "synonyms": []
+          },
+          {
+            "type": "synonyms",
+            "value": "Mucho",
+            "synonyms": [
+              "mcho",
+              "much",
+              "ucho"
+            ]
+          },
+          {
+            "type": "synonyms",
+            "value": "Nada",
+            "synonyms": [
+              "nda"
+            ]
+          }
+        ],
+        "fuzzy_match": true
+      },
+      {
+        "entity": "likert_sue\u00f1o",
+        "values": [
+          {
+            "type": "synonyms",
+            "value": "Buena",
+            "synonyms": [
+              "buen",
+              "buna"
+            ]
+          },
+          {
+            "type": "synonyms",
+            "value": "Mala",
+            "synonyms": [
+              "mal",
+              "mla"
+            ]
+          },
+          {
+            "type": "synonyms",
+            "value": "Regular",
+            "synonyms": []
+          }
+        ],
+        "fuzzy_match": true
+      },
+      {
+        "entity": "sys-number",
+        "values": [],
+        "fuzzy_match": true
+      }
+    ],
+    "metadata": {
+      "api_version": {
+        "major_version": "v2",
+        "minor_version": "2018-11-08"
+      }
+    },
+    "webhooks": [
+      {
+        "url": "https://eu-de.functions.appdomain.cloud/api/v1/web/aebee2c2-76ed-4086-8c56-f81ffe589315/default/CU3-sonrisa-saludable-api.json",
+        "name": "main_webhook",
+        "headers": [
+          {
+            "name": "Accept",
+            "value": "application/json"
+          },
+          {
+            "name": "X-Require-Whisk-Auth",
+            "value": "7174367187356269"
+          }
+        ]
+      }
+    ],
+    "dialog_nodes": [
+      {
+        "type": "standard",
+        "title": "Anything else",
+        "output": {
+          "generic": [
+            {
+              "query": "",
+              "filter": "",
+              "query_type": "natural_language",
+              "response_type": "search_skill"
+            }
+          ]
+        },
+        "context": {
+          "second_query": true
+        },
+        "next_step": {
+          "behavior": "jump_to",
+          "selector": "body",
+          "dialog_node": "node_7_1653646200876"
+        },
+        "conditions": "anything_else && not #volver_inicio",
+        "digress_in": "does_not_return",
+        "dialog_node": "Anything else",
+        "previous_sibling": "node_7_1653646200876",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "output": {
+          "generic": [
+            {
+              "title": "\u00bfQu\u00e9 quieres saber? Selecciona uno de los temas que te propongo, o escribe tu pregunta",
+              "options": [
+                {
+                  "label": "\u00bfPor qu\u00e9 tengo esta sensaci\u00f3n de ahogo?",
+                  "value": {
+                    "input": {
+                      "text": "\u00bfPor qu\u00e9 tengo esta sensaci\u00f3n de ahogo?"
+                    }
+                  }
+                },
+                {
+                  "label": "\u00bfEs normal tener altibajos emocionales?",
+                  "value": {
+                    "input": {
+                      "text": "\u00bfEs normal tener altibajos emocionales?"
+                    }
+                  }
+                },
+                {
+                  "label": "\u00bfC\u00f3mo puedo manejar los altibajos emocionales?",
+                  "value": {
+                    "input": {
+                      "text": "\u00bfC\u00f3mo puedo manejar los altibajos emocionales?"
+                    }
+                  }
+                },
+                {
+                  "label": "\u00bfEs lo mismo miedo que ansiedad?",
+                  "value": {
+                    "input": {
+                      "text": "\u00bfEs lo mismo miedo que ansiedad?"
+                    }
+                  }
+                }
+              ],
+              "response_type": "option"
+            }
+          ]
+        },
+        "parent": "node_7_1653646200876",
+        "conditions": "$rand_seed < 0.2",
+        "dialog_node": "node_10_1658493313522",
+        "previous_sibling": "response_4_1658494155267",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "output": {
+          "generic": [
+            {
+              "title": "\u00bfQu\u00e9 quieres saber? Selecciona uno de los temas que te propongo, o escribe tu pregunta",
+              "options": [
+                {
+                  "label": "\u00bfEs normal tener miedo?",
+                  "value": {
+                    "input": {
+                      "text": "\u00bfEs normal tener miedo?"
+                    }
+                  }
+                },
+                {
+                  "label": "\u00bfC\u00f3mo supero la sensaci\u00f3n de fracaso?",
+                  "value": {
+                    "input": {
+                      "text": "\u00bfC\u00f3mo supero la sensaci\u00f3n de fracaso?"
+                    }
+                  }
+                },
+                {
+                  "label": "\u00bfPor qu\u00e9 no veo que nada me salga bien?",
+                  "value": {
+                    "input": {
+                      "text": "\u00bfPor qu\u00e9 no veo que nada me salga bien?"
+                    }
+                  }
+                },
+                {
+                  "label": "\u00bfCu\u00e1les son las causas del insomnio?",
+                  "value": {
+                    "input": {
+                      "text": "\u00bfCu\u00e1les son las causas del insomnio?"
+                    }
+                  }
+                }
+              ],
+              "response_type": "option"
+            }
+          ]
+        },
+        "parent": "node_7_1653646200876",
+        "conditions": "$rand_seed >= 0.2 && $rand_seed < 0.4",
+        "dialog_node": "node_1_1658493637688",
+        "previous_sibling": "node_10_1658493313522"
+      },
+      {
+        "type": "standard",
+        "output": {
+          "generic": [
+            {
+              "title": "\u00bfQu\u00e9 quieres saber? Selecciona uno de los temas que te propongo, o escribe tu pregunta",
+              "options": [
+                {
+                  "label": "\u00bfPor qu\u00e9 he perdido el inter\u00e9s por hacer cosas?",
+                  "value": {
+                    "input": {
+                      "text": "\u00bfPor qu\u00e9 he perdido el inter\u00e9s por hacer cosas?"
+                    }
+                  }
+                },
+                {
+                  "label": "\u00bfSi estoy triste tengo depresi\u00f3n?",
+                  "value": {
+                    "input": {
+                      "text": "\u00bfSi estoy triste tengo depresi\u00f3n?"
+                    }
+                  }
+                },
+                {
+                  "label": "\u00bfEs normal estar triste?",
+                  "value": {
+                    "input": {
+                      "text": "\u00bfEs normal estar triste?"
+                    }
+                  }
+                },
+                {
+                  "label": "\u00bfSe puede prevenir el suicidio?",
+                  "value": {
+                    "input": {
+                      "text": "\u00bfSe puede prevenir el suicidio?"
+                    }
+                  }
+                }
+              ],
+              "response_type": "option"
+            }
+          ]
+        },
+        "parent": "node_7_1653646200876",
+        "conditions": "$rand_seed >= 0.4 && $rand_seed < 0.6",
+        "dialog_node": "node_2_1658493640063",
+        "previous_sibling": "node_1_1658493637688"
+      },
+      {
+        "type": "standard",
+        "output": {
+          "generic": [
+            {
+              "title": "\u00bfQu\u00e9 quieres saber? Selecciona uno de los temas que te propongo, o escribe tu pregunta",
+              "options": [
+                {
+                  "label": "Si me preocupo tanto \u00bfes porque tengo motivos?",
+                  "value": {
+                    "input": {
+                      "text": "Si me preocupo tanto \u00bfes porque tengo motivos?"
+                    }
+                  }
+                },
+                {
+                  "label": "\u00bfPor qu\u00e9 nos sentimos in\u00fatiles?",
+                  "value": {
+                    "input": {
+                      "text": "\u00bfPor qu\u00e9 nos sentimos in\u00fatiles?"
+                    }
+                  }
+                },
+                {
+                  "label": "\u00bfEs lo mismo ser nerviosa que estar nerviosa?",
+                  "value": {
+                    "input": {
+                      "text": "\u00bfEs lo mismo ser nerviosa que estar nerviosa?"
+                    }
+                  }
+                },
+                {
+                  "label": "\u00bfQu\u00e9 es la irritaci\u00f3n emocional?",
+                  "value": {
+                    "input": {
+                      "text": "\u00bfQu\u00e9 es la irritaci\u00f3n emocional?"
+                    }
+                  }
+                }
+              ],
+              "response_type": "option"
+            }
+          ]
+        },
+        "parent": "node_7_1653646200876",
+        "conditions": "$rand_seed >= 0.6 && $rand_seed < 0.8",
+        "dialog_node": "node_3_1658493642010",
+        "previous_sibling": "node_2_1658493640063"
+      },
+      {
+        "type": "standard",
+        "output": {
+          "generic": [
+            {
+              "title": "\u00bfQu\u00e9 quieres saber? Selecciona uno de los temas que te propongo, o escribe tu pregunta",
+              "options": [
+                {
+                  "label": "\u00bfQu\u00e9 es el embotamiento emocional?",
+                  "value": {
+                    "input": {
+                      "text": "\u00bfQu\u00e9 es el embotamiento emocional?"
+                    }
+                  }
+                },
+                {
+                  "label": "\u00bfPor qu\u00e9 tengo pensamientos negativos?",
+                  "value": {
+                    "input": {
+                      "text": "\u00bfPor qu\u00e9 tengo pensamientos negativos?"
+                    }
+                  }
+                },
+                {
+                  "label": "\u00bfC\u00f3mo puedo manejar la culpa?",
+                  "value": {
+                    "input": {
+                      "text": "\u00bfC\u00f3mo puedo manejar la culpa?"
+                    }
+                  }
+                },
+                {
+                  "label": "\u00bfQu\u00e9 pasa cuando no me abandona el sentimiento de culpa?",
+                  "value": {
+                    "input": {
+                      "text": "\u00bfQu\u00e9 pasa cuando no me abandona el sentimiento de culpa?"
+                    }
+                  }
+                }
+              ],
+              "response_type": "option"
+            }
+          ]
+        },
+        "parent": "node_7_1653646200876",
+        "conditions": "$rand_seed >= 0.8",
+        "dialog_node": "node_4_1658493646045",
+        "previous_sibling": "node_3_1658493642010"
+      },
+      {
+        "type": "standard",
+        "title": "\u00bfQuieres saber m\u00e1s?",
+        "metadata": {
+          "_customization": {
+            "mcr": true
+          }
+        },
+        "next_step": {
+          "behavior": "skip_user_input"
+        },
+        "conditions": "#informacion_buscar || welcome",
+        "dialog_node": "node_7_1653646200876"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": []
+        },
+        "parent": "node_7_1653646200876",
+        "context": {
+          "random_seed": "<? new Random().nextDouble() ?>"
+        },
+        "conditions": "$second_query",
+        "dialog_node": "response_10_1658494168497"
+      },
+      {
+        "type": "response_condition",
+        "output": {
+          "generic": [
+            {
+              "values": [
+                {
+                  "text": "Hola \ud83d\udc4b\u200b, mi nombre es Sonrisa Saludable \ud83d\ude0a\u200b "
+                },
+                {
+                  "text": "Soy tu asistente virtual. Aunque no soy un profesional, voy a intentar guiarte para que puedas mejorar tu estado de \u00e1nimo. De momento, te ofrezco informaci\u00f3n sobre diversos temas relacionados con el bienestar y la salud mental."
+                }
+              ],
+              "response_type": "text",
+              "selection_policy": "multiline"
+            }
+          ]
+        },
+        "parent": "node_7_1653646200876",
+        "context": {
+          "rand_seed": "<? new Random().nextDouble() ?>"
+        },
+        "conditions": "true",
+        "dialog_node": "response_4_1658494155267",
+        "previous_sibling": "response_10_1658494168497"
+      }
+    ],
+    "counterexamples": [],
+    "system_settings": {
+      "nlp": {
+        "model": "baseline"
+      },
+      "disambiguation": {
+        "prompt": "Quer\u00edas decir:",
+        "enabled": true,
+        "randomize": true,
+        "max_suggestions": 5,
+        "suggestion_text_policy": "title",
+        "none_of_the_above_prompt": "Ninguna de las anteriores"
+      },
+      "human_agent_assist": {
+        "prompt": "Did you mean:"
+      },
+      "intent_classification": {
+        "training_backend_version": "v2"
+      }
+    },
+    "learning_opt_out": false
+  },
+  "description": "",
+  "assistant_id": "3b98249b-30c0-4aa0-a784-8c889f77372d",
+  "workspace_id": "78f31774-0591-4112-96be-5d418a415953",
+  "dialog_settings": {},
+  "next_snapshot_version": "5"
+}

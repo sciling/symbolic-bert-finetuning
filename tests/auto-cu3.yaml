@@ -1,0 +1,247 @@
+id: cu3
+name: cu3
+config:
+  assistant_id: 3b98249b-30c0-4aa0-a784-8c889f77372d
+entities:
+  bool:
+    No:
+      - no
+    Sí:
+      - adelante
+      - claro
+      - ok
+      - Si
+      - vale
+  estado_animo:
+    altibajos emocionales:
+      - afectiva
+      - alternancia
+      - altibajos
+      - Ánimo cambiante
+      - bipolar
+      - cambio rápido de un estado a otro,
+      - ' cambios de humor'
+      - ' diferentes emociones en un momento'
+      - humor alterado
+      - sensible
+    dificultad para dormir:
+      - actividad de noche
+      - despierta por la noche
+      - desvelada
+      - duermo mal
+      - duermo poco
+      - espabilada de noche
+      - insomnio
+      - me cuesta dormir,
+      - me despierto antes de la hora
+      - me despierto por las noches
+    embotamiento emocional:
+      - anhedonia
+      - ' colapsado'
+      - cosas que antes me hacían sentir ahora no lo hacen
+      - estoy bloqueado, no se cómo me siento
+      - falta de disfrute
+      - falta de placer
+      - in emociones
+      - no siento nada
+      - pobreza afectiva
+      - solo siento si es algo intenso
+    emociones negativas:
+      - de pena
+      - dolido
+      - fatal
+      - horrible
+      - horroroso
+      - mal
+      - muy mal
+    emociones positivas:
+      - aceptación
+      - admiración
+      - alegría
+      - amor
+      - apego
+      - bien
+      - bondad
+      - compasión
+      - confianza
+      - esperanza
+    estrés:
+      - agobio
+      - estresada
+      - no llego a las cosas
+      - no me da tiempo a hacer nada
+      - no puedo con todo
+      - ' tengo estrés'
+      - tengo mucha presión
+    falta de interés:
+      - abandonada
+      - aburrimiento
+      - apática
+      - dejada
+      - dejo de hacer
+      - descontenta
+      - descuidada
+      - desinterés
+      - empiezo algo y no termino
+      - indiferente
+    frecuencia pensamientos negativos:
+      - cosas que no debería pensar
+      - cosas que no tienen sentido
+      - doy muchas vueltas
+      - obsesivo
+      - pensamientos que no quiero tener
+      - pienso cosas malas
+      - pienso cosas negativas
+      - pienso cosas que me dan miedo
+      - pienso cosas raras
+      - pienso mucho
+    ideas de suicidio:
+      - acabar con todo
+      - apartarme definitivamente
+      - borrarme
+      - decir adiós
+      - dejar nota,
+      - descansar para siempre
+      - despedirme
+      - desprenderme de
+      - eliminarme
+      - inmolarme
+    intensidad de las ideas suicidas:
+      - Intensidad suicida
+    irritación:
+      - colérica
+      - disforia
+      - Enfadado
+      - enojada
+      - gruñona
+      - iracunda
+      - irascible
+      - irritacion
+      - mal humor
+      - me cabreo rápidamente,
+    lloro:
+      - lágrimas
+      - lágrima viva
+      - llorar
+      - lloriquear
+      - plañir
+      - sollozar
+    miedo:
+      - alarmada
+      - cagada
+      - cauta
+      - cobarde
+      - desasosiego
+      - desconfiada
+      - espantada
+      - fobia
+      - insegura
+      - inseguridad
+    nervioso:
+      - agitada
+      - alterada
+      - angustia
+      - ansiedad
+      - Estoy nerviosa
+      - excitada
+      - inquieta
+      - intranquila
+      - no puedo tranquilizarme
+      - tensión
+    preocupación:
+      - me preocupa el futuro
+      - me preocupo por todo
+      - me siento preocupado
+      - pienso mucho en lo que puede pasar
+      - pienso que me puede pasar cosas malas
+      - preocupado
+      - tengo preocupaciones
+    sensación de ahogo:
+      - apnea
+      - asfixiada
+      - asma
+      - como si no entrara aire
+      - ' como si no pudiera respirar'
+      - dificultad para respirar
+      - falta de aire
+      - me ahogo
+      - no puedo respirar
+      - opresión
+    sensación de cansancio:
+      - acabada
+      - agotada
+      - arrastrada
+      - baldada
+      - cansancio
+      - cascada
+      - dejada
+      - desfallecida
+      - exhausta
+      - extenuada
+    sensación de fracaso:
+      - defraudada
+      - derrotada
+      - desastre
+      - desengañada
+      - desgraciada
+      - fiasco
+      - frustrada
+      - infortunio
+      - las metas que me propongo no salen no las consigo
+      - malogro
+    sentimiento de culpa:
+      - ' arrepentimiento'
+      - cargo de conciencia
+      - Culpable
+      - desliz
+      - error
+      - fallo
+      - he hecho algo malo
+      - he sido débil
+      - me lo merezco
+      - me pasa con razón
+    sentimiento de inutilidad:
+      - atontada
+      - débil
+      - improductiva
+      - incapaz
+      - incompetente
+      - ineficaz
+      - inepta
+      - inservible
+      - me siento inútil
+      - nada me sale bien
+    tristeza:
+      - abatida
+      - afligida
+      - amargura
+      - deprimente
+      - deprimida
+      - desconsolada
+      - desgraciada
+      - desilusionada
+      - destrozada
+      - dolida
+  likert_lloro:
+    Apenas:
+      - a penas
+      - apenas
+    Bastante:
+      - bastant
+      - bastante
+      - bstante
+    Frecuentemente: []
+    Mucho:
+      - mcho
+      - much
+      - ucho
+    Nada:
+      - nda
+  likert_sueño:
+    Buena:
+      - buen
+      - buna
+    Mala:
+      - mal
+      - mla
+    Regular: []

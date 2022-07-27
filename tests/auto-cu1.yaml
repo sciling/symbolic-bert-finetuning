@@ -1,0 +1,4808 @@
+id: cu1
+name: cu1
+config:
+  assistant_id: 75ee9c37-df5d-47fc-bf2e-123b8aad578d
+entities:
+  alergia:
+    Altramuces: []
+    Apio: []
+    Cacahuetes: []
+    Cereales con gluten: []
+    Crustáceos: []
+    Frutos de cáscara:
+      - almendras
+      - anacardos
+      - avellanas
+      - castañas
+      - nueces
+      - nueces de brasil
+      - pacanas
+      - piñones
+      - pipas
+      - pipas de girasol
+    Granos de sésamo:
+      - sesamo
+    Huevos: []
+    Leche:
+      - intolerancia a la lactosa
+      - lactosa
+    Moluscos: []
+    Mostaza: []
+    Pescado:
+      - pez
+    Soja: []
+    Sulfitos y dióxido de azufre:
+      - azufre
+      - dioxido
+      - sulfitos
+  alimento_tipo:
+    Aceite de algodón:
+      - Aceite algodón
+      - algodón Aceite
+    Aceite de cacahuete:
+      - Aceite cacahuete
+      - cacahuete Aceite
+    Aceite de coco:
+      - Aceite coco
+      - coco Aceite
+    Aceite de colza:
+      - Aceite colza
+      - colza Aceite
+    Aceite de germen de trigo:
+      - Aceite germen trigo
+      - Aceite trigo germen
+      - germen Aceite trigo
+      - germen trigo Aceite
+      - trigo Aceite germen
+      - trigo germen Aceite
+    Aceite de girasol:
+      - Aceite girasol
+      - girasol Aceite
+    Aceite de grano de uva:
+      - Aceite grano
+      - grano Aceite
+    Aceite de hígado de bacalao:
+      - Aceite bacalao hígado
+      - Aceite hígado bacalao
+      - bacalao Aceite hígado
+      - bacalao hígado Aceite
+      - hígado Aceite bacalao
+      - hígado bacalao Aceite
+    Aceite de lino:
+      - Aceite lino
+      - lino Aceite
+    Aceite de nuez:
+      - Aceite nuez
+      - nuez Aceite
+    Aceite de oliva:
+      - Aceite oliva
+      - oliva Aceite
+    Aceite de oliva virgen extra:
+      - Aceite oliva virgen
+      - Aceite virgen oliva
+      - oliva Aceite virgen
+      - oliva virgen Aceite
+      - virgen Aceite oliva
+      - virgen oliva Aceite
+    Aceite de oliva virgen extra, producción ecologica:
+      - Aceite de oliva virgen extra producción ecologica
+      - Aceite ecologica oliva producción virgen
+      - Aceite ecologica oliva virgen producción
+      - Aceite ecologica producción oliva virgen
+      - Aceite ecologica producción virgen oliva
+      - Aceite ecologica virgen oliva producción
+      - Aceite ecologica virgen producción oliva
+      - Aceite oliva ecologica producción virgen
+      - Aceite oliva ecologica virgen producción
+      - Aceite oliva producción ecologica virgen
+    Aceite de palma:
+      - Aceite palma
+      - palma Aceite
+    Aceite de sésamo:
+      - Aceite sésamo
+      - sésamo Aceite
+    Aceite de soja:
+      - Aceite soja
+      - soja Aceite
+    Aceituna:
+      - aceitunas
+      - oliva
+      - olivas
+    Aceituna negra, con hueso:
+      - Aceituna hueso negra
+      - Aceituna negra con hueso
+      - Aceituna negra hueso
+      - hueso Aceituna negra
+      - hueso negra Aceituna
+      - negra Aceituna hueso
+      - negra hueso Aceituna
+    Acelga, cruda:
+      - Acelga
+      - Acelga cruda
+    Acelga, en conserva:
+      - Acelga conserva
+      - Acelga en conserva
+      - conserva Acelga
+    Acelgas, hervidas:
+      - Acelgas hervidas
+      - hervidas Acelgas
+    Achicoria, cruda:
+      - Achicoria
+      - Achicoria cruda
+    agua:
+      - Agua
+      - agua con gas
+    Aguacate:
+      - aguacates
+    Aguacate congelado:
+      - Aguacate congelado
+      - congelado Aguacate
+    Agua, con gas, embotellada:
+      - Agua con gas embotellada
+      - Agua embotellada
+      - embotellada Agua
+    Agua de la red:
+      - Aguas de la red
+    Agua mineral, mineralización debil:
+      - Agua debil mineralización mineral
+      - Agua debil mineral mineralización
+      - Agua mineral debil mineralización
+      - Agua mineralización debil mineral
+      - Agua mineralización mineral debil
+      - Agua mineral mineralización debil
+      - debil Agua mineralización mineral
+      - debil Agua mineral mineralización
+      - debil mineral Agua mineralización
+      - debil mineralización Agua mineral
+    Aguardiente:
+      - Aguardientes
+    Ajo:
+      - ajos
+    Ajo, en polvo:
+      - Ajo en polvo
+    Ajo, frito:
+      - Ajo frito
+    Albahaca:
+      - Albahacas
+    Albaricoque:
+      - Albaricoques
+    Albondigas en conserva:
+      - Albondigas conserva
+      - conserva Albondigas
+    Alcachofa, cruda:
+      - Alcachofa
+      - Alcachofa cruda
+    Alcachofas en conserva:
+      - Alcachofas conserva
+      - conserva Alcachofas
+    Alcaparra:
+      - alcaparras
+    Alioli:
+      - aliolis
+    Almeja:
+      - almejas
+    Almejas en conserva:
+      - Almejas conserva
+      - conserva Almejas
+    Almendra, cruda:
+      - Almendra
+      - Almendra cruda
+    Almendra, cruda, con cáscara:
+      - Almendra cáscara
+      - Almendra  con cáscara
+      - Almendra cruda con cáscara
+      - cáscara Almendra
+    Almendra, frita, salada:
+      - Almendra frita salada
+      - Almendra salada frita
+      - frita Almendra salada
+      - frita salada Almendra
+      - salada Almendra frita
+      - salada frita Almendra
+    Almendra, tostada:
+      - Almendra tostada
+      - tostada Almendra
+    Almidón de arroz:
+      - Almidón arroz
+      - arroz Almidón
+    Almidón de maíz:
+      - Almidón maíz
+      - maíz Almidón
+    Almidón de trigo:
+      - Almidón trigo
+      - trigo Almidón
+    Altramuz:
+      - altramuces
+    Alubia blanca, en conserva:
+      - Alubia blanca conserva
+      - Alubia blanca en conserva
+      - Alubia conserva blanca
+      - blanca Alubia conserva
+      - blanca conserva Alubia
+      - conserva Alubia blanca
+      - conserva blanca Alubia
+    Alubia blanca, seca, cruda:
+      - Alubia blanca seca
+      - Alubia blanca seca cruda
+      - Alubia seca blanca
+      - blanca Alubia seca
+      - blanca seca Alubia
+      - seca Alubia blanca
+      - seca blanca Alubia
+    Alubia negra, seca, remojada, hervida:
+      - Alubia hervida negra remojada seca
+      - Alubia hervida negra seca remojada
+      - Alubia hervida remojada negra seca
+      - Alubia hervida remojada seca negra
+      - Alubia hervida seca negra remojada
+      - Alubia hervida seca remojada negra
+      - Alubia negra hervida remojada seca
+      - Alubia negra hervida seca remojada
+      - Alubia negra remojada hervida seca
+      - Alubia negra remojada seca hervida
+    Anacardo, crudo:
+      - Anacardo
+      - Anacardo crudo
+    Anchoas en aceite vegetal:
+      - aceite Anchoas vegetal
+      - aceite vegetal Anchoas
+      - Anchoas aceite vegetal
+      - anchoas en aceite
+      - Anchoas vegetal aceite
+      - vegetal aceite Anchoas
+      - vegetal Anchoas aceite
+    Anguila, al horno:
+      - Anguila al horno
+      - Anguila horno
+      - horno Anguila
+    Anguila, cruda:
+      - Anguila
+      - Anguila cruda
+    Anguila, hervida:
+      - Anguila hervida
+      - hervida Anguila
+    Angula, cruda:
+      - Angula
+      - Angula cruda
+    Anís, seco:
+      - Anís seco
+      - seco Anís
+    Aperitivos de trigo:
+      - Aperitivos trigo
+      - trigo Aperitivos
+    Apio, crudo:
+      - Apio
+      - Apio crudo
+    Apio, en conserva en salmuera:
+      - Apio conserva salmuera
+      - Apio en conserva en salmuera
+      - Apio salmuera conserva
+      - conserva Apio salmuera
+      - conserva salmuera Apio
+      - salmuera Apio conserva
+      - salmuera conserva Apio
+    Arandano:
+      - arándanos
+    Arenque, ahumado:
+      - ahumado Arenque
+      - Arenque ahumado
+    Arenque, salado:
+      - Arenque salado
+      - salado Arenque
+    Arroz:
+      - arroces
+    Arroz con leche:
+      - Arroz leche
+      - leche Arroz
+    Arroz, hervido:
+      - Arroz hervido
+      - hervido Arroz
+    Arroz hinchado, para el desayuno, enriquecido:
+      - Arroz desayuno enriquecido hinchado
+      - Arroz desayuno hinchado enriquecido
+      - Arroz enriquecido desayuno hinchado
+      - Arroz enriquecido hinchado desayuno
+      - Arroz hinchado desayuno enriquecido
+      - Arroz hinchado enriquecido desayuno
+      - Arroz hinchado para el desayuno enriquecido
+      - desayuno Arroz enriquecido hinchado
+      - desayuno Arroz hinchado enriquecido
+      - desayuno enriquecido Arroz hinchado
+    Arroz integral, crudo:
+      - Arroz integral
+      - Arroz integral crudo
+      - integral Arroz
+    Arroz integral, hervido:
+      - Arroz hervido integral
+      - Arroz integral hervido
+      - hervido Arroz integral
+      - hervido integral Arroz
+      - integral Arroz hervido
+      - integral hervido Arroz
+    Atún, al horno:
+      - Atún al horno
+      - Atún horno
+      - horno Atún
+    Atún, al natural:
+      - Atún al natural
+      - Atún natural
+      - natural Atún
+    Atún, crudo:
+      - Atún
+      - Atún crudo
+    Atún en aceite de oliva isabel:
+      - aceite Atún isabel oliva
+      - aceite Atún oliva isabel
+      - aceite isabel Atún oliva
+      - aceite isabel oliva Atún
+      - aceite oliva Atún isabel
+      - aceite oliva isabel Atún
+      - Atún aceite isabel oliva
+      - Atún aceite oliva isabel
+      - Atún en aceite de oliva
+      - Atún isabel aceite oliva
+    Atun en aceite vegetal:
+      - aceite Atun vegetal
+      - aceite vegetal Atun
+      - Atun aceite vegetal
+      - Atun vegetal aceite
+      - vegetal aceite Atun
+      - vegetal Atun aceite
+    Atún en escabeche:
+      - Atún escabeche
+      - escabeche Atún
+    Atún, plancha:
+      - Atún plancha
+      - plancha Atún
+    Avellana:
+      - avellanas
+    Avellana, cruda, con cáscara:
+      - Avellana cáscara
+      - Avellana  con cáscara
+      - Avellana cruda con cáscara
+      - cáscara Avellana
+    Avena, cruda:
+      - Avena
+      - Avena cruda
+    Avestruz, solomillo, crudo:
+      - Avestruz solomillo
+      - Avestruz solomillo crudo
+      - solomillo Avestruz
+    Azafrán:
+      - azafranes
+    Azúcar blanca:
+      - Azúcar blanca
+      - blanca Azúcar
+    Azúcar, moreno:
+      - Azúcar moreno
+      - moreno Azúcar
+    Bacaladilla:
+      - bacaladillas
+    Bacalao, ahumado:
+      - ahumado Bacalao
+      - Bacalao ahumado
+    Bacalao, crudo:
+      - Bacalao
+      - Bacalao crudo
+    Bacalao, fresco, al horno:
+      - bacalao al horno
+      - Bacalao fresco al horno
+      - Bacalao fresco horno
+      - Bacalao horno fresco
+      - fresco Bacalao horno
+      - fresco horno Bacalao
+      - horno Bacalao fresco
+      - horno fresco Bacalao
+    Bacalao, frito:
+      - Bacalao frito
+      - frito Bacalao
+    Bacalao, salado, crudo:
+      - Bacalao salado
+      - Bacalao salado crudo
+      - salado Bacalao
+    Bacalao, salado, remojado, crudo:
+      - Bacalao remojado salado
+      - bacalao salado
+      - Bacalao salado remojado
+      - Bacalao salado remojado crudo
+      - remojado Bacalao salado
+      - remojado salado Bacalao
+      - salado Bacalao remojado
+      - salado remojado Bacalao
+    Bacón, ahumado, a la parrilla:
+      - ahumado Bacón parrilla
+      - ahumado parrilla Bacón
+      - Bacón ahumado a la parrilla
+      - Bacón ahumado parrilla
+      - Bacón parrilla ahumado
+      - parrilla ahumado Bacón
+      - parrilla Bacón ahumado
+    Bacon, crudo, con grasa separable:
+      - Bacon  con grasa separable
+      - Bacon crudo con grasa separable
+      - Bacon grasa separable
+      - Bacon separable grasa
+      - grasa Bacon separable
+      - grasa separable Bacon
+      - separable Bacon grasa
+      - separable grasa Bacon
+    Bambú, crudo:
+      - Bambú
+      - Bambú crudo
+    Barra chocolate, tipo "bounty":
+      - Barra bounty chocolate
+      - Barra chocolate bounty
+      - Barra chocolate tipo "bounty"
+      - bounty Barra chocolate
+      - bounty chocolate Barra
+      - chocolate Barra bounty
+      - chocolate bounty Barra
+    Barra de chocolate, tipo "Kit-kat":
+      - Barra chocolate
+      - Barra de chocolate tipo "Kit-kat"
+      - chocolate Barra
+    Barra de chocolate, tipo "Mars":
+      - Barra chocolate Mars
+      - Barra de chocolate tipo "Mars"
+      - Barra Mars chocolate
+      - chocolate Barra Mars
+      - chocolate Mars Barra
+      - Mars Barra chocolate
+      - Mars chocolate Barra
+    Barrita cereales con chocolate:
+      - Barrita cereales chocolate
+      - Barrita chocolate cereales
+      - cereales Barrita chocolate
+      - cereales chocolate Barrita
+      - chocolate Barrita cereales
+      - chocolate cereales Barrita
+    Barrita cereales con frutas:
+      - Barrita cereales frutas
+      - Barrita frutas cereales
+      - cereales Barrita frutas
+      - cereales frutas Barrita
+      - frutas Barrita cereales
+      - frutas cereales Barrita
+    Barrita cereales maíz y trigo:
+      - Barrita cereales maíz trigo
+      - Barrita cereales trigo maíz
+      - Barrita maíz cereales trigo
+      - Barrita maíz trigo cereales
+      - Barrita trigo cereales maíz
+      - Barrita trigo maíz cereales
+      - cereales Barrita maíz trigo
+      - cereales Barrita trigo maíz
+      - cereales maíz Barrita trigo
+      - cereales maíz trigo Barrita
+    Barrita cereales trigo y chocolate:
+      - Barrita cereales chocolate trigo
+      - Barrita cereales trigo chocolate
+      - Barrita chocolate cereales trigo
+      - Barrita chocolate trigo cereales
+      - Barrita trigo cereales chocolate
+      - Barrita trigo chocolate cereales
+      - cereales Barrita chocolate trigo
+      - cereales Barrita trigo chocolate
+      - cereales chocolate Barrita trigo
+      - cereales chocolate trigo Barrita
+    Batido de chocolate:
+      - Batido chocolate
+      - chocolate Batido
+    Batido de fresa:
+      - Batido fresa
+      - fresa Batido
+    Batido de soja:
+      - Batido soja
+      - soja Batido
+    Batido fermentado de soja:
+      - Batido de soja
+      - Batido fermentado soja
+      - Batido soja fermentado
+      - fermentado Batido soja
+      - fermentado soja Batido
+      - soja Batido fermentado
+      - soja fermentado Batido
+    Batido lácteo de cacao, bajo en calorías:
+      - bajo Batido cacao calorías lácteo
+      - bajo Batido cacao lácteo calorías
+      - bajo Batido calorías cacao lácteo
+      - bajo Batido calorías lácteo cacao
+      - bajo Batido lácteo cacao calorías
+      - bajo Batido lácteo calorías cacao
+      - bajo cacao Batido calorías lácteo
+      - bajo cacao Batido lácteo calorías
+      - bajo cacao calorías Batido lácteo
+      - bajo cacao calorías lácteo Batido
+    Batido lácteo, de fresa, bajo en calorías:
+      - bajo Batido calorías fresa lácteo
+      - bajo Batido calorías lácteo fresa
+      - bajo Batido fresa calorías lácteo
+      - bajo Batido fresa lácteo calorías
+      - bajo Batido lácteo calorías fresa
+      - bajo Batido lácteo fresa calorías
+      - bajo calorías Batido fresa lácteo
+      - bajo calorías Batido lácteo fresa
+      - bajo calorías fresa Batido lácteo
+      - bajo calorías fresa lácteo Batido
+    Bebida de soja:
+      - Bebida soja
+      - soja Bebida
+    Bebida energética:
+      - Bebida energética
+      - energética Bebida
+    Bebida isotónica:
+      - Bebida isotónica
+      - isotónica Bebida
+    Berberechos:
+      - Berberecho
+    Berberechos en conserva:
+      - Berberechos conserva
+      - conserva Berberechos
+    Berenjena:
+      - Berenjenas
+    Berenjena, frita, en aceite de girasol:
+      - aceite Berenjena frita girasol
+      - aceite Berenjena girasol frita
+      - aceite frita Berenjena girasol
+      - aceite frita girasol Berenjena
+      - aceite girasol Berenjena frita
+      - aceite girasol frita Berenjena
+      - Berenjena aceite frita girasol
+      - Berenjena aceite girasol frita
+      - Berenjena frita aceite girasol
+      - Berenjena frita en aceite de girasol
+    Berro, crudo:
+      - Berro
+      - Berro crudo
+    Besugo:
+      - Besugos
+    Bígaro, hervido:
+      - Bígaro hervido
+      - hervido Bígaro
+    Bizcocho:
+      - Bizcochos
+    Bocadillo:
+      - Bocadillos
+    Bogavante:
+      - Bogavantes
+    Bogavante, hervido:
+      - Bogavante hervido
+      - hervido Bogavante
+    Bollería, genérico:
+      - Bollería genérico
+    Bombón:
+      - Bombones
+    Boniato, crudo:
+      - Boniato
+      - Boniato crudo
+    Bonito del norte, al vapor:
+      - bonito al vapor
+      - Bonito del norte al vapor
+      - Bonito norte vapor
+      - Bonito vapor norte
+      - norte Bonito vapor
+      - norte vapor Bonito
+      - vapor Bonito norte
+      - vapor norte Bonito
+    Bonito del norte, enlatado en aceite de soja:
+      - aceite Bonito enlatado norte soja
+      - aceite Bonito enlatado soja norte
+      - aceite Bonito norte enlatado soja
+      - aceite Bonito norte soja enlatado
+      - aceite Bonito soja enlatado norte
+      - aceite Bonito soja norte enlatado
+      - aceite enlatado Bonito norte soja
+      - aceite enlatado Bonito soja norte
+      - aceite enlatado norte Bonito soja
+      - aceite enlatado norte soja Bonito
+    Bonito en aceite vegetal:
+      - aceite Bonito vegetal
+      - aceite vegetal Bonito
+      - Bonito aceite vegetal
+      - Bonito vegetal aceite
+      - vegetal aceite Bonito
+      - vegetal Bonito aceite
+    Bonito, enlatado en aceite, escurrido:
+      - aceite Bonito enlatado escurrido
+      - aceite Bonito escurrido enlatado
+      - aceite enlatado Bonito escurrido
+      - aceite enlatado escurrido Bonito
+      - aceite escurrido Bonito enlatado
+      - aceite escurrido enlatado Bonito
+      - Bonito aceite enlatado escurrido
+      - Bonito aceite escurrido enlatado
+      - Bonito enlatado aceite escurrido
+      - Bonito enlatado en aceite escurrido
+    Boquerón:
+      - Boquerones
+    Boquerón, frito:
+      - Boquerón frito
+      - frito Boquerón
+    Borraja: []
+    Breca, cruda:
+      - Breca
+      - Breca cruda
+    Brécol, crudo:
+      - Brécol
+      - Brécol crudo
+    Brécol, hervido:
+      - Brécol hervido
+      - hervido Brécol
+    Butifarra:
+      - Butifarras
+    Caballa, al horno:
+      - Caballa al horno
+      - Caballa horno
+      - horno Caballa
+    Caballa, cruda:
+      - Caballa
+      - Caballa cruda
+    Caballa, enlatada en aceite, escurrida:
+      - aceite Caballa enlatada escurrida
+      - aceite Caballa escurrida enlatada
+      - aceite enlatada Caballa escurrida
+      - aceite enlatada escurrida Caballa
+      - aceite escurrida Caballa enlatada
+      - aceite escurrida enlatada Caballa
+      - Caballa aceite enlatada escurrida
+      - Caballa aceite escurrida enlatada
+      - Caballa enlatada aceite escurrida
+      - Caballa enlatada en aceite escurrida
+    Cabracho o rascacio, crudo:
+      - Cabracho o rascacio
+      - Cabracho o rascacio crudo
+      - Cabracho rascacio
+      - rascacio Cabracho
+    Cabrito, parte s/e, crudo, con grasa separable:
+      - Cabrito grasa separable
+      - Cabrito parte   con grasa separable
+      - Cabrito parte s/e crudo con grasa separable
+      - Cabrito separable grasa
+      - grasa Cabrito separable
+      - grasa separable Cabrito
+      - separable Cabrito grasa
+      - separable grasa Cabrito
+    Cacahuete, crudo, con cáscara:
+      - Cacahuete cáscara
+      - Cacahuete  con cáscara
+      - Cacahuete crudo con cáscara
+      - cáscara Cacahuete
+    Cacahuete, frito, salado:
+      - Cacahuete frito salado
+      - Cacahuete salado frito
+      - frito Cacahuete salado
+      - frito salado Cacahuete
+      - salado Cacahuete frito
+      - salado frito Cacahuete
+    Cacahuete, tostado, salado:
+      - Cacahuete salado tostado
+      - Cacahuete tostado salado
+      - salado Cacahuete tostado
+      - salado tostado Cacahuete
+      - tostado Cacahuete salado
+      - tostado salado Cacahuete
+    Cacao en polvo, azucarado:
+      - azucarado Cacao polvo
+      - azucarado polvo Cacao
+      - Cacao azucarado polvo
+      - Cacao en polvo azucarado
+      - Cacao polvo azucarado
+      - polvo azucarado Cacao
+      - polvo Cacao azucarado
+    Cacao, en polvo, azucarado, bajo en calorías:
+      - azucarado bajo Cacao calorías polvo
+      - azucarado bajo Cacao polvo calorías
+      - azucarado bajo calorías Cacao polvo
+      - azucarado bajo calorías polvo Cacao
+      - azucarado bajo polvo Cacao calorías
+      - azucarado bajo polvo calorías Cacao
+      - azucarado Cacao bajo calorías polvo
+      - azucarado Cacao bajo polvo calorías
+      - azucarado Cacao calorías bajo polvo
+      - azucarado Cacao calorías polvo bajo
+    Café, con leche:
+      - Café con leche
+      - Café leche
+      - leche Café
+    Café, en grano o molido, descafeinado:
+      - Café descafeinado grano molido
+      - Café descafeinado molido grano
+      - Café en grano o molido descafeinado
+      - Café grano descafeinado molido
+      - Café grano molido descafeinado
+      - Café molido descafeinado grano
+      - Café molido grano descafeinado
+      - descafeinado Café grano molido
+      - descafeinado Café molido grano
+      - descafeinado grano Café molido
+    Café, en polvo, sin reconstituir:
+      - Café en polvo sin reconstituir
+      - Café polvo reconstituir
+      - Café reconstituir polvo
+      - polvo Café reconstituir
+      - polvo reconstituir Café
+      - reconstituir Café polvo
+      - reconstituir polvo Café
+    Café, en polvo, soluble:
+      - Café en polvo soluble
+      - Café polvo soluble
+      - Café soluble polvo
+      - polvo Café soluble
+      - polvo soluble Café
+      - soluble Café polvo
+      - soluble polvo Café
+    Café, infusión:
+      - Café infusión
+      - infusión Café
+    Café, infusión, descafeinado:
+      - Café descafeinado infusión
+      - Café infusión descafeinado
+      - descafeinado Café infusión
+      - descafeinado infusión Café
+      - infusión Café descafeinado
+      - infusión descafeinado Café
+    Café, sucedáneo, soluble:
+      - Café soluble sucedáneo
+      - Café sucedáneo soluble
+      - soluble Café sucedáneo
+      - soluble sucedáneo Café
+      - sucedáneo Café soluble
+      - sucedáneo soluble Café
+    Calabacín:
+      - Calabacines
+    Calabacín, asado:
+      - asado Calabacín
+      - Calabacín asado
+    Calabaza, cruda:
+      - Calabaza
+      - Calabaza cruda
+    Calabaza, hervida:
+      - Calabaza hervida
+      - hervida Calabaza
+    Calamar, asado:
+      - asado Calamar
+      - Calamar asado
+    Calamar, conserva:
+      - Calamar conserva
+      - conserva Calamar
+    Calamar, crudo:
+      - Calamar
+      - Calamar crudo
+    Calamares en aceite vegetal:
+      - aceite Calamares vegetal
+      - aceite vegetal Calamares
+      - Calamares aceite vegetal
+      - Calamares en aceite
+      - Calamares vegetal aceite
+      - vegetal aceite Calamares
+      - vegetal Calamares aceite
+    Caldo vegetal:
+      - Caldo vegetal
+      - vegetal Caldo
+    Callos de ternera:
+      - Callos ternera
+      - ternera Callos
+    Camarón:
+      - Camarones
+    Canela, en polvo:
+      - Canela en polvo
+      - Canela polvo
+      - polvo Canela
+    Canelones:
+      - Canelon
+    Cangrejo:
+      - Cangrejos
+    Cangrejo de río crudo:
+      - Cangrejo de río
+    Cangrejo, en conserva:
+      - Cangrejo conserva
+      - Cangrejo en conserva
+      - conserva Cangrejo
+    Canonigos:
+      - Canonigo
+    Caqui:
+      - Caquis
+    Caracol:
+      - Caracoles
+    Caramelo:
+      - Caramelos
+    Cardo:
+      - Cardos
+    Cardo, tallo, en conserva:
+      - Cardo conserva tallo
+      - Cardo tallo conserva
+      - Cardo tallo en conserva
+      - conserva Cardo tallo
+      - conserva tallo Cardo
+      - tallo Cardo conserva
+      - tallo conserva Cardo
+    Carne picada:
+      - Carne picada
+      - picada Carne
+    Carpa, al horno:
+      - Carpa al horno
+      - Carpa horno
+      - horno Carpa
+    Carpa, cruda:
+      - Carpa
+      - Carpa cruda
+    Castaña, cruda:
+      - Castaña
+      - Castaña cruda
+    Castaña, tostada:
+      - Castaña tostada
+      - tostada Castaña
+    Cava:
+      - Cavas
+    Caviar:
+      - Caviares
+    Cebada, cruda:
+      - Cebada
+      - Cebada cruda
+    Cebolla:
+      - Cebollas
+    Cebolla, asada:
+      - asada Cebolla
+      - Cebolla asada
+    Cebolla, hervida:
+      - Cebolla hervida
+      - hervida Cebolla
+    Cebollino, crudo:
+      - Cebollino
+      - Cebollino crudo
+    Cecina:
+      - Cecinas
+    Centeno, crudo:
+      - Centeno
+      - Centeno crudo
+    Centollo, crudo:
+      - Centollo
+      - Centollo crudo
+    Cerdo, chuleta, crudo:
+      - Cerdo chuleta
+      - Cerdo chuleta crudo
+      - chuleta Cerdo
+      - chuleta de cerdo
+    Cerdo, costilla, crudo:
+      - Cerdo costilla
+      - Cerdo costilla crudo
+      - costilla Cerdo
+      - costilla de cerdo
+    Cerdo, lomo, asado:
+      - asado Cerdo lomo
+      - asado lomo Cerdo
+      - Cerdo asado lomo
+      - Cerdo lomo asado
+      - lomo asado Cerdo
+      - lomo Cerdo asado
+    Cerdo, lomo, crudo:
+      - Cerdo lomo
+      - Cerdo lomo crudo
+      - lomo Cerdo
+    Cerdo, panceta, cruda:
+      - Cerdo panceta
+      - Cerdo panceta cruda
+      - panceta Cerdo
+    Cerdo, parte sin especificar:
+      - Cerdo parte sin especificar
+    Cerdo, pierna, cruda, con grasa separable:
+      - Cerdo grasa pierna separable
+      - Cerdo grasa separable pierna
+      - Cerdo pierna  con grasa separable
+      - Cerdo pierna cruda con grasa separable
+      - Cerdo pierna grasa separable
+      - Cerdo pierna separable grasa
+      - Cerdo separable grasa pierna
+      - Cerdo separable pierna grasa
+      - grasa Cerdo pierna separable
+      - grasa Cerdo separable pierna
+    Cerdo, solomillo, asado:
+      - asado Cerdo solomillo
+      - asado solomillo Cerdo
+      - Cerdo asado solomillo
+      - Cerdo solomillo asado
+      - solomillo asado Cerdo
+      - solomillo Cerdo asado
+    Cerdo, solomillo, crudo:
+      - Cerdo solomillo
+      - Cerdo solomillo crudo
+      - solomillo Cerdo
+    Cereales base trigo y chocolate:
+      - Cereales chocolate trigo
+      - Cereales trigo chocolate
+      - chocolate Cereales trigo
+      - chocolate trigo Cereales
+      - trigo Cereales chocolate
+      - trigo chocolate Cereales
+    Cereales desayuno base de arroz chocolateado:
+      - arroz Cereales chocolateado desayuno
+      - arroz Cereales desayuno chocolateado
+      - arroz chocolateado Cereales desayuno
+      - arroz chocolateado desayuno Cereales
+      - arroz desayuno Cereales chocolateado
+      - arroz desayuno chocolateado Cereales
+      - Cereales arroz chocolateado desayuno
+      - Cereales arroz desayuno chocolateado
+      - Cereales chocolateado arroz desayuno
+      - Cereales chocolateado desayuno arroz
+    Cereales desayuno base de arroz, trigo y fruta:
+      - arroz Cereales desayuno fruta trigo
+      - arroz Cereales desayuno trigo fruta
+      - arroz Cereales fruta desayuno trigo
+      - arroz Cereales fruta trigo desayuno
+      - arroz Cereales trigo desayuno fruta
+      - arroz Cereales trigo fruta desayuno
+      - arroz desayuno Cereales fruta trigo
+      - arroz desayuno Cereales trigo fruta
+      - arroz desayuno fruta Cereales trigo
+      - arroz desayuno fruta trigo Cereales
+    Cereales desayuno base de arroz y miel:
+      - arroz Cereales desayuno miel
+      - arroz Cereales miel desayuno
+      - arroz desayuno Cereales miel
+      - arroz desayuno miel Cereales
+      - arroz miel Cereales desayuno
+      - arroz miel desayuno Cereales
+      - Cereales arroz desayuno miel
+      - Cereales arroz miel desayuno
+      - Cereales desayuno arroz miel
+      - Cereales desayuno miel arroz
+    Cereales desayuno base de maíz, trigo y avena:
+      - avena Cereales desayuno maíz trigo
+      - avena Cereales desayuno trigo maíz
+      - avena Cereales maíz desayuno trigo
+      - avena Cereales maíz trigo desayuno
+      - avena Cereales trigo desayuno maíz
+      - avena Cereales trigo maíz desayuno
+      - avena desayuno Cereales maíz trigo
+      - avena desayuno Cereales trigo maíz
+      - avena desayuno maíz Cereales trigo
+      - avena desayuno maíz trigo Cereales
+    Cereales desayuno base de maíz y miel:
+      - Cereales desayuno maíz miel
+      - Cereales desayuno maíz y miel
+      - Cereales desayuno miel maíz
+      - Cereales maíz desayuno miel
+      - Cereales maíz miel desayuno
+      - Cereales miel desayuno maíz
+      - Cereales miel maíz desayuno
+      - desayuno Cereales maíz miel
+      - desayuno Cereales miel maíz
+      - desayuno maíz Cereales miel
+    Cereales desayuno base de maíz y trigo:
+      - Cereales desayuno maíz trigo
+      - Cereales desayuno maíz y trigo
+      - Cereales desayuno trigo maíz
+      - Cereales maíz desayuno trigo
+      - Cereales maíz trigo desayuno
+      - Cereales trigo desayuno maíz
+      - Cereales trigo maíz desayuno
+      - desayuno Cereales maíz trigo
+      - desayuno Cereales trigo maíz
+      - desayuno maíz Cereales trigo
+    Cereales desayuno base de trigo, avena, maíz, miel y nueces:
+      - avena Cereales desayuno maíz miel nueces trigo
+      - avena Cereales desayuno maíz miel trigo nueces
+      - avena Cereales desayuno maíz nueces miel trigo
+      - avena Cereales desayuno maíz nueces trigo miel
+      - avena Cereales desayuno maíz trigo miel nueces
+      - avena Cereales desayuno maíz trigo nueces miel
+      - avena Cereales desayuno miel maíz nueces trigo
+      - avena Cereales desayuno miel maíz trigo nueces
+      - avena Cereales desayuno miel nueces maíz trigo
+      - avena Cereales desayuno miel nueces trigo maíz
+    Cereales desayuno base de trigo, avena, maiz y miel:
+      - avena Cereales desayuno maiz miel trigo
+      - avena Cereales desayuno maiz trigo miel
+      - avena Cereales desayuno miel maiz trigo
+      - avena Cereales desayuno miel trigo maiz
+      - avena Cereales desayuno trigo maiz miel
+      - avena Cereales desayuno trigo miel maiz
+      - avena Cereales maiz desayuno miel trigo
+      - avena Cereales maiz desayuno trigo miel
+      - avena Cereales maiz miel desayuno trigo
+      - avena Cereales maiz miel trigo desayuno
+    Cereales desayuno base de trigo azucarado:
+      - azucarado Cereales desayuno trigo
+      - azucarado Cereales trigo desayuno
+      - azucarado desayuno Cereales trigo
+      - azucarado desayuno trigo Cereales
+      - azucarado trigo Cereales desayuno
+      - azucarado trigo desayuno Cereales
+      - Cereales azucarado desayuno trigo
+      - Cereales azucarado trigo desayuno
+      - Cereales desayuno azucarado trigo
+      - Cereales desayuno trigo azucarado
+    Cereales desayuno base de trigo y arroz:
+      - arroz Cereales desayuno trigo
+      - arroz Cereales trigo desayuno
+      - arroz desayuno Cereales trigo
+      - arroz desayuno trigo Cereales
+      - arroz trigo Cereales desayuno
+      - arroz trigo desayuno Cereales
+      - Cereales arroz desayuno trigo
+      - Cereales arroz trigo desayuno
+      - Cereales desayuno arroz trigo
+      - Cereales desayuno trigo arroz
+    Cereales desayuno base de trigo y frutas:
+      - Cereales desayuno frutas trigo
+      - Cereales desayuno trigo frutas
+      - Cereales desayuno trigo y frutas
+      - Cereales frutas desayuno trigo
+      - Cereales frutas trigo desayuno
+      - Cereales trigo desayuno frutas
+      - Cereales trigo frutas desayuno
+      - desayuno Cereales frutas trigo
+      - desayuno Cereales trigo frutas
+      - desayuno frutas Cereales trigo
+    Cereales desayuno base de trigo y miel:
+      - Cereales desayuno miel trigo
+      - Cereales desayuno trigo miel
+      - Cereales desayuno trigo y miel
+      - Cereales miel desayuno trigo
+      - Cereales miel trigo desayuno
+      - Cereales trigo desayuno miel
+      - Cereales trigo miel desayuno
+      - desayuno Cereales miel trigo
+      - desayuno Cereales trigo miel
+      - desayuno miel Cereales trigo
+    Cereales desayuno base muesli:
+      - Cereales desayuno muesli
+      - Cereales muesli desayuno
+      - desayuno Cereales muesli
+      - desayuno muesli Cereales
+      - muesli Cereales desayuno
+      - muesli desayuno Cereales
+    Cereales desayuno, maíz azucarado:
+      - azucarado Cereales desayuno maíz
+      - azucarado Cereales maíz desayuno
+      - azucarado desayuno Cereales maíz
+      - azucarado desayuno maíz Cereales
+      - azucarado maíz Cereales desayuno
+      - azucarado maíz desayuno Cereales
+      - Cereales azucarado desayuno maíz
+      - Cereales azucarado maíz desayuno
+      - Cereales desayuno azucarado maíz
+      - Cereales desayuno maíz azucarado
+    Cereales, en polvo, solubles (eko):
+      - Cereales en polvo solubles (eko)
+      - Cereales polvo solubles
+      - Cereales solubles polvo
+      - polvo Cereales solubles
+      - polvo solubles Cereales
+      - solubles Cereales polvo
+      - solubles polvo Cereales
+    Cereales para el desayuno, ricos en fibra, tipo "all-bran":
+      - bran Cereales desayuno fibra ricos
+      - bran Cereales desayuno ricos fibra
+      - bran Cereales fibra desayuno ricos
+      - bran Cereales fibra ricos desayuno
+      - bran Cereales ricos desayuno fibra
+      - bran Cereales ricos fibra desayuno
+      - bran desayuno Cereales fibra ricos
+      - bran desayuno Cereales ricos fibra
+      - bran desayuno fibra Cereales ricos
+      - bran desayuno fibra ricos Cereales
+    Cereza:
+      - Cerezas
+    Cerveza, baja en alcohol:
+      - alcohol baja Cerveza
+      - alcohol Cerveza baja
+      - baja alcohol Cerveza
+      - baja Cerveza alcohol
+      - Cerveza alcohol baja
+      - Cerveza baja alcohol
+      - Cerveza baja en alcohol
+    Cerveza con alcohol:
+      - alcohol Cerveza
+      - Cerveza alcohol
+    Cerveza, oscura, 8°- 9°:
+      - Cerveza oscura
+      - Cerveza oscura 8°- 9°
+      - oscura Cerveza
+    Cerveza sin alcohol:
+      - alcohol Cerveza
+      - Cerveza alcohol
+    Champiñon:
+      - Champi en conserva
+      - champiñones
+    Champiñones en conserva:
+      - Champiñones conserva
+      - conserva Champiñones
+    Chayote, crudo:
+      - Chayote
+      - Chayote crudo
+    Chicle, sin azúcar:
+      - azúcar Chicle
+      - Chicle azúcar
+      - Chicle sin azúcar
+    Chile, rojo:
+      - Chile rojo
+      - rojo Chile
+    Chile, verde:
+      - Chile verde
+      - verde Chile
+    Chipiron:
+      - Chipirones
+    Chirimoya:
+      - Chirimoyas
+    Chirla:
+      - Chirlas
+    Chistorra:
+      - Chistorras
+    Chocolate blanco:
+      - blanco Chocolate
+      - Chocolate blanco
+    Chocolate con leche:
+      - Chocolate leche
+      - leche Chocolate
+    Chocolate con leche y almendras:
+      - almendras Chocolate leche
+      - almendras leche Chocolate
+      - Chocolate almendras leche
+      - Chocolate leche almendras
+      - leche almendras Chocolate
+      - leche Chocolate almendras
+    Chocolate con leche y arroz:
+      - arroz Chocolate leche
+      - arroz leche Chocolate
+      - Chocolate arroz leche
+      - Chocolate leche arroz
+      - leche arroz Chocolate
+      - leche Chocolate arroz
+    Chocolate con nueces de macadamia:
+      - Chocolate macadamia nueces
+      - Chocolate nueces macadamia
+      - macadamia Chocolate nueces
+      - macadamia nueces Chocolate
+      - nueces Chocolate macadamia
+      - nueces macadamia Chocolate
+    Chocolate, negro:
+      - Chocolate negro
+      - negro Chocolate
+    Chocolate negro, con almendras:
+      - almendras Chocolate negro
+      - almendras negro Chocolate
+      - Chocolate almendras negro
+      - Chocolate negro almendras
+      - Chocolate negro con almendras
+      - negro almendras Chocolate
+      - negro Chocolate almendras
+    Chocolate negro, con azúcar:
+      - azúcar Chocolate negro
+      - azúcar negro Chocolate
+      - Chocolate azúcar negro
+      - Chocolate negro azúcar
+      - Chocolate negro con azúcar
+      - negro azúcar Chocolate
+      - negro Chocolate azúcar
+    Choped pork:
+      - Choped pork
+      - pork Choped
+    Chorizo:
+      - Chorizos
+    Chufa, cruda:
+      - Chufa
+      - Chufa cruda
+    Churro:
+      - Churros
+    Ciervo, parte s/e, crudo, con grasa separable:
+      - Ciervo grasa separable
+      - Ciervo parte   con grasa separable
+      - Ciervo parte s/e crudo con grasa separable
+      - Ciervo separable grasa
+      - grasa Ciervo separable
+      - grasa separable Ciervo
+      - separable Ciervo grasa
+      - separable grasa Ciervo
+    Cigala:
+      - Cigalas
+    Ciruela, con piel, cruda:
+      - Ciruela con piel
+      - Ciruela con piel cruda
+      - Ciruela piel
+      - piel Ciruela
+    Ciruela, sin piel:
+      - Ciruela piel
+      - Ciruela sin piel
+      - piel Ciruela
+    Coco, desecado:
+      - Coco desecado
+      - desecado Coco
+    Coco, fresco:
+      - Coco fresco
+      - fresco Coco
+    Col blanca, cruda:
+      - Col blanca
+      - Col blanca cruda
+    Col de bruselas, cruda:
+      - Col de bruselas
+      - Col de bruselas cruda
+    Coliflor, congelada, cruda:
+      - Coliflor congelada
+      - Coliflor congelada cruda
+      - congelada Coliflor
+    Coliflor, hervida:
+      - Coliflor hervida
+      - hervida Coliflor
+    Col lombarda, hervida:
+      - Col lombarda hervida
+      - hervida lombarda
+      - lombarda hervida
+    Col rizada, cruda:
+      - Col rizada
+      - Col rizada cruda
+    Comino:
+      - Cominos
+    Complejo vitaminico:
+      - Complejo vitaminico
+      - vitaminico Complejo
+    Coñac:
+      - Coñacs
+    Conejo de granja, carne, cruda:
+      - carne Conejo granja
+      - carne granja Conejo
+      - Conejo carne granja
+      - Conejo de granja carne
+      - Conejo de granja carne cruda
+      - Conejo granja carne
+      - granja carne Conejo
+      - granja Conejo carne
+    Conejo, entero, estofado:
+      - Conejo entero estofado
+      - Conejo estofado entero
+      - entero Conejo estofado
+      - entero estofado Conejo
+      - estofado Conejo entero
+      - estofado entero Conejo
+    Confitura, frutas s/e, baja en calorías:
+      - baja calorías Confitura frutas
+      - baja calorías frutas Confitura
+      - baja Confitura calorías frutas
+      - baja Confitura frutas calorías
+      - baja frutas calorías Confitura
+      - baja frutas Confitura calorías
+      - calorías baja Confitura frutas
+      - calorías baja frutas Confitura
+      - calorías Confitura baja frutas
+      - calorías Confitura frutas baja
+    Congrio:
+      - Congrios
+    Corazón, de cerdo, crudo:
+      - cerdo Corazón
+      - Corazón cerdo
+      - Corazón de cerdo
+      - Corazón de cerdo crudo
+    Corazón de cordero, crudo:
+      - Corazón cordero
+      - Corazón de cordero
+      - Corazón de cordero crudo
+      - cordero Corazón
+    Corazón de pollo, crudo:
+      - Corazón de pollo
+      - Corazón de pollo crudo
+      - Corazón pollo
+      - pollo Corazón
+    Corazón, de vaca/buey, cocido:
+      - buey cocido Corazón vaca
+      - buey cocido vaca Corazón
+      - buey Corazón cocido vaca
+      - buey Corazón vaca cocido
+      - buey vaca cocido Corazón
+      - buey vaca Corazón cocido
+      - cocido buey Corazón vaca
+      - cocido buey vaca Corazón
+      - cocido Corazón buey vaca
+      - cocido Corazón vaca buey
+    Corazón, de vaca/buey, crudo:
+      - buey Corazón vaca
+      - buey vaca Corazón
+      - Corazón buey vaca
+      - Corazón de buey
+      - Corazón de vaca
+      - Corazón de vaca/buey
+      - Corazón de vaca/buey crudo
+      - Corazón vaca buey
+      - vaca buey Corazón
+      - vaca Corazón buey
+    Corazon de vaca, crudo:
+      - Corazon de vaca
+      - Corazon de vaca crudo
+      - Corazon vaca
+      - vaca Corazon
+    Cordero, costilla, crudo:
+      - chuletillas de cordero
+      - Cordero costilla
+      - Cordero costilla crudo
+      - costilla Cordero
+    Cordero, parte sin especificar:
+      - cordero
+      - Cordero parte sin especificar
+    Cordero, pierna, con grasa, asada:
+      - asada Cordero grasa pierna
+      - asada Cordero pierna grasa
+      - asada grasa Cordero pierna
+      - asada grasa pierna Cordero
+      - asada pierna Cordero grasa
+      - asada pierna grasa Cordero
+      - Cordero asada grasa pierna
+      - Cordero asada pierna grasa
+      - Cordero grasa asada pierna
+      - Cordero grasa pierna asada
+    Corteza de trigo:
+      - Corteza trigo
+      - trigo Corteza
+    Crema catalana:
+      - catalana Crema
+      - Crema catalana
+    Crema de almendras:
+      - almendras Crema
+      - Crema almendras
+    Crema de cacahuete:
+      - cacahuete Crema
+      - Crema cacahuete
+    Crema de chocolate, baja en calorías:
+      - baja calorías chocolate Crema
+      - baja calorías Crema chocolate
+      - baja chocolate calorías Crema
+      - baja chocolate Crema calorías
+      - baja Crema calorías chocolate
+      - baja Crema chocolate calorías
+      - calorías baja chocolate Crema
+      - calorías baja Crema chocolate
+      - calorías chocolate baja Crema
+      - calorías chocolate Crema baja
+    Crema de chocolate con avellanas:
+      - avellanas chocolate Crema
+      - avellanas Crema chocolate
+      - chocolate avellanas Crema
+      - chocolate Crema avellanas
+      - Crema avellanas chocolate
+      - Crema chocolate avellanas
+    Crema de chocolate y nata:
+      - chocolate Crema nata
+      - chocolate nata Crema
+      - Crema chocolate nata
+      - Crema nata chocolate
+      - nata chocolate Crema
+      - nata Crema chocolate
+    Crema de coco:
+      - coco Crema
+      - Crema coco
+    Crema de vainilla y mousse de chocolate:
+      - chocolate Crema mousse vainilla
+      - chocolate Crema vainilla mousse
+      - chocolate mousse Crema vainilla
+      - chocolate mousse vainilla Crema
+      - chocolate vainilla Crema mousse
+      - chocolate vainilla mousse Crema
+      - Crema chocolate mousse vainilla
+      - Crema chocolate vainilla mousse
+      - Crema mousse chocolate vainilla
+      - Crema mousse vainilla chocolate
+    Crema inglesa:
+      - Crema inglesa
+      - inglesa Crema
+    Crema pastelera:
+      - Crema pastelera
+      - pastelera Crema
+    Cremoso san millan:
+      - Cremoso millan
+      - millan Cremoso
+    Croissant:
+      - Croissants
+    Croissant de chocolate:
+      - chocolate Croissant
+      - Croissant chocolate
+    Croquetas de pollo:
+      - Croquetas pollo
+      - pollo Croquetas
+    Cuajada:
+      - cuajadas
+    Cubata:
+      - cubatas
+    Cubito de caldo:
+      - caldo Cubito
+      - Cubito caldo
+    Curry:
+      - Currys
+    Dátil:
+      - dátiles
+    Donut:
+      - donuts
+    Donut, de chocolate:
+      - chocolate Donut
+      - Donut chocolate
+      - Donut de chocolate
+      - donuts de chocolate
+    Dorada, cruda:
+      - Dorada
+      - Dorada cruda
+    Dorada, plancha:
+      - Dorada plancha
+      - doradas
+      - plancha Dorada
+    Empanada de carne:
+      - carne Empanada
+      - Empanada carne
+      - empanadas de carne
+    Empanadilla:
+      - empanadillas
+    Endibia:
+      - endibias
+    Eneldo, seco:
+      - Eneldo seco
+      - seco Eneldo
+    Ensaimada:
+      - ensaimadas
+    Ensalada:
+      - ensaladas
+    Ensaladilla rusa:
+      - Ensaladilla rusa
+      - rusa Ensaladilla
+    Escarola:
+      - Escarolas
+    Esparragos blancos en conserva:
+      - blancos conserva Esparragos
+      - blancos Esparragos conserva
+      - conserva blancos Esparragos
+      - conserva Esparragos blancos
+      - Esparragos blancos conserva
+      - Esparragos conserva blancos
+    Espárrago, verde:
+      - Espárrago verde
+      - verde Espárrago
+    Espinaca, en conserva:
+      - conserva Espinaca
+      - Espinaca conserva
+      - Espinaca en conserva
+    Espinaca, hervida:
+      - Espinaca hervida
+      - hervida Espinaca
+    Espinaca, picada, congelada, cruda:
+      - congelada Espinaca picada
+      - congelada picada Espinaca
+      - Espinaca congelada picada
+      - Espinaca picada congelada
+      - Espinaca picada congelada cruda
+      - picada congelada Espinaca
+      - picada Espinaca congelada
+    Fabada:
+      - Fabadas
+    Faneca, cruda:
+      - Faneca
+      - Faneca cruda
+    Flamenquín:
+      - Flamenquínes
+    Flan de huevo:
+      - Flan huevo
+      - huevo Flan
+    Flan de huevo, bajo en calorías:
+      - bajo calorías Flan huevo
+      - bajo calorías huevo Flan
+      - bajo Flan calorías huevo
+      - bajo Flan huevo calorías
+      - bajo huevo calorías Flan
+      - bajo huevo Flan calorías
+      - calorías bajo Flan huevo
+      - calorías bajo huevo Flan
+      - calorías Flan bajo huevo
+      - calorías Flan huevo bajo
+    Fletan, crudo:
+      - Fletan
+      - Fletan crudo
+    Foie gras:
+      - Foie gras
+      - gras Foie
+    Frambuesa, cruda:
+      - Frambuesa
+      - Frambuesa cruda
+    Fresa:
+      - Fresas
+    Fritos de maíz:
+      - Fritos maíz
+      - maíz Fritos
+    Fructosa:
+      - Fructosas
+    Frutos secos:
+      - Frutos secos
+      - secos Frutos
+    Fuet:
+      - Fuets
+    Galleta, barquillo, con jalea de frutas:
+      - barquillo frutas Galleta jalea
+      - barquillo frutas jalea Galleta
+      - barquillo Galleta frutas jalea
+      - barquillo Galleta jalea frutas
+      - barquillo jalea frutas Galleta
+      - barquillo jalea Galleta frutas
+      - frutas barquillo Galleta jalea
+      - frutas barquillo jalea Galleta
+      - frutas Galleta barquillo jalea
+      - frutas Galleta jalea barquillo
+    Galleta, cubierta de chocolate:
+      - chocolate cubierta Galleta
+      - chocolate Galleta cubierta
+      - cubierta chocolate Galleta
+      - cubierta Galleta chocolate
+      - Galleta chocolate cubierta
+      - Galleta cubierta chocolate
+      - Galleta cubierta de chocolate
+    Galleta, genérico:
+      - galleta
+      - Galleta genérico
+    Galleta salada:
+      - Galleta salada
+      - salada Galleta
+    Galletas, con chocolate, tipo "cookies":
+      - chocolate cookies Galletas
+      - chocolate Galletas cookies
+      - Cookies
+      - cookies chocolate Galletas
+      - cookies Galletas chocolate
+      - Galletas chocolate cookies
+      - Galletas con chocolate tipo "cookies"
+      - Galletas cookies chocolate
+    Galletas, de mantequilla:
+      - Galletas de mantequilla
+      - Galletas mantequilla
+      - mantequilla Galletas
+    Galletas integrales:
+      - Galletas integrales
+      - integrales Galletas
+    Galletas saladas, con queso:
+      - Galletas queso saladas
+      - Galletas saladas con queso
+      - Galletas saladas queso
+      - queso Galletas saladas
+      - queso saladas Galletas
+      - saladas Galletas queso
+      - saladas queso Galletas
+    Galletas tipo maria:
+      - Galletas maria
+      - maria Galletas
+    Galleta, tipo "Digestiva":
+      - Digestiva Galleta
+      - Galleta Digestiva
+      - Galleta tipo "Digestiva"
+    Galleta ,tipo "digestiva", con chocolate:
+      - chocolate digestiva Galleta
+      - chocolate Galleta digestiva
+      - digestiva chocolate Galleta
+      - digestiva Galleta chocolate
+      - Galleta chocolate digestiva
+      - Galleta digestiva chocolate
+      - Galleta "digestiva" con chocolate
+      - Galleta tipo "digestiva" con chocolate
+    Gallina, entera, cruda:
+      - entera Gallina
+      - Gallina entera
+      - Gallina entera cruda
+    Gallo:
+      - Gallos
+    Gamba, hervida:
+      - Gamba hervida
+      - hervida Gamba
+    Gamba quisquilla, congelada:
+      - congelada Gamba quisquilla
+      - congelada quisquilla Gamba
+      - Gamba congelada quisquilla
+      - Gamba quisquilla congelada
+      - quisquilla congelada Gamba
+      - quisquilla Gamba congelada
+    Gamba roja, cruda:
+      - Gamba roja
+      - Gamba roja cruda
+      - roja Gamba
+    Garbanzo, en conserva:
+      - conserva Garbanzo
+      - Garbanzo conserva
+      - Garbanzo en conserva
+    Garbanzo, hervido:
+      - Garbanzo hervido
+      - hervido Garbanzo
+    Garbanzo, seco, crudo:
+      - Garbanzo seco
+      - Garbanzo seco crudo
+      - seco Garbanzo
+    Gazpacho:
+      - Gazpachos
+    Gelatina:
+      - Gelatinas
+    Germen de trigo:
+      - Germen trigo
+      - trigo Germen
+    Ginebra:
+      - Ginebras
+    Gofio:
+      - Gofios
+    Gomasio:
+      - Gomasios
+    Gominola, genérica:
+      - Gominola genérica
+    Granada:
+      - Granadas
+    Grasa de pollo:
+      - Grasa pollo
+      - pollo Grasa
+    Grelo:
+      - Grelos
+    Grosella, cruda:
+      - Grosella
+      - Grosella cruda
+    Grosella negra, cruda:
+      - Grosella negra
+      - Grosella negra cruda
+      - negra Grosella
+    Guayaba, enlatada en almíbar:
+      - almíbar enlatada Guayaba
+      - almíbar Guayaba enlatada
+      - enlatada almíbar Guayaba
+      - enlatada Guayaba almíbar
+      - Guayaba almíbar enlatada
+      - Guayaba enlatada almíbar
+      - Guayaba enlatada en almíbar
+    Guayaba, sin piel, cruda:
+      - Guayaba piel
+      - Guayaba sin piel
+      - Guayaba sin piel cruda
+      - piel Guayaba
+    Guindilla, en polvo:
+      - Guindilla en polvo
+      - Guindilla polvo
+      - polvo Guindilla
+    Guindilla, picante:
+      - Guindilla picante
+      - picante Guindilla
+    Guisante, congelado, crudo:
+      - congelado Guisante
+      - Guisante congelado
+      - Guisante congelado crudo
+    Guisante, congelado, hervido:
+      - congelado Guisante hervido
+      - congelado hervido Guisante
+      - Guisante congelado hervido
+      - Guisante hervido congelado
+      - hervido congelado Guisante
+      - hervido Guisante congelado
+    Guisante, seco, crudo:
+      - Guisante seco
+      - Guisante seco crudo
+      - seco Guisante
+    Guisantes en conserva:
+      - conserva Guisantes
+      - Guisantes conserva
+    Gusanito:
+      - Gusanitos
+    Haba, fresca:
+      - fresca Haba
+      - Haba fresca
+    Haba, frita:
+      - frita Haba
+      - Haba frita
+    Haba, seca:
+      - Haba seca
+      - seca Haba
+    Haba, seca, remojada, hervida:
+      - Haba hervida remojada seca
+      - Haba hervida seca remojada
+      - Haba remojada hervida seca
+      - Haba remojada seca hervida
+      - Haba seca hervida remojada
+      - Haba seca remojada hervida
+      - hervida Haba remojada seca
+      - hervida Haba seca remojada
+      - hervida remojada Haba seca
+      - hervida remojada seca Haba
+    Harina de avena:
+      - avena Harina
+      - Harina avena
+    Harina de avena, cocida en agua:
+      - agua avena cocida Harina
+      - agua avena Harina cocida
+      - agua cocida avena Harina
+      - agua cocida Harina avena
+      - agua Harina avena cocida
+      - agua Harina cocida avena
+      - avena agua cocida Harina
+      - avena agua Harina cocida
+      - avena cocida agua Harina
+      - avena cocida Harina agua
+    Harina de cebada:
+      - cebada Harina
+      - Harina cebada
+    Harina de centeno:
+      - centeno Harina
+      - Harina centeno
+    Harina de maíz:
+      - Harina maíz
+      - maíz Harina
+    Harina de soja:
+      - Harina soja
+      - soja Harina
+    Harina de trigo:
+      - harina
+      - Harina trigo
+      - trigo Harina
+    Harina de trigo, integral:
+      - Harina de trigo integral
+      - Harina integral trigo
+      - Harina trigo integral
+      - integral Harina trigo
+      - integral trigo Harina
+      - trigo Harina integral
+      - trigo integral Harina
+    Helado de chocolate:
+      - chocolate Helado
+      - Helado chocolate
+    Helado de fresa:
+      - fresa Helado
+      - Helado fresa
+    Helado de nata:
+      - Helado nata
+      - nata Helado
+    Hígado, de cerdo, crudo:
+      - cerdo Hígado
+      - Hígado cerdo
+      - Hígado de cerdo
+      - Hígado de cerdo crudo
+    Higado de pollo, crudo:
+      - Higado de pollo
+      - Higado de pollo crudo
+      - Higado pollo
+      - pollo Higado
+    Hígado, de vaca/buey, crudo:
+      - buey Hígado vaca
+      - buey vaca Hígado
+      - Hígado buey vaca
+      - Hígado de buey
+      - Hígado de vaca
+      - Hígado de vaca/buey
+      - Hígado de vaca/buey crudo
+      - Hígado vaca buey
+      - vaca buey Hígado
+      - vaca Hígado buey
+    Higos y brevas:
+      - brevas Higos
+      - Higos brevas
+    Hinojo:
+      - Hinojos
+    Hojaldre:
+      - Hojaldres
+    Horchata:
+      - Horchatas
+    Huevo de codorniz, entero, crudo:
+      - codorniz entero Huevo
+      - codorniz Huevo entero
+      - entero codorniz Huevo
+      - entero Huevo codorniz
+      - Huevo codorniz entero
+      - Huevo de codorniz entero
+      - Huevo de codorniz entero crudo
+      - Huevo entero codorniz
+    Huevo de gallina, clara, cruda:
+      - clara gallina Huevo
+      - clara Huevo gallina
+      - gallina clara Huevo
+      - gallina Huevo clara
+      - Huevo clara gallina
+      - Huevo de gallina clara
+      - Huevo de gallina clara cruda
+      - Huevo gallina clara
+    Huevo de gallina, escalfado:
+      - escalfado gallina Huevo
+      - escalfado Huevo gallina
+      - gallina escalfado Huevo
+      - gallina Huevo escalfado
+      - Huevo de gallina escalfado
+      - Huevo escalfado gallina
+      - Huevo gallina escalfado
+    Huevo de gallina fresco:
+      - fresco gallina Huevo
+      - fresco Huevo gallina
+      - gallina fresco Huevo
+      - gallina Huevo fresco
+      - huevo
+      - huevo de gallina
+      - Huevo fresco gallina
+      - Huevo gallina fresco
+      - huevos
+    Huevo de gallina, frito:
+      - frito gallina Huevo
+      - frito Huevo gallina
+      - gallina frito Huevo
+      - gallina Huevo frito
+      - Huevo de gallina frito
+      - Huevo frito gallina
+      - Huevo gallina frito
+    Huevo de gallina, hervido, duro:
+      - duro gallina hervido Huevo
+      - duro gallina Huevo hervido
+      - duro hervido gallina Huevo
+      - duro hervido Huevo gallina
+      - duro Huevo gallina hervido
+      - duro Huevo hervido gallina
+      - gallina duro hervido Huevo
+      - gallina duro Huevo hervido
+      - gallina hervido duro Huevo
+      - gallina hervido Huevo duro
+    Huevo de gallina, pasado por agua:
+      - agua gallina Huevo pasado
+      - agua gallina pasado Huevo
+      - agua Huevo gallina pasado
+      - agua Huevo pasado gallina
+      - agua pasado gallina Huevo
+      - agua pasado Huevo gallina
+      - gallina agua Huevo pasado
+      - gallina agua pasado Huevo
+      - gallina Huevo agua pasado
+      - gallina Huevo pasado agua
+    Huevo de gallina, revuelto, con mantequilla:
+      - gallina Huevo mantequilla revuelto
+      - gallina Huevo revuelto mantequilla
+      - gallina mantequilla Huevo revuelto
+      - gallina mantequilla revuelto Huevo
+      - gallina revuelto Huevo mantequilla
+      - gallina revuelto mantequilla Huevo
+      - Huevo de gallina revuelto con mantequilla
+      - Huevo gallina mantequilla revuelto
+      - Huevo gallina revuelto mantequilla
+      - Huevo mantequilla gallina revuelto
+    Huevo de gallina, yema, cruda:
+      - gallina Huevo yema
+      - gallina yema Huevo
+      - Huevo de gallina yema
+      - Huevo de gallina yema cruda
+      - Huevo gallina yema
+      - Huevo yema gallina
+      - yema gallina Huevo
+      - yema Huevo gallina
+    Huevo de gallina, yema, desecada:
+      - desecada gallina Huevo yema
+      - desecada gallina yema Huevo
+      - desecada Huevo gallina yema
+      - desecada Huevo yema gallina
+      - desecada yema gallina Huevo
+      - desecada yema Huevo gallina
+      - gallina desecada Huevo yema
+      - gallina desecada yema Huevo
+      - gallina Huevo desecada yema
+      - gallina Huevo yema desecada
+    Huevo de pato, crudo:
+      - Huevo de pato
+      - Huevo de pato crudo
+      - Huevo pato
+      - pato Huevo
+    Huevo de pavo, entero, crudo:
+      - entero Huevo pavo
+      - entero pavo Huevo
+      - Huevo de pavo entero
+      - Huevo de pavo entero crudo
+      - Huevo entero pavo
+      - Huevo pavo entero
+      - pavo entero Huevo
+      - pavo Huevo entero
+    Infusión:
+      - Infusiones
+    Jalea real:
+      - Jalea real
+      - real Jalea
+    Jamón asado:
+      - asado Jamón
+      - Jamón asado
+    Jamón cocido, categoría s/e:
+      - categoría cocido Jamón
+      - categoría Jamón cocido
+      - cocido categoría Jamón
+      - cocido Jamón categoría
+      - Jamón categoría cocido
+      - Jamón cocido categoría
+      - Jamón cocido categoría s/e
+    Jamón cocido, enlatado:
+      - cocido enlatado Jamón
+      - cocido Jamón enlatado
+      - enlatado cocido Jamón
+      - enlatado Jamón cocido
+      - Jamón cocido enlatado
+      - Jamón enlatado cocido
+    Jamón ibérico de bellota:
+      - bellota ibérico Jamón
+      - bellota Jamón ibérico
+      - ibérico bellota Jamón
+      - ibérico Jamón bellota
+      - Jamón bellota ibérico
+      - Jamón ibérico bellota
+    Jamón ibérico de cebo:
+      - cebo ibérico Jamón
+      - cebo Jamón ibérico
+      - ibérico cebo Jamón
+      - ibérico Jamón cebo
+      - Jamón cebo ibérico
+      - Jamón ibérico cebo
+    Jamon serrano:
+      - Jamon serrano
+      - serrano Jamon
+    Jengibre:
+      - Jengibres
+    Judía blanca:
+      - blanca Judía
+      - Judía blanca
+    Judía pinta:
+      - Judía pinta
+      - pinta Judía
+    Judías blancas, cocidas:
+      - blancas cocidas Judías
+      - blancas Judías cocidas
+      - cocidas blancas Judías
+      - cocidas Judías blancas
+      - Judías blancas cocidas
+      - Judías cocidas blancas
+    Judias verdes en conserva:
+      - conserva Judias verdes
+      - conserva verdes Judias
+      - Judias conserva verdes
+      - Judias verdes conserva
+      - verdes conserva Judias
+      - verdes Judias conserva
+    Judía verde, congelada, cruda:
+      - congelada Judía verde
+      - congelada verde Judía
+      - Judía congelada verde
+      - Judía verde congelada
+      - Judía verde congelada cruda
+      - verde congelada Judía
+      - verde Judía congelada
+    Judía verde, cruda:
+      - Judía verde
+      - Judía verde cruda
+      - verde Judía
+    Judia verde, hervida:
+      - hervida Judia verde
+      - hervida verde Judia
+      - Judia hervida verde
+      - Judia verde hervida
+      - verde hervida Judia
+      - verde Judia hervida
+    Jurel, crudo:
+      - Jurel
+      - Jurel crudo
+    Kebab:
+      - Kebabs
+    Kefir:
+      - Kefirs
+    Ketchup:
+      - Ketchup
+    Kiwi:
+      - Kiwis
+    Lacón:
+      - Lacónes
+    Lactosa:
+      - Lactosas
+    Langosta:
+      - Langostas
+    Langostino:
+      - Langostinos
+    Lasaña:
+      - Lasañas
+    Laurel, hoja:
+      - hoja Laurel
+      - Laurel hoja
+    Leche condensada, entera, con azúcar:
+      - azúcar condensada entera Leche
+      - azúcar condensada Leche entera
+      - azúcar entera condensada Leche
+      - azúcar entera Leche condensada
+      - azúcar Leche condensada entera
+      - azúcar Leche entera condensada
+      - condensada azúcar entera Leche
+      - condensada azúcar Leche entera
+      - condensada entera azúcar Leche
+      - condensada entera Leche azúcar
+    Leche de almendra:
+      - almendra Leche
+      - Leche almendra
+    Leche de cabra:
+      - cabra Leche
+      - Leche cabra
+    Leche de coco:
+      - coco Leche
+      - Leche coco
+    Leche de oveja:
+      - Leche oveja
+      - oveja Leche
+    Leche, desnatada, pasteurizada:
+      - desnatada Leche
+      - Leche desnatada
+      - Leche desnatada pasteurizada
+    Leche de vaca, desnatada, condensada, con azúcar:
+      - azúcar condensada desnatada Leche vaca
+      - azúcar condensada desnatada vaca Leche
+      - azúcar condensada Leche desnatada vaca
+      - azúcar condensada Leche vaca desnatada
+      - azúcar condensada vaca desnatada Leche
+      - azúcar condensada vaca Leche desnatada
+      - azúcar desnatada condensada Leche vaca
+      - azúcar desnatada condensada vaca Leche
+      - azúcar desnatada Leche condensada vaca
+      - azúcar desnatada Leche vaca condensada
+    Leche de vaca, entera:
+      - entera Leche vaca
+      - entera vaca Leche
+      - leche
+      - Leche de vaca entera
+      - Leche entera vaca
+      - Leche vaca entera
+      - vaca entera Leche
+      - vaca Leche entera
+    Leche en polvo, semidesnatada:
+      - Leche en polvo semidesnatada
+      - Leche polvo semidesnatada
+      - Leche semidesnatada polvo
+      - polvo Leche semidesnatada
+      - polvo semidesnatada Leche
+      - semidesnatada Leche polvo
+      - semidesnatada polvo Leche
+    Leche fermentada, bifidobacterium, entera, natural:
+      - bifidobacterium entera fermentada Leche natural
+      - bifidobacterium entera fermentada natural Leche
+      - bifidobacterium entera Leche fermentada natural
+      - bifidobacterium entera Leche natural fermentada
+      - bifidobacterium entera natural fermentada Leche
+      - bifidobacterium entera natural Leche fermentada
+      - bifidobacterium fermentada entera Leche natural
+      - bifidobacterium fermentada entera natural Leche
+      - bifidobacterium fermentada Leche entera natural
+      - bifidobacterium fermentada Leche natural entera
+    Leche materna:
+      - Leche materna
+      - materna Leche
+    Leche merengada:
+      - Leche merengada
+      - merengada Leche
+    Leche, semidesnatada, pasteurizada:
+      - Leche semidesnatada
+      - Leche semidesnatada pasteurizada
+      - semidesnatada Leche
+    Lechuga:
+      - Lechugas
+    Lecitina de soja:
+      - Lecitina soja
+      - soja Lecitina
+    Lengua, de buey, cruda:
+      - buey Lengua
+      - Lengua buey
+      - Lengua de buey
+      - Lengua de buey cruda
+    Lengua de cerdo, cruda:
+      - cerdo Lengua
+      - Lengua cerdo
+      - Lengua de cerdo
+      - Lengua de cerdo cruda
+    Lengua de cordero, cruda:
+      - cordero Lengua
+      - Lengua cordero
+      - Lengua de cordero
+      - Lengua de cordero cruda
+    Lengua, de ternera, cruda:
+      - Lengua de ternera
+      - Lengua de ternera cruda
+      - Lengua ternera
+      - ternera Lengua
+    Lenguado:
+      - Lenguados
+    Lenguado, al horno:
+      - horno Lenguado
+      - Lenguado al horno
+      - Lenguado horno
+    Lenguado, frito:
+      - frito Lenguado
+      - Lenguado frito
+    Lenguado, plancha:
+      - Lenguado plancha
+      - plancha Lenguado
+    Lenteja, en conserva:
+      - conserva Lenteja
+      - Lenteja conserva
+      - Lenteja en conserva
+    Lenteja, hervida:
+      - hervida Lenteja
+      - Lenteja hervida
+    Lenteja, seca, cruda:
+      - Lenteja seca
+      - Lenteja seca cruda
+      - seca Lenteja
+    Licor apricot:
+      - apricot Licor
+      - Licor apricot
+    Licor benedictine:
+      - benedictine Licor
+      - Licor benedictine
+    Licor curaçao:
+      - curaçao Licor
+      - Licor curaçao
+    Licor de café:
+      - café Licor
+      - Licor café
+    Licor de crema 15-17% vol.:
+      - crema Licor
+      - Licor crema
+    Licores de frutas:
+      - frutas Licores
+      - Licores frutas
+    Liebre, entera, cruda:
+      - entera Liebre
+      - Liebre entera
+      - Liebre entera cruda
+    Lija, cruda:
+      - Lija
+      - Lija cruda
+    Lima, cruda:
+      - Lima
+      - Lima cruda
+    Limonada:
+      - Limonadas
+    Litchi, crudo:
+      - Litchi
+      - Litchi crudo
+    Lombarda:
+      - Lombardas
+    Lomo embuchado:
+      - embuchado Lomo
+      - Lomo embuchado
+    Longaniza:
+      - Longanizas
+    Lubina:
+      - Lubinas
+    Lucio, al horno:
+      - horno Lucio
+      - Lucio al horno
+      - Lucio horno
+    Macedonia de frutas, conserva en su jugo:
+      - conserva frutas jugo Macedonia
+      - conserva frutas Macedonia jugo
+      - conserva jugo frutas Macedonia
+      - conserva jugo Macedonia frutas
+      - conserva Macedonia frutas jugo
+      - conserva Macedonia jugo frutas
+      - frutas conserva jugo Macedonia
+      - frutas conserva Macedonia jugo
+      - frutas jugo conserva Macedonia
+      - frutas jugo Macedonia conserva
+    Magdalena:
+      - Magdalenas
+    Maíz, en mazorca, congelado, crudo:
+      - congelado Maíz mazorca
+      - congelado mazorca Maíz
+      - Maíz congelado mazorca
+      - Maíz en mazorca congelado
+      - Maíz en mazorca congelado crudo
+      - Maíz mazorca congelado
+      - mazorca congelado Maíz
+      - mazorca Maíz congelado
+    Maíz, en mazorca, crudo:
+      - Maíz en mazorca
+      - Maíz en mazorca crudo
+      - Maíz mazorca
+      - mazorca Maíz
+    Mandarina:
+      - Mandarinas
+    Mandarina, congelada:
+      - congelada Mandarina
+      - Mandarina congelada
+    Mango, crudo:
+      - Mango
+      - Mango crudo
+    Manteca:
+      - Mantecas
+    Mantequilla, baja en calorías:
+      - baja calorías Mantequilla
+      - baja Mantequilla calorías
+      - calorías baja Mantequilla
+      - calorías Mantequilla baja
+      - Mantequilla baja calorías
+      - Mantequilla baja en calorías
+      - Mantequilla calorías baja
+    Mantequilla salada:
+      - Mantequilla salada
+      - salada Mantequilla
+    Manzana:
+      - Manzanas
+    Margarina, baja en calorías:
+      - baja calorías Margarina
+      - baja Margarina calorías
+      - calorías baja Margarina
+      - calorías Margarina baja
+      - Margarina baja calorías
+      - Margarina baja en calorías
+      - Margarina calorías baja
+    Margarina de maíz:
+      - maíz Margarina
+      - Margarina maíz
+    Masa de hojaldre, cruda:
+      - hojaldre Masa
+      - Masa de hojaldre
+      - Masa de hojaldre cruda
+      - Masa hojaldre
+    Mayonesa, aceite de oliva:
+      - aceite Mayonesa oliva
+      - aceite oliva Mayonesa
+      - Mayonesa aceite de oliva
+      - Mayonesa aceite oliva
+      - Mayonesa oliva aceite
+      - oliva aceite Mayonesa
+      - oliva Mayonesa aceite
+    Mayonesa, aceite de soja:
+      - aceite Mayonesa soja
+      - aceite soja Mayonesa
+      - Mayonesa aceite de soja
+      - Mayonesa aceite soja
+      - Mayonesa soja aceite
+      - soja aceite Mayonesa
+      - soja Mayonesa aceite
+    Mayonesa, baja en calorías:
+      - baja calorías Mayonesa
+      - baja Mayonesa calorías
+      - calorías baja Mayonesa
+      - calorías Mayonesa baja
+      - Mayonesa baja calorías
+      - Mayonesa baja en calorías
+      - Mayonesa calorías baja
+    Mayonesa con aceite de girasol:
+      - aceite girasol Mayonesa
+      - aceite Mayonesa girasol
+      - girasol aceite Mayonesa
+      - girasol Mayonesa aceite
+      - Mayonesa aceite girasol
+      - Mayonesa girasol aceite
+    Mejillon:
+      - Mejillones
+    Mejillón, en conserva, al natural:
+      - conserva Mejillón natural
+      - conserva natural Mejillón
+      - Mejillón conserva natural
+      - Mejillón en conserva al natural
+      - Mejillón natural conserva
+      - natural conserva Mejillón
+      - natural Mejillón conserva
+    Mejillón, en escabeche:
+      - escabeche Mejillón
+      - Mejillón en escabeche
+      - Mejillón escabeche
+    Mejillón, hervido:
+      - hervido Mejillón
+      - Mejillón hervido
+    Melocotón:
+      - Melocotones
+    Melocotón, desecado:
+      - desecado Melocotón
+      - Melocotón desecado
+    Melocotón en almíbar:
+      - almíbar Melocotón
+      - Melocotón almíbar
+    Melón:
+      - Melones
+    Membrillo, crudo:
+      - Membrillo
+      - Membrillo crudo
+    Menestra de verduras, congelada:
+      - congelada Menestra verduras
+      - congelada verduras Menestra
+      - Menestra congelada verduras
+      - Menestra de verduras congelada
+      - Menestra verduras congelada
+      - verduras congelada Menestra
+      - verduras Menestra congelada
+    Menta, fresca:
+      - fresca Menta
+      - Menta fresca
+    Merluza, congelada, cruda:
+      - congelada Merluza
+      - Merluza congelada
+      - Merluza congelada cruda
+    Merluza fresca:
+      - fresca Merluza
+      - Merluza fresca
+    Merluza, rebozada, frita:
+      - frita Merluza rebozada
+      - frita rebozada Merluza
+      - Merluza frita rebozada
+      - Merluza rebozada frita
+      - rebozada frita Merluza
+      - rebozada Merluza frita
+    Mermelada de albaricoque:
+      - albaricoque Mermelada
+      - Mermelada albaricoque
+    Mermelada de albaricoque y melocotón, baja en calorías:
+      - albaricoque baja calorías melocotón Mermelada
+      - albaricoque baja calorías Mermelada melocotón
+      - albaricoque baja melocotón calorías Mermelada
+      - albaricoque baja melocotón Mermelada calorías
+      - albaricoque baja Mermelada calorías melocotón
+      - albaricoque baja Mermelada melocotón calorías
+      - albaricoque calorías baja melocotón Mermelada
+      - albaricoque calorías baja Mermelada melocotón
+      - albaricoque calorías melocotón baja Mermelada
+      - albaricoque calorías melocotón Mermelada baja
+    Mermelada de ciruela:
+      - ciruela Mermelada
+      - Mermelada ciruela
+    Mermelada de frambuesa:
+      - frambuesa Mermelada
+      - Mermelada frambuesa
+    Mermelada de fresa:
+      - fresa Mermelada
+      - Mermelada fresa
+    Mermelada de fresa, baja en calorías:
+      - baja calorías fresa Mermelada
+      - baja calorías Mermelada fresa
+      - baja fresa calorías Mermelada
+      - baja fresa Mermelada calorías
+      - baja Mermelada calorías fresa
+      - baja Mermelada fresa calorías
+      - calorías baja fresa Mermelada
+      - calorías baja Mermelada fresa
+      - calorías fresa baja Mermelada
+      - calorías fresa Mermelada baja
+    Mermelada de grosella roja:
+      - grosella Mermelada roja
+      - grosella roja Mermelada
+      - Mermelada grosella roja
+      - Mermelada roja grosella
+      - roja grosella Mermelada
+      - roja Mermelada grosella
+    Mermelada de mora:
+      - Mermelada mora
+      - mora Mermelada
+    Mermelada de naranja:
+      - Mermelada naranja
+      - naranja Mermelada
+    Mero, crudo:
+      - Mero
+      - Mero crudo
+    Mero, plancha:
+      - Mero plancha
+      - plancha Mero
+    Miel:
+      - Mieles
+    Mijo:
+      - Mijos
+    Miso:
+      - Misos
+    Mojo picon:
+      - Mojo picon
+      - picon Mojo
+    Molleja de cordero:
+      - cordero Molleja
+      - Molleja cordero
+    Morcilla:
+      - Morcillas
+    Morcilla, frita:
+      - frita Morcilla
+      - Morcilla frita
+    Mortadela:
+      - Mortadelas
+    Mostaza:
+      - Mostazas
+    Mousse de chocolate:
+      - chocolate Mousse
+      - Mousse chocolate
+    Mousse de queso fresco, con frutas:
+      - fresco frutas Mousse queso
+      - fresco frutas queso Mousse
+      - fresco Mousse frutas queso
+      - fresco Mousse queso frutas
+      - fresco queso frutas Mousse
+      - fresco queso Mousse frutas
+      - frutas fresco Mousse queso
+      - frutas fresco queso Mousse
+      - frutas Mousse fresco queso
+      - frutas Mousse queso fresco
+    Mousse de queso fresco, desnatado, azucarado:
+      - azucarado desnatado fresco Mousse queso
+      - azucarado desnatado fresco queso Mousse
+      - azucarado desnatado Mousse fresco queso
+      - azucarado desnatado Mousse queso fresco
+      - azucarado desnatado queso fresco Mousse
+      - azucarado desnatado queso Mousse fresco
+      - azucarado fresco desnatado Mousse queso
+      - azucarado fresco desnatado queso Mousse
+      - azucarado fresco Mousse desnatado queso
+      - azucarado fresco Mousse queso desnatado
+    Mousse de queso fresco, desnatado, con frutas:
+      - desnatado fresco frutas Mousse queso
+      - desnatado fresco frutas queso Mousse
+      - desnatado fresco Mousse frutas queso
+      - desnatado fresco Mousse queso frutas
+      - desnatado fresco queso frutas Mousse
+      - desnatado fresco queso Mousse frutas
+      - desnatado frutas fresco Mousse queso
+      - desnatado frutas fresco queso Mousse
+      - desnatado frutas Mousse fresco queso
+      - desnatado frutas Mousse queso fresco
+    Mousse de yogur, con frutas:
+      - frutas Mousse yogur
+      - frutas yogur Mousse
+      - Mousse de yogur con frutas
+      - Mousse frutas yogur
+      - Mousse yogur frutas
+      - yogur frutas Mousse
+      - yogur Mousse frutas
+    Mousse de yogur, natural:
+      - Mousse de yogur natural
+      - Mousse natural yogur
+      - Mousse yogur natural
+      - natural Mousse yogur
+      - natural yogur Mousse
+      - yogur Mousse natural
+      - yogur natural Mousse
+    Muesli:
+      - Mueslis
+    Mújol, al horno:
+      - horno Mújol
+      - Mújol al horno
+      - Mújol horno
+    Mújol, crudo:
+      - Mújol
+      - Mújol crudo
+    Nabo, pelado, crudo:
+      - Nabo pelado
+      - Nabo pelado crudo
+      - pelado Nabo
+    Napolitana, rellena con crema de cacao:
+      - cacao crema Napolitana rellena
+      - cacao crema rellena Napolitana
+      - cacao Napolitana crema rellena
+      - cacao Napolitana rellena crema
+      - cacao rellena crema Napolitana
+      - cacao rellena Napolitana crema
+      - crema cacao Napolitana rellena
+      - crema cacao rellena Napolitana
+      - crema Napolitana cacao rellena
+      - crema Napolitana rellena cacao
+    Naranja:
+      - Naranjas
+    Nata, líquida, para cocinar, 18% de grasa:
+      - cocinar grasa líquida Nata
+      - cocinar grasa Nata líquida
+      - cocinar líquida grasa Nata
+      - cocinar líquida Nata grasa
+      - cocinar Nata grasa líquida
+      - cocinar Nata líquida grasa
+      - grasa cocinar líquida Nata
+      - grasa cocinar Nata líquida
+      - grasa líquida cocinar Nata
+      - grasa líquida Nata cocinar
+    Nata montada:
+      - montada Nata
+      - Nata montada
+    Natillas sabor vainilla:
+      - Natillas sabor vainilla
+      - Natillas vainilla sabor
+      - sabor Natillas vainilla
+      - sabor vainilla Natillas
+      - vainilla Natillas sabor
+      - vainilla sabor Natillas
+    Nécora:
+      - Necoras
+    Néctar de albaricoque, envasado:
+      - albaricoque envasado Néctar
+      - albaricoque Néctar envasado
+      - envasado albaricoque Néctar
+      - envasado Néctar albaricoque
+      - Néctar albaricoque envasado
+      - Néctar de albaricoque envasado
+      - Néctar envasado albaricoque
+    Néctar de ciruela:
+      - ciruela Néctar
+      - Néctar ciruela
+    Néctar de frutas exóticas, envasado:
+      - envasado exóticas frutas Néctar
+      - envasado exóticas Néctar frutas
+      - envasado frutas exóticas Néctar
+      - envasado frutas Néctar exóticas
+      - envasado Néctar exóticas frutas
+      - envasado Néctar frutas exóticas
+      - exóticas envasado frutas Néctar
+      - exóticas envasado Néctar frutas
+      - exóticas frutas envasado Néctar
+      - exóticas frutas Néctar envasado
+    Néctar de mango, envasado:
+      - envasado mango Néctar
+      - envasado Néctar mango
+      - mango envasado Néctar
+      - mango Néctar envasado
+      - Néctar de mango envasado
+      - Néctar envasado mango
+      - Néctar mango envasado
+    Néctar de maracuyá, envasado:
+      - envasado maracuyá Néctar
+      - envasado Néctar maracuyá
+      - maracuyá envasado Néctar
+      - maracuyá Néctar envasado
+      - Néctar de maracuyá envasado
+      - Néctar envasado maracuyá
+      - Néctar maracuyá envasado
+    Néctar de melocotón:
+      - melocotón Néctar
+      - Néctar melocotón
+    Néctar de naranja, envasado:
+      - envasado naranja Néctar
+      - envasado Néctar naranja
+      - naranja envasado Néctar
+      - naranja Néctar envasado
+      - Néctar de naranja envasado
+      - Néctar envasado naranja
+      - Néctar naranja envasado
+    Néctar de pera, envasado:
+      - envasado Néctar pera
+      - envasado pera Néctar
+      - Néctar de pera envasado
+      - Néctar envasado pera
+      - Néctar pera envasado
+      - pera envasado Néctar
+      - pera Néctar envasado
+    Néctar de piña:
+      - Néctar piña
+      - piña Néctar
+    Néctar de pomelo:
+      - Néctar pomelo
+      - pomelo Néctar
+    Nectarina:
+      - Nectarina
+    Níscalo, crudo:
+      - Níscalo
+      - Níscalo crudo
+    Níspero, con piel, crudo:
+      - Níspero con piel
+      - Níspero con piel crudo
+      - Níspero piel
+      - piel Níspero
+    Nispero, conserva en su jugo:
+      - conserva jugo Nispero
+      - conserva Nispero jugo
+      - jugo conserva Nispero
+      - jugo Nispero conserva
+      - Nispero conserva en su jugo
+      - Nispero conserva jugo
+      - Nispero jugo conserva
+    Nispero, sin piel , congelado:
+      - congelado Nispero piel
+      - congelado piel Nispero
+      - Nispero congelado piel
+      - Nispero piel congelado
+      - Nispero sin piel  congelado
+      - piel congelado Nispero
+      - piel Nispero congelado
+    Nuez:
+      - Nueces
+    Nuez, cruda, con cáscara:
+      - cáscara Nuez
+      - Nuez cáscara
+      - Nuez  con cáscara
+      - Nuez cruda con cáscara
+    Nuez moscada:
+      - moscada Nuez
+      - Nuez moscada
+    Oca, sin piel, asada:
+      - asada piel
+      - Oca sin piel asada
+      - piel asada
+    Orégano, seco:
+      - Orégano seco
+      - seco Orégano
+    Ostra, cruda:
+      - Ostra
+      - Ostra cruda
+    Paella:
+      - Paellas
+    Paella marinera:
+      - marinera Paella
+      - Paella marinera
+    Palmera:
+      - Palmeras
+    Palmito, en conserva:
+      - conserva Palmito
+      - Palmito conserva
+      - Palmito en conserva
+    Palometa, cruda:
+      - Palometa
+      - Palometa cruda
+    Palomitas de maíz, sin aceite, sin sal:
+      - aceite maíz Palomitas
+      - aceite Palomitas maíz
+      - maíz aceite Palomitas
+      - maíz Palomitas aceite
+      - Palomitas aceite maíz
+      - Palomitas de maíz sin aceite sin sal
+      - Palomitas maíz aceite
+    Pan blanco, de barra:
+      - barra blanco
+      - blanco barra
+      - Pan blanco de barra
+    Pan blanco, de barra, sin sal:
+      - barra blanco
+      - blanco barra
+      - Pan blanco de barra sin sal
+    Pan blanco, de molde, tostado:
+      - blanco molde tostado
+      - blanco tostado molde
+      - molde blanco tostado
+      - molde tostado blanco
+      - Pan blanco de molde tostado
+      - tostado blanco molde
+      - tostado molde blanco
+    Pan blanco, frito:
+      - blanco frito
+      - frito blanco
+      - Pan blanco frito
+    Pan blanco, tipo "baguette":
+      - baguette blanco
+      - blanco baguette
+      - Pan blanco "baguette"
+      - Pan blanco tipo "baguette"
+    Pan blanco, tostado:
+      - blanco tostado
+      - Pan blanco tostado
+      - tostado blanco
+    Pan blanco, tostado sin sal:
+      - blanco tostado
+      - Pan blanco tostado sin sal
+      - tostado blanco
+    Panceta, frita:
+      - frita Panceta
+      - Panceta frita
+    Pan de avena:
+      - Panes de avena
+    Pan de cebada:
+      - Panes de cebada
+    Pan de centeno:
+      - Panes de centeno
+    Pan de leche:
+      - Panes de leche
+    Pan de maíz:
+      - Panes de maíz
+    Panga, cruda:
+      - Panga
+      - Panga cruda
+    Pan integral:
+      - Panes integrales
+    Pan integral, de molde, tostado:
+      - integral molde tostado
+      - integral tostado molde
+      - molde integral tostado
+      - molde tostado integral
+      - Pan integral de molde tostado
+      - tostado integral molde
+      - tostado molde integral
+    Pan integral, sin sal:
+      - Pan integral sin sal
+    Pan integral, tostado:
+      - integral tostado
+      - Pan integral tostado
+      - tostado integral
+    Pan rallado:
+      - Panes rallados
+    Pan, tipo hamburguesa:
+      - pan de hamburguesa
+      - Pan tipo hamburguesa
+    Pan tostado integral:
+      - integral tostado
+      - tostado integral
+    Papaya, cruda:
+      - Papaya
+      - Papaya cruda
+    Paraguaya:
+      - Paraguayas
+    Pasta alimenticia, con huevo, cruda:
+      - alimenticia huevo Pasta
+      - alimenticia Pasta huevo
+      - huevo alimenticia Pasta
+      - huevo Pasta alimenticia
+      - Pasta alimenticia con huevo
+      - Pasta alimenticia con huevo cruda
+      - Pasta alimenticia huevo
+      - Pasta huevo alimenticia
+    Pasta alimenticia, con huevo, hervida:
+      - alimenticia hervida huevo Pasta
+      - alimenticia hervida Pasta huevo
+      - alimenticia huevo hervida Pasta
+      - alimenticia huevo Pasta hervida
+      - alimenticia Pasta hervida huevo
+      - alimenticia Pasta huevo hervida
+      - hervida alimenticia huevo Pasta
+      - hervida alimenticia Pasta huevo
+      - hervida huevo alimenticia Pasta
+      - hervida huevo Pasta alimenticia
+    Pasta alimenticia, con vegetales, cruda:
+      - alimenticia Pasta vegetales
+      - alimenticia vegetales Pasta
+      - Pasta alimenticia con vegetales
+      - Pasta alimenticia con vegetales cruda
+      - Pasta alimenticia vegetales
+      - Pasta vegetales alimenticia
+      - vegetales alimenticia Pasta
+      - vegetales Pasta alimenticia
+    Pasta alimenticia, cruda:
+      - alimenticia Pasta
+      - Pasta alimenticia
+      - Pasta alimenticia cruda
+    Pasta alimenticia, integral, cruda:
+      - alimenticia integral Pasta
+      - alimenticia Pasta integral
+      - integral alimenticia Pasta
+      - integral Pasta alimenticia
+      - Pasta alimenticia integral
+      - Pasta alimenticia integral cruda
+      - Pasta integral alimenticia
+    Pasta alimenticia, integral, hervida:
+      - alimenticia hervida integral Pasta
+      - alimenticia hervida Pasta integral
+      - alimenticia integral hervida Pasta
+      - alimenticia integral Pasta hervida
+      - alimenticia Pasta hervida integral
+      - alimenticia Pasta integral hervida
+      - hervida alimenticia integral Pasta
+      - hervida alimenticia Pasta integral
+      - hervida integral alimenticia Pasta
+      - hervida integral Pasta alimenticia
+    Pasta alimenticia, rellena con carne, hervida:
+      - alimenticia carne hervida Pasta rellena
+      - alimenticia carne hervida rellena Pasta
+      - alimenticia carne Pasta hervida rellena
+      - alimenticia carne Pasta rellena hervida
+      - alimenticia carne rellena hervida Pasta
+      - alimenticia carne rellena Pasta hervida
+      - alimenticia hervida carne Pasta rellena
+      - alimenticia hervida carne rellena Pasta
+      - alimenticia hervida Pasta carne rellena
+      - alimenticia hervida Pasta rellena carne
+    Pasta de fruta:
+      - fruta Pasta
+      - Pasta fruta
+    Pastas de te:
+      - Pasta de te
+    Pastel:
+      - Pasteles
+    Pastel con fruta confitada:
+      - confitada fruta Pastel
+      - confitada Pastel fruta
+      - fruta confitada Pastel
+      - fruta Pastel confitada
+      - Pastel confitada fruta
+      - Pastel fruta confitada
+    Pastel de chocolate:
+      - chocolate Pastel
+      - Pastel chocolate
+    Pastel de manzana:
+      - manzana Pastel
+      - Pastel manzana
+    Patata, asada:
+      - asada Patata
+      - Patata asada
+    Patata, cruda:
+      - Patata
+      - Patata cruda
+    Patata, frita con aceite s/e, sin sal:
+      - aceite frita Patata
+      - aceite Patata frita
+      - frita aceite Patata
+      - frita Patata aceite
+      - Patata aceite frita
+      - Patata frita aceite
+      - Patata frita con aceite s/e sin sal
+      - Patata frita con aceite  sin sal
+    Patata, hervida:
+      - hervida Patata
+      - Patata hervida
+    Patata, prefrita, congelada:
+      - congelada Patata prefrita
+      - congelada prefrita Patata
+      - Patata congelada prefrita
+      - Patata prefrita congelada
+      - prefrita congelada Patata
+      - prefrita Patata congelada
+    Patata, salteada con aceite girasol:
+      - aceite girasol Patata salteada
+      - aceite girasol salteada Patata
+      - aceite Patata girasol salteada
+      - aceite Patata salteada girasol
+      - aceite salteada girasol Patata
+      - aceite salteada Patata girasol
+      - girasol aceite Patata salteada
+      - girasol aceite salteada Patata
+      - girasol Patata aceite salteada
+      - girasol Patata salteada aceite
+    Patatas chips, "lights":
+      - chips lights Patatas
+      - chips Patatas lights
+      - lights chips Patatas
+      - lights Patatas chips
+      - Patatas chips "lights"
+      - Patatas chips lights
+      - Patatas lights chips
+    Patatas, fritas, chips:
+      - chips fritas Patatas
+      - chips Patatas fritas
+      - fritas chips Patatas
+      - fritas Patatas chips
+      - Patatas chips fritas
+      - Patatas fritas chips
+    Pate de higado de cerdo, 30% de grasa:
+      - cerdo grasa higado Pate
+      - cerdo grasa Pate higado
+      - cerdo higado grasa Pate
+      - cerdo higado Pate grasa
+      - cerdo Pate grasa higado
+      - cerdo Pate higado grasa
+      - grasa cerdo higado Pate
+      - grasa cerdo Pate higado
+      - grasa higado cerdo Pate
+      - grasa higado Pate cerdo
+    Paté de pimienta:
+      - Paté pimienta
+      - pimienta Paté
+    Pato, entero, asado:
+      - asado entero Pato
+      - asado Pato entero
+      - entero asado Pato
+      - entero Pato asado
+      - Pato asado entero
+      - Pato entero asado
+    Pato, entero, crudo:
+      - entero Pato
+      - Pato entero
+      - Pato entero crudo
+    Pavo, crudo:
+      - Pavo
+      - Pavo crudo
+    Pavo, fiambre:
+      - fiambre Pavo
+      - Pavo fiambre
+    Pavo, fiambre, bajo en grasa:
+      - bajo fiambre grasa Pavo
+      - bajo fiambre Pavo grasa
+      - bajo grasa fiambre Pavo
+      - bajo grasa Pavo fiambre
+      - bajo Pavo fiambre grasa
+      - bajo Pavo grasa fiambre
+      - fiambre bajo grasa Pavo
+      - fiambre bajo Pavo grasa
+      - fiambre grasa bajo Pavo
+      - fiambre grasa Pavo bajo
+    Pavo, muslo, con piel, crudo:
+      - muslo Pavo piel
+      - muslo piel Pavo
+      - Pavo muslo con piel
+      - Pavo muslo con piel crudo
+      - Pavo muslo piel
+      - Pavo piel muslo
+      - piel muslo Pavo
+      - piel Pavo muslo
+    Pavo, pechuga, con piel, crudo:
+      - Pavo pechuga con piel
+      - Pavo pechuga con piel crudo
+      - Pavo pechuga piel
+      - Pavo piel pechuga
+      - pechuga Pavo piel
+      - pechuga piel Pavo
+      - piel Pavo pechuga
+      - piel pechuga Pavo
+    Pavo, pechuga, sin piel, a la plancha:
+      - Pavo pechuga piel plancha
+      - Pavo pechuga plancha piel
+      - Pavo pechuga sin piel a la plancha
+      - Pavo piel pechuga plancha
+      - Pavo piel plancha pechuga
+      - Pavo plancha pechuga piel
+      - Pavo plancha piel pechuga
+      - pechuga Pavo piel plancha
+      - pechuga Pavo plancha piel
+      - pechuga piel Pavo plancha
+    Pepinillos en vinagre:
+      - Pepinillos vinagre
+      - vinagre Pepinillos
+    Pepino:
+      - Pepinos
+    Pera:
+      - Peras
+    Pera, enlatada en almíbar:
+      - almíbar enlatada Pera
+      - almíbar Pera enlatada
+      - enlatada almíbar Pera
+      - enlatada Pera almíbar
+      - Pera almíbar enlatada
+      - Pera enlatada almíbar
+      - Pera enlatada en almíbar
+    Perca, al horno:
+      - horno Perca
+      - Perca al horno
+      - Perca horno
+    Perca, cruda:
+      - Perca
+      - Perca cruda
+    Percebe:
+      - Percebes
+    Perdiz, cruda:
+      - Perdiz
+      - Perdiz cruda
+    Perejil, fresco:
+      - fresco Perejil
+      - Perejil fresco
+    Pescadilla, congelada, cruda:
+      - congelada Pescadilla
+      - Pescadilla congelada
+      - Pescadilla congelada cruda
+    Pescadilla, rebozada en harina, frita:
+      - frita harina Pescadilla rebozada
+      - frita harina rebozada Pescadilla
+      - frita Pescadilla harina rebozada
+      - frita Pescadilla rebozada harina
+      - frita rebozada harina Pescadilla
+      - frita rebozada Pescadilla harina
+      - harina frita Pescadilla rebozada
+      - harina frita rebozada Pescadilla
+      - harina Pescadilla frita rebozada
+      - harina Pescadilla rebozada frita
+    Pescado, genérico:
+      - Pescado genérico
+    Petit líquido, sabor fresa:
+      - fresa líquido Petit sabor
+      - fresa líquido sabor Petit
+      - fresa Petit líquido sabor
+      - fresa Petit sabor líquido
+      - fresa sabor líquido Petit
+      - fresa sabor Petit líquido
+      - líquido fresa Petit sabor
+      - líquido fresa sabor Petit
+      - líquido Petit fresa sabor
+      - líquido Petit sabor fresa
+    Petit suïsse, cereales y fruta:
+      - cereales fruta Petit suïsse
+      - cereales fruta suïsse Petit
+      - cereales Petit fruta suïsse
+      - cereales Petit suïsse fruta
+      - cereales suïsse fruta Petit
+      - cereales suïsse Petit fruta
+      - fruta cereales Petit suïsse
+      - fruta cereales suïsse Petit
+      - fruta Petit cereales suïsse
+      - fruta Petit suïsse cereales
+    Petit suisse, chocolate:
+      - chocolate Petit suisse
+      - chocolate suisse Petit
+      - Petit chocolate suisse
+      - Petit suisse chocolate
+      - suisse chocolate Petit
+      - suisse Petit chocolate
+    Petit suisse, fresa:
+      - fresa Petit suisse
+      - fresa suisse Petit
+      - Petit fresa suisse
+      - Petit suisse fresa
+      - suisse fresa Petit
+      - suisse Petit fresa
+    Petit Suisse, natural azucarado:
+      - azucarado natural Petit Suisse
+      - azucarado natural Suisse Petit
+      - azucarado Petit natural Suisse
+      - azucarado Petit Suisse natural
+      - azucarado Suisse natural Petit
+      - azucarado Suisse Petit natural
+      - natural azucarado Petit Suisse
+      - natural azucarado Suisse Petit
+      - natural Petit azucarado Suisse
+      - natural Petit Suisse azucarado
+    Pez espada, crudo:
+      - Pez espada
+      - Pez espada crudo
+    Pez espada, emperador, plancha:
+      - emperador espada plancha
+      - emperador plancha espada
+      - espada emperador plancha
+      - espada plancha emperador
+      - Pez espada emperador plancha
+      - plancha emperador espada
+      - plancha espada emperador
+    Pichón, sin piel, asado:
+      - asado Pichón piel
+      - asado piel Pichón
+      - Pichón asado piel
+      - Pichón piel asado
+      - Pichón sin piel asado
+      - piel asado Pichón
+      - piel Pichón asado
+    Pijota, cruda:
+      - Pijota
+      - Pijota cruda
+    Pimentón, en polvo:
+      - Pimentón en polvo
+      - Pimentón polvo
+      - polvo Pimentón
+    Pimienta, blanca:
+      - blanca Pimienta
+      - Pimienta blanca
+    Pimienta, negra:
+      - negra Pimienta
+      - Pimienta negra
+    Pimiento, frito:
+      - frito Pimiento
+      - Pimiento frito
+    Pimiento morrón, en conserva:
+      - conserva morrón Pimiento
+      - conserva Pimiento morrón
+      - morrón conserva Pimiento
+      - morrón Pimiento conserva
+      - Pimiento conserva morrón
+      - Pimiento morrón conserva
+      - Pimiento morrón en conserva
+    Pimiento rojo, crudo:
+      - Pimiento rojo
+      - Pimiento rojo crudo
+      - rojo Pimiento
+    Piña:
+      - Piñas
+    Piña en almíbar:
+      - almíbar Piña
+      - Piña almíbar
+    Piña, enlatada en su jugo:
+      - enlatada jugo Piña
+      - enlatada Piña jugo
+      - jugo enlatada Piña
+      - jugo Piña enlatada
+      - Piña enlatada en su jugo
+      - Piña enlatada jugo
+      - Piña jugo enlatada
+    Piñon:
+      - Piñones
+    Piñón, crudo, con cáscara:
+      - cáscara Piñón
+      - Piñón cáscara
+      - Piñón  con cáscara
+      - Piñón crudo con cáscara
+    Pipa de calabaza:
+      - calabaza Pipa
+      - Pipa calabaza
+    Pipa de girasol:
+      - girasol Pipa
+      - Pipa girasol
+    Pipas de girasol, peladas, con sal:
+      - girasol peladas Pipas
+      - girasol Pipas peladas
+      - peladas girasol Pipas
+      - peladas Pipas girasol
+      - Pipas de girasol peladas con sal
+      - Pipas girasol peladas
+      - Pipas peladas girasol
+    Pistacho:
+      - Pistachos
+    Pizza, precocinada:
+      - Pizza precocinada
+      - precocinada Pizza
+    Plátano:
+      - Platanos
+    Platija, al vapor:
+      - Platija al vapor
+      - Platija vapor
+      - vapor Platija
+    Platija, cruda:
+      - Platija
+      - Platija cruda
+    Pollo, ala, con piel, cruda:
+      - piel Pollo
+      - Pollo ala con piel
+      - Pollo ala con piel cruda
+      - Pollo piel
+    Pollo empanado, frito:
+      - empanado frito Pollo
+      - empanado Pollo frito
+      - frito empanado Pollo
+      - frito Pollo empanado
+      - Pollo empanado frito
+      - Pollo frito empanado
+    Pollo, entero, con piel, asado:
+      - asado entero piel Pollo
+      - asado entero Pollo piel
+      - asado piel entero Pollo
+      - asado piel Pollo entero
+      - asado Pollo entero piel
+      - asado Pollo piel entero
+      - entero asado piel Pollo
+      - entero asado Pollo piel
+      - entero piel asado Pollo
+      - entero piel Pollo asado
+    Pollo, entero, con piel, crudo:
+      - entero piel Pollo
+      - entero Pollo piel
+      - piel entero Pollo
+      - piel Pollo entero
+      - Pollo entero con piel
+      - Pollo entero con piel crudo
+      - Pollo entero piel
+      - Pollo piel entero
+    Pollo, fiambre:
+      - fiambre Pollo
+      - Pollo fiambre
+    Pollo, fiambre, bajo en grasa:
+      - bajo fiambre grasa Pollo
+      - bajo fiambre Pollo grasa
+      - bajo grasa fiambre Pollo
+      - bajo grasa Pollo fiambre
+      - bajo Pollo fiambre grasa
+      - bajo Pollo grasa fiambre
+      - fiambre bajo grasa Pollo
+      - fiambre bajo Pollo grasa
+      - fiambre grasa bajo Pollo
+      - fiambre grasa Pollo bajo
+    Pollo, frito:
+      - frito Pollo
+      - Pollo frito
+    Pollo, muslo, con piel, asado:
+      - asado muslo piel Pollo
+      - asado muslo Pollo piel
+      - asado piel muslo Pollo
+      - asado piel Pollo muslo
+      - asado Pollo muslo piel
+      - asado Pollo piel muslo
+      - muslo asado piel Pollo
+      - muslo asado Pollo piel
+      - muslo de pollo
+      - muslo piel asado Pollo
+    Pollo, muslo, con piel, crudo:
+      - muslo piel Pollo
+      - muslo Pollo piel
+      - pechuga de pollo
+      - piel muslo Pollo
+      - piel Pollo muslo
+      - Pollo muslo con piel
+      - Pollo muslo con piel crudo
+      - Pollo muslo piel
+      - Pollo piel muslo
+    Pollo, parte sin especificar:
+      - Pollo parte sin especificar
+    Pollo, pechuga, con piel, crudo:
+      - pechuga piel Pollo
+      - pechuga Pollo piel
+      - piel pechuga Pollo
+      - piel Pollo pechuga
+      - Pollo pechuga con piel
+      - Pollo pechuga con piel crudo
+      - Pollo pechuga piel
+      - Pollo piel pechuga
+    Pollo, pechuga, plancha:
+      - pechuga plancha Pollo
+      - pechuga Pollo plancha
+      - plancha pechuga Pollo
+      - plancha Pollo pechuga
+      - Pollo pechuga plancha
+      - Pollo plancha pechuga
+    Pomelo:
+      - Pomelos
+    Preparado lácteo con omega 3:
+      - lácteo omega Preparado
+      - lácteo Preparado omega
+      - omega lácteo Preparado
+      - omega Preparado lácteo
+      - Preparado lácteo omega
+      - Preparado omega lácteo
+    Pudding de pasas:
+      - pasas Pudding
+      - Pudding pasas
+    Pudin de pasas:
+      - pasas Pudin
+      - Pudin pasas
+    Puerro, crudo y congelado:
+      - congelado Puerro
+      - Puerro congelado
+      - Puerro crudo y congelado
+      - Puerro  y congelado
+    Pulmón, de cerdo, crudo:
+      - cerdo Pulmón
+      - Pulmón cerdo
+      - Pulmón de cerdo
+      - Pulmón de cerdo crudo
+    Pulmón, de cordero, crudo:
+      - cordero Pulmón
+      - Pulmón cordero
+      - Pulmón de cordero
+      - Pulmón de cordero crudo
+    Pulmón, de ternera, crudo:
+      - Pulmón de ternera
+      - Pulmón de ternera crudo
+      - Pulmón ternera
+      - ternera Pulmón
+    Pulpo:
+      - Pulpos
+    Pulpo, hervido:
+      - hervido Pulpo
+      - Pulpo hervido
+    Puré, de patata, con leche:
+      - leche patata Puré
+      - leche Puré patata
+      - patata leche Puré
+      - patata Puré leche
+      - Puré de patata con leche
+      - Puré leche patata
+      - Puré patata leche
+    Puré de patata, con verduras, en copos:
+      - copos patata Puré verduras
+      - copos patata verduras Puré
+      - copos Puré patata verduras
+      - copos Puré verduras patata
+      - copos verduras patata Puré
+      - copos verduras Puré patata
+      - patata copos Puré verduras
+      - patata copos verduras Puré
+      - patata Puré copos verduras
+      - patata Puré verduras copos
+    Puré de patata, en copos:
+      - copos patata Puré
+      - copos Puré patata
+      - patata copos Puré
+      - patata Puré copos
+      - Puré copos patata
+      - Puré de patata en copos
+      - Puré patata copos
+    Puré de patatas y champiñones, en copos:
+      - champiñones copos patatas Puré
+      - champiñones copos Puré patatas
+      - champiñones patatas copos Puré
+      - champiñones patatas Puré copos
+      - champiñones Puré copos patatas
+      - champiñones Puré patatas copos
+      - copos champiñones patatas Puré
+      - copos champiñones Puré patatas
+      - copos patatas champiñones Puré
+      - copos patatas Puré champiñones
+    Puré de patata y queso, en copos:
+      - copos patata Puré queso
+      - copos patata queso Puré
+      - copos Puré patata queso
+      - copos Puré queso patata
+      - copos queso patata Puré
+      - copos queso Puré patata
+      - patata copos Puré queso
+      - patata copos queso Puré
+      - patata Puré copos queso
+      - patata Puré queso copos
+    Queso afuega'l pitu:
+      - afuega'l pitu Queso
+      - afuega'l Queso pitu
+      - pitu afuega'l Queso
+      - pitu Queso afuega'l
+      - Queso afuega'l pitu
+      - Queso pitu afuega'l
+    Queso ahumado de aliva:
+      - ahumado aliva Queso
+      - ahumado Queso aliva
+      - aliva ahumado Queso
+      - aliva Queso ahumado
+      - Queso ahumado aliva
+      - Queso aliva ahumado
+    Queso azul:
+      - azul Queso
+      - Queso azul
+    Queso brie:
+      - brie Queso
+      - Queso brie
+    Queso cabra, curado:
+      - cabra curado Queso
+      - cabra Queso curado
+      - curado cabra Queso
+      - curado Queso cabra
+      - Queso cabra curado
+      - Queso curado cabra
+    Queso cabrales:
+      - cabrales Queso
+      - Queso cabrales
+    Queso Camembert 20-30% MG/ES:
+      - Camembert Queso
+      - Queso Camembert
+    Queso camembert 60% mg/es:
+      - camembert Queso
+      - Queso camembert
+    Queso cantabria:
+      - cantabria Queso
+      - Queso cantabria
+    Queso casín:
+      - casín Queso
+      - Queso casín
+    Queso Castellano:
+      - Castellano Queso
+      - Queso Castellano
+    Queso cebreiro:
+      - cebreiro Queso
+      - Queso cebreiro
+    Queso Cheddar:
+      - Cheddar Queso
+      - Queso Cheddar
+    Queso curado, genérico:
+      - curado Queso
+      - Queso curado
+      - Queso curado genérico
+    Queso de aracena:
+      - aracena Queso
+      - Queso aracena
+    Queso de arzúa:
+      - arzúa Queso
+      - Queso arzúa
+    Queso de bola:
+      - bola Queso
+      - Queso bola
+    Queso de cádiz:
+      - cádiz Queso
+      - Queso cádiz
+    Queso de Castilla-La Mancha, oveja, vaca y cabra:
+      - cabra Castilla Mancha oveja Queso vaca
+      - cabra Castilla Mancha oveja vaca Queso
+      - cabra Castilla Mancha Queso oveja vaca
+      - cabra Castilla Mancha Queso vaca oveja
+      - cabra Castilla Mancha vaca oveja Queso
+      - cabra Castilla Mancha vaca Queso oveja
+      - cabra Castilla oveja Mancha Queso vaca
+      - cabra Castilla oveja Mancha vaca Queso
+      - cabra Castilla oveja Queso Mancha vaca
+      - cabra Castilla oveja Queso vaca Mancha
+    Queso de Castilla-La Mancha, oveja y cabra:
+      - cabra Castilla Mancha oveja Queso
+      - cabra Castilla Mancha Queso oveja
+      - cabra Castilla oveja Mancha Queso
+      - cabra Castilla oveja Queso Mancha
+      - cabra Castilla Queso Mancha oveja
+      - cabra Castilla Queso oveja Mancha
+      - cabra Mancha Castilla oveja Queso
+      - cabra Mancha Castilla Queso oveja
+      - cabra Mancha oveja Castilla Queso
+      - cabra Mancha oveja Queso Castilla
+    Queso de castilla-león, oveja y vaca:
+      - castilla león oveja Queso vaca
+      - castilla león oveja vaca Queso
+      - castilla león Queso oveja vaca
+      - castilla león Queso vaca oveja
+      - castilla león vaca oveja Queso
+      - castilla león vaca Queso oveja
+      - castilla oveja león Queso vaca
+      - castilla oveja león vaca Queso
+      - castilla oveja Queso león vaca
+      - castilla oveja Queso vaca león
+    Queso de murcia, al vino:
+      - murcia Queso vino
+      - murcia vino Queso
+      - Queso de murcia al vino
+      - Queso murcia vino
+      - Queso vino murcia
+      - vino murcia Queso
+      - vino Queso murcia
+    Queso de tenerife:
+      - Queso tenerife
+      - tenerife Queso
+    Queso de tiétar:
+      - Queso tiétar
+      - tiétar Queso
+    Queso edam:
+      - edam Queso
+      - Queso edam
+    Queso emmental:
+      - emmental Queso
+      - Queso emmental
+    Queso en porciones:
+      - Quesos en porciones
+    Queso flor de guía:
+      - flor Queso
+      - Queso flor
+    Queso fresco, cabra:
+      - cabra fresco Queso
+      - cabra Queso fresco
+      - fresco cabra Queso
+      - fresco Queso cabra
+      - Queso cabra fresco
+      - Queso fresco cabra
+    Queso fresco de burgos:
+      - burgos fresco Queso
+      - burgos Queso fresco
+      - fresco burgos Queso
+      - fresco Queso burgos
+      - Queso burgos fresco
+      - Queso fresco burgos
+    Queso fresco, desnatado, con frutas:
+      - desnatado fresco frutas Queso
+      - desnatado fresco Queso frutas
+      - desnatado frutas fresco Queso
+      - desnatado frutas Queso fresco
+      - desnatado Queso fresco frutas
+      - desnatado Queso frutas fresco
+      - fresco desnatado frutas Queso
+      - fresco desnatado Queso frutas
+      - fresco frutas desnatado Queso
+      - fresco frutas Queso desnatado
+    Queso fundido, extragraso (>60% MG/ES):
+      - extragraso fundido Queso
+      - extragraso Queso fundido
+      - fundido extragraso Queso
+      - fundido Queso extragraso
+      - Queso extragraso fundido
+      - Queso fundido extragraso
+      - Queso fundido extragraso (>60% MG/ES)
+    Queso gata-hurdes:
+      - gata hurdes Queso
+      - gata Queso hurdes
+      - hurdes gata Queso
+      - hurdes Queso gata
+      - Queso gata hurdes
+      - Queso hurdes gata
+    Queso gaztazarra:
+      - gaztazarra Queso
+      - Queso gaztazarra
+    Queso Gouda:
+      - Gouda Queso
+      - Queso Gouda
+    Queso grazalema:
+      - grazalema Queso
+      - Queso grazalema
+    Queso Gruyer:
+      - Gruyer Queso
+      - Queso Gruyer
+    Queso herreño:
+      - herreño Queso
+      - Queso herreño
+    Queso Ibores:
+      - Ibores Queso
+      - Queso Ibores
+    Queso Mahón:
+      - Mahón Queso
+      - Queso Mahón
+    Queso majorero:
+      - majorero Queso
+      - Queso majorero
+    Queso manchego:
+      - manchego Queso
+      - Queso manchego
+    Queso manchego, en aceite:
+      - aceite manchego Queso
+      - aceite Queso manchego
+      - manchego aceite Queso
+      - manchego Queso aceite
+      - Queso aceite manchego
+      - Queso manchego aceite
+      - Queso manchego en aceite
+    Queso mozzarella:
+      - mozzarella Queso
+      - Queso mozzarella
+    Queso munster:
+      - munster Queso
+      - Queso munster
+    Queso para untar:
+      - Queso untar
+      - untar Queso
+    Queso para untar, con finas hierbas:
+      - finas hierbas Queso untar
+      - finas hierbas untar Queso
+      - finas Queso hierbas untar
+      - finas Queso untar hierbas
+      - finas untar hierbas Queso
+      - finas untar Queso hierbas
+      - hierbas finas Queso untar
+      - hierbas finas untar Queso
+      - hierbas Queso finas untar
+      - hierbas Queso untar finas
+    Queso para untar, con salmón:
+      - Queso para untar con salmón
+      - Queso salmón untar
+      - Queso untar salmón
+      - salmón Queso untar
+      - salmón untar Queso
+      - untar Queso salmón
+      - untar salmón Queso
+    Queso para untar, natural, bajo en calorías:
+      - bajo calorías natural Queso untar
+      - bajo calorías natural untar Queso
+      - bajo calorías Queso natural untar
+      - bajo calorías Queso untar natural
+      - bajo calorías untar natural Queso
+      - bajo calorías untar Queso natural
+      - bajo natural calorías Queso untar
+      - bajo natural calorías untar Queso
+      - bajo natural Queso calorías untar
+      - bajo natural Queso untar calorías
+    Queso parmesano:
+      - parmesano Queso
+      - Queso parmesano
+    Queso pasiego:
+      - pasiego Queso
+      - Queso pasiego
+    Queso pedroches:
+      - pedroches Queso
+      - Queso pedroches
+    Queso peñamellera:
+      - peñamellera Queso
+      - Queso peñamellera
+    Queso picón:
+      - picón Queso
+      - Queso picón
+    Queso porrúa:
+      - porrúa Queso
+      - Queso porrúa
+    Queso Raclette:
+      - Queso Raclette
+      - Raclette Queso
+    Queso rallado, genérico:
+      - Queso rallado
+      - Queso rallado genérico
+      - rallado Queso
+    Queso roquefort:
+      - Queso roquefort
+      - roquefort Queso
+    Queso San Simón:
+      - Queso Simón
+      - Simón Queso
+    Queso semicurado, genérico:
+      - Queso semicurado
+      - Queso semicurado genérico
+      - semicurado Queso
+    Queso serrat:
+      - Queso serrat
+      - serrat Queso
+    Queso servilleta:
+      - Queso servilleta
+      - servilleta Queso
+    Queso Tetilla:
+      - Queso Tetilla
+      - Tetilla Queso
+    Queso tierno, genérico:
+      - Queso tierno
+      - Queso tierno genérico
+      - tierno Queso
+    Queso torta del casar:
+      - casar Queso torta
+      - casar torta Queso
+      - Queso casar torta
+      - Queso torta casar
+      - torta casar Queso
+      - torta Queso casar
+    Queso tupí:
+      - Queso tupí
+      - tupí Queso
+    Queso Zamorano:
+      - Queso Zamorano
+      - Zamorano Queso
+    Quinoa, cruda:
+      - Quinoa
+      - Quinoa cruda
+    Rábano:
+      - Rábanos
+    Rabo de toro:
+      - Rabo toro
+      - toro Rabo
+    Rape, a la parrilla:
+      - parrilla Rape
+      - Rape a la parrilla
+      - Rape parrilla
+    Rape, crudo:
+      - Rape
+      - Rape crudo
+    Rape, plancha:
+      - plancha Rape
+      - Rape plancha
+    Raya, cruda:
+      - Raya
+      - Raya cruda
+    Refresco con gas, sabor cola, sin cafeina:
+      - cafeina cola Refresco sabor
+      - cafeina cola sabor Refresco
+      - cafeina Refresco cola sabor
+      - cafeina Refresco sabor cola
+      - cafeina sabor cola Refresco
+      - cafeina sabor Refresco cola
+      - cola cafeina Refresco sabor
+      - cola cafeina sabor Refresco
+      - cola Refresco cafeina sabor
+      - cola Refresco sabor cafeina
+    Refresco con gas, sabor cola, sin cafeina, bajo en calorías:
+      - bajo cafeina calorías cola Refresco sabor
+      - bajo cafeina calorías cola sabor Refresco
+      - bajo cafeina calorías Refresco cola sabor
+      - bajo cafeina calorías Refresco sabor cola
+      - bajo cafeina calorías sabor cola Refresco
+      - bajo cafeina calorías sabor Refresco cola
+      - bajo cafeina cola calorías Refresco sabor
+      - bajo cafeina cola calorías sabor Refresco
+      - bajo cafeina cola Refresco calorías sabor
+      - bajo cafeina cola Refresco sabor calorías
+    Refresco, con gas, sabor naranja:
+      - naranja Refresco sabor
+      - naranja sabor Refresco
+      - Refresco con gas sabor naranja
+      - Refresco naranja sabor
+      - Refresco sabor naranja
+      - sabor naranja Refresco
+      - sabor Refresco naranja
+    Refresco de té:
+      - Refrescos de té
+    Refresco de té, bajo en calorías:
+      - bajo calorías Refresco
+      - bajo Refresco calorías
+      - calorías bajo Refresco
+      - calorías Refresco bajo
+      - Refresco bajo calorías
+      - Refresco calorías bajo
+      - Refresco de té bajo en calorías
+    Refresco, sabor cola:
+      - cola Refresco sabor
+      - cola sabor Refresco
+      - Refresco cola sabor
+      - Refresco sabor cola
+      - sabor cola Refresco
+      - sabor Refresco cola
+    Refresco, sabor cola, bajo en calorías:
+      - bajo calorías cola Refresco sabor
+      - bajo calorías cola sabor Refresco
+      - bajo calorías Refresco cola sabor
+      - bajo calorías Refresco sabor cola
+      - bajo calorías sabor cola Refresco
+      - bajo calorías sabor Refresco cola
+      - bajo cola calorías Refresco sabor
+      - bajo cola calorías sabor Refresco
+      - bajo cola Refresco calorías sabor
+      - bajo cola Refresco sabor calorías
+    Refresco, sabor limón, con gas:
+      - limón Refresco sabor
+      - limón sabor Refresco
+      - Refresco limón sabor
+      - Refresco sabor limón
+      - Refresco sabor limón con gas
+      - sabor limón Refresco
+      - sabor Refresco limón
+    Refresco, sabor naranja, sin gas:
+      - naranja Refresco sabor
+      - naranja sabor Refresco
+      - Refresco naranja sabor
+      - Refresco sabor naranja
+      - Refresco sabor naranja sin gas
+      - sabor naranja Refresco
+      - sabor Refresco naranja
+    Refresco "tipo gaseosa":
+      - gaseosa Refresco
+      - Refresco gaseosa
+    Refresco tipo "tónica":
+      - Refresco tónica
+      - tónica Refresco
+    Regaliz:
+      - Regalizes
+    Remolacha, en conserva:
+      - conserva Remolacha
+      - Remolacha conserva
+      - Remolacha en conserva
+    Repollo:
+      - Repollos
+    Requesón:
+      - Requesones
+    Riñón, de cordero, crudo:
+      - cordero Riñón
+      - Riñón cordero
+      - Riñón de cordero
+      - Riñón de cordero crudo
+    Riñón, de ternera, crudo:
+      - Riñón de ternera
+      - Riñón de ternera crudo
+      - Riñón ternera
+      - ternera Riñón
+    Rodaballo:
+      - Rodaballos
+    Rollito de primavera:
+      - primavera Rollito
+      - Rollito primavera
+    Romero:
+      - Romeros
+    Ron:
+      - Rons
+    Rosquilla:
+      - Rosquillas
+    Rúcula:
+      - Rúculas
+    Salami:
+      - Salamis
+    Salchicha de pollo fresca:
+      - fresca pollo Salchicha
+      - fresca Salchicha pollo
+      - pollo fresca Salchicha
+      - pollo Salchicha fresca
+      - Salchicha fresca pollo
+      - Salchicha pollo fresca
+    Salchicha, fresca:
+      - fresca Salchicha
+      - Salchicha fresca
+    Salchicha, tipo "frankfurt":
+      - frankfurt Salchicha
+      - Salchicha de cerdo
+      - Salchicha frankfurt
+      - Salchicha tipo "frankfurt"
+    Salchicha, tipo país, a la plancha:
+      - país plancha Salchicha
+      - país Salchicha plancha
+      - plancha país Salchicha
+      - plancha Salchicha país
+      - Salchicha país plancha
+      - Salchicha plancha país
+      - Salchicha tipo país a la plancha
+    Salchicha, tipo viena:
+      - Salchicha tipo viena
+      - Salchicha viena
+      - viena Salchicha
+    Salchichón:
+      - Salchichones
+    Sal de mar:
+      - Sales de mar
+    Salema, cruda:
+      - Salema
+      - Salema cruda
+    Salmón:
+      - Salmones
+    Salmón ahumado:
+      - ahumado Salmón
+      - Salmón ahumado
+    Salmonete:
+      - Salmonetes
+    Salmón, plancha:
+      - plancha Salmón
+      - Salmón plancha
+    Salsa agridulce:
+      - agridulce Salsa
+      - Salsa agridulce
+    Salsa al curry:
+      - curry Salsa
+      - Salsa curry
+    Salsa al roquefort:
+      - roquefort Salsa
+      - Salsa roquefort
+    Salsa barbacoa:
+      - barbacoa Salsa
+      - Salsa barbacoa
+    Salsa bechamel:
+      - bechamel Salsa
+      - Salsa bechamel
+    Salsa boloñesa:
+      - boloñesa Salsa
+      - Salsa boloñesa
+    Salsa carbonara:
+      - carbonara Salsa
+      - Salsa carbonara
+    Salsa de queso:
+      - queso Salsa
+      - Salsa queso
+    Salsa de sésamo:
+      - Salsa sésamo
+      - sésamo Salsa
+    Salsa de soja:
+      - Salsa soja
+      - soja Salsa
+    Salsa napolitana:
+      - napolitana Salsa
+      - Salsa napolitana
+    Salsa siciliana, picante:
+      - picante Salsa siciliana
+      - picante siciliana Salsa
+      - Salsa picante siciliana
+      - Salsa siciliana picante
+      - siciliana picante Salsa
+      - siciliana Salsa picante
+    Salsa vinagreta, con aceite de oliva:
+      - aceite oliva Salsa vinagreta
+      - aceite oliva vinagreta Salsa
+      - aceite Salsa oliva vinagreta
+      - aceite Salsa vinagreta oliva
+      - aceite vinagreta oliva Salsa
+      - aceite vinagreta Salsa oliva
+      - oliva aceite Salsa vinagreta
+      - oliva aceite vinagreta Salsa
+      - oliva Salsa aceite vinagreta
+      - oliva Salsa vinagreta aceite
+    Salvado de trigo:
+      - Salvado trigo
+      - trigo Salvado
+    Sal yodada:
+      - Sales yodadas
+    Sandía:
+      - Sandias
+    Sangría:
+      - Sangrias
+    San jacobo, congelado:
+      - congelado jacobo
+      - jacobo congelado
+      - San jacobo congelado
+    Sardina:
+      - Sardinas
+    Sardina, asada:
+      - asada Sardina
+      - Sardina asada
+    Sardina, enlatada, en aceite, escurrida:
+      - aceite enlatada escurrida Sardina
+      - aceite enlatada Sardina escurrida
+      - aceite escurrida enlatada Sardina
+      - aceite escurrida Sardina enlatada
+      - aceite Sardina enlatada escurrida
+      - aceite Sardina escurrida enlatada
+      - enlatada aceite escurrida Sardina
+      - enlatada aceite Sardina escurrida
+      - enlatada escurrida aceite Sardina
+      - enlatada escurrida Sardina aceite
+    Sardina, enlatada, en escabeche:
+      - enlatada escabeche Sardina
+      - enlatada Sardina escabeche
+      - escabeche enlatada Sardina
+      - escabeche Sardina enlatada
+      - Sardina en escabeche
+      - Sardina enlatada en escabeche
+      - Sardina enlatada escabeche
+      - Sardina escabeche enlatada
+    Sargo, crudo:
+      - Sargo
+      - Sargo crudo
+    Seitán:
+      - Seitan
+    Semilla de lino:
+      - lino Semilla
+      - Semilla lino
+    Sémola de trigo, cruda:
+      - Sémola de trigo
+      - Sémola de trigo cruda
+      - Sémola trigo
+      - trigo Sémola
+    Sémola de trigo, hervida:
+      - hervida Sémola trigo
+      - hervida trigo Sémola
+      - Sémola de trigo hervida
+      - Sémola hervida trigo
+      - Sémola trigo hervida
+      - trigo hervida Sémola
+      - trigo Sémola hervida
+    Sepia:
+      - Sepias
+    Sésamo molido:
+      - molido Sésamo
+      - Sésamo molido
+    Sésamo, semilla:
+      - semilla Sésamo
+      - Sésamo semilla
+    Sesos, de cerdo, crudos:
+      - cerdo crudos Sesos
+      - cerdo Sesos crudos
+      - crudos cerdo Sesos
+      - crudos Sesos cerdo
+      - Sesos cerdo crudos
+      - Sesos crudos cerdo
+      - Sesos de cerdo
+      - Sesos de cerdo crudos
+    Sesos, de cordero, crudos:
+      - cordero crudos Sesos
+      - cordero Sesos crudos
+      - crudos cordero Sesos
+      - crudos Sesos cordero
+      - Sesos cordero crudos
+      - Sesos crudos cordero
+      - Sesos de cordero
+      - Sesos de cordero crudos
+    Sesos, de ternera, crudos:
+      - crudos Sesos ternera
+      - crudos ternera Sesos
+      - Sesos crudos ternera
+      - Sesos de ternera
+      - Sesos de ternera crudos
+      - Sesos ternera crudos
+      - ternera crudos Sesos
+      - ternera Sesos crudos
+    Seta:
+      - Setas
+    Seta, plancha:
+      - plancha Seta
+      - Seta plancha
+    Sidra:
+      - Sidras
+    Sobao:
+      - Sobaos
+    Sobrasada:
+      - Sobrasadas
+    Soda:
+      - Sodas
+    Sofrito:
+      - Sofritos
+    Soja, fresca:
+      - fresca Soja
+      - Soja fresca
+    Soja, frita:
+      - frita Soja
+      - Soja frita
+    Soja, germinada, en conserva:
+      - conserva germinada Soja
+      - conserva Soja germinada
+      - germinada conserva Soja
+      - germinada Soja conserva
+      - Soja conserva germinada
+      - Soja germinada conserva
+      - Soja germinada en conserva
+    Soja, seca, cruda:
+      - seca Soja
+      - Soja seca
+      - Soja seca cruda
+    Soja, seca, remojada, hervida:
+      - hervida remojada seca Soja
+      - hervida remojada Soja seca
+      - hervida seca remojada Soja
+      - hervida seca Soja remojada
+      - hervida Soja remojada seca
+      - hervida Soja seca remojada
+      - remojada hervida seca Soja
+      - remojada hervida Soja seca
+      - remojada seca hervida Soja
+      - remojada seca Soja hervida
+    Sopa de sobre maravilla:
+      - maravilla Sopa
+      - Sopa maravilla
+    Sopa de sobre, sin reconstituir:
+      - reconstituir Sopa
+      - Sopa de sobre sin reconstituir
+      - Sopa reconstituir
+    Suplemento proteico:
+      - proteico Suplemento
+      - Suplemento proteico
+    Surimi:
+      - Surimis
+    Tabasco:
+      - Tabascos
+    Tapioca, hervida:
+      - hervida Tapioca
+      - Tapioca hervida
+    Té, infusión, con leche:
+      - infusión leche
+      - leche infusión
+      - Té infusión con leche
+    Tenca, cruda:
+      - Tenca
+      - Tenca cruda
+    Tequila:
+      - Tequilas
+    Ternera, costilla, cruda:
+      - costilla de ternera
+      - costilla Ternera
+      - Ternera costilla
+      - Ternera costilla cruda
+    Ternera, lomo, crudo, con grasa separable:
+      - grasa lomo separable Ternera
+      - grasa lomo Ternera separable
+      - grasa separable lomo Ternera
+      - grasa separable Ternera lomo
+      - grasa Ternera lomo separable
+      - grasa Ternera separable lomo
+      - lomo de ternera
+      - lomo grasa separable Ternera
+      - lomo grasa Ternera separable
+      - lomo separable grasa Ternera
+    Ternera, parte s/e, asada:
+      - asada Ternera
+      - Ternera asada
+      - Ternera parte  asada
+      - Ternera parte s/e asada
+    Ternera, parte sin especificar, cruda, con grasa separable:
+      - chuleta de ternera
+      - Filete de ternera
+      - grasa separable Ternera
+      - grasa Ternera separable
+      - separable grasa Ternera
+      - separable Ternera grasa
+      - Ternera grasa separable
+      - Ternera parte sin especificar cruda con grasa separable
+      - Ternera separable grasa
+    Ternera, solomillo, asado:
+      - asado solomillo Ternera
+      - asado Ternera solomillo
+      - solomillo asado Ternera
+      - solomillo de ternera
+      - solomillo Ternera asado
+      - Ternera asado solomillo
+      - Ternera solomillo asado
+    Ternera, solomillo, sin grasa, crudo:
+      - grasa solomillo Ternera
+      - grasa Ternera solomillo
+      - solomillo grasa Ternera
+      - solomillo Ternera grasa
+      - Ternera grasa solomillo
+      - Ternera solomillo grasa
+      - Ternera solomillo sin grasa
+      - Ternera solomillo sin grasa crudo
+    Tocino:
+      - Tocinos
+    Tofu:
+      - Tofus
+    Tomate:
+      - Tomates
+    Tomate, asado:
+      - asado Tomate
+      - Tomate asado
+    Tomate frito:
+      - frito Tomate
+      - Tomate frito
+    Tomate, maduro, pelado y triturado, enlatado:
+      - enlatado maduro pelado Tomate triturado
+      - enlatado maduro pelado triturado Tomate
+      - enlatado maduro Tomate pelado triturado
+      - enlatado maduro Tomate triturado pelado
+      - enlatado maduro triturado pelado Tomate
+      - enlatado maduro triturado Tomate pelado
+      - enlatado pelado maduro Tomate triturado
+      - enlatado pelado maduro triturado Tomate
+      - enlatado pelado Tomate maduro triturado
+      - enlatado pelado Tomate triturado maduro
+    Tomate, maduro, puré:
+      - maduro puré Tomate
+      - maduro Tomate puré
+      - puré maduro Tomate
+      - puré Tomate maduro
+      - Tomate maduro puré
+      - Tomate puré maduro
+    Tomillo, seco:
+      - seco Tomillo
+      - Tomillo seco
+    Torta de aceite:
+      - aceite Torta
+      - Torta aceite
+    Tortilla, a la francesa:
+      - francesa Tortilla
+      - Tortilla a la francesa
+      - Tortilla francesa
+    Trigo, entero, crudo:
+      - entero Trigo
+      - Trigo entero
+      - Trigo entero crudo
+    Trucha:
+      - Truchas
+    Trucha, ahumada:
+      - ahumada Trucha
+      - Trucha ahumada
+    Trufa, cruda:
+      - Trufa
+      - Trufa cruda
+    Turrón, tipo Alicante:
+      - Alicante Turrón
+      - Turrón Alicante
+      - Turrón tipo Alicante
+    Uva blanca:
+      - Uvas blancas
+    Uva blanca, congelada:
+      - blanca congelada
+      - congelada blanca
+      - Uva blanca congelada
+    Uva negra, cruda:
+      - Uva negra
+      - Uva negra cruda
+    Uva pasa:
+      - Uvas pasas
+    Vaca/buey, parte s/e, asado:
+      - asado buey Vaca
+      - asado Vaca buey
+      - buey asado Vaca
+      - buey parte  asado
+      - buey Vaca asado
+      - chuleta de vaca
+      - chuleton de buey
+      - chuleton de vaca
+      - chuleton vaca
+      - Vaca asado buey
+    Vaca/buey, parte s/e, estofado:
+      - buey estofado Vaca
+      - buey parte  estofado
+      - buey Vaca estofado
+      - estofado buey Vaca
+      - estofado de buey
+      - estofado de toro
+      - estofado de vaca
+      - estofado toro
+      - estofado Vaca buey
+      - toro estofado
+    Vaca/buey, solomillo, a la plancha:
+      - buey plancha solomillo Vaca
+      - buey plancha Vaca solomillo
+      - buey solomillo a la plancha
+      - buey solomillo plancha Vaca
+      - buey solomillo Vaca plancha
+      - buey Vaca plancha solomillo
+      - buey Vaca solomillo plancha
+      - plancha buey solomillo Vaca
+      - plancha buey Vaca solomillo
+      - plancha solomillo buey Vaca
+    Vaca/buey, solomillo, crudo:
+      - buey solomillo
+      - buey solomillo Vaca
+      - buey Vaca solomillo
+      - solomillo buey Vaca
+      - solomillo Vaca buey
+      - Vaca buey solomillo
+      - Vaca/buey solomillo
+      - Vaca/buey solomillo crudo
+      - Vaca/solomillo
+      - Vaca solomillo buey
+    Vainilla:
+      - Vainillas
+    Vermut, s/e:
+      - Vermut
+      - Vermut s/e
+    Vieira:
+      - Vieiras
+    Vieja, cruda:
+      - Vieja
+      - Vieja cruda
+    Vinagre balsámico:
+      - balsámico Vinagre
+      - Vinagre balsámico
+    Vinagre de manzana:
+      - manzana Vinagre
+      - Vinagre manzana
+    Vinagre de vino:
+      - Vinagre vino
+      - vino Vinagre
+    Vino blanco:
+      - blanco Vino
+      - Vino blanco
+    Vino dulce, tipo oporto:
+      - dulce oporto Vino
+      - dulce Vino oporto
+      - oporto dulce Vino
+      - oporto Vino dulce
+      - Vino dulce oporto
+      - Vino dulce tipo oporto
+      - Vino oporto dulce
+    Vino rosado:
+      - rosado Vino
+      - Vino rosado
+    Vino tinto:
+      - tinto Vino
+      - Vino tinto
+    Vodka:
+      - Vodkas
+    Volador, crudo:
+      - Volador
+      - Volador crudo
+    Whisky:
+      - Whiskys
+    Yogur, búlgaro:
+      - búlgaro Yogur
+      - Kefir
+      - Yogur búlgaro
+    Yogur, desnatado, aromatizado sabor s/e:
+      - aromatizado desnatado sabor Yogur
+      - aromatizado desnatado Yogur sabor
+      - aromatizado sabor desnatado Yogur
+      - aromatizado sabor Yogur desnatado
+      - aromatizado Yogur desnatado sabor
+      - aromatizado Yogur sabor desnatado
+      - desnatado aromatizado sabor Yogur
+      - desnatado aromatizado Yogur sabor
+      - desnatado sabor aromatizado Yogur
+      - desnatado sabor Yogur aromatizado
+    Yogur, desnatado, con cereales:
+      - cereales desnatado Yogur
+      - cereales Yogur desnatado
+      - desnatado cereales Yogur
+      - desnatado Yogur cereales
+      - Yogur cereales desnatado
+      - Yogur desnatado cereales
+      - Yogur desnatado con cereales
+    Yogur, desnatado, con cereales, manzana y ciruela:
+      - cereales ciruela desnatado manzana Yogur
+      - cereales ciruela desnatado Yogur manzana
+      - cereales ciruela manzana desnatado Yogur
+      - cereales ciruela manzana Yogur desnatado
+      - cereales ciruela Yogur desnatado manzana
+      - cereales ciruela Yogur manzana desnatado
+      - cereales desnatado ciruela manzana Yogur
+      - cereales desnatado ciruela Yogur manzana
+      - cereales desnatado manzana ciruela Yogur
+      - cereales desnatado manzana Yogur ciruela
+    Yogur, desnatado, con cereza y frambuesa:
+      - cereza desnatado frambuesa Yogur
+      - cereza desnatado Yogur frambuesa
+      - cereza frambuesa desnatado Yogur
+      - cereza frambuesa Yogur desnatado
+      - cereza Yogur desnatado frambuesa
+      - cereza Yogur frambuesa desnatado
+      - desnatado cereza frambuesa Yogur
+      - desnatado cereza Yogur frambuesa
+      - desnatado frambuesa cereza Yogur
+      - desnatado frambuesa Yogur cereza
+    Yogur, desnatado, con ciruela, albaricoque y fibra:
+      - albaricoque ciruela desnatado fibra Yogur
+      - albaricoque ciruela desnatado Yogur fibra
+      - albaricoque ciruela fibra desnatado Yogur
+      - albaricoque ciruela fibra Yogur desnatado
+      - albaricoque ciruela Yogur desnatado fibra
+      - albaricoque ciruela Yogur fibra desnatado
+      - albaricoque desnatado ciruela fibra Yogur
+      - albaricoque desnatado ciruela Yogur fibra
+      - albaricoque desnatado fibra ciruela Yogur
+      - albaricoque desnatado fibra Yogur ciruela
+    Yogur, desnatado, con fresa, grosella y fibra:
+      - desnatado fibra fresa grosella Yogur
+      - desnatado fibra fresa Yogur grosella
+      - desnatado fibra grosella fresa Yogur
+      - desnatado fibra grosella Yogur fresa
+      - desnatado fibra Yogur fresa grosella
+      - desnatado fibra Yogur grosella fresa
+      - desnatado fresa fibra grosella Yogur
+      - desnatado fresa fibra Yogur grosella
+      - desnatado fresa grosella fibra Yogur
+      - desnatado fresa grosella Yogur fibra
+    Yogur, desnatado, con frutas:
+      - desnatado frutas Yogur
+      - desnatado Yogur frutas
+      - frutas desnatado Yogur
+      - frutas Yogur desnatado
+      - Yogur desnatado con frutas
+      - Yogur desnatado frutas
+      - Yogur frutas desnatado
+    Yogur, desnatado, con frutas del bosque:
+      - bosque desnatado frutas Yogur
+      - bosque desnatado Yogur frutas
+      - bosque frutas desnatado Yogur
+      - bosque frutas Yogur desnatado
+      - bosque Yogur desnatado frutas
+      - bosque Yogur frutas desnatado
+      - desnatado bosque frutas Yogur
+      - desnatado bosque Yogur frutas
+      - desnatado frutas bosque Yogur
+      - desnatado frutas Yogur bosque
+    Yogur, desnatado, con frutas tropicales:
+      - desnatado frutas tropicales Yogur
+      - desnatado frutas Yogur tropicales
+      - desnatado tropicales frutas Yogur
+      - desnatado tropicales Yogur frutas
+      - desnatado Yogur frutas tropicales
+      - desnatado Yogur tropicales frutas
+      - frutas desnatado tropicales Yogur
+      - frutas desnatado Yogur tropicales
+      - frutas tropicales desnatado Yogur
+      - frutas tropicales Yogur desnatado
+    Yogur, desnatado, con manzana:
+      - desnatado manzana Yogur
+      - desnatado Yogur manzana
+      - manzana desnatado Yogur
+      - manzana Yogur desnatado
+      - Yogur desnatado con manzana
+      - Yogur desnatado manzana
+      - Yogur manzana desnatado
+    Yogur, desnatado, con melocotón, frambuesa y fibra:
+      - desnatado fibra frambuesa melocotón Yogur
+      - desnatado fibra frambuesa Yogur melocotón
+      - desnatado fibra melocotón frambuesa Yogur
+      - desnatado fibra melocotón Yogur frambuesa
+      - desnatado fibra Yogur frambuesa melocotón
+      - desnatado fibra Yogur melocotón frambuesa
+      - desnatado frambuesa fibra melocotón Yogur
+      - desnatado frambuesa fibra Yogur melocotón
+      - desnatado frambuesa melocotón fibra Yogur
+      - desnatado frambuesa melocotón Yogur fibra
+    Yogur, desnatado, con melocotón y maracuyá:
+      - desnatado maracuyá melocotón Yogur
+      - desnatado maracuyá Yogur melocotón
+      - desnatado melocotón maracuyá Yogur
+      - desnatado melocotón Yogur maracuyá
+      - desnatado Yogur maracuyá melocotón
+      - desnatado Yogur melocotón maracuyá
+      - maracuyá desnatado melocotón Yogur
+      - maracuyá desnatado Yogur melocotón
+      - maracuyá melocotón desnatado Yogur
+      - maracuyá melocotón Yogur desnatado
+    Yogur, desnatado, con piña y pomelo:
+      - desnatado piña pomelo Yogur
+      - desnatado piña Yogur pomelo
+      - desnatado pomelo piña Yogur
+      - desnatado pomelo Yogur piña
+      - desnatado Yogur piña pomelo
+      - desnatado Yogur pomelo piña
+      - piña desnatado pomelo Yogur
+      - piña desnatado Yogur pomelo
+      - piña pomelo desnatado Yogur
+      - piña pomelo Yogur desnatado
+    Yogur, desnatado, sabor natural:
+      - desnatado natural sabor Yogur
+      - desnatado natural Yogur sabor
+      - desnatado sabor natural Yogur
+      - desnatado sabor Yogur natural
+      - desnatado Yogur natural sabor
+      - desnatado Yogur sabor natural
+      - natural desnatado sabor Yogur
+      - natural desnatado Yogur sabor
+      - natural sabor desnatado Yogur
+      - natural sabor Yogur desnatado
+    Yogur, desnatado, sabor natural, azucarado:
+      - azucarado desnatado natural sabor Yogur
+      - azucarado desnatado natural Yogur sabor
+      - azucarado desnatado sabor natural Yogur
+      - azucarado desnatado sabor Yogur natural
+      - azucarado desnatado Yogur natural sabor
+      - azucarado desnatado Yogur sabor natural
+      - azucarado natural desnatado sabor Yogur
+      - azucarado natural desnatado Yogur sabor
+      - azucarado natural sabor desnatado Yogur
+      - azucarado natural sabor Yogur desnatado
+    Yogur, desnatado, sabor vainilla:
+      - desnatado sabor vainilla Yogur
+      - desnatado sabor Yogur vainilla
+      - desnatado vainilla sabor Yogur
+      - desnatado vainilla Yogur sabor
+      - desnatado Yogur sabor vainilla
+      - desnatado Yogur vainilla sabor
+      - sabor desnatado vainilla Yogur
+      - sabor desnatado Yogur vainilla
+      - sabor vainilla desnatado Yogur
+      - sabor vainilla Yogur desnatado
+    Yogur, enriquecido, con frutas:
+      - enriquecido frutas Yogur
+      - enriquecido Yogur frutas
+      - frutas enriquecido Yogur
+      - frutas Yogur enriquecido
+      - Yogur enriquecido con frutas
+      - Yogur enriquecido frutas
+      - Yogur frutas enriquecido
+    Yogur, enriquecido, natural:
+      - enriquecido natural Yogur
+      - enriquecido Yogur natural
+      - natural enriquecido Yogur
+      - natural Yogur enriquecido
+      - yogur
+      - Yogur enriquecido natural
+      - Yogur natural
+      - Yogur natural enriquecido
+    Yogur, enriquecido, natural, azucarado:
+      - azucarado enriquecido natural Yogur
+      - azucarado enriquecido Yogur natural
+      - azucarado natural enriquecido Yogur
+      - azucarado natural Yogur enriquecido
+      - azucarado Yogur enriquecido natural
+      - azucarado Yogur natural enriquecido
+      - enriquecido azucarado natural Yogur
+      - enriquecido azucarado Yogur natural
+      - enriquecido natural azucarado Yogur
+      - enriquecido natural Yogur azucarado
+    Yogur, enriquecido, natural, con nata:
+      - enriquecido nata natural Yogur
+      - enriquecido nata Yogur natural
+      - enriquecido natural nata Yogur
+      - enriquecido natural Yogur nata
+      - enriquecido Yogur nata natural
+      - enriquecido Yogur natural nata
+      - nata enriquecido natural Yogur
+      - nata enriquecido Yogur natural
+      - nata natural enriquecido Yogur
+      - nata natural Yogur enriquecido
+    Yogur, enriquecido, sabor, s/e:
+      - enriquecido sabor Yogur
+      - enriquecido Yogur sabor
+      - sabor enriquecido Yogur
+      - sabor Yogur enriquecido
+      - Yogur enriquecido sabor
+      - Yogur enriquecido sabor s/e
+      - Yogur sabor enriquecido
+    Yogur, entero, con cereales y fresas:
+      - cereales entero fresas Yogur
+      - cereales entero Yogur fresas
+      - cereales fresas entero Yogur
+      - cereales fresas Yogur entero
+      - cereales Yogur entero fresas
+      - cereales Yogur fresas entero
+      - entero cereales fresas Yogur
+      - entero cereales Yogur fresas
+      - entero fresas cereales Yogur
+      - entero fresas Yogur cereales
+    Yogur, entero, con fresas:
+      - entero fresas Yogur
+      - entero Yogur fresas
+      - fresas entero Yogur
+      - fresas Yogur entero
+      - Yogur entero con fresas
+      - Yogur entero fresas
+      - Yogur fresas entero
+    Yogur, entero, con frutas del bosque:
+      - bosque entero frutas Yogur
+      - bosque entero Yogur frutas
+      - bosque frutas entero Yogur
+      - bosque frutas Yogur entero
+      - bosque Yogur entero frutas
+      - bosque Yogur frutas entero
+      - entero bosque frutas Yogur
+      - entero bosque Yogur frutas
+      - entero frutas bosque Yogur
+      - entero frutas Yogur bosque
+    Yogur griego:
+      - griego Yogur
+      - Yogur griego
+    Yogur líquido, aromatizado sabor s/e:
+      - aromatizado líquido sabor Yogur
+      - aromatizado líquido Yogur sabor
+      - aromatizado sabor líquido Yogur
+      - aromatizado sabor Yogur líquido
+      - aromatizado Yogur líquido sabor
+      - aromatizado Yogur sabor líquido
+      - líquido aromatizado sabor Yogur
+      - líquido aromatizado Yogur sabor
+      - líquido sabor aromatizado Yogur
+      - líquido sabor Yogur aromatizado
+    Yogur líquido, con frutas s/e:
+      - frutas líquido Yogur
+      - frutas Yogur líquido
+      - líquido frutas Yogur
+      - líquido Yogur frutas
+      - Yogur frutas líquido
+      - Yogur líquido con frutas
+      - Yogur líquido con frutas s/e
+      - Yogur líquido frutas
+    Yogur, líquido, desnatado, natural:
+      - desnatado líquido natural Yogur
+      - desnatado líquido Yogur natural
+      - desnatado natural líquido Yogur
+      - desnatado natural Yogur líquido
+      - desnatado Yogur líquido natural
+      - desnatado Yogur natural líquido
+      - líquido desnatado natural Yogur
+      - líquido desnatado Yogur natural
+      - líquido natural desnatado Yogur
+      - líquido natural Yogur desnatado
+    Yogur líquido, entero, con cereales:
+      - cereales entero líquido Yogur
+      - cereales entero Yogur líquido
+      - cereales líquido entero Yogur
+      - cereales líquido Yogur entero
+      - cereales Yogur entero líquido
+      - cereales Yogur líquido entero
+      - entero cereales líquido Yogur
+      - entero cereales Yogur líquido
+      - entero líquido cereales Yogur
+      - entero líquido Yogur cereales
+    Yogur, líquido, entero, con fresas:
+      - entero fresas líquido Yogur
+      - entero fresas Yogur líquido
+      - entero líquido fresas Yogur
+      - entero líquido Yogur fresas
+      - entero Yogur fresas líquido
+      - entero Yogur líquido fresas
+      - fresas entero líquido Yogur
+      - fresas entero Yogur líquido
+      - fresas líquido entero Yogur
+      - fresas líquido Yogur entero
+    Yogur, líquido, entero, con frutas:
+      - entero frutas líquido Yogur
+      - entero frutas Yogur líquido
+      - entero líquido frutas Yogur
+      - entero líquido Yogur frutas
+      - entero Yogur frutas líquido
+      - entero Yogur líquido frutas
+      - frutas entero líquido Yogur
+      - frutas entero Yogur líquido
+      - frutas líquido entero Yogur
+      - frutas líquido Yogur entero
+    Yogur, líquido, entero, sabor fresa:
+      - entero fresa líquido sabor Yogur
+      - entero fresa líquido Yogur sabor
+      - entero fresa sabor líquido Yogur
+      - entero fresa sabor Yogur líquido
+      - entero fresa Yogur líquido sabor
+      - entero fresa Yogur sabor líquido
+      - entero líquido fresa sabor Yogur
+      - entero líquido fresa Yogur sabor
+      - entero líquido sabor fresa Yogur
+      - entero líquido sabor Yogur fresa
+    Yogur, líquido, entero, sabor fresa y plátano:
+      - entero fresa líquido plátano sabor Yogur
+      - entero fresa líquido plátano Yogur sabor
+      - entero fresa líquido sabor plátano Yogur
+      - entero fresa líquido sabor Yogur plátano
+      - entero fresa líquido Yogur plátano sabor
+      - entero fresa líquido Yogur sabor plátano
+      - entero fresa plátano líquido sabor Yogur
+      - entero fresa plátano líquido Yogur sabor
+      - entero fresa plátano sabor líquido Yogur
+      - entero fresa plátano sabor Yogur líquido
+    Yogur, líquido, entero, sabor frutas del bosque:
+      - bosque entero frutas líquido sabor Yogur
+      - bosque entero frutas líquido Yogur sabor
+      - bosque entero frutas sabor líquido Yogur
+      - bosque entero frutas sabor Yogur líquido
+      - bosque entero frutas Yogur líquido sabor
+      - bosque entero frutas Yogur sabor líquido
+      - bosque entero líquido frutas sabor Yogur
+      - bosque entero líquido frutas Yogur sabor
+      - bosque entero líquido sabor frutas Yogur
+      - bosque entero líquido sabor Yogur frutas
+    Yogur, líquido, entero, sabor piña y coco:
+      - coco entero líquido piña sabor Yogur
+      - coco entero líquido piña Yogur sabor
+      - coco entero líquido sabor piña Yogur
+      - coco entero líquido sabor Yogur piña
+      - coco entero líquido Yogur piña sabor
+      - coco entero líquido Yogur sabor piña
+      - coco entero piña líquido sabor Yogur
+      - coco entero piña líquido Yogur sabor
+      - coco entero piña sabor líquido Yogur
+      - coco entero piña sabor Yogur líquido
+    Yogur líquido, natural, azucarado:
+      - azucarado líquido natural Yogur
+      - azucarado líquido Yogur natural
+      - azucarado natural líquido Yogur
+      - azucarado natural Yogur líquido
+      - azucarado Yogur líquido natural
+      - azucarado Yogur natural líquido
+      - líquido azucarado natural Yogur
+      - líquido azucarado Yogur natural
+      - líquido natural azucarado Yogur
+      - líquido natural Yogur azucarado
+    Yogur líquido, "tipo actimel":
+      - Actimel
+      - actimel líquido Yogur
+      - actimel Yogur líquido
+      - líquido actimel Yogur
+      - líquido Yogur actimel
+      - Yogur actimel líquido
+      - Yogur líquido actimel
+      - Yogur líquido "tipo actimel"
+    Zamburiñas: []
+    Zanahoria, cruda:
+      - Zanahoria
+      - Zanahoria cruda
+    Zumo de grosella negra:
+      - grosella negra Zumo
+      - grosella Zumo negra
+      - negra grosella Zumo
+      - negra Zumo grosella
+      - Zumo grosella negra
+      - Zumo negra grosella
+    Zumo de grosella roja:
+      - grosella roja Zumo
+      - grosella Zumo roja
+      - roja grosella Zumo
+      - roja Zumo grosella
+      - Zumo grosella roja
+      - Zumo roja grosella
+    Zumo de lima, envasado:
+      - envasado lima Zumo
+      - envasado Zumo lima
+      - lima envasado Zumo
+      - lima Zumo envasado
+      - Zumo de lima envasado
+      - Zumo envasado lima
+      - Zumo lima envasado
+    Zumo de limón, fresco:
+      - fresco limón Zumo
+      - fresco Zumo limón
+      - limón fresco Zumo
+      - limón Zumo fresco
+      - Zumo de limón fresco
+      - Zumo fresco limón
+      - Zumo limón fresco
+    Zumo de mango:
+      - mango Zumo
+      - Zumo mango
+    Zumo de manzana:
+      - manzana Zumo
+      - Zumo manzana
+    Zumo de naranja:
+      - naranja Zumo
+      - Zumo naranja
+    Zumo de piña:
+      - piña Zumo
+      - Zumo piña
+    Zumo de piña y uva:
+      - piña Zumo
+      - Zumo piña
+    Zumo de pomelo, envasado:
+      - envasado pomelo Zumo
+      - envasado Zumo pomelo
+      - pomelo envasado Zumo
+      - pomelo Zumo envasado
+      - Zumo de pomelo envasado
+      - Zumo envasado pomelo
+      - Zumo pomelo envasado
+    Zumo de tomate, fresco:
+      - fresco tomate Zumo
+      - fresco Zumo tomate
+      - tomate fresco Zumo
+      - tomate Zumo fresco
+      - Zumo de tomate fresco
+      - Zumo fresco tomate
+      - Zumo tomate fresco
+    Zumo de uva:
+      - Zumos de uva
+    Zumo de uva y melocotón:
+      - melocotón Zumo
+      - Zumo melocotón
+    Zumo de zanahoria, fresco:
+      - fresco zanahoria Zumo
+      - fresco Zumo zanahoria
+      - zanahoria fresco Zumo
+      - zanahoria Zumo fresco
+      - Zumo de zanahoria fresco
+      - Zumo fresco zanahoria
+      - Zumo zanahoria fresco
+  alimento_unidad:
+    cc:
+      - centimetros cubicos
+      - centimetros cúbicos
+      - centímetros cubicos
+      - centímetros cúbicos
+    clara:
+      - claras
+    copa:
+      - copas
+    copa grande:
+      - copon
+      - copones
+    cucharada:
+      - cuchara
+    cucharadita:
+      - cucharita
+    gramos:
+      - g
+      - gr
+      - gramos
+    guarnición:
+      - guariniciones
+      - guarniciones
+    lata:
+      - latas
+    litros:
+      - L
+      - litro
+    loncha:
+      - lonchas
+    ml:
+      - mililitros
+      - milis
+    onza:
+      - onzas
+    pizca:
+      - pizcas
+    plato:
+      - platos
+    ración:
+      - cuenco
+      - 'porción '
+      - raciones
+    ración grande:
+      - ración enorme
+      - raciones enormes
+      - raciones generosas
+      - raciones grandes
+      - raciones hermosas
+      - ración generosa
+      - reciones grandes
+      - reción hermosa
+    rebanada:
+      - rebanadas
+      - rebanas
+    rodaja:
+      - corte
+    taza:
+      - tazas
+    taza pequeña:
+      - tacita
+      - tacitas
+      - tazas pequeñas
+    tazón:
+      - taza grande
+      - tazas grandes
+      - tazón enorme
+      - tazón grande
+      - tazón hermoso
+    unidad:
+      - uds
+      - unidades
+    vaso:
+      - baso
+      - basos
+      - vasos
+  bool:
+    No: []
+    Si: []
+  enfermedad:
+    Diabetes mellitus tipo 1:
+      - diabetes tipo 1
+      - tipo 1
+    Diabetes mellitus tipo 2:
+      - diabetes tipo 2
+      - tipo 2
+    Dislipemia: []
+    Enfermedad cardiovascular:
+      - cardiovascular
+    Enfermedad celiaca:
+      - celiaca
+      - celiaquía
+    Hipertensión:
+      - tensión alta
+    Insuficiencia cardiaca congestiva:
+      - insuficiencia cardiaca
+    Insuficiencia hepática:
+      - hepática
+    Insuficiencia renal:
+      - renal
+    Ninguna: []
+    Osteoporosis: []
+  estados_fisiologicos:
+    Embarazo:
+      - encinta
+      - gestante
+      - ' grávida '
+      - preñada
+    Lactancia:
+      - amamantamiento
+      - crianza
+      - lactación
+    Menopausia:
+      - climaterio
+    No, ninguna:
+      - ninguna
+      - noda
+  frecuencia_ejercicio:
+    No realizo ejercicio:
+      - ninguno
+      - no ejercicio
+      - no hago
+      - no hago ejercicio
+      - no realizo
+    Practico deporte de 3 a 5 días por semana:
+      - 3 a 5
+      - 3 a 5 dias
+      - 3 a 5 dias a la semana
+      - cinco dias
+      - cuatro dias
+      - deporte de 3 a 5 dias
+      - tres a cinco
+      - tres dias
+    Practico deporte de 6 a 7 días a la semana:
+      - 6 a 7
+      - 6 a 7 dias
+      - 6 a 7 dias a la semana
+      - deporte de 6 a 7 dias
+      - seis a siete
+      - seis dias
+      - siete dias
+    Realizo ejercicios fisicos muy intensos al menos 2 horas al día:
+      - 2 horas al dia
+      - intenso
+      - muy intenso
+    Realizo ejercicios suaves de 1 a 3 días por semana:
+      - de 1 a 3 dias
+      - deporte suave
+      - dos días
+      - ejercicios suaves
+      - tres dias
+      - un dia
+  tipo_dieta:
+    Dieta ovolacteovegetariana:
+      - ovolacteo
+      - ovolacteovegetariano
+    Dieta vegana:
+      - vegana
+      - veggie
+    No consumo carne:
+      - no carne
+      - sin carne
+    No, mi dieta no tiene ninguna particularidad:
+      - nada
+      - ninguna
+      - no
+  toma:
+    almuerzo:
+      - almorzar
+      - esmorçar
+    cena:
+      - cena
+    comida:
+      - comer
+      - comida
+      - comidas
+    desayuno:
+      - desayunar
+    tentempié:
+      - media mañana
+      - merendar
+      - merienda
+      - picaeta
+      - picar
+      - tentempie
+      - tentenpie
+      - vermú

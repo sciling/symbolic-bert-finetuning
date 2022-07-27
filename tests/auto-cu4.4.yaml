@@ -1,0 +1,49 @@
+id: cu4.4
+name: cu4.4
+config:
+  assistant_id: 88c34e3d-6da9-4cef-affe-a1319816ba38
+entities:
+  bool:
+    No: []
+    Si: []
+  onboarding_objetivos_programa:
+    Conocer más cosas sobre adicciones:
+      - conocer más
+      - conocer más sobre adicciones
+      - info
+      - información
+      - más info
+      - más información
+      - saber más
+    Eliminar esta actividad:
+      - dejar de consumir
+      - dejarlo
+      - eliminar
+      - 'eliminar el consumo '
+      - quitar consumo
+    Reducir la frecuencia de esta actividad:
+      - consumir menos
+      - reducir
+      - reducir el consumo
+      - reducirlo
+  periodo:
+    dia: []
+    semana: []
+  tiempo:
+    horas:
+      - h
+      - hora
+    minutos:
+      - min
+      - minuto
+  tipo_adiccion:
+    Alucinógenos: []
+    Anfetaminas: []
+    Cocaína: []
+    Compras: []
+    Drogas de síntesis: []
+    Estimulantes: []
+    Heroína: []
+    Ludopatía: []
+    Nuevas tecnologías: []
+    Sexo: []

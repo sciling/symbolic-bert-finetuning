@@ -1,0 +1,43 @@
+id: cu4.2
+name: cu4.2
+config:
+  assistant_id: da990cc8-091b-4964-8af3-b8246e475ecc
+entities:
+  bool:
+    No: []
+    Si: []
+  metodo_uso:
+    No:
+      - consumir menos
+      - reducir
+      - reducir el consumo
+      - reducirlo
+      - sólo reducir consumo
+    Seguimiento:
+      - hacer un registro
+      - mismo consumo
+      - registrar
+      - registrar consumo
+      - registro
+      - registro consumo
+      - solo registrar
+    Sí:
+      - dejar
+      - dejar de fumar
+      - dejar fumar
+      - dejarlo
+      - Si
+      - Sí
+  renuncia_cigarrillo:
+    otro: []
+    primero de la mañana:
+      - el primero
+      - por la mañana
+      - primero
+  tratamiento:
+    Acupuntura: []
+    Fármacos: []
+    Otra: []
+    Parches de nicotina: []
+    Terapia: []
+    Vaping: []

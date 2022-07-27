@@ -1,0 +1,39 @@
+---
+id: cu5
+name: CU5 - Mejor en Compañía
+config:
+  assistant_id: f8923f44-6edb-45bb-ba8f-605e4d537826
+
+entities:
+  tipo_dieta:
+    Dieta ovolacteovegetariana:
+      - ovolacteovegetariano
+      - ovolacteo
+      - huevos y leche pero no carne
+      - vegetariano pero con huevos y leche
+    Dieta vegana:
+      - vegana
+      - veggie
+      - vegano puro y duro
+      - del animal nada de nada
+    no consumo carne:
+      - no consumo carne
+      - no como carne
+      - la carne no me mola
+      - la carne me da asco
+      - la carne me causa indigestión
+    No, mi dieta no tiene ninguna particularidad:
+      - nada
+      - ninguna
+      - no
+      - soy normalito del montón
+      - lo que caiga
+
+dialogs:
+
+  - name: dont_understand
+    initial_context: {}
+    steps:
+      - query: el trabajo del trilero
+        response:
+          intent:

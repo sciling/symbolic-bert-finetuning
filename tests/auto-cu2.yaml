@@ -1,0 +1,478 @@
+id: cu2
+name: cu2
+config:
+  assistant_id: fd3e711e-767d-4c31-969b-490f4534ea5b
+entities:
+  actividad_trabajo:
+    8h cogiendo peso:
+      - 8 con peso
+      - 8 levantando peso
+      - 8 peso
+      - con peso
+      - levantado peso
+      - mucho peso
+      - peso
+    8h de pie:
+      - 8 pie
+      - de pie
+      - todo el rato de pie
+      - todo el tiempo de pie
+    8h desplazandome:
+      - 8 desplazandome
+      - andando
+      - andar
+      - caminando
+      - caminar
+      - con desplazamientos
+      - de aquí para allá
+      - desplazamiento
+      - desplazandome
+      - en movimiento
+    8h en la silla:
+      - 8 horas sentado
+      - 8h sentado
+      - en la silla
+      - en silla
+      - sentado
+      - todo el tiempo en la silla
+    8h en la silla y de pie:
+      - sentado y de pie
+      - silla y de pie
+    combinación:
+      - combinación de las anteriores
+      - combinado
+      - todas las anteriores
+      - todo
+      - varias anteriores
+    no trabajo:
+      - nada
+      - no estudio
+      - no tengo
+  bool:
+    No:
+      - negativo
+      - no
+    Sí:
+      - afirmativo
+      - ok
+      - si
+      - yes
+  desplazamientos:
+    automóvil:
+      - auto
+      - autobus
+      - autocar
+      - bus
+      - camion
+      - coche
+      - furgoneta
+      - moto
+      - vehiculo
+    automóvil o caminando:
+      - auto y andar
+      - bus y andar
+      - caminar y automovil
+      - caminar y coche
+      - coche y andar
+    bici:
+      - bicicleta
+      - monopatin
+      - patinando
+      - patines
+      - patinete
+    caminando:
+      - andando
+      - andar
+      - a pie
+      - 'caminar '
+      - pasear
+      - pasenado
+      - pateando
+      - patear
+  distancia_unidad:
+    horas:
+      - h
+      - hora
+    kilometros:
+      - km
+      - kms
+    minutos:
+      - min
+      - minuto
+      - minuts
+    pasos: []
+  embarazo:
+    1º Trimestre:
+      - '1'
+      - 1º
+      - 1 trimestre
+      - primer
+      - primer trimestre
+      - uno
+    2º Trimestre:
+      - '2'
+      - 2º
+      - 2 trimestre
+      - dos
+      - segundo
+      - segundo trimestre
+    3º Trimestre:
+      - '3'
+      - 3º
+      - 3 trimestre
+      - tercer
+      - tercero
+      - tercer trimestre
+      - tres
+  enfermedad:
+    Cáncer: []
+    Diabetes mellitus tipo 2:
+      - diabetes
+      - diabetes tipo 2
+    Enfermedad cardiovascular:
+      - cardiovascular
+    Enfermedad mental:
+      - mental
+    Hipertensión:
+      - hiper
+      - tensión
+      - tensión alta
+    Ninguna de estas:
+      - Nada
+      - Ningun
+      - Ninguna
+      - No
+      - No tengo
+    Osteoporosis: []
+  frecuencia_ejercicio:
+    1 vez:
+      - '1'
+      - 1 dia
+      - un
+      - una
+      - una vez
+      - un dia
+    2 veces:
+      - '2'
+      - 2 dias
+      - dos
+      - dos dias
+      - dos veces
+    3 veces:
+      - '3'
+      - 3 dias
+      - 3 veces o mas
+      - tres
+      - tres dias
+      - tres veces
+  intensidad_ejercicio:
+    Alta:
+      - Fuerte
+      - intensa
+      - potente
+    Baja:
+      - floja
+      - leve
+      - Ligera
+      - poca
+    Moderada:
+      - Media
+      - normal
+  limitacion:
+    cadera:
+      - caderas
+    codos:
+      - codo
+    columna: []
+    cuello: []
+    hombros:
+      - hombro
+    manos:
+      - mano
+    pies:
+      - pie
+    rodilla:
+      - rodillas
+    tobillo: []
+  ninguna:
+    nada: []
+    ninguna: []
+    ninguna de estas: []
+    ninguna de las anteriores: []
+  numbers:
+    '1': []
+  puerperio:
+    0 a 3 meses:
+      - '0'
+      - 0 a 3
+      - '1'
+      - '2'
+      - '3'
+      - cero
+      - 'cero meses '
+      - dos
+      - dos meses
+      - tres
+    4 a 7 meses:
+      - '4'
+      - 4 a 7
+      - '5 '
+      - '6'
+      - '7'
+      - cinco
+      - cinco meses
+      - cuatro
+      - cuatro meses
+      - seis
+    8 a 12 meses:
+      - '10'
+      - '11'
+      - '12'
+      - '8'
+      - '8 a 12 '
+      - '9'
+      - diez
+      - diez meses
+      - doce
+      - doce meses
+  tipo_ejercicio:
+    Aerobic:
+      - aeróbic
+      - aeróbic acuático
+      - aquagym
+      - estep
+      - fitness acuático
+      - gimnasia acuática
+      - step
+    Artes marciales:
+      - aikido
+      - capoeira
+      - defence lab
+      - defensa personal
+      - goshin
+      - hapkido
+      - jiu-jitsu
+      - judo
+      - karate
+      - kendo
+    Atletismo:
+      - 10000 metros
+      - 100 metros
+      - 100 metros vallas
+      - 110 metros vallas
+      - 1500 metros
+      - 200 metros
+      - 3000 metros
+      - 3000 metros obstáculos
+      - 400 metros
+      - 400 metros vallas
+    Badminton: []
+    Baile:
+      - bachata
+      - baile moderno
+      - cha
+      - cha cha cha
+      - chachacha
+      - chotis
+      - jota
+      - merengue
+      - muñeira
+      - pasodoble
+    Ballet-Baile en barra:
+      - baile en barra
+      - ballet
+      - pole dance
+    Baloncesto:
+      - basket
+    Balonmano: []
+    Beisbol:
+      - baseball
+    Boxeo:
+      - boxing
+    Buceo:
+      - submarinismo
+    Caminar:
+      - andar
+    Ciclismo:
+      - bicicleta
+      - bici de montaña
+      - btt
+      - ciclismo de carretera
+      - ciclismo de montaña
+      - ciclocrós
+      - cross country
+      - descenso bici
+      - enduro
+      - mountain bike
+    Ciclismo manual:
+      - ciclismo adaptado
+      - ciclismo de mano
+    Correr:
+      - jogging
+    Cricket: []
+    Crossfit: []
+    Curling: []
+    Deportes de nieve:
+      - snow
+      - snowboard
+    Deportes de raqueta:
+      - paddel
+      - pádel
+    Deportes de surf:
+      - body board
+      - bodyboard
+      - long board
+      - surf
+      - windsurf
+    Elíptica: []
+    Entrenamiento de fuerza:
+      - hipertrofia
+      - máquinas
+      - p90x
+    Entrenamiento funcional:
+      - autocargas
+      - calistenia
+    Equitación: []
+    Escalada:
+      - boulder
+      - rocodromo
+    Esgrima: []
+    Esquí alpino:
+      - esquí
+      - ski
+    Esquí de fondo:
+      - biatlón
+      - esqui cross-country
+      - esquí nórdico
+      - raquetas
+      - raquetas de nieve
+      - ski cross country
+      - ski de fondo
+      - ski nordico
+    Frisbee:
+      - frisbi
+      - juego de disco
+      - ultimate
+    Futbol:
+      - balompié
+      - football
+      - furbo
+      - fútbol
+      - soccer
+    Futbol americano:
+      - american football
+    Futbol australiano:
+      - australian football
+    Gimnasia:
+      - gimansia artística
+      - gimnasia rítmica
+    Golf: []
+    HIIT:
+      - entrenamiento a intervalos de alta intensidad
+      - entrenamiento hiit
+    Hockey:
+      - hockey hielo
+      - hockey hierba
+      - hockey patines
+    Kayak:
+      - canoa
+      - paddle boarding
+      - paddleboarding
+      - paddle surf
+      - piragua
+      - piraguismo
+      - piragüismo
+    Kickboxing:
+      - kick boxing
+      - kick-boxing
+    Marcha nórdica: []
+    Meditación: []
+    Natación:
+      - nadar
+    Navegación:
+      - sailing
+    Otros deportes:
+      - otro
+      - otros
+    Patinaje:
+      - patin
+      - patinaje hielo
+      - patinaje sobre hielo
+      - patinaje sobre ruedas
+      - roller
+      - roller blading
+      - rollerblading
+      - skate
+      - skate board
+      - skateboarding
+    Pilates: []
+    Remo:
+      - remar
+      - traineras
+    Rugby: []
+    Saltos:
+      - jumping rope
+      - saltar a la cuerda
+      - saltos cuerda
+    Senderismo:
+      - andar por el campo
+      - andar por el monte
+      - hiking
+      - ir al monte
+      - montañismo
+      - salir al monte
+      - subir al monte
+    Silla de ruedas-Caminar:
+      - andar silla de ruedas
+      - caminar silla de ruedas
+      - paseo en silla de ruedas
+      - silla de ruedas andar
+      - silla de ruedas caminar
+      - silla de ruedas paseo
+    Silla de ruedas-Correr:
+      - carrera en silla de ruedas
+      - correr en silla de ruedas
+      - silla de ruedas carrera
+      - silla de ruedas correr
+    Snowboard:
+      - snow
+      - snow board
+    Softbal:
+      - softball
+    Squash:
+      - escuas
+      - squas
+    Subir escaleras:
+      - maaquina de subir escaleras
+      - subir escalones
+    Tenis:
+      - ténis
+      - tennis
+    Tenis de mesa:
+      - ping pong
+      - ping-pong
+      - pingpong
+      - pin pon
+      - pin-pon
+      - pin pong
+    Tiro con arco:
+      - arquería
+      - arquero
+    Voleibol:
+      - voley
+      - voley playa
+      - volley
+      - volleyball
+    Waterpolo:
+      - water polo
+    Yoga: []
+    Zumba:
+      - baile cardio
+  velocidad:
+    lento:
+      - lentitud
+      - normal
+    rapido:
+      - ligero
+      - rápido
+      - veloz
