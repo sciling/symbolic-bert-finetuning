@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js" integrity="sha512-CSBhVREyzHAjAFfBlIBakjoRUKp5h7VSweP0InR/pAJyptH7peuhCsqAI/snV+TwZmXZqoUklpXp6R6wMnYf5Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+    <title>Chatbot Test - Web widget</title>
+
+    <div class="container" style="margin:100px">
+      <form action="javascript:setAction()">
+        <h4>Selecciona un chatbot y escribe un token</h4>
+        <label>Selecciona un chatbot: </label>
+        <select class="form-control" id="chatbotName" style="padding-top:10px">
+          <option value="CU1"> CU1 </option>
+          <option value="CU2"> CU2 </option>
+          <option value="CU3"> CU3 </option>
+          <option value="CU4.1"> CU4.1 </option>
+          <option value="CU4.2"> CU4.2 </option>
+          <option value="CU4.3"> CU4.3 </option>
+          <option value="CU4.4"> CU4.4 </option>
+          <option value="CU5"> CU5 </option>
+        </select>
+
+      <div class="form-group"  style="padding-top:10px">
+        <label for="chatbotToken">Escribe el token</label>
+        <textarea class="form-control" id="chatbotToken" rows="10"></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Abrir Chatbot</button>
+
+      <div class="form-group"  style="padding-top:10px">
+        <label for="test">test code</label>
+        <textarea class="form-control" id="test" rows="10"></textarea>
+      </div>
+    </form>
+  </div>
+
+
+
+<script>
+  const chats_integration = {"CU1":"cb8f4908-a4f9-44cd-8d64-e00875d920a5","CU2":"a5b8006b-2ca7-4cec-b293-d75550ed269e","CU3":"880d695b-6535-4ac6-9b2b-0690427d73cd", "CU4.1":"f5a443dd-0ff4-4e26-977c-e809b3b6ecfa", "CU4.2":"8385d843-273e-476d-8de3-c29a0b96b52d", "CU4.3":"a7a5904e-b74b-46e0-9984-444daf9e36f7", "CU4.4":"88c34e3d-6da9-4cef-affe-a1319816ba38", "CU5":"f8923f44-6edb-45bb-ba8f-605e4d537826"}
+
+  let integration_id = ""
+  let bot_token = ""
+
+  //bot_token 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzNyIsInVzZXJfbmFtZSI6IlBhY1BhcTAxIiwic2NvcGUiOlsidHJ1c3QiXSwiaXNzIjoidHJpbGVtYS5lcyIsImV4cCI6MTY4OTY2MjY2NSwiYXV0aG9yaXRpZXMiOlsidXNlciJdLCJqdGkiOiJjZTJjM2VjMC1iNzM1LTQyZmQtODc1Ni00Y2FlYzU2ODBlYjEiLCJjbGllbnRfaWQiOiJOYWJlbGlhU3lzdGVtIn0.W8wjX1YJQstBLsAgipvYtbuGLK3o6N8dydzhMIiuyLl7-KnF5JFqCmO4MBC6P7Fa_3ArlxFsXUGuDhPqaNs7i35z2BKxOt9SBBNsM5qngDBKRezKQpEIYBJG2H7ilUN58L7002GLTrCKxEDedfPe2siUyPVbI7ghN8H2ax9W3t6Y_WPlv56G5VrS8zOEBZXGw5QvLRZsooYb0BampT4ltXTW39lSKLPFQ4Xo5KuxPVL5veny-0P2BfzhPhGKhzeFAadVR6_qHrx1AuHQGEw7caSatcqv0rktBMAjfeAC95rBIDPaOzt0QmH4__MhUsH0Kx2i6pIdo2yQ21hQ7kfc7w';
+
+  function get_backend_token() {
+    var settings = {
+      "url": "https://medp-api.laberit.com/oauth/token",
+      "method": "POST",
+      "timeout": 0,
+      "headers": {
+        "Authorization": "Basic TmFiZWxpYVN5c3RlbTpKZWFsekQxc3RyQnV0cjY2Ng==",
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      "data": {
+        "username": "PacPaq01",
+        "password": "WeebRkOdHb",
+        "grant_type": "password"
+      }
+    };
+
+    $.ajax(settings).done(function (response) {
+      get_chatbot_token(response.access_token);
+    });
+  }
+
+  function get_chatbot_token(access_token) {
+    var settings = {
+      "url": "https://medp-api.laberit.com/oauth/token",
+      "method": "POST",
+      "timeout": 0,
+      "headers": {
+        "Authorization": "Basic TmFiZWxpYUNoYXRib3Q6amhyZURuN2JCWjZlQ0M3Mw==",
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      "data": {
+        "token": access_token,
+        "grant_type": "token"
+      }
+    };
+
+    $.ajax(settings).done(function (response) {
+      $('#chatbotToken').val(response.access_token);
+    });
+  }
+
+
+  get_backend_token();
+
+  function setAction() {
+    integration_id = chats_integration[document.getElementById("chatbotName").value];
+    bot_token = document.getElementById("chatbotToken").value;
+    createAssistant()
+  }
+
+
+  async function fetchAsync (url) {
+    let response = await fetch(url);
+    let data = await response.json();
+    return data;
+  }
+
+
+  function createAssistant(){
+
+    steps = [];
+    test = {
+      dialog: [{
+        name: 'test',
+        initial_context: {},
+        steps: steps,
+      }]
+    }
+
+    $('#test').val(jsyaml.dump(test))
+    step = null;
+
+    window.watsonAssistantChatOptions = {
+      integrationID: integration_id, // The ID of this integration. CU1
+      region: "eu-de", // The region your integration is hosted in.
+      serviceInstanceID: "59a05c17-afcb-4374-afc6-caba0754ee4c", // The ID of your service instance.
+      showCloseAndRestartButton: true,
+      onLoad: function(instance) {
+        instance.on({ type: 'identityTokenExpired', handler: function(event) {
+          return new Promise(function(resolve, reject) {
+            event.identityToken = bot_token;
+            resolve();
+          });
+        }});
+
+        instance.on({ type: "send", handler: function(msg) {
+          data = msg.data;
+          console.log('send', data);
+
+          step = {
+            query: data.input.text,
+          };
+          test.steps.dialog.steps.push(step);
+
+          $('#test').val(jsyaml.dump(test))
+        }});
+
+        instance.on({ type: "receive", handler: function(msg) {
+          data = msg.data;
+          console.log('receive', data);
+
+          res = {
+            confidence: 0.7,
+          };
+          step['response'] = res;
+
+          if (data.output.entities.length) {
+            res.intent = 'entity_recognition';
+
+            ent = data.output.entities[0];
+            res.entities = [{
+              name: ent.entity,
+              value: ent.value,
+              confidence: 0.7,
+            }];
+
+          } else if (data.output.intents.length) {
+            res.intent = data.output.intents[0].intent;
+          } else {
+            res.intent = 'UNDEFINED';
+          }
+          $('#test').val(jsyaml.dump(test))
+        }});
+
+        instance.render();
+      }
+    };
+
+    setTimeout(function(){
+      var e_to_remove = document.getElementById("chatbot_script") || false;
+      if (e_to_remove){
+        document.head.removeChild(e_to_remove)
+      }
+      var chatbot_div = document.getElementsByClassName("WatsonAssistantChatHost")[0] || false;
+      if (chatbot_div){
+        document.body.removeChild(chatbot_div)
+      }
+      const t=document.createElement('script');
+      t.id = "chatbot_script";
+      t.src="https://web-chat.global.assistant.watson.appdomain.cloud/versions/" + (window.watsonAssistantChatOptions.clientVersion || 'latest') + "/WatsonAssistantChatEntry.js";
+      document.head.appendChild(t);
+    });
+  }
+
+
+</script>
+</body>
+</html>

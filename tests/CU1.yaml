@@ -37,3 +37,63 @@ dialogs:
       - query: el trabajo del trilero
         response:
           intent:
+
+  - name: test_1
+    initial_context: {}
+    steps:
+      - query: ¡Comenzar!
+        response:
+          confidence: 0.7
+          intent: welcome
+      - query: hacer onboarding
+        response:
+          confidence: 0.7
+          intent: onboarding
+      - query: ciento setenta
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '170'
+              confidence: 0.7
+      - query: '20'
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '20'
+              confidence: 0.7
+      - query: '80'
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '80'
+              confidence: 0.7
+      - query: '60'
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '60'
+              confidence: 0.7
+      - query: 60 cm
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '60'
+              confidence: 0.7
+      - query: noventa cm
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '90'
+              confidence: 0.7
