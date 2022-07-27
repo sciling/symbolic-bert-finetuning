@@ -139,7 +139,7 @@
           step = {
             query: data.input.text,
           };
-          test.steps.dialog.steps.push(step);
+          test.dialog[0].steps.push(step);
 
           $('#test').val(jsyaml.dump(test))
         }});
