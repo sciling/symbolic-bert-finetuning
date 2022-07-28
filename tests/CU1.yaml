@@ -30,7 +30,107 @@ entities:
       - lo que caiga
 
 dialogs:
+  #region Welcome Tests
+  - name: welcome_test_1
+    initial_context: {}
+    steps:
+      - query: ¡Comenzar!
+        response:
+          confidence: 0.7
+          intent: welcome
+  
+  - name: welcome_test_2
+    initial_context: {}
+    steps:
+      - query: comenzar
+        response:
+          confidence: 0.7
+          intent: welcome
 
+  - name: welcome_test_3
+    initial_context: {}
+    steps:
+      - query: empezar
+        response:
+          confidence: 0.7
+          intent: welcome
+          
+  - name: welcome_test_4
+    initial_context: {}
+    steps:
+      - query: hola
+        response:
+          confidence: 0.7
+          intent: welcome
+  
+  - name: welcome_test_5
+    initial_context: {}
+    steps:
+      - query: buenas
+        response:
+          confidence: 0.7
+          intent: welcome
+          
+  - name: welcome_test_6
+    initial_context: {}
+    steps:
+      - query: buenos dias
+        response:
+          confidence: 0.7
+          intent: welcome
+
+  #endregion
+  - name: test
+    initial_context: {}
+    steps:
+      - query: comenzar
+        response:
+          confidence: 0.7
+          intent: welcome
+      - query: vamos alla
+        response:
+          confidence: 0.7
+          intent: onboarding
+
+  #region onboarding Tests
+  - name: test
+    initial_context: {}
+    steps:
+      - query: ¡Comenzar!
+        response:
+          confidence: 0.7
+          intent: welcome
+      - query: vamos
+        response:
+          confidence: 0.7
+          intent: onboarding
+  #endregion
+  - name: test
+    initial_context: {}
+    steps:
+      - query: ¡Comenzar!
+        response:
+          confidence: 0.7
+          intent: welcome
+      - query: vamos
+        response:
+          confidence: 0.7
+          intent: onboarding
+      - query: '170'
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '170'
+              confidence: 0.7
+  #region Extreme Chat Tests
+
+  #endregion
+
+  #region Normal Chat Tests
+
+  #endregion
   - name: dont_understand
     initial_context: {}
     steps:
