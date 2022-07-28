@@ -132,6 +132,12 @@
           });
         }});
 
+        function update() {
+          $('#test').val(jsyaml.dump(test))
+          var textarea = document.getElementById('test');
+          textarea.scrollTop = textarea.scrollHeight;
+        }
+
         instance.on({ type: "send", handler: function(msg) {
           data = msg.data;
           console.log('send', data);
@@ -141,7 +147,7 @@
           };
           test.dialog[0].steps.push(step);
 
-          $('#test').val(jsyaml.dump(test))
+          update();
         }});
 
         instance.on({ type: "receive", handler: function(msg) {
@@ -151,24 +157,27 @@
           res = {
             confidence: 0.7,
           };
+
           step['response'] = res;
 
           if (data.output.entities.length) {
             res.intent = 'entity_recognition';
 
             ent = data.output.entities[0];
-            res.entities = [{
-              name: ent.entity,
-              value: ent.value,
-              confidence: 0.7,
-            }];
+            res.entities = data.output.entities.map((ent) => {
+              return {
+                name: ent.entity,
+                value: ent.value,
+                confidence: 0.7,
+              };
+            });
 
           } else if (data.output.intents.length) {
             res.intent = data.output.intents[0].intent;
           } else {
             res.intent = 'UNDEFINED';
           }
-          $('#test').val(jsyaml.dump(test))
+          update();
         }});
 
         instance.render();

@@ -1,0 +1,355 @@
+alcohol.n.01: Cerveza con alcohol
+almond.n.01: Almendra, tostada
+almond.n.02: Almendra, tostada
+anchovy.n.02: Boquerón
+apple.n.01: Manzana
+apricot.n.01: Albaricoque
+bacon.n.01: Panceta, frita
+bamboo.n.02: Bambú, crudo
+banana.n.01: Plátano
+barley.n.01: Pan de cebada
+barley.n.02: Pan de cebada
+barnacle.n.01: Percebe
+basil.n.01: Albahaca
+bean.n.01: Alubia negra, seca, remojada, hervida
+beef.n.01: Vaca/buey, solomillo, a la plancha
+beef.n.02: Vaca/buey, solomillo, a la plancha
+beer.n.01: Cerveza con alcohol
+beet.n.01: Remolacha, en conserva
+beet.n.02: Remolacha, en conserva
+beverage.n.01: agua
+biscuit.n.01: Galleta, genérico
+bleu.n.01: Queso azul
+bologna.n.02: Mortadela
+bonito.n.03: Bonito en aceite vegetal
+brain.n.05: Sesos, de cordero, crudos
+brandy.n.01: Coñac
+bread.n.01: Pan blanco, de barra
+breakfast.n.01: Cereales desayuno base de trigo azucarado
+breakfast_food.n.01: Cereales desayuno base de trigo azucarado
+brittle.n.01: Caramelo
+broth.n.01: Caldo vegetal
+broth.n.02: Caldo vegetal
+brown_sugar.n.01: Azúcar, moreno
+bull.n.01: Rabo de toro
+butter.n.01: Mantequilla, baja en calorías
+cabbage.n.01: Col blanca, cruda
+cabbage.n.03: Col blanca, cruda
+cacao.n.01: Cacao en polvo, azucarado
+cake.n.03: Pastel
+candied_fruit.n.01: Confitura, frutas s/e, baja en calorías
+candy.n.01: Caramelo
+canned_food.n.01: Garbanzo, en conserva
+caper.n.01: Alcaparra
+capsicum.n.01: Pimiento rojo, crudo
+carp.n.02: Carpa, al horno
+cattle.n.01: Ternera, parte s/e, asada
+caviar.n.01: Caviar
+celery.n.02: Apio, crudo
+cereal.n.03: Cereales desayuno base de trigo azucarado
+cheddar.n.02: Queso Cheddar
+cheese.n.01: Queso manchego
+cheese_sauce.n.01: Salsa de queso
+cherry.n.02: Cereza
+cherry.n.03: Cereza
+chestnut.n.02: Castaña, tostada
+chewing_gum.n.01: Chicle, sin azúcar
+chicken.n.01: Pollo, pechuga, plancha
+chicken.n.02: Pollo, pechuga, plancha
+chicory.n.04: Escarola
+chicory_escarole.n.01: Escarola
+chili.n.02: Guindilla, picante
+chocolate.n.02: Chocolate con leche
+chocolate_bar.n.01: Barra de chocolate, tipo "Kit-kat"
+chocolate_cake.n.01: Pastel de chocolate
+chocolate_ice_cream.n.01: Helado de chocolate
+chop.n.02: Cerdo, chuleta, crudo
+cicada.n.01: Cigala
+cider.n.01: Sidra
+cinnamon.n.03: Canela, en polvo
+clam.n.01: Almeja
+clam.n.03: Almeja
+cock.n.04: Gallo
+cocoa.n.02: Cacao en polvo, azucarado
+coconut.n.01: Coco, desecado
+cod-liver_oil.n.01: Aceite de hígado de bacalao
+cod.n.02: Bacalao, fresco, al horno
+cod.n.03: Bacalao, fresco, al horno
+coffee.n.01: Café, infusión
+coffee.n.02: Café, infusión
+coffee_liqueur.n.01: Licor de café
+cola.n.02: Refresco, sabor cola, bajo en calorías
+common_bean.n.01: Alubia blanca, en conserva
+common_bean.n.02: Alubia blanca, en conserva
+confiture.n.01: Confitura, frutas s/e, baja en calorías
+cookie.n.01: Galleta, genérico
+corn.n.01: Maíz, en mazorca, crudo
+corn.n.03: Maíz, en mazorca, crudo
+corn_chip.n.01: Corteza de trigo
+corn_whiskey.n.01:  Whisky
+cornbread.n.01: Pan de maíz
+cotton.n.03: Aceite de algodón
+cow.n.01: Ternera, parte s/e, asada
+crab.n.01: Cangrejo
+crab.n.05: Cangrejo
+cracker.n.01: Galleta salada
+crayfish.n.03: Cangrejo
+cream.n.02: Crema pastelera
+cress.n.01: Berro, crudo
+cress.n.02: Berro, crudo
+crocus.n.01: Azafrán
+cucumber.n.02: Pepino
+curd.n.01: Cuajada
+currant.n.01: Grosella, cruda
+curry.n.01: Curry
+custard.n.01: Crema pastelera
+custard_apple.n.02: Chirimoya
+dairy_product.n.01: Batido lácteo de cacao, bajo en calorías
+deer.n.01: Ciervo, parte s/e, crudo, con grasa separable
+dessert.n.01: Vino dulce, tipo oporto
+dessert_wine.n.01: Vino dulce, tipo oporto
+dip.n.04: Salsa de queso
+domestic_goat.n.01: Cordero, parte sin especificar
+domestic_sheep.n.01: Cordero, parte sin especificar
+dory.n.03: Gallo
+dough.n.01: Pasta alimenticia, cruda
+doughnut.n.02: Donut
+duck.n.01: Pato, entero, asado
+duck.n.03: Pato, entero, asado
+eating_apple.n.01: Manzana
+edible_fruit.n.01: Manzana
+eel.n.01: Anguila, hervida
+eel.n.02: Anguila, hervida
+fennel.n.01: Hinojo
+fish.n.01: Pescado, genérico
+fish.n.02: Pescado, genérico
+flatfish.n.01: Platija, al vapor
+flounder.n.01: Rodaballo
+flour.n.01: Harina de trigo
+flower.n.01: Queso flor de guía
+food_fish.n.01: Pescado, genérico
+frank.n.02: Salchicha, tipo "frankfurt"
+fresh_bean.n.01: Judía verde, cruda
+freshwater_bass.n.01: Lubina
+fruit_juice.n.01: Zumo de naranja
+fruit_salad.n.01: Macedonia de frutas, conserva en su jugo
+garlic.n.02: Ajo
+gelatin.n.02: Gelatina
+gin.n.01: Ginebra
+ginger.n.01: Jengibre
+goat.n.01: Cordero, parte sin especificar
+goatfish.n.01: Salmonete
+goose.n.01: Oca, sin piel, asada
+gourd.n.03: Calabaza, hervida
+grain.n.02: Cereales desayuno base de trigo azucarado
+grape.n.01: Uva blanca
+grape.n.02: Uva blanca
+grape_juice.n.01: Zumo de uva
+green_bean.n.01: Judía verde, cruda
+greens.n.01: Menestra de verduras, congelada
+grouper.n.02: Mero, plancha
+gumdrop.n.01: Gominola, genérica
+hake.n.02: Merluza fresca
+ham.n.01: Jamón ibérico de cebo
+hamburger.n.01: Pan, tipo hamburguesa
+hare.n.01: Liebre, entera, cruda
+hazelnut.n.01: Avellana
+head_cabbage.n.02: Repollo
+hen.n.01: Pollo, parte sin especificar
+herb.n.02: Queso para untar, con finas hierbas
+herb_tea.n.01: Infusión
+herring.n.01: Arenque, salado
+herring.n.02: Arenque, salado
+hog.n.03: Cerdo, parte sin especifica
+hooch.n.01: Aguardiente
+hotdog.n.02: Salchicha, tipo "frankfurt"
+huitre.n.01: Ostra, cruda
+ice.n.05: Helado de fresa
+ice_cream.n.01: Helado de fresa
+jam.n.01: Mermelada de fresa
+jelly.n.02: Mermelada de fresa
+juice.n.01: Zumo de naranja
+jungle_fowl.n.01: Pollo, parte sin especificar
+kabob.n.01: Kebab
+kale.n.02: Col rizada, cruda
+kale.n.03: Col lombarda, hervida
+lamb.n.01: Cordero, parte sin especificar
+laurel.n.01: Laurel, hoja
+lemon.n.03: Zumo de limón, fresco
+lettuce.n.02: Lechuga
+lettuce.n.03: Lechuga
+lima_bean.n.03: Haba, fresca
+lime.n.06: Lima, cruda
+liqueur.n.01: Licor apricot
+liquor.n.01: Aguardiente
+liver.n.02: Hígado, de vaca/buey, crudo
+loaf_of_bread.n.01: Pan blanco, de molde, tostado
+lobster.n.01: Bogavante, hervido
+lobster.n.02: Langosta
+locust.n.01: Langosta
+lupine.n.01: Altramuz
+macadamia.n.01: Chocolate con nueces de macadamia
+mackerel.n.01: Caballa, al horno
+mackerel.n.02: Caballa, al horno
+mandarin.n.01: Mandarina
+mandarin.n.05: Mandarina
+margarine.n.01: Margarina, baja en calorías
+marigold.n.01: Sopa de sobre maravilla
+marmalade.n.01: Mermelada de fresa
+marrow.n.02: Calabacín, asado
+mayonnaise.n.01: Mayonesa con aceite de girasol
+meal.n.03: Harina de trigo
+meat.n.01: Carne picada
+meat_pie.n.01: Empanada de carne
+melon.n.01: Melón
+melon.n.02: Melón
+milk.n.01: Leche de vaca, entera
+milk.n.02: Leche de vaca, entera
+milk.n.04: Leche de vaca, entera
+millet.n.01: Mijo
+mineral_water.n.01: Agua mineral, mineralización debil
+mint.n.02: Menta, fresca
+mix.n.01: Preparado lácteo con omega 3
+mousse.n.01: Mousse de chocolate
+mousse.n.02: Mousse de chocolate
+mushroom.n.03: Seta, plancha
+muskmelon.n.02: Melón
+mussel.n.02: Mejillón, hervido
+mustard.n.01: Mostaza
+mustard.n.02: Mostaza
+oat.n.01: Cereales desayuno base de maíz, trigo y avena
+olive.n.04: Aceituna
+omelet.n.01: Tortilla, a la francesa
+onion.n.02: Cebolla
+onion.n.03: Cebolla
+orange.n.01: Naranja
+orange_juice.n.01: Zumo de naranja
+origanum.n.01: Orégano, seco
+oyster.n.01: Ostra, cruda
+palm.n.03: Palmera
+palmetto.n.01: Palmito, en conserva
+pancake.n.01: Torta de aceite
+paprika.n.02: Pimentón, en polvo
+parsley.n.01: Perejil, fresco
+passion_fruit.n.01: Néctar de maracuyá, envasado
+pasta.n.02: Pasta alimenticia, cruda
+pastry.n.01: Pasta alimenticia, cruda
+pastry.n.02: Pastel
+pasty.n.01: Empanadilla
+pate.n.01: Paté de pimienta
+pea.n.01: Guisante, congelado, hervido
+pea.n.03: Guisante, congelado, hervido
+peafowl.n.01: Pavo, pechuga, sin piel, a la plancha
+pear.n.01: Pera
+pepper.n.03: Pimienta, negra
+pepper.n.04: Pimiento rojo, crudo
+perch.n.06: Perca, al horno
+persimmon.n.01: Caqui
+pickle.n.01: Pepinillos en vinagre
+pie.n.01: Pastel
+pigeon.n.01: Pichón, sin piel, asado
+pike.n.02: Lucio, al horno
+pilchard.n.02: Sardina, asada
+pizza.n.01: Pizza, precocinada
+plane_tree.n.01: Plátano
+plum.n.01: Ciruela, con piel, cruda
+plum.n.02: Ciruela, con piel, cruda
+pork.n.01: Cerdo, parte sin especificar
+pork_sausage.n.01: Salchicha, tipo "frankfurt"
+potato.n.01: Patata, frita con aceite s/e, sin sal
+powdered_milk.n.01: Leche en polvo, semidesnatada
+prawn.n.01: Gamba, hervida
+primrose.n.01: Rollito de primavera
+pudding.n.03: Pudding de pasas
+puff_paste.n.01: Hojaldre
+quail.n.02: Huevo de codorniz, entero, crudo
+rabbit.n.01: Conejo, entero, estofado
+radish_plant.n.01: Rábano
+raisin.n.01: Uva pasa
+raspberry.n.01: Frambuesa, cruda
+raw_meat.n.01: Conejo de granja, carne, cruda
+red_deer.n.01: Ciervo, parte s/e, crudo, con grasa separable
+red_wine.n.01: Vino tinto
+rib.n.03: Cerdo, costilla, crudo
+rice.n.01: Arroz
+rice.n.02: Arroz
+roughage.n.01: Cereales para el desayuno, ricos en fibra, tipo "all-bran"
+rum.n.01: Ron
+rye_bread.n.01: Pan de centeno
+salad.n.01: Ensalada
+salmon.n.01: Salmón
+salmon.n.03: Salmón
+salt_pork.n.01: Tocino
+sandwich.n.01: Bocadillo
+sardine.n.02: Sardina, enlatada, en aceite, escurrida
+sauce.n.01: Salsa de queso
+sausage.n.01: Salchicha, tipo "frankfurt"
+scad.n.01: Jurel, crudo
+scallop.n.02: Vieira
+scallop.n.04: Vieira
+scorpionfish.n.01: Cabracho o rascacio, crudo
+sea_bass.n.01: Lubina
+sea_bream.n.02: Besugo
+shank.n.01: Cordero, pierna, con grasa, asada
+sheep.n.01: Cordero, parte sin especificar
+shrimp.n.03: Gamba, hervida
+skate.n.02: Raya, cruda
+smoked_salmon.n.01: Salmón ahumado
+snail.n.01: Caracol
+soft_drink.n.01: Refresco "tipo gaseosa"
+sole.n.02: Lenguado, plancha
+soup.n.01: Sopa de sobre, sin reconstituir
+sour_cherry.n.01: Cereza
+soy.n.04: Soja, fresca
+sponge_cake.n.01: Bizcocho
+spread.n.05: Pan blanco, tostado
+sprout.n.02: Col de bruselas, cruda
+squash.n.02: Calabaza, hervida
+squid.n.02: Calamar, asado
+stag.n.02: Ciervo, parte s/e, crudo, con grasa separable
+strawberry.n.02: Fresa
+sugar.n.01: Azúcar blanca
+sunflower.n.01: Aceite de girasol
+sweet.n.03: Vino dulce, tipo oporto
+sweet_cherry.n.02: Cereza
+sweet_melon.n.01: Melón
+sweet_pepper.n.02: Pimiento rojo, crudo
+sweet_potato.n.02: Boniato, crudo
+swine.n.01: Cerdo, parte sin especificar
+tea.n.01: Infusión
+tea.n.05: Infusión
+tenderloin.n.02: Ternera, lomo, crudo, con grasa separable
+thistle.n.01: Cardo
+thyme.n.01: Tomillo, seco
+toast.n.01: Pan tostado integral
+tomato.n.01: Tomate
+tomato.n.02: Tomate
+tongue.n.06: Lengua, de ternera, cruda
+tortilla.n.01: Tortilla, a la francesa
+tripe.n.01: Callos de ternera
+trout.n.01: Trucha
+trout.n.02: Trucha
+tuna.n.02: Atún, plancha
+tuna.n.03: Atún, plancha
+turkey.n.01: Pavo, pechuga, sin piel, a la plancha
+turnip.n.02: Nabo, pelado, crudo
+vanilla.n.01: Vainilla
+veal.n.01: Ternera, parte s/e, asada
+vegetable.n.01: Calabacín
+vegetable.n.02: Calabacín
+vegetable_oil.n.01: Aceite de oliva
+vermouth.n.01: Vermut, s/e
+vinegar.n.01: Vinagre de vino
+walnut.n.01: Nuez
+water.n.06: Agua de la red
+watercress.n.01: Berro, crudo
+wheat.n.01: Salvado de trigo
+wheat.n.02: Salvado de trigo
+wheat_flour.n.01: Harina de trigo
+whiskey.n.01: Whisky
+white_bread.n.01: Pan blanco, de barra
+white_sauce.n.01: Salsa bechamel
+white_wine.n.01: Vino blanco
+wine.n.01: Vino tinto
+yogurt.n.01: Yogur, entero, con fresas
+young_bird.n.01: Pollo, parte sin especificar
