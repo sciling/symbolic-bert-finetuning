@@ -86,7 +86,7 @@ cookie.n.01: Galleta, genérico
 corn.n.01: Maíz, en mazorca, crudo
 corn.n.03: Maíz, en mazorca, crudo
 corn_chip.n.01: Corteza de trigo
-corn_whiskey.n.01:  Whisky
+corn_whiskey.n.01: Whisky
 cornbread.n.01: Pan de maíz
 cotton.n.03: Aceite de algodón
 cow.n.01: Ternera, parte s/e, asada
@@ -160,7 +160,7 @@ herb.n.02: Queso para untar, con finas hierbas
 herb_tea.n.01: Infusión
 herring.n.01: Arenque, salado
 herring.n.02: Arenque, salado
-hog.n.03: Cerdo, parte sin especifica
+hog.n.03: Cerdo, parte sin especificar
 hooch.n.01: Aguardiente
 hotdog.n.02: Salchicha, tipo "frankfurt"
 huitre.n.01: Ostra, cruda
@@ -233,7 +233,7 @@ paprika.n.02: Pimentón, en polvo
 parsley.n.01: Perejil, fresco
 passion_fruit.n.01: Néctar de maracuyá, envasado
 pasta.n.02: Pasta alimenticia, cruda
-pastry.n.01: Pasta alimenticia, cruda
+pastry.n.01: Hojaldre
 pastry.n.02: Pastel
 pasty.n.01: Empanadilla
 pate.n.01: Paté de pimienta

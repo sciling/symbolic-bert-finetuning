@@ -11,6 +11,7 @@
 
 import warnings
 
+import csv
 from collections import Counter
 from collections import OrderedDict
 from collections import defaultdict
@@ -177,10 +178,10 @@ def find_hypos(word, log=False):
 def find_food_hypos(word, log=False):
     syns = get_syns(word)
 
-    res = {}
+    res = set()
     for syn in syns:
         hypos = list(syn.closure(lambda s: s.hyponyms()))
-        res.update(res)
+        res.update(hypos)
         hypos = [f"{lemma.name()}({h.name()})" for h in hypos for lemma in h.lemmas(lang="spa") if not find_hypos(h) and find_foods_syns(h)]
         if log:
             typer.echo(f"{syn} -> {hypos}")
@@ -298,7 +299,12 @@ def generate_alternatives(alts):
 
 
 @app.command()
-def get_food_alternatives(foods_fn: Path, default_foods_fn: None, do_hypos: bool = False):
+def get_food_alternatives(
+    foods_fn: Path, default_foods_fn: Path = typer.Argument(None), do_hypos: bool = False,
+    show_synsets: bool = False, show_definitions: bool = True, show_alternatives: bool = True,
+    export_ibm: bool = False
+):
+
     nltk.download("omw")
 
     yaml = YAML(typ="safe")  # default, if not specfied, is 'rt' (round-trip)
@@ -307,12 +313,13 @@ def get_food_alternatives(foods_fn: Path, default_foods_fn: None, do_hypos: bool
 
     doc = {}
     for sentence in foods:
-        parts = sentence.split(", ")
-        prefs = [" ".join(parts[0:n]) for n in range(1, len(parts) + 1)]
-        # typer.echo(f"{sentence} -> {parts} -> {prefs}")
         alt = {}
         all_seqs = []
         doc[sentence] = alt
+
+        parts = sentence.split(", ")
+        prefs = [" ".join(parts[0:n]) for n in range(1, len(parts) + 1)]
+        # typer.echo(f"{sentence} -> {parts} -> {prefs}")
         alts = set()
 
         for pref in prefs:
@@ -323,15 +330,40 @@ def get_food_alternatives(foods_fn: Path, default_foods_fn: None, do_hypos: bool
             alts.update(gen)
             # typer.echo(f"  {pref} -> {seqs} -> {expanded} -> {gen}")
         typer.echo(f"{sentence} -> {alts}")
-        alt["synsets"] = [[[s.name() if isinstance(s, Synset) else s for s in seq] for seq in seqs] for seqs in all_seqs]
-        alt["definitions"] = {s.name(): s.definition() for seqs in all_seqs for seq in seqs for s in seq if isinstance(s, Synset)}
-        alt["alternatives"] = list(alts)
+        if show_synsets:
+            alt["synsets"] = [[[s.name() if isinstance(s, Synset) else s for s in seq] for seq in seqs] for seqs in all_seqs]
+        if show_definitions:
+            alt["definitions"] = {s.name(): s.definition() for seqs in all_seqs for seq in seqs for s in seq if isinstance(s, Synset)}
+        if show_alternatives:
+            alt["alternatives"] = list(alts)
 
-    with open("food_alts.yaml", "w") as file:
-        yaml = YAML()
-        yaml.Representer = MyRepresenter
-        yaml.indent(mapping=2, sequence=4, offset=2)
-        yaml.dump(doc, file)
+    default_foods = None
+    if default_foods_fn:
+        yaml = YAML(typ="safe")  # default, if not specfied, is 'rt' (round-trip)
+        with open(default_foods_fn) as file:
+            default_foods = yaml.load(file)
+
+        for synname, sentence in default_foods.items():
+            syn = wn.synset(synname)
+            alts = sorted({lemma.name().replace('_', ' ') for hs in find_food_hypos(syn) for lemma in get_lemmas(hs)})
+            typer.echo(f"DEF: {syn} -> {sentence} -> {alts}")
+            if 'hyponyms' in doc[sentence]:
+                doc[sentence]['hyponyms'] = sorted(set(alts + doc[sentence]['hyponyms']))
+            else:
+                doc[sentence]['hyponyms'] = alts
+
+    if export_ibm:
+        with open("food_alts.csv", "w") as file:
+            csvwriter = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            for food, data in doc.items():
+                csvwriter.writerow(['alimento_tipo', food] + list(set(data.get('alternatives', []) + data.get('hyponyms', []))))
+
+    else:
+        with open("food_alts.yaml", "w") as file:
+            yaml = YAML()
+            yaml.Representer = MyRepresenter
+            yaml.indent(mapping=2, sequence=4, offset=2)
+            yaml.dump(doc, file)
 
 
 def get_all_ngram_syns(sentence, max_ngram=5):
@@ -351,7 +383,7 @@ def get_all_ngram_syns(sentence, max_ngram=5):
 
 
 @app.command()
-def get_confusing_foods(foods_fn: Path, show_definition: bool = True, show_lemmas: bool = True, show_alternatives: bool = True, prepare_defaults: bool = False):
+def get_confusing_foods(foods_fn: Path, show_definitions: bool = True, show_lemmas: bool = True, show_alternatives: bool = True, prepare_defaults: bool = False):
     nltk.download("omw")
 
     yaml = YAML(typ="safe")  # default, if not specfied, is 'rt' (round-trip)
@@ -368,7 +400,6 @@ def get_confusing_foods(foods_fn: Path, show_definition: bool = True, show_lemma
             ngrs = get_all_ngram_syns(pref)
             all_ngrams.extend(ngrs)
         synsets = {s for s in all_ngrams if isinstance(s, Synset) and find_hypos(s)}
-        print(all_ngrams, synsets)
         for syn in synsets:
             confusions[syn].add(sentence)
         typer.echo(f"{sentence} -> {synsets}")
@@ -386,7 +417,7 @@ def get_confusing_foods(foods_fn: Path, show_definition: bool = True, show_lemma
             doc[syn.name()] = {
                 "foods": confs,
             }
-            if show_definition:
+            if show_definitions:
                 doc[syn.name()]["definition"] = syn.definition()
             if show_lemmas:
                 doc[syn.name()]["lemmas"] = sorted(find_syns(syn))
