@@ -73,6 +73,7 @@ def match_response(pattern, output, context):
         return matches
 
     intent = output["intents"][0]
+    correct = True
     if intent["confidence"] < 0.5:
         if output["entities"]:
             intent = {
@@ -84,8 +85,13 @@ def match_response(pattern, output, context):
                 "intent": None,
                 "confidence": 1 - intent["confidence"],
             }
-
+    
+    correctResponeOutput = get_isCorrectResponse(output)
+    print("JAUME MODIFIED line 77: " + str(correct))
     print(f"<MATCH>: {intent} <-> {pattern}")
+    if "correct" in pattern:
+        matches = matches and pattern["correct"] == correctResponeOutput
+        
     if "intent" in pattern:
         matches = matches and intent["intent"] == pattern["intent"]
 
@@ -131,6 +137,20 @@ def get_responses(output):
 
     return [generic]
 
+lastResponse = None
+def get_isCorrectResponse(output):
+    print("JAUME: " + str(output["generic"]))
+    actualResponse = None
+    for i in range(len(output["generic"])):
+        if "text" in output["generic"][len(output["generic"])-i-1]:
+            actualResponse = output["generic"][len(output["generic"])-i-1]["text"]
+            break
+
+    confidence = output["intents"][0]["confidence"] > 0.5 or output["entities"]
+    print("Correct Respone: ", output["intents"][0]["confidence"], lastResponse, actualResponse)
+    correct = confidence and lastResponse != actualResponse
+    globals()["lastResponse"] = actualResponse
+    return correct
 
 def response_to_str(response):
     if "text" in response:
@@ -241,7 +261,6 @@ def run_test(assistant_service, assistant_id, uuid, test):
             json.dump(context, file, indent=2, ensure_ascii=False)
 
         output = resp["output"]
-
         # Client actions from original script
         # if "actions" in output and len(output["actions"]) and output["actions"][0]["type"] == "client":
         #     # Dump the returned answer

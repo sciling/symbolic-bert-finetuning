@@ -31,6 +31,15 @@ entities:
 
 dialogs:
   #region Welcome Tests
+  - name: bad_welcome_test_1
+    initial_context: {}
+    steps:
+      - query: asdf
+        response:
+          correct: false
+          confidence: 0.7
+          intent: None
+
   - name: welcome_test_1
     initial_context: {}
     steps:
@@ -80,10 +89,26 @@ dialogs:
           intent: welcome
 
   #endregion
-  - name: test
+  
+
+  #region onboarding Tests
+
+  - name: bad_onboarding_test_1
     initial_context: {}
     steps:
-      - query: comenzar
+      - query: ¡Comenzar!
+        response:
+          confidence: 0.7
+          intent: welcome
+      - query: asd
+        response:
+          correct: false
+          confidence: 0.7
+          intent: onboarding
+  - name: onboarding_test_1
+    initial_context: {}
+    steps:
+      - query: ¡Comenzar!
         response:
           confidence: 0.7
           intent: welcome
@@ -92,8 +117,7 @@ dialogs:
           confidence: 0.7
           intent: onboarding
 
-  #region onboarding Tests
-  - name: test
+  - name: onboarding_test_2
     initial_context: {}
     steps:
       - query: ¡Comenzar!
@@ -104,7 +128,9 @@ dialogs:
         response:
           confidence: 0.7
           intent: onboarding
+
   #endregion
+
   - name: test
     initial_context: {}
     steps:
@@ -124,8 +150,28 @@ dialogs:
             - name: sys-number
               value: '170'
               confidence: 0.7
+              
   #region Extreme Chat Tests
-
+  - name: extreme_test_1
+    initial_context: {}
+    steps:
+      - query: ¡Comenzar!
+        response:
+          confidence: 0.7
+          intent: welcome
+      - query: hacer onboarding
+        response:
+          confidence: 0.7
+          intent: onboarding
+      - query: '0'
+        response:
+          correct: false
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '0'
+              confidence: 0.7
   #endregion
 
   #region Normal Chat Tests
