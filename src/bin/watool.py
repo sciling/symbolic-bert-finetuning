@@ -72,6 +72,8 @@ def match_response(pattern, output, context):
     if not pattern:
         return matches
 
+    correctResponeOutput = get_isCorrectResponse(output)
+
     intent = output["intents"][0]
     correct = True
     if intent["confidence"] < 0.5:
@@ -85,9 +87,8 @@ def match_response(pattern, output, context):
                 "intent": None,
                 "confidence": 1 - intent["confidence"],
             }
+    intent["correct"] = correctResponeOutput
     
-    correctResponeOutput = get_isCorrectResponse(output)
-    print("JAUME MODIFIED line 77: " + str(correct))
     print(f"<MATCH>: {intent} <-> {pattern}")
     if "correct" in pattern:
         matches = matches and pattern["correct"] == correctResponeOutput
