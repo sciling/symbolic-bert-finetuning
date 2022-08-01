@@ -87,11 +87,13 @@ def match_response(pattern, output, context):
                 "intent": None,
                 "confidence": 1 - intent["confidence"],
             }
+    print(correctResponeOutput)
     intent["correct"] = correctResponeOutput
     
     print(f"<MATCH>: {intent} <-> {pattern}")
     if "correct" in pattern:
         matches = matches and pattern["correct"] == correctResponeOutput
+        return matches
         
     if "intent" in pattern:
         matches = matches and intent["intent"] == pattern["intent"]
@@ -124,8 +126,8 @@ def get_text(output):
 def get_generic(output):
     generic = output["generic"]
 
-    if "suggestions" in generic[0]:
-        generic = generic["suggestions"][0]["output"]["generic"]
+    if "suggestions" in output["generic"][0]:
+        generic = output["generic"][0]["suggestions"][0]["output"]["generic"]
 
     return generic
 
@@ -140,17 +142,17 @@ def get_responses(output):
 
 lastResponse = None
 def get_isCorrectResponse(output):
-    print("JAUME: " + str(output["generic"]))
     actualResponse = None
     for i in range(len(output["generic"])):
         if "text" in output["generic"][len(output["generic"])-i-1]:
             actualResponse = output["generic"][len(output["generic"])-i-1]["text"]
             break
 
-    confidence = output["intents"][0]["confidence"] > 0.5 or output["entities"]
+    confidence = output["intents"][0]["confidence"] > 0.5 or output["entities"] != []
     print("Correct Respone: ", output["intents"][0]["confidence"], lastResponse, actualResponse)
     correct = confidence and lastResponse != actualResponse
     globals()["lastResponse"] = actualResponse
+    print(confidence,lastResponse,actualResponse)
     return correct
 
 def response_to_str(response):
