@@ -130,26 +130,6 @@ dialogs:
           intent: onboarding
 
   #endregion
-
-  - name: test
-    initial_context: {}
-    steps:
-      - query: ¡Comenzar!
-        response:
-          confidence: 0.7
-          intent: welcome
-      - query: vamos
-        response:
-          confidence: 0.7
-          intent: onboarding
-      - query: '170'
-        response:
-          confidence: 0.7
-          intent: entity_recognition
-          entities:
-            - name: sys-number
-              value: '170'
-              confidence: 0.7
               
   #region Extreme Chat Tests
   - name: extreme_test_1
@@ -175,7 +155,25 @@ dialogs:
   #endregion
 
   #region Normal Chat Tests
-
+  - name: normal_test_1
+    initial_context: {}
+    steps:
+      - query: ¡Comenzar!
+        response:
+          confidence: 0.7
+          intent: welcome
+      - query: vamos
+        response:
+          confidence: 0.7
+          intent: onboarding
+      - query: '170'
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '170'
+              confidence: 0.7
   #endregion
   - name: dont_understand
     initial_context: {}
