@@ -67,7 +67,9 @@ def get_assistant_service(config_fn="config.json"):
     return assistant_service, config
 
 
-def match_response(pattern, output, context):
+def not_match_response(pattern, output, context):
+    match_exit_status = ""
+    match_error_info = ""
     matches = True
     if not pattern:
         return matches
@@ -87,21 +89,30 @@ def match_response(pattern, output, context):
                 "intent": None,
                 "confidence": 1 - intent["confidence"],
             }
-    print(correctResponeOutput)
+    print(f"<CORRECT>: {correctResponeOutput} \n")
     intent["correct"] = correctResponeOutput
     
     print(f"<MATCH>: {intent} <-> {pattern}")
-    if "correct" in pattern:
+
+    #pattern["correct"] = pattern.get("correct",True)
+    if "correct" in pattern and matches:
         matches = matches and pattern["correct"] == correctResponeOutput
-        return matches
+        if not matches and not match_exit_status:
+            match_exit_status = "\"correct\" doesn't match"
         
-    if "intent" in pattern:
+    if "intent" in pattern and matches:
         matches = matches and intent["intent"] == pattern["intent"]
+        if not matches and not match_exit_status:
+            match_exit_status = "\"intent\" doesn't match"
+            match_error_info = "Got: " + intent["intent"] + " and expected " + pattern["intent"]
 
-    if "confidence" in pattern:
+    if "confidence" in pattern and matches:
         matches = matches and intent["confidence"] >= pattern["confidence"]
+        if not matches and not match_exit_status:
+            match_exit_status = "\"confidence\" is too low"
+            match_error_info = "Got " + str(intent["confidence"]) + " and expected >= " + str(pattern["confidence"])
 
-    if "entities" in pattern:
+    if "entities" in pattern and matches:
         entities = {e["entity"]: e for e in output["entities"]}
         for pat in pattern["entities"]:
             if pat["name"] in entities:
@@ -111,10 +122,12 @@ def match_response(pattern, output, context):
                     matches = matches and entities[pat["name"]]["confidence"] >= pat["confidence"]
             else:
                 matches = False
-
+        if not matches and not match_exit_status:
+            match_exit_status = "\"entities\" doesn't match"
     matches = matches and context is not None
-
-    return matches
+    if not matches and not match_exit_status:
+            match_exit_status = "\"context\" doesn't match"
+    return match_exit_status, match_error_info
 
 
 def get_text(output):
@@ -149,10 +162,8 @@ def get_isCorrectResponse(output):
             break
 
     confidence = output["intents"][0]["confidence"] > 0.5 or output["entities"] != []
-    print("Correct Respone: ", output["intents"][0]["confidence"], lastResponse, actualResponse)
     correct = confidence and lastResponse != actualResponse
     globals()["lastResponse"] = actualResponse
-    print(confidence,lastResponse,actualResponse)
     return correct
 
 def response_to_str(response):
@@ -205,7 +216,7 @@ def run_entity_test(assistant_service, assistant_id, uuid, entity, test):
                 json.dump(resp, file, indent=2, ensure_ascii=False)
 
             output = resp["output"]
-            print(f"<ENTITIES>: {', '.join([e['entity'] + ':' + e['value'] + ':' + str(e['confidence']) for e in output['entities']])}")
+            print(f"<OUTPUT ENTITIES>: {', '.join([e['entity'] + ':' + e['value'] + ':' + str(e['confidence']) for e in output['entities']])}")
 
             has_intent = output["intents"][0]["confidence"] >= 0.5
             entity_value = next((e for e in output["entities"] if e["entity"] == entity), None)
@@ -297,11 +308,12 @@ def run_test(assistant_service, assistant_id, uuid, test):
         print(f"<ENTITIES>: {', '.join([e['entity'] + ':' + e['value'] + ':' + str(e['confidence']) for e in output['entities']])}")
 
         print("\n")
-        if not match_response(step.get("response", None), output, context):
+        not_match_result, error_msg = not_match_response(step.get("response", None), output, context)
+        if bool(not_match_result):
             print("\n")
-            error = f"error in step {step_n} with query '{minput}'"
+            error = f"error: {not_match_result}, {error_msg}. In step {step_n} with query '{minput}'"
             break
-        print("\n")
+        print("---------------------------------------------------------------------\n")
 
     # if we catch a "bye" then exit after deleting the session
     response = assistant_service.delete_session(assistant_id=assistant_id, session_id=session_id).get_result()

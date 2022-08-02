@@ -152,6 +152,645 @@ dialogs:
             - name: sys-number
               value: '0'
               confidence: 0.7
+      - query: '170'
+        response:
+          correct: true
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '170'
+              confidence: 0.7
+  
+  - name: extreme_test_2
+    initial_context: {}
+    steps:
+      - query: ¡Comenzar!
+        response:
+          confidence: 0.7
+          intent: welcome
+      - query: hacer onboarding
+        response:
+          confidence: 0.7
+          intent: onboarding
+      - query: '0'
+        response:
+          correct: false
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '0'
+              confidence: 0.7
+      - query: '300'
+        response:
+          correct: false
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '300'
+              confidence: 0.7
+      - query: '170'
+        response:
+          correct: true
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '170'
+              confidence: 0.7
+      - query: '0'
+        response:
+          correct: false
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '0'
+              confidence: 0.7
+      - query: '1000'
+        response:
+          correct: false
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '1000'
+              confidence: 0.7
+      - query: '70'
+        response:
+          correct: true
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '70'
+              confidence: 0.7
+      - query: '0'
+        response:
+          correct: false
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '0'
+              confidence: 0.7
+      - query: '500'
+        response:
+          confidence: 0.7
+          correct: false
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '500'
+              confidence: 0.7
+      - query: '70'
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '70'
+              confidence: 0.7
+      - query: '0'
+        response:
+          confidence: 0.7
+          correct: false
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '0'
+              confidence: 0.7
+      - query: '500'
+        response:
+          confidence: 0.7
+          correct: false
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '500'
+              confidence: 0.7
+      - query: '100'
+        response:
+          confidence: 0.7
+          correct: true
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '100'
+              confidence: 0.7
+      - query: no soy vegano
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: estados_fisiologicos
+              value: No, ninguna
+              confidence: 0.7
+            - name: tipo_dieta
+              value: No, mi dieta no tiene ninguna particularidad
+              confidence: 0.7
+            - name: bool
+              value: 'No'
+              confidence: 0.7
+            - name: enfermedad
+              value: Ninguna
+              confidence: 0.7
+            - name: tipo_dieta
+              value: Dieta vegana
+              confidence: 0.7
+  
+  - name: extreme_test_3
+    initial_context: {}
+    steps:
+      - query: ¡Comenzar!
+        response:
+          confidence: 0.7
+          intent: welcome
+      - query: hacer onboarding
+        response:
+          confidence: 0.7
+          intent: onboarding
+      - query: 1,7 metros
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '1.7'
+              confidence: 0.7
+      - query: '180'
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '180'
+              confidence: 0.7
+      - query: 150 libras
+        response:
+          confidence: 0.7
+          correct: true
+          intent: entity_recognition
+          entities:
+            - name: sys-currency
+              value: '68.038'
+              confidence: 0.7
+
+  - name: extreme_test_4
+    initial_context: {}
+    steps:
+      - query: ¡Comenzar!
+        response:
+          confidence: 0.7
+          intent: welcome
+      - query: hacer onboarding
+        response:
+          confidence: 0.7
+          intent: onboarding
+      - query: 1,7 metros
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '1.7'
+              confidence: 0.7
+      - query: '180'
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '180'
+              confidence: 0.7
+      - query: 150 lb
+        response:
+          confidence: 0.7
+          correct: false
+          intent: entity_recognition
+          entities:
+            - name: sys-currency
+              value: '68.038'
+              confidence: 0.7
+
+  - name: extreme_test_5
+    initial_context: {}
+    steps:
+      - query: ¡Comenzar!
+        response:
+          confidence: 0.7
+          intent: welcome
+      - query: hacer onboarding
+        response:
+          confidence: 0.7
+          intent: onboarding
+      - query: 170,302 kg
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '170.302'
+              confidence: 0.7
+
+  - name: extreme_test_6
+    initial_context: {}
+    steps:
+      - query: ¡Comenzar!
+        response:
+          confidence: 0.7
+          intent: welcome
+      - query: hacer onboarding
+        response:
+          confidence: 0.7
+          intent: onboarding
+      - query: '170'
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '170'
+              confidence: 0.7
+      - query: '100'
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '100'
+              confidence: 0.7
+      - query: '100'
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '100'
+              confidence: 0.7
+      - query: '120'
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '120'
+              confidence: 0.7
+      - query: No, mi dieta no tiene ninguna particularidad
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: estados_fisiologicos
+              value: No, ninguna
+              confidence: 0.7
+            - name: bool
+              value: 'No'
+              confidence: 0.7
+            - name: enfermedad
+              value: Ninguna
+              confidence: 0.7
+            - name: tipo_dieta
+              value: No, mi dieta no tiene ninguna particularidad
+              confidence: 0.7
+            - name: estados_fisiologicos
+              value: No, ninguna
+              confidence: 0.7
+            - name: bool
+              value: 'No'
+              confidence: 0.7
+            - name: enfermedad
+              value: Ninguna
+              confidence: 0.7
+            - name: estados_fisiologicos
+              value: No, ninguna
+              confidence: 0.7
+            - name: enfermedad
+              value: Ninguna
+              confidence: 0.7
+      - query: No:Si
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: estados_fisiologicos
+              value: No, ninguna
+              confidence: 0.7
+            - name: tipo_dieta
+              value: No, mi dieta no tiene ninguna particularidad
+              confidence: 0.7
+            - name: bool
+              value: 'No'
+              confidence: 0.7
+            - name: enfermedad
+              value: Ninguna
+              confidence: 0.7
+            - name: bool
+              value: Si
+              confidence: 0.7
+      - query: ninguna de las anteriores
+        response:
+          confidence: 0.7
+          correct: true
+          intent: entity_recognition
+          entities:
+            - name: estados_fisiologicos
+              value: No, ninguna
+              confidence: 0.7
+            - name: tipo_dieta
+              value: No, mi dieta no tiene ninguna particularidad
+              confidence: 0.7
+            - name: enfermedad
+              value: Ninguna
+              confidence: 0.7
+  
+  - name: extreme_test_7
+    initial_context: {}
+    steps:
+      - query: ¡Comenzar!
+        response:
+          confidence: 0.7
+          intent: welcome
+      - query: hacer onboarding
+        response:
+          confidence: 0.7
+          intent: onboarding
+      - query: '170'
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '170'
+              confidence: 0.7
+      - query: '100'
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '100'
+              confidence: 0.7
+      - query: '100'
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '100'
+              confidence: 0.7
+      - query: '120'
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '120'
+              confidence: 0.7
+      - query: No, mi dieta no tiene ninguna particularidad
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: estados_fisiologicos
+              value: No, ninguna
+              confidence: 0.7
+            - name: bool
+              value: 'No'
+              confidence: 0.7
+            - name: enfermedad
+              value: Ninguna
+              confidence: 0.7
+            - name: tipo_dieta
+              value: No, mi dieta no tiene ninguna particularidad
+              confidence: 0.7
+            - name: estados_fisiologicos
+              value: No, ninguna
+              confidence: 0.7
+            - name: bool
+              value: 'No'
+              confidence: 0.7
+            - name: enfermedad
+              value: Ninguna
+              confidence: 0.7
+            - name: estados_fisiologicos
+              value: No, ninguna
+              confidence: 0.7
+            - name: enfermedad
+              value: Ninguna
+              confidence: 0.7
+      - query: No:Si
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: estados_fisiologicos
+              value: No, ninguna
+              confidence: 0.7
+            - name: tipo_dieta
+              value: No, mi dieta no tiene ninguna particularidad
+              confidence: 0.7
+            - name: bool
+              value: 'No'
+              confidence: 0.7
+            - name: enfermedad
+              value: Ninguna
+              confidence: 0.7
+            - name: bool
+              value: Si
+              confidence: 0.7
+      - query: huevos
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: alergia
+              value: Huevos
+              confidence: 0.7
+  
+  - name: extreme_test_8
+    initial_context: {}
+    steps:
+      - query: ¡Comenzar!
+        response:
+          confidence: 0.7
+          intent: welcome
+      - query: hacer onboarding
+        response:
+          confidence: 0.7
+          intent: onboarding
+      - query: '170'
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '170'
+              confidence: 0.7
+      - query: '100'
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '100'
+              confidence: 0.7
+      - query: '100'
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '100'
+              confidence: 0.7
+      - query: '120'
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '120'
+              confidence: 0.7
+      - query: No, mi dieta no tiene ninguna particularidad
+        response:
+          confidence: 0.7
+          intent: faq_opinion_finalizar
+          entities:
+            - name: estados_fisiologicos
+              value: No, ninguna
+              confidence: 0.7
+            - name: bool
+              value: 'No'
+              confidence: 0.7
+            - name: enfermedad
+              value: Ninguna
+              confidence: 0.7
+            - name: tipo_dieta
+              value: No, mi dieta no tiene ninguna particularidad
+              confidence: 0.7
+            - name: estados_fisiologicos
+              value: No, ninguna
+              confidence: 0.7
+            - name: bool
+              value: 'No'
+              confidence: 0.7
+            - name: enfermedad
+              value: Ninguna
+              confidence: 0.7
+            - name: estados_fisiologicos
+              value: No, ninguna
+              confidence: 0.7
+            - name: enfermedad
+              value: Ninguna
+              confidence: 0.7
+      - query: No:Si
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: estados_fisiologicos
+              value: No, ninguna
+              confidence: 0.7
+            - name: tipo_dieta
+              value: No, mi dieta no tiene ninguna particularidad
+              confidence: 0.7
+            - name: bool
+              value: 'No'
+              confidence: 0.7
+            - name: enfermedad
+              value: Ninguna
+              confidence: 0.7
+            - name: bool
+              value: Si
+              confidence: 0.7
+      - query: frutos secos
+        response:
+          confidence: 0.7
+          correct: true
+          intent: entity_recognition
+          entities:
+            - name: alergia
+              value: Frutos de cáscara
+              confidence: 0.7
+  
+  - name: extreme_test_9
+    initial_context: {}
+    steps:
+      - query: ¡Comenzar!
+        response:
+          confidence: 0.7
+          intent: welcome
+      - query: hacer onboarding
+        response:
+          confidence: 0.7
+          intent: onboarding
+      - query: '180'
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '180'
+              confidence: 0.7
+      - query: '60'
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '60'
+              confidence: 0.7
+      - query: '70'
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '70'
+              confidence: 0.7
+      - query: '80'
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '80'
+              confidence: 0.7
+      - query: No, mi dieta no tiene ninguna particularidad
+        response:
+          confidence: 0.7
+          intent: faq_opinion_finalizar
+          entities:
+            - name: estados_fisiologicos
+              value: No, ninguna
+              confidence: 0.7
+            - name: bool
+              value: 'No'
+              confidence: 0.7
+            - name: enfermedad
+              value: Ninguna
+              confidence: 0.7
+            - name: tipo_dieta
+              value: No, mi dieta no tiene ninguna particularidad
+              confidence: 0.7
+            - name: estados_fisiologicos
+              value: No, ninguna
+              confidence: 0.7
+            - name: bool
+              value: 'No'
+              confidence: 0.7
+            - name: enfermedad
+              value: Ninguna
+              confidence: 0.7
+            - name: estados_fisiologicos
+              value: No, ninguna
+              confidence: 0.7
+            - name: enfermedad
+              value: Ninguna
+              confidence: 0.7
+
   #endregion
 
   #region Normal Chat Tests
@@ -175,69 +814,3 @@ dialogs:
               value: '170'
               confidence: 0.7
   #endregion
-  - name: dont_understand
-    initial_context: {}
-    steps:
-      - query: el trabajo del trilero
-        response:
-          intent:
-
-  - name: test_1
-    initial_context: {}
-    steps:
-      - query: ¡Comenzar!
-        response:
-          confidence: 0.7
-          intent: welcome
-      - query: hacer onboarding
-        response:
-          confidence: 0.7
-          intent: onboarding
-      - query: ciento setenta
-        response:
-          confidence: 0.7
-          intent: entity_recognition
-          entities:
-            - name: sys-number
-              value: '170'
-              confidence: 0.7
-      - query: '20'
-        response:
-          confidence: 0.7
-          intent: entity_recognition
-          entities:
-            - name: sys-number
-              value: '20'
-              confidence: 0.7
-      - query: '80'
-        response:
-          confidence: 0.7
-          intent: entity_recognition
-          entities:
-            - name: sys-number
-              value: '80'
-              confidence: 0.7
-      - query: '60'
-        response:
-          confidence: 0.7
-          intent: entity_recognition
-          entities:
-            - name: sys-number
-              value: '60'
-              confidence: 0.7
-      - query: 60 cm
-        response:
-          confidence: 0.7
-          intent: entity_recognition
-          entities:
-            - name: sys-number
-              value: '60'
-              confidence: 0.7
-      - query: noventa cm
-        response:
-          confidence: 0.7
-          intent: entity_recognition
-          entities:
-            - name: sys-number
-              value: '90'
-              confidence: 0.7

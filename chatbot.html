@@ -161,8 +161,12 @@
           step['response'] = res;
 
           if (data.output.entities.length) {
-            res.intent = 'entity_recognition';
-
+            if (data.output.intents.length){
+              res.intent = data.output.intents[0].intent;
+            }
+            else{
+              res.intent = 'entity_recognition';
+            }
             ent = data.output.entities[0];
             res.entities = data.output.entities.map((ent) => {
               return {
