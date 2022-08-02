@@ -101,10 +101,10 @@ def not_match_response(pattern, output, context):
             match_exit_status = "\"correct\" doesn't match"
         
     if "intent" in pattern and matches:
-        matches = matches and intent["intent"] == pattern["intent"]
+        matches = matches and str(intent["intent"]) == str(pattern["intent"])
         if not matches and not match_exit_status:
             match_exit_status = "\"intent\" doesn't match"
-            match_error_info = "Got: " + intent["intent"] + " and expected " + pattern["intent"]
+            match_error_info = "Got: " + str(intent["intent"]) + " and expected " + str(pattern["intent"])
 
     if "confidence" in pattern and matches:
         matches = matches and intent["confidence"] >= pattern["confidence"]
@@ -118,15 +118,19 @@ def not_match_response(pattern, output, context):
             if pat["name"] in entities:
                 if "value" in pat:
                     matches = matches and entities[pat["name"]]["value"] == pat["value"]
+                    if not matches and not match_exit_status:
+                        match_exit_status = "\"entities\" values don't match"
+                        match_error_info = "Got " + str(entities[pat["name"]]["value"]) + " and expected " + str(pat["value"])
                 if "confidence" in pat:
                     matches = matches and entities[pat["name"]]["confidence"] >= pat["confidence"]
+                    if not matches and not match_exit_status:
+                        match_exit_status = "\"entities\" confidence is too low"
+                        match_error_info = "Got " + str(entities[pat["name"]]["confidence"]) + " and expected >= " + str(pat["confidence"])
             else:
                 matches = False
-        if not matches and not match_exit_status:
-            match_exit_status = "\"entities\" doesn't match"
     matches = matches and context is not None
     if not matches and not match_exit_status:
-            match_exit_status = "\"context\" doesn't match"
+        match_exit_status = "\"context\" doesn't match, should be None"
     return match_exit_status, match_error_info
 
 
