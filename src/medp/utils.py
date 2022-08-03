@@ -154,4 +154,4 @@ class SearchEngine:
         index_sorted = torch.argsort(scores)
         top_scores = index_sorted[-nbest:]
 
-        return seq, desc, [(self.entities[i][1]['label'], scores[i].item(), self.entities[i][1]['label']) for i in top_scores]
+        return seq, desc, [(self.entities[i][1]['label'], scores[i].item(), self.entities[i][1]['description']) for i in top_scores]
