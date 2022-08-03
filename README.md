@@ -26,3 +26,7 @@ Describe text:
 ```bash
 poetry run src/bin/wn.py describe  "hummus con aceite de ólivA virgen" data/foods-wd.csv data/dish-wd.csv data/entities-wn.csv
 ```
+Search:
+```bash
+poetry run src/bin/wn.py search --db-fn food-db.json "arroz de pollo y conejo"
+```
