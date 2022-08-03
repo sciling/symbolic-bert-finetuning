@@ -3088,6 +3088,17 @@ beautifulsoup4 = "*"
 requests = ">=2.0.0,<3.0.0"
 
 [[package]]
+name = "wikipedia-api"
+version = "0.5.4"
+description = "Python Wrapper for Wikipedia"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+requests = "*"
+
+[[package]]
 name = "wrapt"
 version = "1.12.1"
 description = "Module for decorators, wrappers and monkey patching."
@@ -3118,7 +3129,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "~3.10"
-content-hash = "e9cd9c80b492f1bb970a9dccbf4b8e82911e6911139d8fc9ec585791fcffa8b3"
+content-hash = "56282d2beed7fc212638e424698123002f351da4a1d98deaaf410d5ee9aa63e6"
 
 [metadata.files]
 anyio = []
@@ -4502,6 +4513,9 @@ werkzeug = [
 ]
 wikipedia = [
     {file = "wikipedia-1.4.0.tar.gz", hash = "sha256:db0fad1829fdd441b1852306e9856398204dc0786d2996dd2e0c8bb8e26133b2"},
+]
+wikipedia-api = [
+    {file = "Wikipedia-API-0.5.4.tar.gz", hash = "sha256:5173d4db641cdb78d96f2b052df2232bcdc00cf32a424c43402958a40f783992"},
 ]
 wrapt = [
     {file = "wrapt-1.12.1.tar.gz", hash = "sha256:b62ffa81fb85f4332a4f609cab4ac40709470da05643a082ec1eb88e6d9b97d7"},
