@@ -1,7 +1,44 @@
 import csv
+from typing import Iterable
+
 from unidecode import unidecode
 import spacy_stanza
 from inflector import Inflector, Spanish
+from sentence_transformers import SentenceTransformer
+from sentence_transformers import util
+import numpy as np
+import torch
+from tqdm import tqdm
+
+
+class EmbeddingsProcessor:
+    EMBEDDINGS_MODEL = None
+
+    @classmethod
+    def get_model(cls):
+        if cls.EMBEDDINGS_MODEL is None:
+            cls.EMBEDDINGS_MODEL = SentenceTransformer("paraphrase-distilroberta-base-v2")
+        return cls.EMBEDDINGS_MODEL
+
+    @classmethod
+    def pages_to_embeddings(cls, pages_content: Iterable[str]) -> torch.Tensor:
+        webs_sent_data = []
+        indexes = []
+        splitted_sentences = []
+        for i, page in enumerate(pages_content):
+            single_page = list(page.split("\n"))
+            indexes.append((i, len(single_page)))
+            splitted_sentences.extend(single_page)
+        web_embedding = cls.get_model().encode(splitted_sentences)
+        acumulator = 0
+        for i, number in indexes:
+            # web_embedding[acumulator: acumulator + number, :] are the phrases from a single document
+            single_web_embedding = np.mean(web_embedding[acumulator : acumulator + number, :], 0)
+            webs_sent_data.append(single_web_embedding)
+            acumulator += number
+        torch_vector = torch.from_numpy(np.array(webs_sent_data)).float()  # pylint: disable=no-member
+        web_embeddings = util.normalize_embeddings(torch_vector)
+        return web_embeddings
 
 
 class NLP:
@@ -31,22 +68,33 @@ class NLP:
     @classmethod
     def normalize(cls, sentence):
         seq = cls.nlp(sentence.lower())
-        return tuple([unidecode(cls.singularize_spacy_token(t)) for t in seq])
+        return [unidecode(cls.singularize_spacy_token(t)) for t in seq]
 
     @classmethod
     def singularize_spacy_token(cls, token):
         if token.lemma_ != token.text:
             return token.lemma_
-        else:
-            return cls.singularize(token.text)
+
+        return cls.singularize(token.text)
 
     @classmethod
-    def update_vocab(cls, vocab, vocab_fn):
+    def update_vocab(cls, vocab, vocab_fn, is_entity=False):
         with open(vocab_fn) as file:
             csvreader = csv.reader(file, delimiter=',', quotechar='"')
-            for row in csvreader:
-                token = '_'.join(cls.normalize(row[0]))
-                vocab[token] = row[1]
+            rows = list(csvreader)
+            for row in tqdm(rows):
+                res = {
+                    'description': row[1],
+                    'embedding': EmbeddingsProcessor.pages_to_embeddings([row[1]])[0].tolist(),
+                }
+
+                for num, alt in enumerate([row[0]] + row[2:]):
+                    token = '_'.join(cls.normalize(alt))
+                    if token not in vocab:
+                        vocab[token] = {'label': alt}
+                        vocab[token].update(res)
+                        if num == 0 and is_entity:
+                            vocab[token]['is_entity'] = True
                 # print(f"'{row[0]}' -> vocab[{token}] = {row[1][:80]}")
         return vocab
 

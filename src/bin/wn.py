@@ -33,7 +33,7 @@ from nltk.util import ngrams
 from inflector import Inflector, Spanish
 from ruamel.yaml import YAML
 from ruamel.yaml.representer import RoundTripRepresenter
-from medp.utils import NLP
+from medp.utils import NLP, EmbeddingsProcessor
 
 
 warnings.filterwarnings("ignore")
@@ -538,6 +538,19 @@ def describe(sentence: str, vocab_fns: List[Path]):
         json.dump(vocab, file, indent=2, ensure_ascii=False)
 
     print(NLP.describe(sentence, vocab))
+
+
+@app.command()
+def create_db(entities_fn: Path, vocab_fns: List[Path], save_fn: Path = typer.Option(None)):
+    vocab = {}
+
+    NLP.update_vocab(vocab, entities_fn, is_entity=True)
+
+    for vocab_fn in vocab_fns:
+        NLP.update_vocab(vocab, vocab_fn)
+
+    with open(save_fn, 'w') as file:
+        json.dump(vocab, file, indent=2, ensure_ascii=False)
 
 
 if __name__ == "__main__":
