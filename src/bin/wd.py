@@ -4,6 +4,7 @@ import re
 import sys
 import csv
 import json
+import time
 from queue import Queue
 from pathlib import Path
 from typing import List
@@ -113,6 +114,41 @@ wp_aliases = {
 }
 
 
+def get_page_info(wiki, term, path):
+    if isinstance(term, str):
+        print(f"SEARCHING: {term} from {path}")
+        page = wiki.page(term)
+    else:
+        print(f"PROCESSING: {term.title} from {path}")
+        page = term
+        term = term.title
+
+    doc = None
+    if page.exists():
+        if 'en' in page.langlinks:
+            description = f"{page.langlinks['en'].summary}"
+        else:
+            description = ''
+
+        if description:
+            doc = {
+                'label': wp_pars_re.sub('', term),
+                'description': description,
+                'path': path,
+            }
+
+    else:
+        print(f"ERROR: page '{term}' does not exist")
+
+    members = []
+    try:
+        members = page.categorymembers.values()
+    except KeyError:
+        pass
+
+    return term, doc, members
+
+
 def find_all_wp(terms: List[str], do_subcats: bool = False):
     wiki = wikipediaapi.Wikipedia('es')
 
@@ -124,45 +160,32 @@ def find_all_wp(terms: List[str], do_subcats: bool = False):
         aliases = wp_aliases.get(term, [term])
         for alias in aliases:
             if alias not in queued:
-                queue.put(alias)
+                queue.put((alias, 'Root'))
                 queued.add(alias)
 
     with tqdm(total=queue.qsize()) as pbar:
         while not queue.empty():  # and pbar.n < 10:
             pbar.update()
-            term = queue.get()
-            if isinstance(term, str):
-                print(f"SEARCHING: {term}")
-                page = wiki.page(term)
-            else:
-                print(f"PROCESSING: {term.title}")
-                page = term
-                term = term.title
-
-            if page.exists():
-                if 'en' in page.langlinks:
-                    description = page.langlinks['en'].summary
-                else:
-                    description = ''
-
-                if description:
-                    docs[term] = {
-                        'label': wp_pars_re.sub('', term),
-                        'description': description,
-                    }
-
+            term, path = queue.get()
+            retry = 5
+            while retry > 0:
                 try:
-                    for member in page.categorymembers.values():
-                        if member not in queued and (do_subcats or not member.title.startswith('Categoría:')):
-                            queue.put(member)
-                            queued.add(member)
-                    pbar.total = queue.qsize()
-                    pbar.refresh()
-                except KeyError:
-                    pass
-            else:
-                print(f"ERROR: page '{term}' does not exist")
+                    term, doc, members = get_page_info(wiki, term, path)
+                    if doc:
+                        docs[term] = doc
 
+                    for member in members:
+                        if member.title not in queued and (do_subcats or not member.title.startswith('Categoría:')):
+                            queue.put((member, f"{path} -> {term}"))
+                            queued.add(member.title)
+                    retry = 0
+                except requests.exceptions.ReadTimeout:
+                    retry -= 1
+                    time.sleep(30)
+            print(f"TERM: {term}:{queue.qsize()}")
+
+            pbar.total = queue.qsize()
+            pbar.refresh()
     return docs
 
 
@@ -177,7 +200,7 @@ def search(terms: List[str], do_subcats: bool = False, export_csv_fn: Path = typ
             for doc in docs.values():
                 if wd_id_re.match(doc['label']):
                     continue
-                row = [doc['label'], doc['description']]
+                row = [doc['label'], doc['description'], doc['path']]
                 csvwriter.writerow(row)
     else:
         json.dump(docs, sys.stdout, indent=2, ensure_ascii=False)
