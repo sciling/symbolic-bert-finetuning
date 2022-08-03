@@ -152,6 +152,6 @@ class SearchEngine:
         embedding = EmbeddingsProcessor.pages_to_embeddings([desc])[0]
         scores = cos(self.entity_embeddings, embedding)
         index_sorted = torch.argsort(scores)
-        top_scores = index_sorted[-nbest:]
+        top_scores = reversed(index_sorted[-nbest:])
 
         return seq, desc, [(self.entities[i][1]['label'], scores[i].item(), self.entities[i][1]['description']) for i in top_scores]

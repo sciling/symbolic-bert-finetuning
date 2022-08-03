@@ -549,10 +549,11 @@ def create_db(entities_fn: Path, vocab_fns: List[Path], save_fn: Path = typer.Op
 
 
 @app.command()
-def search(text: str, db_fn: Path = typer.Option(None)):
+def search(text: str, db_fn: Path = typer.Option(None), nbest: int = 4):
     searcher = SearchEngine(db_fn)
+    res = searcher.search(text, nbest)
 
-    print(json.dumps(searcher.search(text), indent=2, ensure_ascii=False))
+    print(json.dumps(res, indent=2, ensure_ascii=False))
 
 
 if __name__ == "__main__":

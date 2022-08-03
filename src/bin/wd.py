@@ -10,6 +10,7 @@ from urllib.parse import unquote
 
 import typer
 import wikipedia
+import wikipediaapi
 from wikipedia.exceptions import DisambiguationError, PageError
 import requests
 
