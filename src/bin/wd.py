@@ -148,7 +148,7 @@ def get_page_info(wiki, term, path):
     members = []
     try:
         members = page.categorymembers.values()
-    except KeyError:
+    except KeyError, requests.exceptions.JSONDecodeError:
         pass
 
     return term, doc, members
