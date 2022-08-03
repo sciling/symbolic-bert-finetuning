@@ -33,7 +33,7 @@ from nltk.util import ngrams
 from inflector import Inflector, Spanish
 from ruamel.yaml import YAML
 from ruamel.yaml.representer import RoundTripRepresenter
-from medp.utils import NLP, EmbeddingsProcessor
+from medp.utils import SearchEngine, NLP, EmbeddingsProcessor
 
 
 warnings.filterwarnings("ignore")
@@ -528,14 +528,9 @@ def find_all(synnames: List[str], export_csv_fn: Path = typer.Option(None)):
 
 
 @app.command()
-def describe(sentence: str, vocab_fns: List[Path]):
-    vocab = {}
-
-    for vocab_fn in vocab_fns:
-        NLP.update_vocab(vocab, vocab_fn)
-
-    with open('cached-vocab.json', 'w') as file:
-        json.dump(vocab, file, indent=2, ensure_ascii=False)
+def describe(sentence: str, db_fn: Path = typer.Option(None)):
+    with open(db_fn) as file:
+        vocab = json.load(file)
 
     print(NLP.describe(sentence, vocab))
 
@@ -551,6 +546,13 @@ def create_db(entities_fn: Path, vocab_fns: List[Path], save_fn: Path = typer.Op
 
     with open(save_fn, 'w') as file:
         json.dump(vocab, file, indent=2, ensure_ascii=False)
+
+
+@app.command()
+def search(text: str, db_fn: Path = typer.Option(None)):
+    searcher = SearchEngine(db_fn)
+
+    print(json.dumps(searcher.search(text), indent=2, ensure_ascii=False))
 
 
 if __name__ == "__main__":

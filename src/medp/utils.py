@@ -1,3 +1,4 @@
+import json
 import csv
 from typing import Iterable
 
@@ -8,7 +9,10 @@ from sentence_transformers import SentenceTransformer
 from sentence_transformers import util
 import numpy as np
 import torch
+from torch.nn import CosineSimilarity
 from tqdm import tqdm
+
+cos = CosineSimilarity(dim=1, eps=1e-6)
 
 
 class EmbeddingsProcessor:
@@ -18,6 +22,10 @@ class EmbeddingsProcessor:
     def get_model(cls):
         if cls.EMBEDDINGS_MODEL is None:
             cls.EMBEDDINGS_MODEL = SentenceTransformer("paraphrase-distilroberta-base-v2")
+            if torch.cuda.is_available():
+                print(f"CUDA: {torch.cuda.get_device_name(0)}")
+            else:
+                print(f"CUDA: {torch.cuda.is_available()}")
         return cls.EMBEDDINGS_MODEL
 
     @classmethod
@@ -82,7 +90,7 @@ class NLP:
         with open(vocab_fn) as file:
             csvreader = csv.reader(file, delimiter=',', quotechar='"')
             rows = list(csvreader)
-            for row in tqdm(rows):
+            for row in tqdm(rows, desc=f"Loading '{vocab_fn}'"):
                 res = {
                     'description': row[1],
                     'embedding': EmbeddingsProcessor.pages_to_embeddings([row[1]])[0].tolist(),
@@ -103,7 +111,6 @@ class NLP:
         max_ngram_len = max([len(w.split('_')) for w in vocab])
         sentence = cls.normalize(sentence)
         total_words = len(sentence)
-        print(f"{sentence}: {total_words} {max_ngram_len}")
 
         seq = []
 
@@ -126,5 +133,25 @@ class NLP:
     @classmethod
     def describe(cls, sentence, vocab):
         seq = cls.tokenize(sentence, vocab)
-        description = '.\n'.join(vocab[w] for w in seq if w in vocab)
+        description = '.\n'.join(vocab[w].get('description', '') for w in seq if w in vocab)
         return seq, description
+
+
+class SearchEngine:
+    def __init__(self, db_fn):
+        with open(db_fn) as file:
+            self.vocab = json.load(file)
+
+        self.entities = [(ent, data) for ent, data in self.vocab.items() if data.get('is_entity', False)]
+        self.entity_embeddings = torch.stack([torch.FloatTensor(data.get('embedding')) for ent, data in self.entities])
+
+    def search(self, sentence, nbest=4):
+        seq, desc = NLP.describe(sentence, self.vocab)
+        desc = f"{sentence}. {desc}"
+        print(f"{sentence}: {seq}: {desc}")
+        embedding = EmbeddingsProcessor.pages_to_embeddings([desc])[0]
+        scores = cos(self.entity_embeddings, embedding)
+        index_sorted = torch.argsort(scores)
+        top_scores = index_sorted[-nbest:]
+
+        return seq, desc, [(self.entities[i][1]['label'], scores[i].item(), self.entities[i][1]['label']) for i in top_scores]
