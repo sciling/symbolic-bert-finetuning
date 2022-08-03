@@ -107,13 +107,13 @@ def search_wikidata(terms: List[str], export_csv_fn: Path = typer.Option(None)):
 
 
 wp_aliases = {
-    'food': 'Categoría:Alimentos',
-    'sport': 'Categoría:Deportes',
-    'feeling': 'Categoría:Emociones',
+    'food': ['Categoría:Alimentos_por_tipo'],
+    'sport': ['Categoría:Deportes'],
+    'feeling': ['Categoría:Emociones'],
 }
 
 
-def find_all_wp(terms: List[str]):
+def find_all_wp(terms: List[str], do_subcats: bool = False):
     wiki = wikipediaapi.Wikipedia('es')
 
     docs = {}
@@ -121,10 +121,11 @@ def find_all_wp(terms: List[str]):
     queue = Queue()
 
     for term in terms:
-        term = wp_aliases.get(term, term)
-        if term not in queued:
-            queue.put(term)
-            queued.add(term)
+        aliases = wp_aliases.get(term, [term])
+        for alias in aliases:
+            if alias not in queued:
+                queue.put(alias)
+                queued.add(alias)
 
     with tqdm(total=queue.qsize()) as pbar:
         while not queue.empty():  # and pbar.n < 10:
@@ -152,7 +153,7 @@ def find_all_wp(terms: List[str]):
 
                 try:
                     for member in page.categorymembers.values():
-                        if member not in queued:
+                        if member not in queued and (do_subcats or not member.title.startswith('Categoría:')):
                             queue.put(member)
                             queued.add(member)
                     pbar.total = queue.qsize()
@@ -166,9 +167,9 @@ def find_all_wp(terms: List[str]):
 
 
 @app.command()
-def search(terms: List[str], export_csv_fn: Path = typer.Option(None)):
+def search(terms: List[str], do_subcats: bool = False, export_csv_fn: Path = typer.Option(None)):
     typer.echo(f"Processing terms {terms} in to '{export_csv_fn}' ...")
-    docs = find_all_wp(terms)
+    docs = find_all_wp(terms, do_subcats=do_subcats)
 
     if export_csv_fn:
         with open(export_csv_fn, "w") as file:
