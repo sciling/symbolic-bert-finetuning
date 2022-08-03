@@ -76,7 +76,7 @@ class NLP:
     @classmethod
     def normalize(cls, sentence):
         seq = cls.nlp(sentence.lower())
-        return [unidecode(cls.singularize_spacy_token(t)) for t in seq]
+        return [unidecode(cls.singularize_spacy_token(t)) for t in seq if not t.is_punct]
 
     @classmethod
     def singularize_spacy_token(cls, token):
@@ -98,7 +98,10 @@ class NLP:
 
                 for num, alt in enumerate([row[0]] + row[2:]):
                     token = '_'.join(cls.normalize(alt))
-                    if token not in vocab:
+                    if token in vocab:
+                        vocab[token]['description'] = vocab[token]['description'] + '. ' + res['description']
+                        vocab[token]['embedding'] = EmbeddingsProcessor.pages_to_embeddings([vocab[token]['description']])[0].tolist()
+                    else:
                         vocab[token] = {'label': alt}
                         vocab[token].update(res)
                         if num == 0 and is_entity:

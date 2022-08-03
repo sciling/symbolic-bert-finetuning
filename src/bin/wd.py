@@ -131,7 +131,10 @@ def get_page_info(wiki, term, path):
             langs = {}
 
         if 'en' in langs:
-            description = f"{langs['en'].summary}"
+            try:
+                description = f"{langs['en'].summary}"
+            except requests.exceptions.JSONDecodeError:
+                description = ''
         else:
             description = ''
 
