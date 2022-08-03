@@ -131,10 +131,7 @@ def get_page_info(wiki, term, path):
             langs = {}
 
         if 'en' in langs:
-            try:
-                description = f"{langs['en'].summary}"
-            except requests.exceptions.JSONDecodeError:
-                description = ''
+            description = f"{langs['en'].summary}"
         else:
             description = ''
 
@@ -187,7 +184,7 @@ def find_all_wp(terms: List[str], do_subcats: bool = False):
                             queue.put((member, f"{path} -> {term}"))
                             queued.add(member.title)
                     retry = 0
-                except requests.exceptions.ReadTimeout:
+                except (requests.exceptions.ReadTimeout, requests.exceptions.JSONDecodeError):
                     retry -= 1
                     time.sleep(30)
             print(f"TERM: {term}:{queue.qsize()}")
