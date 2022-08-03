@@ -3,9 +3,12 @@ name = "ibm_watson_test"
 version = "0.1.0"
 description = ""
 authors = ["Vicent Alabau <valabau@sciling.com>"]
+packages = [
+    { include = "medp", from = "src" },
+]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "~3.10"
 ibm-watson = "^6.0.0"
 "ruamel.yaml" = "^0.17.21"
 typer = "^0.4.1"
@@ -18,6 +21,12 @@ pyppeteer = "^1.0.2"
 hyper = "^0.7.0"
 nltk = "^3.7"
 multiwordnet = "^0.1.5"
+spacy-stanza = "^1.0.2"
+sentence-transformers = "^2.2.2"
+Inflector = "^3.0.1"
+wikipedia = "^1.4.0"
+torch = {url = "https://download.pytorch.org/whl/cu116/torch-1.12.0%2Bcu116-cp310-cp310-linux_x86_64.whl"}
+
 
 [tool.poetry.dev-dependencies]
 autopep8 = "==1.5.7"
@@ -60,7 +69,6 @@ aws-lambda-powertools = "==1.26.1"
 coloredlogs = "==15.0.1"
 simple-term-menu = "==1.4.1"
 eks = "==0.1.1"
-
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

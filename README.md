@@ -21,3 +21,8 @@ Convert template into watson assistant compatible json:
 ```bash
 poetry run src/bin/watool.py apply chatbots/cu2-contamos-contigo/sections/faq.yml --flatten --to-json
 ```
+
+Describe text:
+```bash
+poetry run src/bin/wn.py describe  "hummus con aceite de ólivA virgen" data/foods-wd.csv data/dish-wd.csv data/entities-wn.csv
+```

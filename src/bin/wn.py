@@ -12,22 +12,28 @@
 import warnings
 
 import csv
+import json
 from collections import Counter
 from collections import OrderedDict
 from collections import defaultdict
 from itertools import product
 from pathlib import Path
+from typing import List
+from functools import lru_cache
 
 import nltk
 import ruamel.yaml
 import typer
+import spacy_stanza
 
 from nltk.corpus import wordnet as wn
 from nltk.corpus.reader.wordnet import Synset  # pylint: disable=no-name-in-module
 from nltk.tokenize import word_tokenize
 from nltk.util import ngrams
+from inflector import Inflector, Spanish
 from ruamel.yaml import YAML
 from ruamel.yaml.representer import RoundTripRepresenter
+from medp.utils import NLP
 
 
 warnings.filterwarnings("ignore")
@@ -47,7 +53,17 @@ food_hyps = {"food.n.01", "food.n.02", "meal.n.01", "animal.n.01", "fungus.n.01"
 food_hyps.update({s.name() for s in wn.all_synsets("n") if s.name().startswith("edible_")})
 # we don't want oil.n.01 because that's also used for petroleum
 food_hyps.update({s.name() for s in wn.all_synsets("n") if "_oil" in s.name()})
-beverage_hyps = {"beverage.n.01"}
+
+aliases = {
+    'food': food_hyps,
+    'water': {
+        "drinking_water.n.01", "bottled_water.n.01", "mineral_water.n.01", "mineral_water.n.01", "soda_water.n.01", "soda_water.n.01", "soda_water.n.01", "seltzer.n.01",
+        "tea.n.01", "tea.n.05", "mate.n.09",
+    },
+    'other_drinks': {"soft_drink.n.01", 'alcohol.n.01'},
+    'sports': {"sport.n.01"},
+    'feelings': {"feeling.n.01", "temporary_state.n.01"},
+}
 
 
 @app.command()
@@ -82,6 +98,32 @@ def get_lemmas(syn, lang="spa"):
     return syn.lemmas(lang=lang)
 
 
+class LazyNlp:
+    INFLECTOR = None
+    NLP = None
+
+    @classmethod
+    def get_model(cls):
+        if cls.NLP is None:
+            cls.NLP = spacy_stanza.load_pipeline("es", processors="tokenize,lemma")
+        return cls.NLP
+
+    @classmethod
+    def get_inflector(cls):
+        if cls.INFLECTOR is None:
+            cls.INFLECTOR = Inflector(Spanish)
+        return cls.INFLECTOR
+
+    @classmethod
+    def nlp(cls, text):
+        return cls.get_model()(text)
+
+    @classmethod
+    def singularize(cls, text):
+        return cls.get_inflector().singularize(text)
+
+
+@lru_cache(maxsize=None)
 def get_syns(word):
     try:
         if isinstance(word, str):
@@ -89,7 +131,11 @@ def get_syns(word):
         else:
             syns = [word]
     except ValueError:
-        syns = wn.synsets(word.lower(), lang="spa")
+        singular = ' '.join([w.lemma_ for w in LazyNlp.nlp(word)])
+        if singular == word:
+            singular = ' '.join([LazyNlp.singularize(w.text) for w in LazyNlp.nlp(word)])
+        syns = list(set(wn.synsets(word.lower(), lang="spa") + wn.synsets(singular.lower(), lang="spa")))
+        # print(f"SING: {word} -> {singular} -> {syns}")
 
     return syns
 
@@ -113,7 +159,7 @@ def find_siblings(word, log=False):
             hyps = [lemma.name() for s in hyp.hyponyms() for lemma in get_lemmas(s)]
             res.extend(hyps)
             if log:
-                hyps = [f"{lemma.name()}({syn.name()})" for s in hyp.hyponyms() for lemma in get_lemmas(s)]
+                hyps = [f"{lemma.name()}({s.name()})" for s in hyp.hyponyms() for lemma in get_lemmas(s)]
                 typer.echo(f"{hyp} -> {hyps}")
     return res
 
@@ -182,7 +228,7 @@ def find_food_hypos(word, log=False):
     for syn in syns:
         hypos = list(syn.closure(lambda s: s.hyponyms()))
         res.update(hypos)
-        hypos = [f"{lemma.name()}({h.name()})" for h in hypos for lemma in h.lemmas(lang="spa") if not find_hypos(h) and find_foods_syns(h)]
+        hypos = sorted({f"{lemma.name()}({h.name()})" for h in hypos for lemma in h.lemmas(lang="spa") if not find_hypos(h) and find_foods_syns(h)})
         if log:
             typer.echo(f"{syn} -> {hypos}")
     return res
@@ -267,7 +313,7 @@ def get_ngram_syns(sentence, max_ngram=5):
             ngram = "_".join(sentence[i : i + n])
             if ngram in ignore_ngrams:
                 continue
-            syn = [s for s in wn.synsets(ngram, lang="spa") if find_foods_syns(s)]
+            syn = [s for s in get_syns(ngram) if find_foods_syns(s)]
             if syn:
                 advance = n
                 break
@@ -302,7 +348,7 @@ def generate_alternatives(alts):
 def get_food_alternatives(
     foods_fn: Path, default_foods_fn: Path = typer.Argument(None), do_hypos: bool = False,
     show_synsets: bool = False, show_definitions: bool = True, show_alternatives: bool = True,
-    export_ibm: bool = False
+    export_ibm: bool = False, export_csv_fn: Path = typer.Option(None)
 ):
 
     nltk.download("omw")
@@ -357,6 +403,12 @@ def get_food_alternatives(
             csvwriter = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             for food, data in doc.items():
                 csvwriter.writerow(['alimento_tipo', food] + list(set(data.get('alternatives', []) + data.get('hyponyms', []))))
+
+    elif export_csv_fn:
+        with open(export_csv_fn, "w") as file:
+            csvwriter = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            for food, data in doc.items():
+                csvwriter.writerow([food, '. '.join(data.get('definitions', {}).values())] + list(set(data.get('alternatives', []))))
 
     else:
         with open("food_alts.yaml", "w") as file:
@@ -447,6 +499,45 @@ def get_synsets_with_suffix(suffix: str):
 
     syns = [syn for syn in wn.all_synsets(lang="spa") if suffix in syn.name()]
     typer.echo(syns)
+
+
+@app.command()
+def find_all(synnames: List[str], export_csv_fn: Path = typer.Option(None)):
+    typer.echo(f"Processing {synnames}")
+    nltk.download("omw")
+
+    parent_syns = set()
+    for synname in synnames:
+        if synname in aliases:
+            parent_syns.update({wn.synset(synname) for synname in aliases[synname]})
+        else:
+            parent_syns.add(wn.synset(synname))
+
+    typer.echo(f"parent_syns: {parent_syns}")
+    syns = sorted([syn for syn in wn.all_synsets(lang="spa") if any([parent_syn in find_hyps(syn) for parent_syn in parent_syns])])
+    for syn in syns:
+        typer.echo(f"{syn}: {syn.definition()} {sorted({lm.name() for lm in get_lemmas(syn)})} <- {find_hyps(syn)}")
+
+    if export_csv_fn:
+        with open(export_csv_fn, "w") as file:
+            csvwriter = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            for syn in syns:
+                typer.echo(f"{syn}: {syn.definition()} {sorted({lm.name() for lm in get_lemmas(syn)})} <- {find_hyps(syn)}")
+                row = [syn.name(), syn.definition()] + sorted({lm.name() for lm in get_lemmas(syn)})
+                csvwriter.writerow(row)
+
+
+@app.command()
+def describe(sentence: str, vocab_fns: List[Path]):
+    vocab = {}
+
+    for vocab_fn in vocab_fns:
+        NLP.update_vocab(vocab, vocab_fn)
+
+    with open('cached-vocab.json', 'w') as file:
+        json.dump(vocab, file, indent=2, ensure_ascii=False)
+
+    print(NLP.describe(sentence, vocab))
 
 
 if __name__ == "__main__":
