@@ -52,6 +52,7 @@ class EmbeddingsProcessor:
 class NLP:
     INFLECTOR = None
     NLP = None
+    STOPWORDS = None
 
     @classmethod
     def get_model(cls):
@@ -76,7 +77,7 @@ class NLP:
     @classmethod
     def normalize(cls, sentence):
         seq = cls.nlp(sentence.lower())
-        return [unidecode(cls.singularize_spacy_token(t)) for t in seq if not t.is_punct]
+        return [unidecode(cls.singularize_spacy_token(t)) for t in seq if not t.is_punct and not t.is_stop]
 
     @classmethod
     def singularize_spacy_token(cls, token):
