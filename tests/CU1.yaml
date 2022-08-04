@@ -366,19 +366,11 @@ dialogs:
           confidence: 0.7
           correct: false
           intent: entity_recognition
-          entities:
-            - name: sys-currency
-              value: '150'
-              confidence: 0.7
       - query: 150 lb
         response:
           confidence: 0.7
           correct: false
           intent: entity_recognition
-          entities:
-            - name: sys-currency
-              value: '150'
-              confidence: 0.7
 
   #5 Testea reconocimiento de decimales + kg
   - name: extreme_test_5
@@ -767,6 +759,114 @@ dialogs:
               value: '150'
               confidence: 0.7
 
+  #11 Testea los rangos de ingesta de agua y si admite decimales
+  - name: extreme_test_11
+    initial_context: {}
+    steps:
+      - query: registrar agua
+        response:
+          confidence: 0.7
+          intent: Registrar_agua
+          entities:
+            - name: alimento_tipo
+              value: agua
+              confidence: 0.7
+      - query: '5'
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '5'
+              confidence: 0.7
+      - query: registrar agua
+        response:
+          confidence: 0.7
+          intent: Registrar_agua
+          entities:
+            - name: alimento_tipo
+              value: agua
+              confidence: 0.7
+      - query: '100000000'
+        response:
+          confidence: 0.7
+          correct: false
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '100000000'
+              confidence: 0.7
+      - query: registrar agua
+        response:
+          confidence: 0.7
+          intent: Registrar_agua
+          entities:
+            - name: alimento_tipo
+              value: agua
+              confidence: 0.7
+      - query: '-99'
+        response:
+          confidence: 0.7
+          correct: false
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '-99'
+              confidence: 0.7
+      - query: '0.5'
+        response:
+          confidence: 0.7
+          correct: false
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '0.5'
+              confidence: 0.7
+  
+  #12 Test de texto sin sentido
+  - name: extreme_test_12
+    initial_context: {}
+    steps:
+      - query: Texto sin sentido
+        response:
+          confidence: 0.7
+          correct: false
+          intent: faq_solo_texto
+      - query: Texto sin sentido
+        response:
+          confidence: 0.7
+          correct: false
+          intent: entity_recognition
+          entities:
+            - name: estados_fisiologicos
+              value: No, ninguna
+              confidence: 0.7
+            - name: tipo_dieta
+              value: No, mi dieta no tiene ninguna particularidad
+              confidence: 0.7
+      - query: comenzar
+        response:
+          confidence: 0.7
+          intent: welcome
+  
+  - name: extreme_test_13
+    initial_context: {}
+    steps:
+      - query: ¡Comenzar!
+        response:
+          confidence: 0.7
+          intent: welcome
+      - query: Texto sin sentido
+        response:
+          confidence: 0.7
+          correct: false
+          intent: faq_solo_texto
+      - query: ¡Adelante!
+        response:
+          confidence: 0.7
+          correct: true
+          intent: onboarding
+
   #endregion
 
   #region Normal Chat Tests
@@ -789,4 +889,426 @@ dialogs:
             - name: sys-number
               value: '170'
               confidence: 0.7
+
+  #2 Testea una conversación de 1ra fase con respuestas coerentes y variadas
+  - name: normal_test_2
+    initial_context: {}
+    steps:
+      - query: ¡Comenzar!
+        response:
+          confidence: 0.7
+          intent: welcome
+      - query: hacer onboarding
+        response:
+          confidence: 0.7
+          intent: onboarding
+      - query: '180'
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '180'
+              confidence: 0.7
+      - query: 100 kg
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '100'
+              confidence: 0.7
+      - query: '60'
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '60'
+              confidence: 0.7
+      - query: '70'
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '70'
+              confidence: 0.7
+      - query: '80'
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '80'
+              confidence: 0.7
+      - query: 'no'
+        response:
+          confidence: 0.7
+          intent: faq_opinion_finalizar
+          entities:
+            - name: estados_fisiologicos
+              value: No, ninguna
+              confidence: 0.7
+            - name: tipo_dieta
+              value: No, mi dieta no tiene ninguna particularidad
+              confidence: 0.7
+            - name: bool
+              value: 'No'
+              confidence: 0.7
+            - name: enfermedad
+              value: Ninguna
+              confidence: 0.7
+      - query: si
+        response:
+          confidence: 0.7
+          intent: faq_opinion_mas
+          entities:
+            - name: bool
+              value: Si
+              confidence: 0.7
+      - query: intolerancia a la lactosa
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: alergia
+              value: Leche
+              confidence: 0.7
+            - name: alimento_tipo
+              value: Lactosa
+              confidence: 0.7
+      - query: 'no'
+        response:
+          confidence: 0.7
+          intent: faq_opinion_finalizar
+          entities:
+            - name: estados_fisiologicos
+              value: No, ninguna
+              confidence: 0.7
+            - name: tipo_dieta
+              value: No, mi dieta no tiene ninguna particularidad
+              confidence: 0.7
+            - name: bool
+              value: 'No'
+              confidence: 0.7
+            - name: enfermedad
+              value: Ninguna
+              confidence: 0.7
+      - query: si, tengo diabetes tipo 2
+        response:
+          confidence: 0.7
+          intent: faq_restricciones_medicas_dieta
+          entities:
+            - name: bool
+              value: Si
+              confidence: 0.7
+            - name: enfermedad
+              value: Diabetes mellitus tipo 2
+              confidence: 0.7
+            - name: sys-number
+              value: '2'
+              confidence: 0.7
+      - query: tambien tengo osteoporosis
+        response:
+          confidence: 0.4
+          intent: faq_restricciones_medicas_dieta
+          entities:
+            - name: enfermedad
+              value: Osteoporosis
+              confidence: 0.7
+      - query: 'no'
+        response:
+          confidence: 0.7
+          intent: faq_opinion_finalizar
+          entities:
+            - name: estados_fisiologicos
+              value: No, ninguna
+              confidence: 0.7
+            - name: tipo_dieta
+              value: No, mi dieta no tiene ninguna particularidad
+              confidence: 0.7
+            - name: bool
+              value: 'No'
+              confidence: 0.7
+            - name: enfermedad
+              value: Ninguna
+              confidence: 0.7
+      - query: si
+        response:
+          confidence: 0.7
+          intent: faq_opinion_mas
+          entities:
+            - name: bool
+              value: Si
+              confidence: 0.7
+      - query: no, soy hombre
+        response:
+          confidence: 0.4
+          intent: faq_opinion_finalizar
+          entities:
+            - name: estados_fisiologicos
+              value: No, ninguna
+              confidence: 0.7
+            - name: tipo_dieta
+              value: No, mi dieta no tiene ninguna particularidad
+              confidence: 0.7
+            - name: bool
+              value: 'No'
+              confidence: 0.7
+            - name: enfermedad
+              value: Ninguna
+              confidence: 0.7
+      - query: 'no'
+        response:
+          confidence: 0.7
+          intent: faq_opinion_finalizar
+          entities:
+            - name: estados_fisiologicos
+              value: No, ninguna
+              confidence: 0.7
+            - name: tipo_dieta
+              value: No, mi dieta no tiene ninguna particularidad
+              confidence: 0.7
+            - name: bool
+              value: 'No'
+              confidence: 0.7
+            - name: enfermedad
+              value: Ninguna
+              confidence: 0.7
+      - query: si
+        response:
+          confidence: 0.7
+          intent: faq_opinion_mas
+          entities:
+            - name: bool
+              value: Si
+              confidence: 0.7
+      - query: no demasiado
+        response:
+          confidence: 0.4
+          intent: faq_opinion_finalizar
+          entities:
+            - name: estados_fisiologicos
+              value: No, ninguna
+              confidence: 0.7
+            - name: tipo_dieta
+              value: No, mi dieta no tiene ninguna particularidad
+              confidence: 0.7
+            - name: bool
+              value: 'No'
+              confidence: 0.7
+            - name: enfermedad
+              value: Ninguna
+              confidence: 0.7
+      - query: muy poco
+        response:
+          correct: true
+          confidence: 0.7
+          intent: faq_opinion_finalizar
+          entities:
+            - name: bool
+              value: Si
+              confidence: 0.7
+
+  #3 Conversacion normal de 1ra fase
+  - name: normal_test_3
+    initial_context: {}
+    steps:
+      - query: ¡Comenzar!
+        response:
+          confidence: 0.7
+          intent: welcome
+      - query: hacer onboarding
+        response:
+          confidence: 0.7
+          intent: onboarding
+      - query: '180'
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '180'
+              confidence: 0.7
+      - query: '70'
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '70'
+              confidence: 0.7
+      - query: '60'
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '60'
+              confidence: 0.7
+      - query: '80'
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '80'
+              confidence: 0.7
+      - query: 'no'
+        response:
+          confidence: 0.7
+          intent: faq_opinion_finalizar
+          entities:
+            - name: estados_fisiologicos
+              value: No, ninguna
+              confidence: 0.7
+            - name: tipo_dieta
+              value: No, mi dieta no tiene ninguna particularidad
+              confidence: 0.7
+            - name: bool
+              value: 'No'
+              confidence: 0.7
+            - name: enfermedad
+              value: Ninguna
+              confidence: 0.7
+      - query: 'no'
+        response:
+          confidence: 0.7
+          intent: faq_opinion_finalizar
+          entities:
+            - name: estados_fisiologicos
+              value: No, ninguna
+              confidence: 0.7
+            - name: tipo_dieta
+              value: No, mi dieta no tiene ninguna particularidad
+              confidence: 0.7
+            - name: bool
+              value: 'No'
+              confidence: 0.7
+            - name: enfermedad
+              value: Ninguna
+              confidence: 0.7
+      - query: 'no'
+        response:
+          confidence: 0.7
+          intent: faq_opinion_finalizar
+          entities:
+            - name: estados_fisiologicos
+              value: No, ninguna
+              confidence: 0.7
+            - name: tipo_dieta
+              value: No, mi dieta no tiene ninguna particularidad
+              confidence: 0.7
+            - name: bool
+              value: 'No'
+              confidence: 0.7
+            - name: enfermedad
+              value: Ninguna
+              confidence: 0.7
+      - query: si
+        response:
+          confidence: 0.7
+          intent: faq_opinion_mas
+          entities:
+            - name: bool
+              value: Si
+              confidence: 0.7
+      - query: 'no'
+        response:
+          confidence: 0.7
+          intent: faq_opinion_finalizar
+          entities:
+            - name: estados_fisiologicos
+              value: No, ninguna
+              confidence: 0.7
+            - name: tipo_dieta
+              value: No, mi dieta no tiene ninguna particularidad
+              confidence: 0.7
+            - name: bool
+              value: 'No'
+              confidence: 0.7
+            - name: enfermedad
+              value: Ninguna
+              confidence: 0.7
+  
+  - name: normal_test_4
+    initial_context: {}
+    steps:
+      - query: Registar una ingesta
+        response:
+          confidence: 0.7
+          intent: Registrar_ingesta
+          entities:
+            - name: sys-number
+              value: '1'
+              confidence: 0.7
+      - query: hoy para cenar
+        response:
+          confidence: 0.11
+          intent: Registrar_ingesta
+          entities:
+            - name: sys-date
+              value: '2022-08-03'
+              confidence: 0.7
+            - name: toma
+              value: cena
+              confidence: 0.7
+
+  - name: normal_test_5
+    initial_context: {}
+    steps:
+      - query: Registar una ingesta
+        response:
+          confidence: 0.7
+          intent: Registrar_ingesta
+          entities:
+            - name: sys-number
+              value: '1'
+              confidence: 0.7
+      - query: comí un pollo el 8/3/2022 para cenar
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '1'
+              confidence: 0.7
+            - name: alimento_tipo
+              value: Pollo, pechuga, plancha
+              confidence: 0.7
+            - name: sys-date
+              value: '2022-03-08'
+              confidence: 0.7
+            - name: toma
+              value: cena
+              confidence: 0.7
+      - query: unidad
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: alimento_unidad
+              value: unidad
+              confidence: 0.7
+      - query: 'no'
+        response:
+          confidence: 0.7
+          intent: faq_opinion_finalizar
+          entities:
+            - name: estados_fisiologicos
+              value: No, ninguna
+              confidence: 0.7
+            - name: tipo_dieta
+              value: No, mi dieta no tiene ninguna particularidad
+              confidence: 0.7
+            - name: bool
+              value: 'No'
+              confidence: 0.7
+            - name: enfermedad
+              value: Ninguna
+              confidence: 0.7
+
+#✗ test for dialog 'normal_test_4' failed: error: "intent" doesn't match, Got: Registrar_ingesta and expected entity_recognition. In step 1 with query 'hoy para cenar'
+
   #endregion
