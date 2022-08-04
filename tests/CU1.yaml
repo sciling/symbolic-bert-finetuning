@@ -867,6 +867,28 @@ dialogs:
           correct: true
           intent: onboarding
 
+  - name: extreme_test_14
+    initial_context: {}
+    steps:
+      - query: registrar agua
+        response:
+          confidence: 0.7
+          intent: Registrar_agua
+          entities:
+            - name: alimento_tipo
+              value: agua
+              confidence: 0.7
+      - query: Texto sin sentido
+        response:
+          confidence: 0.7
+          correct: false
+          intent: faq_solo_texto
+      - query: Texto sin sentido
+        response:
+          confidence: 0.7
+          correct: false
+          intent: faq_solo_texto
+
   #endregion
 
   #region Normal Chat Tests

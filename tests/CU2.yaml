@@ -31,9 +31,78 @@ entities:
 
 dialogs:
 
-  - name: dont_understand
+
+  #region Welcome Tests
+  - name: bad_welcome_test_1
     initial_context: {}
     steps:
-      - query: el trabajo del trilero
+      - query: asdf
         response:
-          intent:
+          correct: false
+          confidence: 0.7
+          intent: None
+
+  - name: welcome_test_1
+    initial_context: {}
+    steps:
+      - query: ¡Comenzar!
+        response:
+          confidence: 0.7
+          intent: welcome
+  
+  - name: welcome_test_2
+    initial_context: {}
+    steps:
+      - query: comenzar
+        response:
+          confidence: 0.7
+          intent: welcome
+
+  - name: welcome_test_3
+    initial_context: {}
+    steps:
+      - query: empezar
+        response:
+          confidence: 0.7
+          intent: welcome
+          
+  - name: welcome_test_4
+    initial_context: {}
+    steps:
+      - query: hola
+        response:
+          confidence: 0.7
+          intent: welcome
+  
+  - name: welcome_test_5
+    initial_context: {}
+    steps:
+      - query: buenas
+        response:
+          confidence: 0.7
+          intent: welcome
+          
+  - name: welcome_test_6
+    initial_context: {}
+    steps:
+      - query: buenos dias
+        response:
+          confidence: 0.7
+          intent: welcome
+
+  - name: welcome_test_7
+    initial_context: {}
+    steps:
+      - query: hola
+        response:
+          confidence: 0.7
+          intent: welcome
+
+  #endregion
+
+  #region Normal Chat Tests
+  
+  #endregion
+  
+
+
