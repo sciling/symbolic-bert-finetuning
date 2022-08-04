@@ -108,7 +108,7 @@ def search_wikidata(terms: List[str], export_csv_fn: Path = typer.Option(None)):
 
 
 wp_aliases = {
-    'food': ['Categoría:Alimentos_por_tipo', 'Categoría:Platos_de_España'],
+    'food': ['Categoría:Alimentos_por_tipo', 'Categoría:Platos_de_España', 'Categoría:Gastronomía_de_España_por_comunidad_autónoma'],
     'sport': ['Categoría:Deportes'],
     'feeling': ['Categoría:Emociones'],
 }

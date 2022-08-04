@@ -1,3 +1,4 @@
+import re
 import json
 import csv
 from typing import Iterable
@@ -21,7 +22,8 @@ class EmbeddingsProcessor:
     @classmethod
     def get_model(cls):
         if cls.EMBEDDINGS_MODEL is None:
-            cls.EMBEDDINGS_MODEL = SentenceTransformer("paraphrase-distilroberta-base-v2")
+            # cls.EMBEDDINGS_MODEL = SentenceTransformer("paraphrase-distilroberta-base-v2")
+            cls.EMBEDDINGS_MODEL = SentenceTransformer("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
             if torch.cuda.is_available():
                 print(f"CUDA: {torch.cuda.get_device_name(0)}")
             else:
@@ -47,6 +49,9 @@ class EmbeddingsProcessor:
         torch_vector = torch.from_numpy(np.array(webs_sent_data)).float()  # pylint: disable=no-member
         web_embeddings = util.normalize_embeddings(torch_vector)
         return web_embeddings
+
+
+noise_re = re.compile(r"\s*Root -> .*$")
 
 
 class NLP:
@@ -92,22 +97,28 @@ class NLP:
             csvreader = csv.reader(file, delimiter=',', quotechar='"')
             rows = list(csvreader)
             for row in tqdm(rows, desc=f"Loading '{vocab_fn}'"):
+                desc = noise_re.sub('', '. '.join(row))
                 res = {
                     'description': row[1],
-                    'embedding': EmbeddingsProcessor.pages_to_embeddings([row[1]])[0].tolist(),
+                    'embedding': EmbeddingsProcessor.pages_to_embeddings([desc])[0].tolist(),
                 }
 
-                for num, alt in enumerate([row[0]] + row[2:]):
+                for num, alt in enumerate([row[0]]):  # enumerate([row[0]] + row[2:]):
                     token = '_'.join(cls.normalize(alt))
-                    if token in vocab:
-                        vocab[token]['description'] = vocab[token]['description'] + '. ' + res['description']
-                        vocab[token]['embedding'] = EmbeddingsProcessor.pages_to_embeddings([vocab[token]['description']])[0].tolist()
-                    else:
+                    if token not in vocab:
                         vocab[token] = {'label': alt}
                         vocab[token].update(res)
                         if num == 0 and is_entity:
                             vocab[token]['is_entity'] = True
+                    else:
+                        vocab[token]['description'] = desc
+                        vocab[token]['embedding'] = EmbeddingsProcessor.pages_to_embeddings([desc])[0].tolist()
+
                 # print(f"'{row[0]}' -> vocab[{token}] = {row[1][:80]}")
+        return vocab
+
+    @classmethod
+    def generate_embeddings(cls, vocab):
         return vocab
 
     @classmethod

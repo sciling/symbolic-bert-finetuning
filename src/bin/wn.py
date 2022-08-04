@@ -353,9 +353,15 @@ def get_food_alternatives(
 
     nltk.download("omw")
 
-    yaml = YAML(typ="safe")  # default, if not specfied, is 'rt' (round-trip)
-    with open(foods_fn) as file:
-        foods = yaml.load(file)
+    if foods_fn.suffix in ('.csv', ):
+        with open(foods_fn) as file:
+            csvreader = csv.reader(file, delimiter=',', quotechar='"')
+            foods = [r[1] for r in csvreader]
+
+    else:
+        yaml = YAML(typ="safe")  # default, if not specfied, is 'rt' (round-trip)
+        with open(foods_fn) as file:
+            foods = yaml.load(file)
 
     doc = {}
     for sentence in foods:
