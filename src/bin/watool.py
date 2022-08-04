@@ -78,7 +78,9 @@ def not_match_response(pattern, output, context):
 
     intent = output["intents"][0]
     correct = True
-    if intent["confidence"] < 0.5:
+    intentConfidence = intent["confidence"]
+    intentname = intent["intent"] 
+    if intent["confidence"] < pattern["confidence"]:
         if output["entities"]:
             intent = {
                 "intent": "entity_recognition",
@@ -99,18 +101,23 @@ def not_match_response(pattern, output, context):
         matches = matches and pattern["correct"] == correctResponeOutput
         if not matches and not match_exit_status:
             match_exit_status = "\"correct\" doesn't match"
-        
+        elif not pattern["correct"] and matches:
+            return match_exit_status, match_error_info
+
+    if "confidence" in pattern and matches:
+        matches = matches and intent["confidence"] >= pattern["confidence"]
+        if not matches and not match_exit_status:
+            match_exit_status = "the confidence of the intent \"" + str(intent["intent"]) + "\" is too low"
+            match_error_info = "Got " + str(intent["confidence"]) + " and expected >= " + str(pattern["confidence"])
+
     if "intent" in pattern and matches:
         matches = matches and str(intent["intent"]) == str(pattern["intent"])
         if not matches and not match_exit_status:
             match_exit_status = "\"intent\" doesn't match"
             match_error_info = "Got: " + str(intent["intent"]) + " and expected " + str(pattern["intent"])
-
-    if "confidence" in pattern and matches:
-        matches = matches and intent["confidence"] >= pattern["confidence"]
-        if not matches and not match_exit_status:
-            match_exit_status = "\"confidence\" is too low"
-            match_error_info = "Got " + str(intent["confidence"]) + " and expected >= " + str(pattern["confidence"])
+            if str(intent["intent"]) == "entity_recognition":
+                match_error_info+=f"\nIs recomended to check the CONFIDENCE! Greatest confidence is {intentConfidence} < {pattern['confidence']} for the intent {intentname}"
+                match_error_info+="\nso it was transformed into entity_recognition"
 
     if "entities" in pattern and matches:
         entities = {e["entity"]: e for e in output["entities"]}
@@ -135,15 +142,17 @@ def not_match_response(pattern, output, context):
 
 
 def get_text(output):
-    generic = get_generic(output)[0]
-    title = generic.get("title", "")
-    return "\n".join([title] + [response_to_str(o) for o in get_responses(output)])
+    generic = get_generic(output)
+    if generic != None and len(generic) > 0:
+        title = generic[0].get("title", "")
+        return "\n".join([title] + [response_to_str(o) for o in get_responses(output)])
+    return ""
 
 
 def get_generic(output):
     generic = output["generic"]
 
-    if "suggestions" in output["generic"][0]:
+    if len(generic) > 0 and "suggestions" in output["generic"][0]:
         generic = output["generic"][0]["suggestions"][0]["output"]["generic"]
 
     return generic
@@ -165,8 +174,9 @@ def get_isCorrectResponse(output):
             actualResponse = output["generic"][len(output["generic"])-i-1]["text"]
             break
 
-    confidence = output["intents"][0]["confidence"] > 0.5 or output["entities"] != []
-    correct = confidence and lastResponse != actualResponse
+    #confidence = output["intents"][0]["confidence"] > 0.5 or output["entities"] != []
+    confidence = True
+    correct = confidence and lastResponse != actualResponse and 'nodes_visited' in output['debug'] and "anything_else" in str(output['debug']['nodes_visited'][-1]['conditions'])
     globals()["lastResponse"] = actualResponse
     return correct
 
@@ -305,9 +315,10 @@ def run_test(assistant_service, assistant_id, uuid, test):
         #         print("\n\nplease use -actionmodule to define module to handle client actions")
         #         break
 
-        print(f"> user:   {minput}")
+        
         text = get_text(output)
-        print(f"> watson: {indent(text, prefix='          ').strip()}\n")
+        print(f"> watson: {indent(text, prefix='          ').strip()}")
+        print(f"> user:   {minput}\n")
         print(f"<INTENTS>: {', '.join([i['intent'] + ':' + str(i['confidence']) for i in output['intents']])}")
         print(f"<ENTITIES>: {', '.join([e['entity'] + ':' + e['value'] + ':' + str(e['confidence']) for e in output['entities']])}")
 
@@ -315,7 +326,7 @@ def run_test(assistant_service, assistant_id, uuid, test):
         not_match_result, error_msg = not_match_response(step.get("response", None), output, context)
         if bool(not_match_result):
             print("\n")
-            error = f"error: {not_match_result}, {error_msg}. In step {step_n} with query '{minput}'"
+            error = f"Error in step {step_n} with query '{minput}':\n{not_match_result}. {error_msg}."
             break
         print("---------------------------------------------------------------------\n")
 
