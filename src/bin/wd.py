@@ -114,7 +114,7 @@ wp_aliases = {
 }
 
 
-def get_page_info(wiki, term, path):
+def get_page_info(wiki, term, path, lang='es', desc_lang='en'):
     if isinstance(term, str):
         print(f"SEARCHING: {term} from {path}")
         page = wiki.page(term)
@@ -130,8 +130,10 @@ def get_page_info(wiki, term, path):
         except requests.exceptions.JSONDecodeError:
             langs = {}
 
-        if 'en' in langs:
-            description = f"{langs['en'].summary}"
+        if lang == desc_lang:
+            description = page.summary
+        elif desc_lang in langs:
+            description = f"{langs[desc_lang].summary}"
         else:
             description = ''
 
@@ -154,8 +156,8 @@ def get_page_info(wiki, term, path):
     return term, doc, members
 
 
-def find_all_wp(terms: List[str], do_subcats: bool = False):
-    wiki = wikipediaapi.Wikipedia('es')
+def find_all_wp(terms: List[str], do_subcats: bool = False, lang: str = 'es', desc_lang: str = 'en'):
+    wiki = wikipediaapi.Wikipedia(lang)
 
     docs = {}
     queued = set()
@@ -175,7 +177,7 @@ def find_all_wp(terms: List[str], do_subcats: bool = False):
             retry = 5
             while retry > 0:
                 try:
-                    term, doc, members = get_page_info(wiki, term, path)
+                    term, doc, members = get_page_info(wiki, term, path, lang, desc_lang)
                     if doc:
                         docs[term] = doc
 
@@ -195,9 +197,9 @@ def find_all_wp(terms: List[str], do_subcats: bool = False):
 
 
 @app.command()
-def search(terms: List[str], do_subcats: bool = False, export_csv_fn: Path = typer.Option(None)):
+def search(terms: List[str], do_subcats: bool = False, export_csv_fn: Path = typer.Option(None), lang: str = 'es', desc_lang: str = 'en'):
     typer.echo(f"Processing terms {terms} in to '{export_csv_fn}' ...")
-    docs = find_all_wp(terms, do_subcats=do_subcats)
+    docs = find_all_wp(terms, do_subcats=do_subcats, lang=lang, desc_lang=desc_lang)
 
     if export_csv_fn:
         with open(export_csv_fn, "w") as file:
