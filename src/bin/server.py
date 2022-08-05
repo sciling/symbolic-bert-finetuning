@@ -27,7 +27,7 @@ def check_credentials(credentials: HTTPBasicCredentials = Depends(security)):
 
 @app.get("/search/{entity}/{text}")
 def search(entity: str, text: str, nbest: int = 4, username: str = Depends(check_credentials)):
-    searcher = SearchEngine(f"{entity}-db.json")
+    searcher = SearchEngine(f"db/{entity}.json")
     res = searcher.search(text, nbest)
 
     return res

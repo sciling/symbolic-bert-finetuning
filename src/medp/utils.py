@@ -170,16 +170,25 @@ class NLP:
         return seq
 
     @classmethod
-    def summarize(cls, sentence, vocab):
-        seq, description = cls.describe(sentence, vocab)
-        print(f"DESC: {cls.normalize(description)}")
+    def summarize(cls, sentence, vocab, long_description=True):
+        seq, description = cls.describe(sentence, vocab, long_description=long_description)
         summary = {token for token in cls.tokenize(description, vocab) if token in vocab}
         return seq, summary
 
     @classmethod
-    def describe(cls, sentence, vocab):
-        seq = cls.tokenize(sentence, vocab)
-        description = '.\n'.join(vocab[w].get('description', '') for w in seq if w in vocab)
+    def summarizedb_entry(cls, entry, vocab, long_description=True):
+        entry['summary'] = list(sorted(cls.summarize(entry['label'], vocab, long_description)[1]))
+        desc = " ".join([w for token in entry['summary'] for w in token.split('_')])
+        entry['summaryEmbedding'] = EmbeddingsProcessor.pages_to_embeddings([desc])[0].tolist()
+        return entry
+
+    @classmethod
+    def describe(cls, sentence, vocab, long_description=False):
+        if long_description:
+            seq = ['_'.join(cls.normalize(token)) for token in cls.get_all_ngrams(sentence)]
+        else:
+            seq = cls.tokenize(sentence, vocab)
+        description = '. '.join(vocab[w].get('description', '') for w in seq if w in vocab)
         return seq, description
 
 
@@ -190,18 +199,38 @@ class SearchEngine:
 
         self.entities = [(ent, data) for ent, data in self.vocab.items() if data.get('is_entity', False)]
         self.entity_embeddings = torch.stack([torch.FloatTensor(data.get('embedding')) for ent, data in self.entities])
+        self.entity_summary_embeddings = torch.stack([torch.FloatTensor(data.get('summaryEmbedding', [])) for ent, data in self.entities])
 
-    def search(self, sentence, nbest=4):
-        seq, desc = NLP.describe(sentence, self.vocab)
+    def search(self, sentence, nbest=4, vocab=False):
+        embedding = None
+        if vocab:
+            entry = NLP.summarizedb_entry({'label': sentence}, vocab)
+            seq = entry['summary']
+            desc = " ".join([w for token in entry['summary'] for w in token.split('_')])
+            embedding = entry['summaryEmbedding']
+        else:
+            seq, desc = NLP.describe(sentence, self.vocab)
         desc = f"{sentence}. {desc}"
         print(f"{sentence}: {seq}: {desc}")
 
-        return seq, desc, self.literal_search(desc, nbest)
+        return {
+            'tokens': seq,
+            'description': desc,
+            'nbests': self.literal_search(desc, nbest, embedding=embedding),
+        }
 
-    def literal_search(self, desc, nbest=4):
-        embedding = EmbeddingsProcessor.pages_to_embeddings([desc])[0]
+    def literal_search(self, desc, nbest=4, embedding=None):
+        if not embedding:
+            embedding = EmbeddingsProcessor.pages_to_embeddings([desc])[0]
         scores = cos(self.entity_embeddings, embedding)
         index_sorted = torch.argsort(scores)
         top_scores = reversed(index_sorted[-nbest:])
 
-        return [(self.entities[i][1]['label'], scores[i].item(), self.entities[i][1]['description']) for i in top_scores]
+        return [
+            {
+                'entity': self.entities[i][1]['label'],
+                'score': scores[i].item(),
+                'description': self.entities[i][1]['description'],
+            }
+            for i in top_scores
+        ]
