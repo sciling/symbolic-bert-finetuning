@@ -1,1 +1,1 @@
-git lfs track db/**
+db/food-db.json filter=lfs diff=lfs merge=lfs -text
