@@ -25,9 +25,17 @@ entities:
     No, mi dieta no tiene ninguna particularidad:
       - nada
       - ninguna
+      - no soy vegano
       - no
       - soy normalito del montón
+      - si que como carne
       - lo que caiga
+    Cereza:
+      - picota
+      - cerezas
+    Centeno:
+      - cerales de centeno
+      - pan de centeno
 
 dialogs:
   #region Welcome Tests
@@ -90,7 +98,6 @@ dialogs:
 
   #endregion
   
-
   #region onboarding Tests
 
   - name: bad_onboarding_test_1
@@ -141,6 +148,10 @@ dialogs:
         response:
           confidence: 0.7
           intent: welcome
+      - query: Cuestionario inicial
+        response:
+          confidence: 0.7
+          intent: onboarding_comenzar
       - query: hacer onboarding
         response:
           confidence: 0.7
@@ -156,7 +167,6 @@ dialogs:
               confidence: 0.7
       - query: '170'
         response:
-          correct: true
           confidence: 0.7
           intent: entity_recognition
           entities:
@@ -172,6 +182,10 @@ dialogs:
         response:
           confidence: 0.7
           intent: welcome
+      - query: Cuestionario inicial
+        response:
+          confidence: 0.7
+          intent: onboarding_comenzar
       - query: hacer onboarding
         response:
           confidence: 0.7
@@ -312,6 +326,10 @@ dialogs:
         response:
           confidence: 0.7
           intent: welcome
+      - query: Cuestionario inicial
+        response:
+          confidence: 0.7
+          intent: onboarding_comenzar
       - query: hacer onboarding
         response:
           confidence: 0.7
@@ -349,6 +367,10 @@ dialogs:
         response:
           confidence: 0.7
           intent: welcome
+      - query: Cuestionario inicial
+        response:
+          confidence: 0.7
+          intent: onboarding_comenzar
       - query: hacer onboarding
         response:
           confidence: 0.7
@@ -380,6 +402,10 @@ dialogs:
         response:
           confidence: 0.7
           intent: welcome
+      - query: Cuestionario inicial
+        response:
+          confidence: 0.7
+          intent: onboarding_comenzar
       - query: hacer onboarding
         response:
           confidence: 0.7
@@ -401,6 +427,10 @@ dialogs:
         response:
           confidence: 0.7
           intent: welcome
+      - query: Cuestionario inicial
+        response:
+          confidence: 0.7
+          intent: onboarding_comenzar
       - query: hacer onboarding
         response:
           confidence: 0.7
@@ -520,6 +550,10 @@ dialogs:
         response:
           confidence: 0.7
           intent: welcome
+      - query: Cuestionario inicial
+        response:
+          confidence: 0.7
+          intent: onboarding_comenzar
       - query: hacer onboarding
         response:
           confidence: 0.7
@@ -613,6 +647,10 @@ dialogs:
         response:
           confidence: 0.7
           intent: welcome
+      - query: Cuestionario inicial
+        response:
+          confidence: 0.7
+          intent: onboarding_comenzar
       - query: hacer onboarding
         response:
           confidence: 0.7
@@ -709,6 +747,10 @@ dialogs:
         response:
           confidence: 0.7
           intent: welcome
+      - query: Cuestionario inicial
+        response:
+          confidence: 0.7
+          intent: onboarding_comenzar
       - query: hacer onboarding
         response:
           confidence: 0.7
@@ -738,6 +780,10 @@ dialogs:
         response:
           confidence: 0.7
           intent: welcome
+      - query: Cuestionario inicial
+        response:
+          confidence: 0.7
+          intent: onboarding_comenzar
       - query: hacer onboarding
         response:
           confidence: 0.7
@@ -771,22 +817,6 @@ dialogs:
             - name: alimento_tipo
               value: agua
               confidence: 0.7
-      - query: '5'
-        response:
-          confidence: 0.7
-          intent: entity_recognition
-          entities:
-            - name: sys-number
-              value: '5'
-              confidence: 0.7
-      - query: registrar agua
-        response:
-          confidence: 0.7
-          intent: Registrar_agua
-          entities:
-            - name: alimento_tipo
-              value: agua
-              confidence: 0.7
       - query: '100000000'
         response:
           confidence: 0.7
@@ -795,32 +825,6 @@ dialogs:
           entities:
             - name: sys-number
               value: '100000000'
-              confidence: 0.7
-      - query: registrar agua
-        response:
-          confidence: 0.7
-          intent: Registrar_agua
-          entities:
-            - name: alimento_tipo
-              value: agua
-              confidence: 0.7
-      - query: '-99'
-        response:
-          confidence: 0.7
-          correct: false
-          intent: entity_recognition
-          entities:
-            - name: sys-number
-              value: '-99'
-              confidence: 0.7
-      - query: '0.5'
-        response:
-          confidence: 0.7
-          correct: false
-          intent: entity_recognition
-          entities:
-            - name: sys-number
-              value: '0.5'
               confidence: 0.7
   
   #12 Test de texto sin sentido
@@ -889,6 +893,86 @@ dialogs:
           correct: false
           intent: faq_solo_texto
 
+  #15 Testea los rangos de ingesta de agua
+  - name: extreme_test_15
+    initial_context: {}
+    steps:
+      - query: registrar agua
+        response:
+          confidence: 0.7
+          intent: Registrar_agua
+          entities:
+            - name: alimento_tipo
+              value: agua
+              confidence: 0.7
+      - query: '-99'
+        response:
+          confidence: 0.7
+          correct: false
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '-99'
+              confidence: 0.7
+      - query: '0.5'
+        response:
+          confidence: 0.7
+          correct: false
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '0.5'
+              confidence: 0.7
+
+  #16 Testea si ingesta de agua admite decimales
+  - name: extreme_test_16
+    initial_context: {}
+    steps:
+      - query: registrar agua
+        response:
+          confidence: 0.7
+          intent: Registrar_agua
+          entities:
+            - name: alimento_tipo
+              value: agua
+              confidence: 0.7
+      - query: '0.5'
+        response:
+          confidence: 0.7
+          correct: true
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '0.5'
+              confidence: 0.7
+  
+    #16 Testea si ingesta de agua admite decimales
+  
+  #17 Testea si ingesta de agua admite datos en ml
+  - name: extreme_test_17
+    initial_context: {}
+    steps:
+      - query: registrar agua
+        response:
+          confidence: 0.7
+          intent: Registrar_agua
+          entities:
+            - name: alimento_tipo
+              value: agua
+              confidence: 0.7
+      - query: 200 ml
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '1'
+              confidence: 0.7
+            - name: alimento_unidad
+              value: ml
+              confidence: 0.7
+
+  
   #endregion
 
   #region Normal Chat Tests
@@ -920,6 +1004,10 @@ dialogs:
         response:
           confidence: 0.7
           intent: welcome
+      - query: Cuestionario inicial
+        response:
+          confidence: 0.7
+          intent: onboarding_comenzar
       - query: hacer onboarding
         response:
           confidence: 0.7
@@ -1141,6 +1229,10 @@ dialogs:
         response:
           confidence: 0.7
           intent: welcome
+      - query: Cuestionario inicial
+        response:
+          confidence: 0.7
+          intent: onboarding_comenzar
       - query: hacer onboarding
         response:
           confidence: 0.7
@@ -1331,6 +1423,285 @@ dialogs:
               value: Ninguna
               confidence: 0.7
 
-#✗ test for dialog 'normal_test_4' failed: error: "intent" doesn't match, Got: Registrar_ingesta and expected entity_recognition. In step 1 with query 'hoy para cenar'
+  #6 Registro de agua normal
+  - name: normal_test_6
+    initial_context: {}
+    steps:
+      - query: registrar agua
+        response:
+          confidence: 0.7
+          intent: Registrar_agua
+          entities:
+            - name: alimento_tipo
+              value: agua
+              confidence: 0.7
+      - query: '5'
+        response:
+          confidence: 0.7
+          correct: true
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '5'
+              confidence: 0.7
+
+  - name: normal_test_7
+    initial_context: {}
+    steps:
+      - query: como se registra comida
+        response:
+          confidence: 0.7
+          correct: true
+          intent: faq_como_registro_mis_comidas
+          entities:
+            - name: toma
+              value: comida
+              confidence: 0.7
+      - query: que preguntas respondere?
+        response:
+          confidence: 0.7
+          intent: faq_tipo_de_preguntas
+      - query: tengo que meter mas datos?
+        response:
+          confidence: 0.7
+          intent: faq_registro_mas_datos
+      - query: como va el registro de agua?
+        response:
+          confidence: 0.7
+          intent: faq_registro_agua
+          entities:
+            - name: alimento_tipo
+              value: agua
+              confidence: 0.7
+      - query: salir
+        response:
+          confidence: 0.7
+          intent: volver_inicio
+  
+  - name: normal_test_8
+    initial_context: {}
+    steps:
+      - query: ¿Qué podré hacer con el asistente?
+        response:
+          confidence: 0.7
+          intent: faq_iniciar
+      - query: ya tengo una vida sana
+        response:
+          confidence: 0.7
+          intent: faq_que_me_aporta_si_estoy_sano
+
+  - name: normal_test_9
+    initial_context: {}
+    steps:
+      - query: empezar a usar el asistente
+        response:
+          confidence: 0.7
+          intent: onboarding_comenzar
+      - query: hacer onboarding
+        response:
+          confidence: 0.7
+          intent: onboarding
+      - query: '180'
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '180'
+              confidence: 0.7
+      - query: '100'
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '100'
+              confidence: 0.7
+      - query: '100'
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '100'
+              confidence: 0.7
+      - query: '100'
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '100'
+              confidence: 0.7
+      - query: 'no'
+        response:
+          confidence: 0.7
+          intent: faq_opinion_finalizar
+          entities:
+            - name: estados_fisiologicos
+              value: No, ninguna
+              confidence: 0.7
+            - name: tipo_dieta
+              value: No, mi dieta no tiene ninguna particularidad
+              confidence: 0.7
+            - name: bool
+              value: 'No'
+              confidence: 0.7
+            - name: enfermedad
+              value: Ninguna
+              confidence: 0.7
+      - query: 'no'
+        response:
+          confidence: 0.7
+          intent: faq_opinion_finalizar
+          entities:
+            - name: estados_fisiologicos
+              value: No, ninguna
+              confidence: 0.7
+            - name: tipo_dieta
+              value: No, mi dieta no tiene ninguna particularidad
+              confidence: 0.7
+            - name: bool
+              value: 'No'
+              confidence: 0.7
+            - name: enfermedad
+              value: Ninguna
+              confidence: 0.7
+      - query: 'no'
+        response:
+          confidence: 0.7
+          intent: faq_opinion_finalizar
+          entities:
+            - name: estados_fisiologicos
+              value: No, ninguna
+              confidence: 0.7
+            - name: tipo_dieta
+              value: No, mi dieta no tiene ninguna particularidad
+              confidence: 0.7
+            - name: bool
+              value: 'No'
+              confidence: 0.7
+            - name: enfermedad
+              value: Ninguna
+              confidence: 0.7
+      - query: si
+        response:
+          confidence: 0.7
+          intent: faq_opinion_mas
+          entities:
+            - name: bool
+              value: Si
+              confidence: 0.7
+      - query: si
+        response:
+          confidence: 0.7
+          intent: faq_opinion_mas
+          entities:
+            - name: bool
+              value: Si
+              confidence: 0.7
+      - query: 'no'
+        response:
+          confidence: 0.7
+          intent: faq_opinion_finalizar
+          entities:
+            - name: estados_fisiologicos
+              value: No, ninguna
+              confidence: 0.7
+            - name: tipo_dieta
+              value: No, mi dieta no tiene ninguna particularidad
+              confidence: 0.7
+            - name: bool
+              value: 'No'
+              confidence: 0.7
+            - name: enfermedad
+              value: Ninguna
+              confidence: 0.7
+      - query: 'no'
+        response:
+          confidence: 0.7
+          intent: faq_opinion_finalizar
+          entities:
+            - name: estados_fisiologicos
+              value: No, ninguna
+              confidence: 0.7
+            - name: tipo_dieta
+              value: No, mi dieta no tiene ninguna particularidad
+              confidence: 0.7
+            - name: bool
+              value: 'No'
+              confidence: 0.7
+            - name: enfermedad
+              value: Ninguna
+              confidence: 0.7
+      - query: si
+        response:
+          confidence: 0.7
+          intent: faq_opinion_mas
+          entities:
+            - name: bool
+              value: Si
+              confidence: 0.7
+      - query: si
+        response:
+          confidence: 0.7
+          intent: faq_opinion_mas
+          entities:
+            - name: bool
+              value: Si
+              confidence: 0.7
+      - query: si
+        response:
+          confidence: 0.7
+          intent: faq_opinion_mas
+          entities:
+            - name: bool
+              value: Si
+              confidence: 0.7
+      - query: 'no'
+        response:
+          confidence: 0.7
+          intent: faq_opinion_finalizar
+          entities:
+            - name: estados_fisiologicos
+              value: No, ninguna
+              confidence: 0.7
+            - name: tipo_dieta
+              value: No, mi dieta no tiene ninguna particularidad
+              confidence: 0.7
+            - name: bool
+              value: 'No'
+              confidence: 0.7
+            - name: enfermedad
+              value: Ninguna
+              confidence: 0.7
+      - query: no hago ejercicio
+        response:
+          confidence: 0.7
+          intent: faq_opinion_finalizar
+          entities:
+            - name: estados_fisiologicos
+              value: No, ninguna
+              confidence: 0.7
+            - name: tipo_dieta
+              value: No, mi dieta no tiene ninguna particularidad
+              confidence: 0.7
+            - name: bool
+              value: 'No'
+              confidence: 0.7
+            - name: enfermedad
+              value: Ninguna
+              confidence: 0.7
+            - name: frecuencia_ejercicio
+              value: No realizo ejercicio
+              confidence: 0.7
+      - query: ¿Para qué sirve este asistente?
+        response:
+          confidence: 0.7
+          intent: faq_iniciar
+      - query: Empezar a utilizar el asistente
+        response:
+          confidence: 0.7
+          intent: onboarding_comenzar
 
   #endregion
