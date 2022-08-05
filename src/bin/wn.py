@@ -21,6 +21,7 @@ from pathlib import Path
 from typing import List
 from functools import lru_cache
 
+from tqdm import tqdm
 import nltk
 import ruamel.yaml
 import typer
@@ -555,6 +556,14 @@ def describe(sentence: str, db_fn: Path = typer.Option(None)):
 
 
 @app.command()
+def summarize(sentence: str, db_fn: Path = typer.Option(None)):
+    with open(db_fn) as file:
+        vocab = json.load(file)
+
+    print(NLP.summarize(sentence, vocab))
+
+
+@app.command()
 def create_db(entities_fn: Path, vocab_fns: List[Path], save_fn: Path = typer.Option(None)):
     vocab = {}
 
@@ -565,6 +574,23 @@ def create_db(entities_fn: Path, vocab_fns: List[Path], save_fn: Path = typer.Op
 
     with open(save_fn, 'w') as file:
         json.dump(vocab, file, indent=2, ensure_ascii=False)
+
+
+@app.command()
+def summarize_db(db_fn: Path, save_fn: Path = typer.Option(None), long_descriptions: bool = True):
+    with open(db_fn) as file:
+        db = json.load(file)
+
+    ignore_token = {'conservar'}
+    for token in ignore_token:
+        del db[token]
+
+    new_db = {}
+    for text, data in tqdm(db.items()):
+        new_db[text] = NLP.summarizedb_entry(data, db, long_descriptions)
+
+    with open(save_fn, 'w') as file:
+        json.dump(new_db, file, indent=2, ensure_ascii=False)
 
 
 @app.command()
