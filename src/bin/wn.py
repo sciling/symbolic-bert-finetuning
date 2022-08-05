@@ -555,6 +555,14 @@ def describe(sentence: str, db_fn: Path = typer.Option(None)):
 
 
 @app.command()
+def summarize(sentence: str, db_fn: Path = typer.Option(None)):
+    with open(db_fn) as file:
+        vocab = json.load(file)
+
+    print(NLP.summarize(sentence, vocab))
+
+
+@app.command()
 def create_db(entities_fn: Path, vocab_fns: List[Path], save_fn: Path = typer.Option(None)):
     vocab = {}
 

@@ -170,6 +170,13 @@ class NLP:
         return seq
 
     @classmethod
+    def summarize(cls, sentence, vocab):
+        seq, description = cls.describe(sentence, vocab)
+        print(f"DESC: {cls.normalize(description)}")
+        summary = {token for token in cls.tokenize(description, vocab) if token in vocab}
+        return seq, summary
+
+    @classmethod
     def describe(cls, sentence, vocab):
         seq = cls.tokenize(sentence, vocab)
         description = '.\n'.join(vocab[w].get('description', '') for w in seq if w in vocab)
