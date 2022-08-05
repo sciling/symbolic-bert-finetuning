@@ -12,6 +12,7 @@ import numpy as np
 import torch
 from torch.nn import CosineSimilarity
 from tqdm import tqdm
+from nltk.util import ngrams
 
 cos = CosineSimilarity(dim=1, eps=1e-6)
 
@@ -52,17 +53,19 @@ class EmbeddingsProcessor:
 
 
 noise_re = re.compile(r"\s*Root -> .*$")
+punct_re = re.compile(r"[^\w\s]*")
 
 
 class NLP:
     INFLECTOR = None
     NLP = None
-    STOPWORDS = None
+    STOPWORDS = {'tipo'}
 
     @classmethod
     def get_model(cls):
         if cls.NLP is None:
             cls.NLP = spacy_stanza.load_pipeline("es", processors="tokenize,lemma")
+            cls.NLP.Defaults.stop_words |= cls.STOPWORDS
         return cls.NLP
 
     @classmethod
@@ -85,6 +88,11 @@ class NLP:
         return [unidecode(cls.singularize_spacy_token(t)) for t in seq if not t.is_punct and not t.is_stop]
 
     @classmethod
+    def split(cls, sentence):
+        seq = cls.nlp(sentence.lower())
+        return [t.text for t in seq if not t.is_punct]
+
+    @classmethod
     def singularize_spacy_token(cls, token):
         if token.lemma_ != token.text:
             return token.lemma_
@@ -97,9 +105,10 @@ class NLP:
             csvreader = csv.reader(file, delimiter=',', quotechar='"')
             rows = list(csvreader)
             for row in tqdm(rows, desc=f"Loading '{vocab_fn}'"):
+                row[1] = row[1].split('###')[0]
                 desc = noise_re.sub('', '. '.join(row))
                 res = {
-                    'description': row[1],
+                    'description': desc,
                     'embedding': EmbeddingsProcessor.pages_to_embeddings([desc])[0].tolist(),
                 }
 
@@ -120,6 +129,21 @@ class NLP:
     @classmethod
     def generate_embeddings(cls, vocab):
         return vocab
+
+    @classmethod
+    def is_valid_ngram(cls, sentence):
+        seq = cls.nlp(sentence)
+        return not seq[0].is_stop and not seq[0].like_num and not seq[0].is_punct and not seq[-1].is_stop and not seq[-1].is_punct
+
+    @classmethod
+    def get_all_ngrams(cls, sentence, max_ngram=5):
+        sentence = [w for w in punct_re.sub('', sentence).lower().split(' ') if w]
+        ngs = set()
+        for n in range(1, max_ngram + 1):
+            fullset = [' '.join(ng) for ng in ngrams(sentence, n)]
+            valid = {n for n in fullset if cls.is_valid_ngram(n)}
+            ngs.update(valid)
+        return ngs
 
     @classmethod
     def tokenize(cls, sentence, vocab):
@@ -164,9 +188,13 @@ class SearchEngine:
         seq, desc = NLP.describe(sentence, self.vocab)
         desc = f"{sentence}. {desc}"
         print(f"{sentence}: {seq}: {desc}")
+
+        return seq, desc, self.literal_search(desc, nbest)
+
+    def literal_search(self, desc, nbest=4):
         embedding = EmbeddingsProcessor.pages_to_embeddings([desc])[0]
         scores = cos(self.entity_embeddings, embedding)
         index_sorted = torch.argsort(scores)
         top_scores = reversed(index_sorted[-nbest:])
 
-        return seq, desc, [(self.entities[i][1]['label'], scores[i].item(), self.entities[i][1]['description']) for i in top_scores]
+        return [(self.entities[i][1]['label'], scores[i].item(), self.entities[i][1]['description']) for i in top_scores]

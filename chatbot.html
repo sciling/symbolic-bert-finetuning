@@ -11,30 +11,39 @@
     <div class="container" style="margin:100px">
       <form action="javascript:setAction()">
         <h4>Selecciona un chatbot y escribe un token</h4>
-        <label>Selecciona un chatbot: </label>
-        <select class="form-control" id="chatbotName" style="padding-top:10px">
-          <option value="CU1"> CU1 </option>
-          <option value="CU2"> CU2 </option>
-          <option value="CU3"> CU3 </option>
-          <option value="CU4.1"> CU4.1 </option>
-          <option value="CU4.2"> CU4.2 </option>
-          <option value="CU4.3"> CU4.3 </option>
-          <option value="CU4.4"> CU4.4 </option>
-          <option value="CU5"> CU5 </option>
-        </select>
+        <div class="form-group">
+          <label>Selecciona un chatbot: </label>
+          <select class="form-control" id="chatbotName" style="padding-top:10px">
+            <option value="CU1"> CU1 </option>
+            <option value="CU2"> CU2 </option>
+            <option value="CU3"> CU3 </option>
+            <option value="CU4.1"> CU4.1 </option>
+            <option value="CU4.2"> CU4.2 </option>
+            <option value="CU4.3"> CU4.3 </option>
+            <option value="CU4.4"> CU4.4 </option>
+            <option value="CU5"> CU5 </option>
+          </select>
+        </div>
+
+        <div class="form-group row">
+            <input id="username" class="form-control col-sm-2" type="text" placeholder="Enter Username" name="username" required>
+            <input id="password" class="form-control col-sm-2" type="password" placeholder="Enter Password" name="password" required>
+            <button id="login" class="btn btn-primary col-sm-2" type="submit">Login</button>
+        </div>
+
+        <div class="form-group d-none">
+          <label for="chatbotToken">Token</label>
+          <textarea class="form-control" id="chatbotToken" rows="10"></textarea>
+        </div>
+
+      <button type="submit" class="btn btn-primary d-none">Abrir Chatbot</button>
 
       <div class="form-group"  style="padding-top:10px">
-        <label for="chatbotToken">Escribe el token</label>
-        <textarea class="form-control" id="chatbotToken" rows="10"></textarea>
-      </div>
-
-      <button type="submit" class="btn btn-primary">Abrir Chatbot</button>
-
-      <div class="form-group"  style="padding-top:10px">
-        <label for="test">test code</label>
+        <label for="test">Test code:</label>
         <textarea class="form-control" id="test" rows="10"></textarea>
       </div>
     </form>
+    <button type="" onclick="sendMessage()" class="btn btn-secondary" style="margin-top:20px">Enviar mensaje</button>
   </div>
 
 
@@ -44,10 +53,12 @@
 
   let integration_id = ""
   let bot_token = ""
-
-  //bot_token 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzNyIsInVzZXJfbmFtZSI6IlBhY1BhcTAxIiwic2NvcGUiOlsidHJ1c3QiXSwiaXNzIjoidHJpbGVtYS5lcyIsImV4cCI6MTY4OTY2MjY2NSwiYXV0aG9yaXRpZXMiOlsidXNlciJdLCJqdGkiOiJjZTJjM2VjMC1iNzM1LTQyZmQtODc1Ni00Y2FlYzU2ODBlYjEiLCJjbGllbnRfaWQiOiJOYWJlbGlhU3lzdGVtIn0.W8wjX1YJQstBLsAgipvYtbuGLK3o6N8dydzhMIiuyLl7-KnF5JFqCmO4MBC6P7Fa_3ArlxFsXUGuDhPqaNs7i35z2BKxOt9SBBNsM5qngDBKRezKQpEIYBJG2H7ilUN58L7002GLTrCKxEDedfPe2siUyPVbI7ghN8H2ax9W3t6Y_WPlv56G5VrS8zOEBZXGw5QvLRZsooYb0BampT4ltXTW39lSKLPFQ4Xo5KuxPVL5veny-0P2BfzhPhGKhzeFAadVR6_qHrx1AuHQGEw7caSatcqv0rktBMAjfeAC95rBIDPaOzt0QmH4__MhUsH0Kx2i6pIdo2yQ21hQ7kfc7w';
+  let instance_custom = ""
 
   function get_backend_token() {
+    let username = $('#username').val();
+    let password = $('#password').val();
+
     var settings = {
       "url": "https://medp-api.laberit.com/oauth/token",
       "method": "POST",
@@ -57,8 +68,8 @@
         "Content-Type": "application/x-www-form-urlencoded"
       },
       "data": {
-        "username": "PacPaq01",
-        "password": "WeebRkOdHb",
+        "username": username,
+        "password": password,
         "grant_type": "password"
       }
     };
@@ -85,16 +96,50 @@
 
     $.ajax(settings).done(function (response) {
       $('#chatbotToken').val(response.access_token);
+      console.log(`ACCESS_TOKEN: ${response.access_token}`)
+      setAction();
     });
   }
 
 
-  get_backend_token();
+  $('#login').click(get_backend_token);
+
+
+  function sendMessage(){
+
+    const sendObject = {
+    "input": {
+      "intents":[{
+        "intent":"volver_inicio",
+        "confidence":1
+        }]
+      }
+    };
+    const sendOptions = {
+      "silent": true
+    }
+
+    let restartPromise = new Promise(function(resolve, reject) {
+      window.WebChatInstance.restartConversation();
+      resolve();
+    });
+
+    restartPromise.then(function(value){
+      window.WebChatInstance.send(sendObject, sendOptions).catch(function(error) {
+        console.error('This message did not send!');
+
+    });
+
+    //para abrir el chat si no está abierto
+      window.WebChatInstance.openWindow();
+    });
+  }
+
 
   function setAction() {
     integration_id = chats_integration[document.getElementById("chatbotName").value];
     bot_token = document.getElementById("chatbotToken").value;
-    createAssistant()
+    createAssistant();
   }
 
 
@@ -185,6 +230,7 @@
         }});
 
         instance.render();
+        window.WebChatInstance = instance;
       }
     };
 
@@ -203,6 +249,7 @@
       document.head.appendChild(t);
     });
   }
+
 
 
 </script>

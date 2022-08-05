@@ -1,61 +1,40 @@
-alcohol.n.01: Cerveza con alcohol
-almond.n.01: Almendra, tostada
-almond.n.02: Almendra, tostada
+pasta.n.01: Pasta alimenticia, cruda
+pasta.n.02: Pasta alimenticia, cruda
+pastry.n.01: Hojaldre
+pastry.n.02: Pastel
+brew.n.01: Cerveza con alcohol
+liqueur.n.01: Licor apricot
+liquor.n.01: Aguardiente
 anchovy.n.02: Boquerón
-apple.n.01: Manzana
-apricot.n.01: Albaricoque
 bacon.n.01: Panceta, frita
-bamboo.n.02: Bambú, crudo
 banana.n.01: Plátano
-barley.n.01: Pan de cebada
-barley.n.02: Pan de cebada
-barnacle.n.01: Percebe
-basil.n.01: Albahaca
 bean.n.01: Alubia negra, seca, remojada, hervida
-beef.n.01: Vaca/buey, solomillo, a la plancha
-beef.n.02: Vaca/buey, solomillo, a la plancha
-beer.n.01: Cerveza con alcohol
+beef.n.02: Vaca/buey, parte s/e, asado
 beet.n.01: Remolacha, en conserva
 beet.n.02: Remolacha, en conserva
-beverage.n.01: agua
-biscuit.n.01: Galleta, genérico
+soft_drink.n.01: Refresco "tipo gaseosa"
 bleu.n.01: Queso azul
-bologna.n.02: Mortadela
 bonito.n.03: Bonito en aceite vegetal
-brain.n.05: Sesos, de cordero, crudos
 brandy.n.01: Coñac
 bread.n.01: Pan blanco, de barra
-breakfast.n.01: Cereales desayuno base de trigo azucarado
-breakfast_food.n.01: Cereales desayuno base de trigo azucarado
 brittle.n.01: Caramelo
-broth.n.01: Caldo vegetal
-broth.n.02: Caldo vegetal
 brown_sugar.n.01: Azúcar, moreno
-bull.n.01: Rabo de toro
 butter.n.01: Mantequilla, baja en calorías
 cabbage.n.01: Col blanca, cruda
 cabbage.n.03: Col blanca, cruda
-cacao.n.01: Cacao en polvo, azucarado
 cake.n.03: Pastel
 candied_fruit.n.01: Confitura, frutas s/e, baja en calorías
 candy.n.01: Caramelo
-canned_food.n.01: Garbanzo, en conserva
 caper.n.01: Alcaparra
 capsicum.n.01: Pimiento rojo, crudo
 carp.n.02: Carpa, al horno
-cattle.n.01: Ternera, parte s/e, asada
 caviar.n.01: Caviar
-celery.n.02: Apio, crudo
 cereal.n.03: Cereales desayuno base de trigo azucarado
 cheddar.n.02: Queso Cheddar
 cheese.n.01: Queso manchego
 cheese_sauce.n.01: Salsa de queso
-cherry.n.02: Cereza
 cherry.n.03: Cereza
-chestnut.n.02: Castaña, tostada
-chewing_gum.n.01: Chicle, sin azúcar
 chicken.n.01: Pollo, pechuga, plancha
-chicken.n.02: Pollo, pechuga, plancha
 chicory.n.04: Escarola
 chicory_escarole.n.01: Escarola
 chili.n.02: Guindilla, picante
@@ -63,37 +42,21 @@ chocolate.n.02: Chocolate con leche
 chocolate_bar.n.01: Barra de chocolate, tipo "Kit-kat"
 chocolate_cake.n.01: Pastel de chocolate
 chocolate_ice_cream.n.01: Helado de chocolate
-chop.n.02: Cerdo, chuleta, crudo
 cicada.n.01: Cigala
-cider.n.01: Sidra
 cinnamon.n.03: Canela, en polvo
-clam.n.01: Almeja
-clam.n.03: Almeja
-cock.n.04: Gallo
-cocoa.n.02: Cacao en polvo, azucarado
 coconut.n.01: Coco, desecado
 cod-liver_oil.n.01: Aceite de hígado de bacalao
-cod.n.02: Bacalao, fresco, al horno
-cod.n.03: Bacalao, fresco, al horno
 coffee.n.01: Café, infusión
-coffee.n.02: Café, infusión
 coffee_liqueur.n.01: Licor de café
-cola.n.02: Refresco, sabor cola, bajo en calorías
 common_bean.n.01: Alubia blanca, en conserva
 common_bean.n.02: Alubia blanca, en conserva
 confiture.n.01: Confitura, frutas s/e, baja en calorías
 cookie.n.01: Galleta, genérico
-corn.n.01: Maíz, en mazorca, crudo
-corn.n.03: Maíz, en mazorca, crudo
+corn.n.03: Palomitas de maíz, sin aceite, sin sal
 corn_chip.n.01: Corteza de trigo
-corn_whiskey.n.01: Whisky
-cornbread.n.01: Pan de maíz
-cotton.n.03: Aceite de algodón
-cow.n.01: Ternera, parte s/e, asada
 crab.n.01: Cangrejo
 crab.n.05: Cangrejo
 cracker.n.01: Galleta salada
-crayfish.n.03: Cangrejo
 cream.n.02: Crema pastelera
 cress.n.01: Berro, crudo
 cress.n.02: Berro, crudo
@@ -101,9 +64,9 @@ crocus.n.01: Azafrán
 cucumber.n.02: Pepino
 curd.n.01: Cuajada
 currant.n.01: Grosella, cruda
-curry.n.01: Curry
 custard.n.01: Crema pastelera
 custard_apple.n.02: Chirimoya
+
 dairy_product.n.01: Batido lácteo de cacao, bajo en calorías
 deer.n.01: Ciervo, parte s/e, crudo, con grasa separable
 dessert.n.01: Vino dulce, tipo oporto
@@ -180,8 +143,6 @@ lettuce.n.02: Lechuga
 lettuce.n.03: Lechuga
 lima_bean.n.03: Haba, fresca
 lime.n.06: Lima, cruda
-liqueur.n.01: Licor apricot
-liquor.n.01: Aguardiente
 liver.n.02: Hígado, de vaca/buey, crudo
 loaf_of_bread.n.01: Pan blanco, de molde, tostado
 lobster.n.01: Bogavante, hervido
@@ -232,9 +193,6 @@ pancake.n.01: Torta de aceite
 paprika.n.02: Pimentón, en polvo
 parsley.n.01: Perejil, fresco
 passion_fruit.n.01: Néctar de maracuyá, envasado
-pasta.n.02: Pasta alimenticia, cruda
-pastry.n.01: Hojaldre
-pastry.n.02: Pastel
 pasty.n.01: Empanadilla
 pate.n.01: Paté de pimienta
 pea.n.01: Guisante, congelado, hervido
@@ -296,7 +254,6 @@ shrimp.n.03: Gamba, hervida
 skate.n.02: Raya, cruda
 smoked_salmon.n.01: Salmón ahumado
 snail.n.01: Caracol
-soft_drink.n.01: Refresco "tipo gaseosa"
 sole.n.02: Lenguado, plancha
 soup.n.01: Sopa de sobre, sin reconstituir
 sour_cherry.n.01: Cereza

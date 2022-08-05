@@ -49,7 +49,7 @@ class MyRepresenter(RoundTripRepresenter):
 ruamel.yaml.add_representer(OrderedDict, MyRepresenter.represent_dict, representer=MyRepresenter)
 
 
-food_hyps = {"food.n.01", "food.n.02", "meal.n.01", "animal.n.01", "fungus.n.01", "plant.n.01", "plant.n.02"}
+food_hyps = {"food.n.01", "food.n.02", "meal.n.01", "animal.n.01", "fungus.n.01", "plant.n.02"}
 food_hyps.update({s.name() for s in wn.all_synsets("n") if s.name().startswith("edible_")})
 # we don't want oil.n.01 because that's also used for petroleum
 food_hyps.update({s.name() for s in wn.all_synsets("n") if "_oil" in s.name()})
@@ -353,25 +353,30 @@ def get_food_alternatives(
 
     nltk.download("omw")
 
+    seen = set()
+    doc = {}
+    foods = []
     if foods_fn.suffix in ('.csv', ):
         with open(foods_fn) as file:
             csvreader = csv.reader(file, delimiter=',', quotechar='"')
-            foods = [r[1] for r in csvreader]
+            for row in csvreader:
+                foods.append(row[1])
+                doc[row[1]] = {"alternatives": {r for r in row[2:] if r not in seen}}
+                seen.update(row[2:])
 
     else:
         yaml = YAML(typ="safe")  # default, if not specfied, is 'rt' (round-trip)
         with open(foods_fn) as file:
             foods = yaml.load(file)
+            doc = {food: {"alternatives": set([food])} for food in foods}
 
-    doc = {}
-    for sentence in foods:
-        alt = {}
+    for food in foods:
         all_seqs = []
-        doc[sentence] = alt
+        alt = doc[food]
 
-        parts = sentence.split(", ")
+        parts = food.split(", ")
         prefs = [" ".join(parts[0:n]) for n in range(1, len(parts) + 1)]
-        # typer.echo(f"{sentence} -> {parts} -> {prefs}")
+        # typer.echo(f"{food} -> {parts} -> {prefs}")
         alts = set()
 
         for pref in prefs:
@@ -381,13 +386,14 @@ def get_food_alternatives(
             gen = generate_alternatives(expanded)
             alts.update(gen)
             # typer.echo(f"  {pref} -> {seqs} -> {expanded} -> {gen}")
-        typer.echo(f"{sentence} -> {alts}")
+        typer.echo(f"{food} -> {alts}")
         if show_synsets:
             alt["synsets"] = [[[s.name() if isinstance(s, Synset) else s for s in seq] for seq in seqs] for seqs in all_seqs]
         if show_definitions:
             alt["definitions"] = {s.name(): s.definition() for seqs in all_seqs for seq in seqs for s in seq if isinstance(s, Synset)}
         if show_alternatives:
-            alt["alternatives"] = list(alts)
+            alt["alternatives"].update({alt for alt in alts if alt not in seen})
+        seen.update(alts)
 
     default_foods = None
     if default_foods_fn:
@@ -395,20 +401,27 @@ def get_food_alternatives(
         with open(default_foods_fn) as file:
             default_foods = yaml.load(file)
 
-        for synname, sentence in default_foods.items():
+        for synname, food in default_foods.items():
             syn = wn.synset(synname)
             alts = sorted({lemma.name().replace('_', ' ') for hs in find_food_hypos(syn) for lemma in get_lemmas(hs)})
-            typer.echo(f"DEF: {syn} -> {sentence} -> {alts}")
-            if 'hyponyms' in doc[sentence]:
-                doc[sentence]['hyponyms'] = sorted(set(alts + doc[sentence]['hyponyms']))
+
+            if food in doc:
+                doc[food]["alternatives"].update({alt for alt in alts if alt not in seen})
+                seen.update(alts)
+
+                typer.echo(f"DEF: {syn} -> {food} -> {alts}")
+                if 'hyponyms' in doc[food]:
+                    doc[food]['hyponyms'] = sorted(set(alts + doc[food]['hyponyms']))
+                else:
+                    doc[food]['hyponyms'] = alts
             else:
-                doc[sentence]['hyponyms'] = alts
+                print(f"WARNING: default '{synname}' -> '{food}' not a valid entity")
 
     if export_ibm:
         with open("food_alts.csv", "w") as file:
             csvwriter = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             for food, data in doc.items():
-                csvwriter.writerow(['alimento_tipo', food] + list(set(data.get('alternatives', []) + data.get('hyponyms', []))))
+                csvwriter.writerow(['alimento_tipo', food] + list(set(list(data.get('alternatives', [])) + list(data.get('hyponyms', [])))))
 
     elif export_csv_fn:
         with open(export_csv_fn, "w") as file:
@@ -558,6 +571,14 @@ def create_db(entities_fn: Path, vocab_fns: List[Path], save_fn: Path = typer.Op
 def search(text: str, db_fn: Path = typer.Option(None), nbest: int = 4):
     searcher = SearchEngine(db_fn)
     res = searcher.search(text, nbest)
+
+    print(json.dumps(res, indent=2, ensure_ascii=False))
+
+
+@app.command()
+def literal_search(text: str, db_fn: Path = typer.Option(None), nbest: int = 4):
+    searcher = SearchEngine(db_fn)
+    res = searcher.literal_search(text, nbest)
 
     print(json.dumps(res, indent=2, ensure_ascii=False))
 

@@ -13,9 +13,11 @@ from urllib.parse import unquote
 import typer
 from tqdm import tqdm
 import wikipedia
-import wikipediaapi
 from wikipedia.exceptions import DisambiguationError, PageError
 import requests
+
+from medp import wikipediaapi
+from medp.utils import NLP
 
 
 app = typer.Typer()
@@ -111,10 +113,21 @@ wp_aliases = {
     'food': ['Categoría:Alimentos_por_tipo', 'Categoría:Platos_de_España', 'Categoría:Gastronomía_de_España_por_comunidad_autónoma'],
     'sport': ['Categoría:Deportes'],
     'feeling': ['Categoría:Emociones'],
+    'food-spain': ['Categoría:Gastronomía_de_España_por_comunidad_autónoma'],
 }
 
 
-def get_page_info(wiki, term, path, lang='es', desc_lang='en'):
+def get_page_info_retry(wiki, term, path=None, lang='es', desc_lang='en', retry=5):
+    while retry > 0:
+        try:
+            return get_page_info(wiki, term, path, lang, desc_lang)
+        except (requests.exceptions.ReadTimeout, requests.exceptions.JSONDecodeError):
+            retry -= 1
+            time.sleep(30)
+    return term, None, []
+
+
+def get_page_info(wiki, term, path=None, lang='es', desc_lang='en'):
     if isinstance(term, str):
         print(f"SEARCHING: {term} from {path}")
         page = wiki.page(term)
@@ -137,11 +150,13 @@ def get_page_info(wiki, term, path, lang='es', desc_lang='en'):
         else:
             description = ''
 
+        description = description.replace('\n', ' ')
         if description:
             doc = {
                 'label': wp_pars_re.sub('', term),
                 'description': description,
                 'path': path,
+                'synonyms': list(page.redirects.keys()),
             }
 
     else:
@@ -150,7 +165,7 @@ def get_page_info(wiki, term, path, lang='es', desc_lang='en'):
     members = []
     try:
         members = page.categorymembers.values()
-    except (KeyError, requests.exceptions.JSONDecodeError):
+    except (KeyError, requests.exceptions.ReadTimeout, requests.exceptions.JSONDecodeError):
         pass
 
     return term, doc, members
@@ -207,10 +222,38 @@ def search(terms: List[str], do_subcats: bool = False, export_csv_fn: Path = typ
             for doc in docs.values():
                 if wd_id_re.match(doc['label']):
                     continue
-                row = [doc['label'], doc['description'], doc['path']]
+                row = [doc['label'], '###'.join([doc['description'], doc['path']]), *doc['synonyms']]
                 csvwriter.writerow(row)
     else:
         json.dump(docs, sys.stdout, indent=2, ensure_ascii=False)
+
+
+@app.command()
+def get_definitions(foods_fn: Path, max_ngram: int = 5, export_csv_fn: Path = typer.Option(None), lang: str = 'es', desc_lang: str = 'es'):
+    with open(foods_fn) as file:
+        csvreader = csv.reader(file, delimiter=',', quotechar='"')
+        foods = {r[1] for r in csvreader}
+
+    vocab = {w for food in foods for w in NLP.get_all_ngrams(food, max_ngram)}
+    defs = {}
+
+    wiki = wikipediaapi.Wikipedia(lang)
+    for ngram in tqdm(list(sorted(vocab))):
+        term, info, _ = get_page_info_retry(wiki, ngram, lang=lang, desc_lang=desc_lang)
+        if info:
+            defs[ngram] = info['description']
+            print(f"DEF: {ngram} [{term}] = {info}")
+        else:
+            print(f"DEF: {ngram} = NOT_FOUND")
+
+    if export_csv_fn:
+        with open(export_csv_fn, "w") as file:
+            csvwriter = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            for food, data in defs.items():
+                csvwriter.writerow([food, data])
+    else:
+        json.dump(sorted(vocab), sys.stdout, indent=2, ensure_ascii=False)
+        print(len(vocab))
 
 
 if __name__ == "__main__":
