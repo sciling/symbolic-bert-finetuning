@@ -345,7 +345,7 @@ class SearchEngine:
 
 
         result = self.literal_search(desc, nbest, embedding=embedding, multinomial=multinomial)
-        if len(result) == 0:
+        if len(result) == 0 and not use_alts:
             return self.search(sentence, nbest=nbest, summarized=summarized, multinomial=multinomial, description_type=description_type, reuse_description=reuse_description, use_alts=True)
 
         return {
