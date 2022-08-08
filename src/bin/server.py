@@ -25,9 +25,22 @@ def check_credentials(credentials: HTTPBasicCredentials = Depends(security)):
     return credentials.username
 
 
+CACHED = {
+    'alimento_tipo': None,
+}
+
+for entity in CACHED:
+    CACHED[entity] = SearchEngine(f"db/{entity}.json", "ignore.json")
+
+
 @app.get("/search/{entity}")
 def search(entity: str, text: str, nbest: int = 4, summarized: bool = True, multinomial: bool = True, description_type: DescriptionType = DescriptionType.DEFAULT, reuse_description: bool = True, username: str = Depends(check_credentials)):
-    searcher = SearchEngine(f"db/{entity}.json", "ignore.json")
+    if entity in CACHED:
+        searcher = CACHED[entity]
+    else:
+        searcher = SearchEngine(f"db/{entity}.json", "ignore.json")
+        CACHED[entity] = searcher
+
     res = searcher.search(text, nbest, summarized=summarized, multinomial=multinomial, description_type=description_type, reuse_description=reuse_description)
 
     return res
