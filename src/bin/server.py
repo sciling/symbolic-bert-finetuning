@@ -5,7 +5,7 @@ import os
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 
-from medp.utils import SearchEngine
+from medp.utils import SearchEngine, DescriptionType
 
 app = FastAPI()
 
@@ -26,8 +26,8 @@ def check_credentials(credentials: HTTPBasicCredentials = Depends(security)):
 
 
 @app.get("/search/{entity}")
-def search(entity: str, text: str, nbest: int=4, username: str = Depends(check_credentials)):
-    searcher = SearchEngine(f"db/{entity}.json")
-    res = searcher.search(text, nbest)
+def search(entity: str, text: str, nbest: int = 4, summarized: bool = True, multinomial: bool = True, description_type: DescriptionType = DescriptionType.DEFAULT, reuse_description: bool = True, username: str = Depends(check_credentials)):
+    searcher = SearchEngine(f"db/{entity}.json", "ignore.json")
+    res = searcher.search(text, nbest, summarized=summarized, multinomial=multinomial, description_type=description_type, reuse_description=reuse_description)
 
     return res
