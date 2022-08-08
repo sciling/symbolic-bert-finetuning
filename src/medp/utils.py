@@ -274,19 +274,26 @@ class SearchEngine:
             if not self.is_valid_token(token):
                 del self.vocab[token]
 
+        self.entity_syns = {syn: ent for ent, data in self.vocab.items() for syn in data.get('synonyms', []) if not data.get('is_entity', False)}
+        self.entity_syns = {ent: ent for ent, data in self.vocab.items()}
+        self.entity_syns.update({syn: ent for ent, data in self.vocab.items() for syn in data.get('synonyms', []) if data.get('is_entity', False)})
+        self.entity_names = {ent for syn, ent in self.entity_syns.items()}
+        # print(self.entity_names)
+        # print(self.entity_syns)
+
         self.entities = [(ent, data) for ent, data in self.vocab.items() if data.get('is_entity', False)]
         self.entity_embeddings = torch.stack([torch.FloatTensor(data.get('embedding')) for ent, data in self.entities])
         self.entity_summary_embeddings = torch.stack([torch.FloatTensor(data.get('summaryEmbedding', [])) for ent, data in self.entities])
 
-        self.tok2id = {tok: n for n, tok in enumerate(sorted(self.vocab.keys()))}
+        self.tok2id = {tok: n for n, tok in enumerate(sorted(self.entity_names))}
         self.id2tok = {n: tok for tok, n in self.tok2id.items()}
 
         # After id2tok is computed, because otherwise id2tok might be associated with a synonym and not the main lemma.
         for word, data in list(self.vocab.items()):
             data['synonyms'] = list({tok for tok in data.get('synonyms', []) if self.is_valid_token(tok, is_new=True)})
             data['summary'] = list({tok for tok in data.get('summary', []) + data['synonyms'] if self.is_valid_token(tok)})
-            self.tok2id.update({tok: self.tok2id[word] for tok in data['synonyms']})
-            self.vocab.update({tok: self.vocab[word] for tok in data['synonyms']})
+            self.tok2id.update({tok: self.tok2id[self.entity_syns.get(word, word)] for tok in data['synonyms']})
+            self.vocab.update({tok: self.vocab[self.entity_syns.get(word, word)] for tok in data['synonyms']})
 
         # print(self.tok2id)
         self.entity_multinomial = []
@@ -315,6 +322,7 @@ class SearchEngine:
             desc = " ".join([w for token in seq for w in token.split('_')])
             if multinomial:
                 literal_seq = NLP.get_tokens(sentence, self.vocab, DescriptionType.DEFAULT)
+                # print(f"LITERAL: {literal_seq} {self.vocab.get(literal_seq[0], {})}")
                 if use_alts:
                     seq_non_entities = [tok for tok in seq if not self.vocab.get(tok, {}).get('is_entity', False)]
                     alts = {
@@ -326,6 +334,7 @@ class SearchEngine:
 
                 elif len(literal_seq) == 1 and self.vocab.get(literal_seq[0], {}).get('is_entity', False):
                     token = self.normalize(literal_seq[0])
+                    # print(f"LITERAL: {literal_seq} {token}")
                     seq = self.vocab.get(token, {}).get('summary', [])
 
                 embedding = NLP.to_multinomial(seq, self.tok2id)
