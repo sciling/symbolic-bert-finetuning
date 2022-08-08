@@ -34,7 +34,7 @@ from nltk.util import ngrams
 from inflector import Inflector, Spanish
 from ruamel.yaml import YAML
 from ruamel.yaml.representer import RoundTripRepresenter
-from medp.utils import SearchEngine, NLP, EmbeddingsProcessor
+from medp.utils import SearchEngine, NLP, EmbeddingsProcessor, DescriptionType
 
 
 warnings.filterwarnings("ignore")
@@ -349,7 +349,8 @@ def generate_alternatives(alts):
 def get_food_alternatives(
     foods_fn: Path, default_foods_fn: Path = typer.Argument(None), do_hypos: bool = False,
     show_synsets: bool = False, show_definitions: bool = True, show_alternatives: bool = True,
-    export_ibm: bool = False, export_csv_fn: Path = typer.Option(None)
+    export_ibm: bool = False, export_csv_fn: Path = typer.Option(None),
+    use_definitions: bool = False
 ):
 
     nltk.download("omw")
@@ -428,7 +429,11 @@ def get_food_alternatives(
         with open(export_csv_fn, "w") as file:
             csvwriter = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             for food, data in doc.items():
-                csvwriter.writerow([food, '. '.join(data.get('definitions', {}).values())] + list(set(data.get('alternatives', []))))
+                if use_definitions:
+                    definition = '. '.join(data.get('definitions', {}).values())
+                else:
+                    definition = ''
+                csvwriter.writerow([food, definition] + list(set(data.get('alternatives', []))))
 
     else:
         with open("food_alts.yaml", "w") as file:
@@ -564,20 +569,34 @@ def summarize(sentence: str, db_fn: Path = typer.Option(None)):
 
 
 @app.command()
-def create_db(entities_fn: Path, vocab_fns: List[Path], save_fn: Path = typer.Option(None)):
+def create_db(vocab_fns: List[Path], entities_fn: Path = typer.Option(None), save_fn: Path = typer.Option(None), redefinitions_fn: Path = typer.Option(None), override_definitions: bool = True):
     vocab = {}
+    redefinitions = {}
 
-    NLP.update_vocab(vocab, entities_fn, is_entity=True)
+    if redefinitions_fn:
+        with open(redefinitions_fn) as file:
+            csvreader = csv.reader(file, delimiter=',', quotechar='"')
+            for row in csvreader:
+                if len(row) >= 2:
+                    redefinitions[row[0]] = row[1]
 
     for vocab_fn in vocab_fns:
-        NLP.update_vocab(vocab, vocab_fn)
+        NLP.update_vocab(vocab, vocab_fn, redefinitions=redefinitions, override_definitions=override_definitions)
+
+    if entities_fn:
+        NLP.update_vocab(vocab, entities_fn, is_entity=True, redefinitions=redefinitions, override_definitions=override_definitions)
+
+    for data in tqdm(vocab.values(), desc="Regenerating descriptions..."):
+        if not data.get('description', None):
+            data['description'] = NLP.describe(data['label'], vocab)
+            data['embedding'] = EmbeddingsProcessor.pages_to_embeddings([data['description']])[0].tolist()
 
     with open(save_fn, 'w') as file:
         json.dump(vocab, file, indent=2, ensure_ascii=False)
 
 
 @app.command()
-def summarize_db(db_fn: Path, save_fn: Path = typer.Option(None), long_descriptions: bool = True):
+def summarize_db(db_fn: Path, save_fn: Path = typer.Option(None), description_type: DescriptionType = DescriptionType.DEFAULT, reuse_descriptions: bool = False):
     with open(db_fn) as file:
         db = json.load(file)
 
@@ -587,16 +606,16 @@ def summarize_db(db_fn: Path, save_fn: Path = typer.Option(None), long_descripti
 
     new_db = {}
     for text, data in tqdm(db.items()):
-        new_db[text] = NLP.summarizedb_entry(data, db, long_descriptions)
+        new_db[text] = NLP.summarizedb_entry(data, db, description_type, reuse_descriptions)
 
     with open(save_fn, 'w') as file:
         json.dump(new_db, file, indent=2, ensure_ascii=False)
 
 
 @app.command()
-def search(text: str, db_fn: Path = typer.Option(None), nbest: int = 4):
-    searcher = SearchEngine(db_fn)
-    res = searcher.search(text, nbest)
+def search(text: str, db_fn: Path = typer.Option(None), ignore_fn: Path = typer.Option(None), nbest: int = 4, summarized: bool = False, multinomial: bool = False, description_type: DescriptionType = DescriptionType.DEFAULT, reuse_description: bool = True):
+    searcher = SearchEngine(db_fn, ignore_fn)
+    res = searcher.search(text, nbest, summarized=summarized, multinomial=multinomial, description_type=description_type, reuse_description=reuse_description)
 
     print(json.dumps(res, indent=2, ensure_ascii=False))
 

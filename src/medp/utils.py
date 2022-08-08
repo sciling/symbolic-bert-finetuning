@@ -2,6 +2,7 @@ import re
 import json
 import csv
 from typing import Iterable
+from enum import Enum
 
 from unidecode import unidecode
 import spacy_stanza
@@ -54,6 +55,13 @@ class EmbeddingsProcessor:
 
 noise_re = re.compile(r"\s*Root -> .*$")
 punct_re = re.compile(r"[^\w\s]*")
+note_re = re.compile(r"\s*\([^\)]*\)")
+
+
+class DescriptionType(Enum):
+    DEFAULT = 'default'
+    LONG = 'long'
+    SHORT = 'short'
 
 
 class NLP:
@@ -84,7 +92,7 @@ class NLP:
 
     @classmethod
     def normalize(cls, sentence):
-        seq = cls.nlp(sentence.lower())
+        seq = cls.nlp(note_re.sub('', sentence.lower()))
         return [unidecode(cls.singularize_spacy_token(t)) for t in seq if not t.is_punct and not t.is_stop]
 
     @classmethod
@@ -100,28 +108,39 @@ class NLP:
         return cls.singularize(token.text)
 
     @classmethod
-    def update_vocab(cls, vocab, vocab_fn, is_entity=False):
+    def update_vocab(cls, vocab, vocab_fn, is_entity=False, redefinitions=None, override_definitions=True):
         with open(vocab_fn) as file:
             csvreader = csv.reader(file, delimiter=',', quotechar='"')
             rows = list(csvreader)
             for row in tqdm(rows, desc=f"Loading '{vocab_fn}'"):
+                token = '_'.join(cls.normalize(row[0]))
                 row[1] = row[1].split('###')[0]
                 desc = noise_re.sub('', '. '.join(row))
-                res = {
-                    'description': desc,
-                    'embedding': EmbeddingsProcessor.pages_to_embeddings([desc])[0].tolist(),
-                }
 
-                for num, alt in enumerate([row[0]]):  # enumerate([row[0]] + row[2:]):
-                    token = '_'.join(cls.normalize(alt))
-                    if token not in vocab:
-                        vocab[token] = {'label': alt}
-                        vocab[token].update(res)
-                        if num == 0 and is_entity:
-                            vocab[token]['is_entity'] = True
+                if redefinitions and token in redefinitions:
+                    if redefinitions[token] == 'DROP':
+                        continue
                     else:
-                        vocab[token]['description'] = desc
-                        vocab[token]['embedding'] = EmbeddingsProcessor.pages_to_embeddings([desc])[0].tolist()
+                        desc = noise_re.sub('', redefinitions[token])
+
+                if token not in vocab:
+                    vocab[token] = {
+                        'label': row[0],
+                        'description': desc,
+                        'embedding': EmbeddingsProcessor.pages_to_embeddings([desc])[0].tolist(),
+                        'synonyms': [],
+                    }
+                elif override_definitions:
+                    vocab[token].update({
+                        'description': desc,
+                        'embedding': EmbeddingsProcessor.pages_to_embeddings([desc])[0].tolist(),
+                    })
+
+                if is_entity:
+                    vocab[token]['is_entity'] = True
+                    vocab[token]['label'] = row[0]
+
+                vocab[token]['synonyms'] = list(set(vocab[token]['synonyms']) | {'_'.join(cls.normalize(alt)) for alt in row[2:]})
 
                 # print(f"'{row[0]}' -> vocab[{token}] = {row[1][:80]}")
         return vocab
@@ -147,7 +166,10 @@ class NLP:
 
     @classmethod
     def tokenize(cls, sentence, vocab):
-        max_ngram_len = max([len(w.split('_')) for w in vocab])
+        if vocab:
+            max_ngram_len = min(1, max([len(w.split('_')) for w in vocab]))
+        else:
+            max_ngram_len = 1
         sentence = cls.normalize(sentence)
         total_words = len(sentence)
 
@@ -170,67 +192,145 @@ class NLP:
         return seq
 
     @classmethod
-    def summarize(cls, sentence, vocab, long_description=True):
-        seq, description = cls.describe(sentence, vocab, long_description=long_description)
-        summary = {token for token in cls.tokenize(description, vocab) if token in vocab}
-        return seq, summary
+    def summarize(cls, sentence, vocab, description_type=DescriptionType.DEFAULT, description=None):
+        # print(f"INITDES: '{description}'")
+        if not description:
+            _, description = cls.describe(sentence, vocab, description_type=description_type)
+        # print(f"POSTDES: '{description}'")
+        if description_type == DescriptionType.LONG:
+            all_ngrams = cls.get_all_ngrams(description)
+            # print(f"NGRAMTOKS: {sentence} '{description}' {all_ngrams}")
+            tokens = {'_'.join(cls.normalize(token)) for token in all_ngrams}
+        elif description_type == DescriptionType.SHORT:
+            tokens = cls.tokenize(description, vocab={})
+        else:
+            tokens = cls.tokenize(description, vocab)
+        summary = {token for token in tokens if token in vocab}
+        # print(f"SUMMARIZE({len(vocab)}, {description_type}): {sentence} {tokens} {summary}")
+        return summary
 
     @classmethod
-    def summarizedb_entry(cls, entry, vocab, long_description=True):
-        entry['summary'] = list(sorted(cls.summarize(entry['label'], vocab, long_description)[1]))
+    def summarizedb_entry(cls, entry, vocab, description_type=DescriptionType.DEFAULT, reuse_description=False):
+        description = None
+        if reuse_description:
+            description = entry.get('description', None)
+        entry['summary'] = list(sorted(cls.summarize(entry['label'], vocab, description_type, description)))
         desc = " ".join([w for token in entry['summary'] for w in token.split('_')])
-        entry['summaryEmbedding'] = EmbeddingsProcessor.pages_to_embeddings([desc])[0].tolist()
+        # entry['summaryEmbedding'] = EmbeddingsProcessor.pages_to_embeddings([desc])[0].tolist()
+        if 'embedding' in entry:
+            entry['summaryEmbedding'] = entry['embedding']
+        else:
+            entry['summaryEmbedding'] = EmbeddingsProcessor.pages_to_embeddings([desc])[0].tolist()
         return entry
 
     @classmethod
-    def describe(cls, sentence, vocab, long_description=False):
-        if long_description:
-            seq = ['_'.join(cls.normalize(token)) for token in cls.get_all_ngrams(sentence)]
+    def describe(cls, sentence, vocab, description_type=DescriptionType.DEFAULT):
+        if description_type == DescriptionType.LONG:
+            all_ngrams = cls.get_all_ngrams(sentence)
+            # print(f"DESCRIBE: {sentence} -> {all_ngrams}")
+            seq = ['_'.join(cls.normalize(token)) for token in all_ngrams]
+        elif description_type == DescriptionType.SHORT:
+            seq = cls.tokenize(sentence, vocab={})
         else:
             seq = cls.tokenize(sentence, vocab)
         description = '. '.join(vocab[w].get('description', '') for w in seq if w in vocab)
         return seq, description
 
+    @classmethod
+    def to_multinomial(cls, summary, tok2id):
+        vect = [0] * len(tok2id)
+        for tok in summary:
+            tokid = tok2id.get(tok, None)
+            if tokid is not None:
+                vect[tokid] = 1
+        return torch.FloatTensor(vect)
+
 
 class SearchEngine:
-    def __init__(self, db_fn):
+    def __init__(self, db_fn, ignore_fn=None):
         with open(db_fn) as file:
             self.vocab = json.load(file)
+
+        if ignore_fn:
+            with open(ignore_fn) as file:
+                self.ignore = set(json.load(file))
+        else:
+            self.ignore = set()
+
+        for token in list(self.vocab.keys()):
+            if len(token) < 3 or token in self.ignore:
+                del self.vocab[token]
 
         self.entities = [(ent, data) for ent, data in self.vocab.items() if data.get('is_entity', False)]
         self.entity_embeddings = torch.stack([torch.FloatTensor(data.get('embedding')) for ent, data in self.entities])
         self.entity_summary_embeddings = torch.stack([torch.FloatTensor(data.get('summaryEmbedding', [])) for ent, data in self.entities])
 
-    def search(self, sentence, nbest=4, vocab=False):
+        self.tok2id = {tok: n for n, tok in enumerate(sorted(self.vocab.keys()))}
+        self.id2tok = {n: tok for tok, n in self.tok2id.items()}
+
+        # After id2tok is computed, because otherwise id2tok might be associated with a synonym and not the main lemma.
+        for word, data in list(self.vocab.items()):
+            synonyms = {tok: self.tok2id[word] for tok in data.get('synonyms', [])}
+            # print(f"tok2id: {word} ({self.tok2id[word]}) -> {synonyms}")
+            self.tok2id.update(synonyms)
+            vocab_synonyms = {tok: self.vocab[word] for tok in data.get('synonyms', [])}
+            # print(f"tok2id: {word} ({self.tok2id[word]}) -> {synonyms}")
+            self.vocab.update(vocab_synonyms)
+
+        # print(self.tok2id)
+        self.entity_multinomial = []
+        for ent, data in self.entities:
+            self.entity_multinomial.append(NLP.to_multinomial(data.get('summary', set()), self.tok2id))
+        self.entity_multinomial = torch.stack(self.entity_multinomial)
+        # print(len(self.entities))
+
+    def search(self, sentence, nbest=4, summarized=False, multinomial=False, description_type=DescriptionType.DEFAULT, reuse_description=True):
         embedding = None
-        if vocab:
-            entry = NLP.summarizedb_entry({'label': sentence}, vocab)
+        if summarized:
+            entry = NLP.summarizedb_entry({'label': sentence}, self.vocab, description_type=description_type, reuse_description=reuse_description)
             seq = entry['summary']
-            desc = " ".join([w for token in entry['summary'] for w in token.split('_')])
-            embedding = entry['summaryEmbedding']
+            desc = " ".join([w for token in seq for w in token.split('_')])
+            if multinomial:
+                embedding = NLP.to_multinomial(seq, self.tok2id)
+            else:
+                embedding = torch.FloatTensor(entry['summaryEmbedding'])
         else:
             seq, desc = NLP.describe(sentence, self.vocab)
         desc = f"{sentence}. {desc}"
-        print(f"{sentence}: {seq}: {desc}")
+        # print(f"{sentence}: {seq}: {desc}")
 
         return {
             'tokens': seq,
             'description': desc,
-            'nbests': self.literal_search(desc, nbest, embedding=embedding),
+            'nbests': self.literal_search(desc, nbest, embedding=embedding, multinomial=multinomial),
         }
 
-    def literal_search(self, desc, nbest=4, embedding=None):
-        if not embedding:
+    def literal_search(self, desc, nbest=4, embedding=None, multinomial=False):
+        is_summary = embedding is not None
+        if is_summary:
+            if multinomial:
+                entity_embeddings = self.entity_multinomial
+            else:
+                entity_embeddings = self.entity_summary_embeddings
+        else:
             embedding = EmbeddingsProcessor.pages_to_embeddings([desc])[0]
-        scores = cos(self.entity_embeddings, embedding)
+            entity_embeddings = self.entity_embeddings
+
+        scores = cos(entity_embeddings, embedding)
+        if is_summary:
+            mult = torch.mul(embedding, entity_embeddings).sum(dim=1)
+            entity_coverage = mult / entity_embeddings.sum(dim=1)
+            scores = (scores + entity_coverage + mult) / (embedding.sum() + 2.0)
+
         index_sorted = torch.argsort(scores)
         top_scores = reversed(index_sorted[-nbest:])
+        # print([(scores[i], self.entities[i][1]['label']) for i in index_sorted])
 
         return [
             {
                 'entity': self.entities[i][1]['label'],
                 'score': scores[i].item(),
-                'description': self.entities[i][1]['description'],
+                'description': self.entities[i][1]['summary' if is_summary else 'description'],
             }
-            for i in top_scores
+            for i in top_scores if scores[i].item() > 0
         ]
