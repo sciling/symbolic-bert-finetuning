@@ -270,8 +270,7 @@ class SearchEngine:
         else:
             self.ignore = set()
 
-        self.known = set(self.vocab)
-        for token in self.known:
+        for token in set(self.vocab):
             if not self.is_valid_token(token):
                 del self.vocab[token]
 
@@ -302,11 +301,6 @@ class SearchEngine:
         return None
 
     def is_valid_token(self, token, is_new=False):
-        # if token in self.known:
-        #     if is_new:
-        #         return False
-        # else:
-        #     self.known.add(token)
         return len(token) >= 4 and token not in self.ignore
 
     def search(self, sentence, nbest=4, summarized=False, multinomial=False, description_type=DescriptionType.DEFAULT, reuse_description=True, use_alts=False):
