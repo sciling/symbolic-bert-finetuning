@@ -192,19 +192,25 @@ class NLP:
         return seq
 
     @classmethod
+    def get_tokens(cls, text, vocab, description_type=DescriptionType.DEFAULT):
+        # print(f"POSTDES: '{description}'")
+        if description_type == DescriptionType.LONG:
+            all_ngrams = cls.get_all_ngrams(text)
+            # print(f"NGRAMTOKS: {sentence} '{description}' {all_ngrams}")
+            tokens = {'_'.join(cls.normalize(token)) for token in all_ngrams}
+        elif description_type == DescriptionType.SHORT:
+            tokens = cls.tokenize(text, vocab={})
+        else:
+            tokens = cls.tokenize(text, vocab)
+        return tokens
+
+    @classmethod
     def summarize(cls, sentence, vocab, description_type=DescriptionType.DEFAULT, description=None):
         # print(f"INITDES: '{description}'")
         if not description:
             _, description = cls.describe(sentence, vocab, description_type=description_type)
         # print(f"POSTDES: '{description}'")
-        if description_type == DescriptionType.LONG:
-            all_ngrams = cls.get_all_ngrams(description)
-            # print(f"NGRAMTOKS: {sentence} '{description}' {all_ngrams}")
-            tokens = {'_'.join(cls.normalize(token)) for token in all_ngrams}
-        elif description_type == DescriptionType.SHORT:
-            tokens = cls.tokenize(description, vocab={})
-        else:
-            tokens = cls.tokenize(description, vocab)
+        tokens = cls.get_tokens(description, vocab, description_type)
         summary = {token for token in tokens if token in vocab}
         # print(f"SUMMARIZE({len(vocab)}, {description_type}): {sentence} {tokens} {summary}")
         return summary
@@ -225,14 +231,7 @@ class NLP:
 
     @classmethod
     def describe(cls, sentence, vocab, description_type=DescriptionType.DEFAULT):
-        if description_type == DescriptionType.LONG:
-            all_ngrams = cls.get_all_ngrams(sentence)
-            # print(f"DESCRIBE: {sentence} -> {all_ngrams}")
-            seq = ['_'.join(cls.normalize(token)) for token in all_ngrams]
-        elif description_type == DescriptionType.SHORT:
-            seq = cls.tokenize(sentence, vocab={})
-        else:
-            seq = cls.tokenize(sentence, vocab)
+        seq = cls.get_tokens(sentence, vocab, description_type)
         description = '. '.join(vocab[w].get('description', '') for w in seq if w in vocab)
         return seq, description
 
@@ -270,12 +269,8 @@ class SearchEngine:
 
         # After id2tok is computed, because otherwise id2tok might be associated with a synonym and not the main lemma.
         for word, data in list(self.vocab.items()):
-            synonyms = {tok: self.tok2id[word] for tok in data.get('synonyms', [])}
-            # print(f"tok2id: {word} ({self.tok2id[word]}) -> {synonyms}")
-            self.tok2id.update(synonyms)
-            vocab_synonyms = {tok: self.vocab[word] for tok in data.get('synonyms', [])}
-            # print(f"tok2id: {word} ({self.tok2id[word]}) -> {synonyms}")
-            self.vocab.update(vocab_synonyms)
+            self.tok2id.update({tok: self.tok2id[word] for tok in data.get('synonyms', [])})
+            self.vocab.update({tok: self.vocab[word] for tok in data.get('synonyms', [])})
 
         # print(self.tok2id)
         self.entity_multinomial = []
@@ -287,8 +282,10 @@ class SearchEngine:
     def search(self, sentence, nbest=4, summarized=False, multinomial=False, description_type=DescriptionType.DEFAULT, reuse_description=True):
         embedding = None
         if summarized:
-            entry = NLP.summarizedb_entry({'label': sentence}, self.vocab, description_type=description_type, reuse_description=reuse_description)
-            seq = entry['summary']
+            # entry = NLP.summarizedb_entry({'label': sentence}, self.vocab, description_type=description_type, reuse_description=reuse_description)
+            # seq = entry['summary']
+            seq = NLP.get_tokens(sentence, self.vocab, description_type)
+            print(f"SEARCH {seq}")
             desc = " ".join([w for token in seq for w in token.split('_')])
             if multinomial:
                 embedding = NLP.to_multinomial(seq, self.tok2id)
@@ -297,7 +294,7 @@ class SearchEngine:
         else:
             seq, desc = NLP.describe(sentence, self.vocab)
         desc = f"{sentence}. {desc}"
-        # print(f"{sentence}: {seq}: {desc}")
+        print(f"SEARCH: {sentence}: {seq}: {desc}")
 
         return {
             'tokens': seq,
