@@ -406,8 +406,6 @@ dialogs:
               value: '170.302'
               confidence: 0.7
 
-
-
   #9 Testea que se acepte el peso con el numero +kg junto
   - name: extreme_test_9
     initial_context: {}
@@ -1039,7 +1037,103 @@ dialogs:
               value: Ninguna
               confidence: 0.7
 
-#✗ test for dialog 'normal_test_4' failed: error: "intent" doesn't match, Got: Registrar_ingesta and expected entity_recognition. In step 1 with query 'hoy para cenar'
+  - name: normal_test_6
+    initial_context: {}
+    steps:
+      - query: ¿Qué podré hacer con el asistente?
+        response:
+          confidence: 0.7
+          intent: faq_iniciar
+      - query: como registrar actividad fisica
+        response:
+          confidence: 0.7
+          intent: faq_registrar_actividad
+      - query: que tendré que responder?
+        response:
+          confidence: 0.7
+          intent: faq_iniciar
+      - query: que tendré que responder?
+        response:
+          confidence: 0.7
+          intent: faq_tipo_preguntas_registro
+
+  - name: normal_test_7
+    initial_context: {}
+    steps:
+      - query: ¿Qué podré hacer con el asistente?
+        response:
+          confidence: 0.7
+          intent: faq_iniciar
+      - query: ya tengo una vida saludable
+        response:
+          confidence: 0.7
+          intent: faq_ya_tengo_vida_activa
+          entities:
+            - name: frecuencia_ejercicio
+              value: 1 vez
+              confidence: 0.7
+            - name: sys-number
+              value: '1'
+              confidence: 0.7
+  
+  - name: normal_test_8
+    initial_context: {}
+    steps:
+      - query: ¿Qué podré hacer con el asistente?
+        response:
+          confidence: 0.7
+          intent: faq_iniciar
+      - query: ya tengo una vida saludable
+        response:
+          confidence: 0.7
+          intent: faq_ya_tengo_vida_activa
+          entities:
+            - name: frecuencia_ejercicio
+              value: 1 vez
+              confidence: 0.7
+            - name: sys-number
+              value: '1'
+              confidence: 0.7
+      - query: que son los retos colectivos?
+        response:
+          confidence: 0.7
+          intent: faq_retos_colectivos
+      - query: salir
+        response:
+          confidence: 0.7
+          intent: faq_iniciar
+  
+  - name: normal_test_9
+    initial_context: {}
+    steps:
+      - query: ¿Qué podré hacer con el asistente?
+        response:
+          confidence: 0.7
+          intent: faq_iniciar
+      - query: tengo una enfermedad, los ejercicios se personalizan?
+        response:
+          confidence: 0.7
+          intent: faq_plan_personalizado
+
+  - name: normal_test_10
+    initial_context: {}
+    steps:
+      - query: ¿Qué podré hacer con el asistente?
+        response:
+          confidence: 0.7
+          intent: faq_iniciar
+      - query: como se registra el ejercicio?
+        response:
+          confidence: 0.7
+          intent: faq_registrar_actividad
+
+  - name: normal_test_11
+    initial_context: {}
+    steps:
+      - query: quiero informacion sobre ejercicios
+        response:
+          confidence: 0.7
+          intent: faq_informacion_actividad_fisica
 
   #endregion
 
