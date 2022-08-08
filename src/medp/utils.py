@@ -285,6 +285,7 @@ class SearchEngine:
             # entry = NLP.summarizedb_entry({'label': sentence}, self.vocab, description_type=description_type, reuse_description=reuse_description)
             # seq = entry['summary']
             seq = NLP.get_tokens(sentence, self.vocab, description_type)
+            seq = list(set(seq) | {alt for tok in seq for alt in self.vocab.get(tok, {}).get('summary', []) if not self.vocab.get(tok, {}).get('is_entity', False)})
             print(f"SEARCH {seq}")
             desc = " ".join([w for token in seq for w in token.split('_')])
             if multinomial:
