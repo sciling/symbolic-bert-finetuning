@@ -375,7 +375,7 @@ class SearchEngine:
 
         index_sorted = torch.argsort(scores)
         top_scores = reversed(index_sorted[-nbest:])
-        print([(scores[i], self.entities[i][1]['label']) for i in index_sorted])
+        # print([(scores[i], self.entities[i][1]['label']) for i in index_sorted])
 
         return [
             {
