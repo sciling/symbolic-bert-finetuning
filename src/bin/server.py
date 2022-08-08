@@ -34,7 +34,7 @@ for entity in CACHED:
 
 
 @app.get("/search/{entity}")
-def search(entity: str, text: str, nbest: int = 4, summarized: bool = True, multinomial: bool = True, description_type: DescriptionType = DescriptionType.DEFAULT, reuse_description: bool = True, username: str = Depends(check_credentials)):
+def search(entity: str, text: str, nbest: int = 4, summarized: bool = True, multinomial: bool = True, description_type: DescriptionType = DescriptionType.LONG, reuse_description: bool = True, username: str = Depends(check_credentials)):
     if entity in CACHED:
         searcher = CACHED[entity]
     else:

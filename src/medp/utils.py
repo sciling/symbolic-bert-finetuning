@@ -167,7 +167,7 @@ class NLP:
     @classmethod
     def tokenize(cls, sentence, vocab):
         if vocab:
-            max_ngram_len = min(1, max([len(w.split('_')) for w in vocab]))
+            max_ngram_len = max(1, max([len(w.split('_')) for w in vocab]))
         else:
             max_ngram_len = 1
         sentence = cls.normalize(sentence)
@@ -182,6 +182,7 @@ class NLP:
             for n_words in range(max_ngram_len, 0, -1):
                 ngram = '_'.join(sentence[i : i + n_words])
 
+                # print(f"NGRAM: {ngram}: {ngram in vocab}")
                 if ngram in vocab:
                     advance = n_words
                     break
@@ -193,7 +194,7 @@ class NLP:
 
     @classmethod
     def get_tokens(cls, text, vocab, description_type=DescriptionType.DEFAULT):
-        # print(f"POSTDES: '{description}'")
+        # print(f"PREEDES: '{text}'")
         if description_type == DescriptionType.LONG:
             all_ngrams = cls.get_all_ngrams(text)
             # print(f"NGRAMTOKS: {sentence} '{description}' {all_ngrams}")
@@ -202,6 +203,7 @@ class NLP:
             tokens = cls.tokenize(text, vocab={})
         else:
             tokens = cls.tokenize(text, vocab)
+        # print(f"POSTDES: '{tokens}'")
         return tokens
 
     @classmethod
@@ -236,12 +238,16 @@ class NLP:
         return seq, description
 
     @classmethod
-    def to_multinomial(cls, summary, tok2id):
+    def to_multinomial(cls, summary, tok2id, scoring=None):
         vect = [0] * len(tok2id)
         for tok in summary:
             tokid = tok2id.get(tok, None)
             if tokid is not None:
                 vect[tokid] = 1
+                if scoring:
+                    for score, tokens in scoring.items():
+                        if tok in tokens:
+                            vect[tokid] = score
         return torch.FloatTensor(vect)
 
 
@@ -252,12 +258,21 @@ class SearchEngine:
 
         if ignore_fn:
             with open(ignore_fn) as file:
-                self.ignore = set(json.load(file))
+                data = json.load(file)
+            self.ignore = {v for v, d in data.items() if d is None}
+            self.synonyms = {v: d for v, d in data.items() if d is not None}
+
+            for token, syns in list(self.synonyms.items()):
+                if token in self.vocab:
+                    synonyms = self.vocab[token].get('synonyms', [])
+                    self.vocab[token]['synonyms'] = list(set(synonyms + syns))
+
         else:
             self.ignore = set()
 
-        for token in list(self.vocab.keys()):
-            if len(token) < 3 or token in self.ignore:
+        self.known = set(self.vocab)
+        for token in self.known:
+            if not self.is_valid_token(token):
                 del self.vocab[token]
 
         self.entities = [(ent, data) for ent, data in self.vocab.items() if data.get('is_entity', False)]
@@ -269,8 +284,10 @@ class SearchEngine:
 
         # After id2tok is computed, because otherwise id2tok might be associated with a synonym and not the main lemma.
         for word, data in list(self.vocab.items()):
-            self.tok2id.update({tok: self.tok2id[word] for tok in data.get('synonyms', [])})
-            self.vocab.update({tok: self.vocab[word] for tok in data.get('synonyms', [])})
+            data['synonyms'] = list({tok for tok in data.get('synonyms', []) if self.is_valid_token(tok, is_new=True)})
+            data['summary'] = list({tok for tok in data.get('summary', []) + data['synonyms'] if self.is_valid_token(tok)})
+            self.tok2id.update({tok: self.tok2id[word] for tok in data['synonyms']})
+            self.vocab.update({tok: self.vocab[word] for tok in data['synonyms']})
 
         # print(self.tok2id)
         self.entity_multinomial = []
@@ -279,17 +296,46 @@ class SearchEngine:
         self.entity_multinomial = torch.stack(self.entity_multinomial)
         # print(len(self.entities))
 
-    def search(self, sentence, nbest=4, summarized=False, multinomial=False, description_type=DescriptionType.DEFAULT, reuse_description=True):
+    def normalize(self, token):
+        if self.is_valid_token(token):
+            return self.id2tok.get(self.tok2id.get(token, None), None)
+        return None
+
+    def is_valid_token(self, token, is_new=False):
+        # if token in self.known:
+        #     if is_new:
+        #         return False
+        # else:
+        #     self.known.add(token)
+        return len(token) >= 4 and token not in self.ignore
+
+    def search(self, sentence, nbest=4, summarized=False, multinomial=False, description_type=DescriptionType.DEFAULT, reuse_description=True, use_alts=False):
         embedding = None
+        literal_seq = []
         if summarized:
             # entry = NLP.summarizedb_entry({'label': sentence}, self.vocab, description_type=description_type, reuse_description=reuse_description)
             # seq = entry['summary']
             seq = NLP.get_tokens(sentence, self.vocab, description_type)
-            seq = list(set(seq) | {alt for tok in seq for alt in self.vocab.get(tok, {}).get('summary', []) if not self.vocab.get(tok, {}).get('is_entity', False)})
-            print(f"SEARCH {seq}")
+            seq = {self.normalize(tok) for tok in seq}
+            seq = {tok for tok in seq if tok}
             desc = " ".join([w for token in seq for w in token.split('_')])
             if multinomial:
+                literal_seq = NLP.get_tokens(sentence, self.vocab, DescriptionType.DEFAULT)
+                if use_alts:
+                    seq_non_entities = [tok for tok in seq if not self.vocab.get(tok, {}).get('is_entity', False)]
+                    alts = {
+                        self.normalize(alt)
+                        for tok in seq_non_entities
+                        for alt in self.vocab.get(tok, {}).get('summary', []) + seq_non_entities
+                    }
+                    seq |= alts
+
+                elif len(literal_seq) == 1 and self.vocab.get(literal_seq[0], {}).get('is_entity', False):
+                    token = self.normalize(literal_seq[0])
+                    seq = self.vocab.get(token, {}).get('summary', [])
+
                 embedding = NLP.to_multinomial(seq, self.tok2id)
+                seq = list(seq)
             else:
                 embedding = torch.FloatTensor(entry['summaryEmbedding'])
         else:
@@ -297,10 +343,15 @@ class SearchEngine:
         desc = f"{sentence}. {desc}"
         print(f"SEARCH: {sentence}: {seq}: {desc}")
 
+
+        result = self.literal_search(desc, nbest, embedding=embedding, multinomial=multinomial)
+        if len(result) == 0:
+            return self.search(sentence, nbest=nbest, summarized=summarized, multinomial=multinomial, description_type=description_type, reuse_description=reuse_description, use_alts=True)
+
         return {
             'tokens': seq,
             'description': desc,
-            'nbests': self.literal_search(desc, nbest, embedding=embedding, multinomial=multinomial),
+            'nbests': result,
         }
 
     def literal_search(self, desc, nbest=4, embedding=None, multinomial=False):
@@ -314,15 +365,17 @@ class SearchEngine:
             embedding = EmbeddingsProcessor.pages_to_embeddings([desc])[0]
             entity_embeddings = self.entity_embeddings
 
-        scores = cos(entity_embeddings, embedding)
         if is_summary:
             mult = torch.mul(embedding, entity_embeddings).sum(dim=1)
             entity_coverage = mult / entity_embeddings.sum(dim=1)
-            scores = (scores + entity_coverage + mult) / (embedding.sum() + 2.0)
+            scores = (mult + entity_coverage) / (embedding.sum() + 1.0)
+            # scores = mult / embedding.sum()
+        else:
+            scores = cos(entity_embeddings, embedding)
 
         index_sorted = torch.argsort(scores)
         top_scores = reversed(index_sorted[-nbest:])
-        # print([(scores[i], self.entities[i][1]['label']) for i in index_sorted])
+        print([(scores[i], self.entities[i][1]['label']) for i in index_sorted])
 
         return [
             {

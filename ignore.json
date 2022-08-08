@@ -1,4 +1,29 @@
-[
-  "",
-  "a"
-]
+{
+  "": null,
+  "": null,
+  "": null,
+  "blanco": null,
+  "plato": null,
+  "castellano": null,
+  "rojo": null,
+  "vegetariana": null,
+  "entero": null,
+  "calorio": null,
+  "hierba": null,
+  "exotico": null,
+  "tropical": null,
+  "norte": null,
+  "oryza": null,
+  "asiatico": null,
+  "vino_blanco": ["chacoli"],
+  "paella": ["paellada"],
+  "aguardiente": ["cazalla"],
+  "lengua": null,
+  "pai": null,
+  "chile": null,
+  "burgo": null,
+  "produccion": null,
+  "cantabria": null,
+  "": null,
+  "a": null
+}
