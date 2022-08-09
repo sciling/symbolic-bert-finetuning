@@ -238,16 +238,12 @@ class NLP:
         return seq, description
 
     @classmethod
-    def to_multinomial(cls, summary, tok2id, scoring=None):
+    def to_multinomial(cls, summary, tok2id):
         vect = [0] * len(tok2id)
         for tok in summary:
             tokid = tok2id.get(tok, None)
             if tokid is not None:
                 vect[tokid] = 1
-                if scoring:
-                    for score, tokens in scoring.items():
-                        if tok in tokens:
-                            vect[tokid] = score
         return torch.FloatTensor(vect)
 
 
