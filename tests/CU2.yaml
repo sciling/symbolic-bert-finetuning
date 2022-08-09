@@ -48,6 +48,7 @@ dialogs:
       - query: ¡Comenzar!
         response:
           confidence: 0.7
+          correct: true
           intent: welcome
   
   - name: welcome_test_2

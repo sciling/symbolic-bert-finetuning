@@ -31,9 +31,173 @@ entities:
 
 dialogs:
 
-  - name: dont_understand
+  #region Welcome Tests
+  - name: bad_welcome_test_1
     initial_context: {}
     steps:
-      - query: el trabajo del trilero
+      - query: asdf
         response:
-          intent:
+          correct: false
+          confidence: 0.7
+          intent: None
+
+  - name: welcome_test_1
+    initial_context: {}
+    steps:
+      - query: ¡Comenzar!
+        response:
+          confidence: 0.7
+          intent: welcome
+  
+  - name: welcome_test_2
+    initial_context: {}
+    steps:
+      - query: comenzar
+        response:
+          confidence: 0.7
+          intent: welcome
+
+  - name: welcome_test_3
+    initial_context: {}
+    steps:
+      - query: empezar
+        response:
+          confidence: 0.7
+          intent: welcome
+          
+  - name: welcome_test_4
+    initial_context: {}
+    steps:
+      - query: hola
+        response:
+          confidence: 0.7
+          intent: welcome
+  
+  - name: welcome_test_5
+    initial_context: {}
+    steps:
+      - query: buenas
+        response:
+          confidence: 0.7
+          intent: welcome
+          
+  - name: welcome_test_6
+    initial_context: {}
+    steps:
+      - query: buenos dias
+        response:
+          confidence: 0.7
+          intent: welcome
+
+  - name: welcome_test_7
+    initial_context: {}
+    steps:
+      - query: hola
+        response:
+          confidence: 0.7
+          intent: welcome
+
+  #endregion
+
+#region normal conversations
+
+  #Este test debe ser correcto siempre. Si no, watool.py no funciona correctamente.
+  - name: control
+    initial_context: {}
+    steps:
+      - query: ¡Comenzar!
+        response:
+          confidence: 0.7
+          intent: onboarding_comenzar
+
+  - name: normal_test_1
+    initial_context: {}
+    steps:
+      - query: ¡Comenzar!
+        response:
+          confidence: 0.7
+          correct: false
+          intent: onboarding_comenzar
+      - query: ¡Adelante!
+        response:
+          confidence: 0.7
+          intent: onboarding
+          entities:
+            - name: bool
+              value: Sí
+              confidence: 0.7
+      - query: nada
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: likert_lloro
+              value: Nada
+              confidence: 0.7
+
+  - name: normal_test_2
+    initial_context: {}
+    steps:
+      - query: ¡Comenzar!
+        response:
+          confidence: 0.7
+          intent: onboarding_comenzar
+      - query: ¡Adelante!
+        response:
+          confidence: 0.7
+          intent: onboarding
+          entities:
+            - name: bool
+              value: Sí
+              confidence: 0.7
+      - query: tranquilo
+        response:
+          confidence: 0.7
+          intent: onboarding
+
+  - name: normal_test_3
+    initial_context: {}
+    steps:
+      - query: ¡Comenzar!
+        response:
+          confidence: 0.7
+          intent: onboarding_comenzar
+      - query: Quiero registrar mis emociones
+        response:
+          confidence: 0.7
+          intent: onboarding
+      - query: bien
+        response:
+          confidence: 0.7
+          intent: onboarding
+          entities:
+            - name: estado_animo
+              value: emociones positivas
+              confidence: 0.7
+
+  - name: normal_test_4
+    initial_context: {}
+    steps:
+      - query: ¡Comenzar!
+        response:
+          confidence: 0.7
+          intent: onboarding_comenzar
+      - query: ¡Adelante!
+        response:
+          confidence: 0.7
+          correct: false
+          intent: onboarding
+          entities:
+            - name: bool
+              value: Sí
+              confidence: 0.7
+      - query: horrible
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: estado_animo
+              value: emociones negativas
+              confidence: 0.7
+      
+#endregion
