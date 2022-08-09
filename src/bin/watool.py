@@ -103,6 +103,11 @@ def not_match_response(pattern, output, context):
             match_exit_status = "\"correct\" doesn't match"
         elif not pattern["correct"] and matches:
             return match_exit_status, match_error_info
+    elif not correctResponeOutput:
+        matches = False
+        match_exit_status = "Incorrect response"
+        match_error_info = "Expected a correct output and got correct = False"
+        return match_exit_status, match_error_info
 
     if "confidence" in pattern and matches:
         matches = matches and intent["confidence"] >= pattern["confidence"]
@@ -135,6 +140,9 @@ def not_match_response(pattern, output, context):
                         match_error_info = "Got " + str(entities[pat["name"]]["confidence"]) + " and expected >= " + str(pat["confidence"])
             else:
                 matches = False
+                if not matches and not match_exit_status:
+                        match_exit_status = "Entity not found"
+                        match_error_info = f"{pat['name']} is not in {entities}"
     matches = matches and context is not None
     if not matches and not match_exit_status:
         match_exit_status = "\"context\" doesn't match, should be None"
@@ -173,11 +181,16 @@ def get_isCorrectResponse(output):
         if "text" in output["generic"][len(output["generic"])-i-1]:
             actualResponse = output["generic"][len(output["generic"])-i-1]["text"]
             break
+        elif "title" in output["generic"][len(output["generic"])-i-1]:
+            actualResponse = output["generic"][len(output["generic"])-i-1]["title"]
+            break
 
     #confidence = output["intents"][0]["confidence"] > 0.5 or output["entities"] != []
     confidence = True
-    correct = confidence and lastResponse != actualResponse and 'nodes_visited' in output['debug'] and "anything_else" in str(output['debug']['nodes_visited'][-1]['conditions'])
+    correct = lastResponse != actualResponse and 'nodes_visited' in output['debug'] and "anything_else" not in str(output['debug']['nodes_visited'][-1]['conditions'])
+    print("Correct answer test status: ", lastResponse != actualResponse,'nodes_visited' in output['debug'],"anything_else" not in str(output['debug']['nodes_visited'][-1]['conditions']))
     globals()["lastResponse"] = actualResponse
+    
     return correct
 
 def response_to_str(response):
