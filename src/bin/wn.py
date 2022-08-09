@@ -351,7 +351,7 @@ def get_food_alternatives(
     extend_fn: Path = typer.Option(None), do_hypos: bool = False,
     show_synsets: bool = False, show_definitions: bool = True, show_alternatives: bool = True,
     export_ibm_fn: Path = typer.Option(None), export_csv_fn: Path = typer.Option(None),
-    use_definitions: bool = False
+    use_definitions: bool = False, entity_name: str = 'alimento_tipo'
 ):
 
     nltk.download("omw")
@@ -364,6 +364,7 @@ def get_food_alternatives(
         with open(extend_fn) as file:
             csvreader = csv.reader(file, delimiter=',', quotechar='"')
             for row in csvreader:
+                entity_name = row[0]
                 foods.add(row[1])
                 doc[row[1]] = {"alternatives": {r for r in row[2:] if r not in seen}}
                 seen.update(row[2:])
@@ -373,6 +374,7 @@ def get_food_alternatives(
         with open(foods_fn) as file:
             csvreader = csv.reader(file, delimiter=',', quotechar='"')
             for row in csvreader:
+                entity_name = row[0]
                 foods.add(row[1])
                 alts = {r for r in row[2:] if r not in seen}
                 seen.update(row[2:])
@@ -443,7 +445,10 @@ def get_food_alternatives(
         with open(export_ibm_fn, "w") as file:
             csvwriter = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             for food, data in doc.items():
-                csvwriter.writerow(['alimento_tipo', food] + list(set(list(data.get('alternatives', [])) + list(data.get('hyponyms', [])))))
+                syns = [syn for syn in set(list(data.get('alternatives', [])) + list(data.get('hyponyms', []))) if len(syn) <= 64]
+                if len(syns) == 0:
+                    syns = [food[0:64]]
+                csvwriter.writerow([entity_name, food] + syns)
 
     elif export_csv_fn:
         with open(export_csv_fn, "w") as file:
