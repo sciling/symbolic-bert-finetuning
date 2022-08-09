@@ -14,6 +14,8 @@ import torch
 from torch.nn import CosineSimilarity
 from tqdm import tqdm
 from nltk.util import ngrams
+from spacy.tokens import Doc, Token
+from spellchecker import SpellChecker
 
 cos = CosineSimilarity(dim=1, eps=1e-6)
 
@@ -65,6 +67,7 @@ class DescriptionType(Enum):
 
 
 class NLP:
+    SPELLCHECKER = None
     INFLECTOR = None
     NLP = None
     STOPWORDS = {'tipo'}
@@ -83,6 +86,16 @@ class NLP:
         return cls.INFLECTOR
 
     @classmethod
+    def get_spellchecker(cls):
+        if cls.SPELLCHECKER is None:
+            cls.SPELLCHECKER = SpellChecker(language='es')
+        return cls.SPELLCHECKER
+
+    @classmethod
+    def correct(cls, text):
+        return cls.get_spellchecker().correction(text)
+
+    @classmethod
     def nlp(cls, text):
         return cls.get_model()(text)
 
@@ -91,9 +104,15 @@ class NLP:
         return cls.get_inflector().singularize(text)
 
     @classmethod
-    def normalize(cls, sentence):
+    def normalize(cls, sentence, fuzzy=None):
+        print(f"SENT: {sentence}")
         seq = cls.nlp(note_re.sub('', sentence.lower()))
-        return [unidecode(cls.singularize_spacy_token(t)) for t in seq if not t.is_punct and not t.is_stop]
+        print(f"SEQ: {seq}")
+        if fuzzy:
+            seq = cls.nlp(' '.join([NLP.correct(t.text) for t in seq]))
+        normalized = [unidecode(cls.singularize_spacy_token(t)) for t in seq if not t.is_punct and not t.is_stop]
+        print(f"NORMALIZED: {normalized}")
+        return normalized
 
     @classmethod
     def split(cls, sentence):
@@ -155,8 +174,9 @@ class NLP:
         return not seq[0].is_stop and not seq[0].like_num and not seq[0].is_punct and not seq[-1].is_stop and not seq[-1].is_punct
 
     @classmethod
-    def get_all_ngrams(cls, sentence, max_ngram=5):
-        sentence = [w for w in punct_re.sub('', sentence).lower().split(' ') if w]
+    def get_all_ngrams(cls, sentence, max_ngram=5, fuzzy=None):
+        sentence = cls.normalize(sentence, fuzzy=fuzzy)
+        # sentence = [w for w in punct_re.sub('', sentence).lower().split(' ') if w]
         ngs = set()
         for n in range(1, max_ngram + 1):
             fullset = [' '.join(ng) for ng in ngrams(sentence, n)]
@@ -165,12 +185,12 @@ class NLP:
         return ngs
 
     @classmethod
-    def tokenize(cls, sentence, vocab):
+    def tokenize(cls, sentence, vocab, fuzzy=None):
         if vocab:
             max_ngram_len = max(1, max([len(w.split('_')) for w in vocab]))
         else:
             max_ngram_len = 1
-        sentence = cls.normalize(sentence)
+        sentence = cls.normalize(sentence, fuzzy=fuzzy)
         total_words = len(sentence)
 
         seq = []
@@ -193,16 +213,16 @@ class NLP:
         return seq
 
     @classmethod
-    def get_tokens(cls, text, vocab, description_type=DescriptionType.DEFAULT):
+    def get_tokens(cls, text, vocab, description_type=DescriptionType.DEFAULT, fuzzy=None):
         # print(f"PREEDES: '{text}'")
         if description_type == DescriptionType.LONG:
-            all_ngrams = cls.get_all_ngrams(text)
+            all_ngrams = cls.get_all_ngrams(text, fuzzy=fuzzy)
             # print(f"NGRAMTOKS: {sentence} '{description}' {all_ngrams}")
             tokens = {'_'.join(cls.normalize(token)) for token in all_ngrams}
         elif description_type == DescriptionType.SHORT:
-            tokens = cls.tokenize(text, vocab={})
+            tokens = cls.tokenize(text, vocab={}, fuzzy=None)
         else:
-            tokens = cls.tokenize(text, vocab)
+            tokens = cls.tokenize(text, vocab, fuzzy=fuzzy)
         # print(f"POSTDES: '{tokens}'")
         return tokens
 
@@ -298,6 +318,9 @@ class SearchEngine:
         self.entity_multinomial = torch.stack(self.entity_multinomial)
         # print(len(self.entities))
 
+    def get_ibm_entities(self):
+        return [[ent] + data.get('synonyms', []) for ent, data in self.entities]
+
     def normalize(self, token):
         if self.is_valid_token(token):
             return self.id2tok.get(self.tok2id.get(token, None), None)
@@ -306,18 +329,16 @@ class SearchEngine:
     def is_valid_token(self, token, is_new=False):
         return len(token) >= 4 and token not in self.ignore
 
-    def search(self, sentence, nbest=4, summarized=False, multinomial=False, description_type=DescriptionType.DEFAULT, reuse_description=True, use_alts=False):
+    def search(self, sentence, nbest=4, summarized=False, multinomial=False, description_type=DescriptionType.DEFAULT, reuse_description=True, fuzzy=True, use_alts=False):
         embedding = None
         literal_seq = []
         if summarized:
-            # entry = NLP.summarizedb_entry({'label': sentence}, self.vocab, description_type=description_type, reuse_description=reuse_description)
-            # seq = entry['summary']
-            seq = NLP.get_tokens(sentence, self.vocab, description_type)
+            seq = NLP.get_tokens(sentence, self.vocab, description_type, fuzzy=fuzzy)
             seq = {self.normalize(tok) for tok in seq}
             seq = {tok for tok in seq if tok}
             desc = " ".join([w for token in seq for w in token.split('_')])
             if multinomial:
-                literal_seq = NLP.get_tokens(sentence, self.vocab, DescriptionType.DEFAULT)
+                literal_seq = NLP.get_tokens(sentence, self.vocab, DescriptionType.DEFAULT, fuzzy=fuzzy)
                 # print(f"LITERAL: {literal_seq} {self.vocab.get(literal_seq[0], {})}")
                 if use_alts:
                     seq_non_entities = [tok for tok in seq if not self.vocab.get(tok, {}).get('is_entity', False)]
@@ -336,6 +357,8 @@ class SearchEngine:
                 embedding = NLP.to_multinomial(seq, self.tok2id)
                 seq = list(seq)
             else:
+                entry = NLP.summarizedb_entry({'label': sentence}, self.vocab, description_type=description_type, reuse_description=reuse_description)
+                seq = entry['summary']
                 embedding = torch.FloatTensor(entry['summaryEmbedding'])
         else:
             seq, desc = NLP.describe(sentence, self.vocab)

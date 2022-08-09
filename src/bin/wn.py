@@ -613,9 +613,17 @@ def summarize_db(db_fn: Path, save_fn: Path = typer.Option(None), description_ty
 
 
 @app.command()
-def search(text: str, db_fn: Path = typer.Option(None), ignore_fn: Path = typer.Option(None), nbest: int = 4, summarized: bool = False, multinomial: bool = False, description_type: DescriptionType = DescriptionType.DEFAULT, reuse_description: bool = True):
+def search(text: str, db_fn: Path = typer.Option(None), ignore_fn: Path = typer.Option(None), nbest: int = 4, summarized: bool = False, multinomial: bool = False, description_type: DescriptionType = DescriptionType.DEFAULT, reuse_description: bool = True, fuzzy=True):
     searcher = SearchEngine(db_fn, ignore_fn)
-    res = searcher.search(text, nbest, summarized=summarized, multinomial=multinomial, description_type=description_type, reuse_description=reuse_description)
+    res = searcher.search(text, nbest, summarized=summarized, multinomial=multinomial, description_type=description_type, reuse_description=reuse_description, fuzzy=fuzzy)
+
+    print(json.dumps(res, indent=2, ensure_ascii=False))
+
+
+@app.command()
+def search_ibm_export(db_fn: Path = typer.Option(None), ignore_fn: Path = typer.Option(None)):
+    searcher = SearchEngine(db_fn, ignore_fn)
+    res = searcher.get_ibm_entities()
 
     print(json.dumps(res, indent=2, ensure_ascii=False))
 
