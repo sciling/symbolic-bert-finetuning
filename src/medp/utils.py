@@ -105,13 +105,13 @@ class NLP:
 
     @classmethod
     def normalize(cls, sentence, fuzzy=None):
-        print(f"SENT: {sentence}")
+        # print(f"SENT: {sentence}")
         seq = cls.nlp(note_re.sub('', sentence.lower()))
-        print(f"SEQ: {seq}")
+        # print(f"SEQ: {seq}")
         if fuzzy:
             seq = cls.nlp(' '.join([NLP.correct(t.text) for t in seq]))
         normalized = [unidecode(cls.singularize_spacy_token(t)) for t in seq if not t.is_punct and not t.is_stop]
-        print(f"NORMALIZED: {normalized}")
+        # print(f"NORMALIZED: {normalized}")
         return normalized
 
     @classmethod
