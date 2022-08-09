@@ -347,9 +347,10 @@ def generate_alternatives(alts):
 
 @app.command()
 def get_food_alternatives(
-    foods_fn: Path, default_foods_fn: Path = typer.Argument(None), do_hypos: bool = False,
+    foods_fn: Path, default_foods_fn: Path = typer.Argument(None),
+    extend_fn: Path = typer.Option(None), do_hypos: bool = False,
     show_synsets: bool = False, show_definitions: bool = True, show_alternatives: bool = True,
-    export_ibm: bool = False, export_csv_fn: Path = typer.Option(None),
+    export_ibm_fn: Path = typer.Option(None), export_csv_fn: Path = typer.Option(None),
     use_definitions: bool = False
 ):
 
@@ -357,20 +358,39 @@ def get_food_alternatives(
 
     seen = set()
     doc = {}
-    foods = []
+    foods = set()
+
+    if extend_fn:
+        with open(extend_fn) as file:
+            csvreader = csv.reader(file, delimiter=',', quotechar='"')
+            for row in csvreader:
+                foods.add(row[1])
+                doc[row[1]] = {"alternatives": {r for r in row[2:] if r not in seen}}
+                seen.update(row[2:])
+
+    new_entries = 0
     if foods_fn.suffix in ('.csv', ):
         with open(foods_fn) as file:
             csvreader = csv.reader(file, delimiter=',', quotechar='"')
             for row in csvreader:
-                foods.append(row[1])
-                doc[row[1]] = {"alternatives": {r for r in row[2:] if r not in seen}}
+                foods.add(row[1])
+                alts = {r for r in row[2:] if r not in seen}
                 seen.update(row[2:])
+
+                if row[1] in doc:
+                    doc[row[1]]['alternatives'] |= alts
+                else:
+                    new_entries += 1
+                    print(f"NEW: '{row[1]}'")
+                    doc[row[1]] = {"alternatives": alts}
 
     else:
         yaml = YAML(typ="safe")  # default, if not specfied, is 'rt' (round-trip)
         with open(foods_fn) as file:
             foods = yaml.load(file)
             doc = {food: {"alternatives": set([food])} for food in foods}
+
+    print(f"NEW ENTRIES: {new_entries}")
 
     for food in foods:
         all_seqs = []
@@ -419,8 +439,8 @@ def get_food_alternatives(
             else:
                 print(f"WARNING: default '{synname}' -> '{food}' not a valid entity")
 
-    if export_ibm:
-        with open("food_alts.csv", "w") as file:
+    if export_ibm_fn:
+        with open(export_ibm_fn, "w") as file:
             csvwriter = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             for food, data in doc.items():
                 csvwriter.writerow(['alimento_tipo', food] + list(set(list(data.get('alternatives', [])) + list(data.get('hyponyms', [])))))
