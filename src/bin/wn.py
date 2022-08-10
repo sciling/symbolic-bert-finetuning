@@ -448,7 +448,7 @@ def get_food_alternatives(
                 syns = [syn for syn in set(list(data.get('alternatives', [])) + list(data.get('hyponyms', []))) if len(syn) <= 64]
                 if len(syns) == 0:
                     syns = [food[0:64]]
-                csvwriter.writerow([entity_name, food] + syns)
+                csvwriter.writerow([entity_name, food] + sorted(syns))
 
     elif export_csv_fn:
         with open(export_csv_fn, "w") as file:
