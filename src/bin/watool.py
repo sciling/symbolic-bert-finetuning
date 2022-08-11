@@ -74,7 +74,7 @@ def not_match_response(pattern, output, context):
     if not pattern:
         return matches
 
-    correctResponeOutput = get_isCorrectResponse(output)
+    correctResponeOutput = get_isCorrectResponse(output, pattern.get('anything_else',False))
 
     intent = output["intents"][0]
     correct = True
@@ -175,7 +175,7 @@ def get_responses(output):
     return [generic]
 
 lastResponse = None
-def get_isCorrectResponse(output):
+def get_isCorrectResponse(output,anything_else=False):
     actualResponse = None
     for i in range(len(output["generic"])):
         if "text" in output["generic"][len(output["generic"])-i-1]:
@@ -187,7 +187,7 @@ def get_isCorrectResponse(output):
 
     #confidence = output["intents"][0]["confidence"] > 0.5 or output["entities"] != []
     confidence = True
-    correct = lastResponse != actualResponse and 'nodes_visited' in output['debug'] and "anything_else" not in str(output['debug']['nodes_visited'][-1]['conditions'])
+    correct = lastResponse != actualResponse and 'nodes_visited' in output['debug'] and (anything_else or "anything_else" not in str(output['debug']['nodes_visited'][-1]['conditions']))
     print("Correct answer test status: ", lastResponse != actualResponse,'nodes_visited' in output['debug'],"anything_else" not in str(output['debug']['nodes_visited'][-1]['conditions']))
     globals()["lastResponse"] = actualResponse
     

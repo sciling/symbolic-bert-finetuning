@@ -5,29 +5,15 @@ config:
   assistant_id: 3b98249b-30c0-4aa0-a784-8c889f77372d
 
 entities:
-  tipo_dieta:
-    Dieta ovolacteovegetariana:
-      - ovolacteovegetariano
-      - ovolacteo
-      - huevos y leche pero no carne
-      - vegetariano pero con huevos y leche
-    Dieta vegana:
-      - vegana
-      - veggie
-      - vegano puro y duro
-      - del animal nada de nada
-    no consumo carne:
-      - no consumo carne
-      - no como carne
-      - la carne no me mola
-      - la carne me da asco
-      - la carne me causa indigestión
-    No, mi dieta no tiene ninguna particularidad:
-      - nada
-      - ninguna
-      - no
-      - soy normalito del montón
-      - lo que caiga
+  estado_animo:
+    irritación:
+      - irritado
+      - irritación
+      - furioso
+      - enfadado
+      - enfado
+      - molesto
+      - furia
 
 dialogs:
 
@@ -99,6 +85,63 @@ dialogs:
 
   #endregion
 
+#region Extreme tests
+
+  - name: extreme_test_1
+    initial_context: {}
+    steps:
+      - query: ¡Comenzar!
+        response:
+          confidence: 0.7
+          intent: onboarding_comenzar
+      - query: Buscar informacion
+        response:
+          confidence: 0.7
+          intent: informacion_buscar
+      - query: asasdasfaf
+        response:
+          correct: False
+          confidence: 0.7
+          intent: UNDEFINED
+
+  - name: extreme_test_2
+    initial_context: {}
+    steps:
+      - query: asddffgh
+        response:
+          confidence: 0.7
+          correct: False
+          intent: onboarding
+      - query: asdfg
+        response:
+          confidence: 0.7
+          correct: False
+          anything_else: true
+          intent: entity_recognition
+
+  - name: extreme_test_3
+    initial_context: {}
+    steps:
+      - query: ¡Comenzar!
+        response:
+          confidence: 0.7
+          intent: onboarding_comenzar
+      - query: ¡Adelante!
+        response:
+          confidence: 0.7
+          anything_else: true
+          intent: onboarding
+          entities:
+            - name: bool
+              value: Si
+              confidence: 0.7
+      - query: sfadfd
+        response:
+          confidence: 0.7
+          intent: None
+
+#endregion
+
 #region normal conversations
 
   #Este test debe ser correcto siempre. Si no, watool.py no funciona correctamente.
@@ -116,15 +159,15 @@ dialogs:
       - query: ¡Comenzar!
         response:
           confidence: 0.7
-          correct: false
           intent: onboarding_comenzar
       - query: ¡Adelante!
         response:
           confidence: 0.7
+          anything_else: true
           intent: onboarding
           entities:
             - name: bool
-              value: Sí
+              value: Si
               confidence: 0.7
       - query: nada
         response:
@@ -145,10 +188,11 @@ dialogs:
       - query: ¡Adelante!
         response:
           confidence: 0.7
+          anything_else: true
           intent: onboarding
           entities:
             - name: bool
-              value: Sí
+              value: Si
               confidence: 0.7
       - query: tranquilo
         response:
@@ -165,10 +209,12 @@ dialogs:
       - query: Quiero registrar mis emociones
         response:
           confidence: 0.7
+          anything_else: true
           intent: onboarding
       - query: bien
         response:
           confidence: 0.7
+          anything_else: true
           intent: onboarding
           entities:
             - name: estado_animo
@@ -185,11 +231,11 @@ dialogs:
       - query: ¡Adelante!
         response:
           confidence: 0.7
-          correct: false
+          anything_else: true
           intent: onboarding
           entities:
             - name: bool
-              value: Sí
+              value: Si
               confidence: 0.7
       - query: horrible
         response:
@@ -199,5 +245,126 @@ dialogs:
             - name: estado_animo
               value: emociones negativas
               confidence: 0.7
-      
+      - query: irritado
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: estado_animo
+              value: irritación
+              confidence: 0.7
+
+  - name: normal_test_5
+    initial_context: {}
+    steps:
+      - query: ¡Comenzar!
+        response:
+          confidence: 0.7
+          intent: onboarding_comenzar
+      - query: ¡Adelante!
+        response:
+          confidence: 0.7
+          anything_else: true
+          intent: onboarding
+          entities:
+            - name: bool
+              value: Si
+              confidence: 0.7
+      - query: nerviosismo
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: estado_animo
+              value: nervioso
+              confidence: 0.7
+      - query: '10'
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '10'
+              confidence: 0.7
+      - query: si
+        response:
+          confidence: 0.7
+          intent: onboarding
+          entities:
+            - name: bool
+              value: Si
+              confidence: 0.7
+      - query: si
+        response:
+          confidence: 0.7
+          intent: onboarding
+          entities:
+            - name: bool
+              value: Si
+              confidence: 0.7
+      - query: si
+        response:
+          confidence: 0.7
+          anything_else: true
+          intent: onboarding
+          entities:
+            - name: bool
+              value: Si
+              confidence: 0.7
+      - query: 'no'
+        response:
+          confidence: 0.7
+          intent: onboarding
+          entities:
+            - name: bool
+              value: 'No'
+              confidence: 0.7
+
+
+  - name: normal_test_6
+    initial_context: {}
+    steps:
+      - query: ¡Comenzar!
+        response:
+          confidence: 0.7
+          intent: onboarding_comenzar
+      - query: Buscar informacion
+        response:
+          confidence: 0.7
+          intent: informacion_buscar
+      - query: ¿Por qué he perdido el interés por hacer cosas?
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: estado_animo
+              value: emociones positivas
+              confidence: 0.7
+
+#Tests de ira
+  - name: extreme_test_7
+    initial_context: {}
+    steps:
+      - query: ¡Comenzar!
+        response:
+          confidence: 0.7
+          intent: onboarding_comenzar
+      - query: ¡Adelante!
+        response:
+          confidence: 0.7
+          anything_else: true
+          intent: onboarding
+          entities:
+            - name: bool
+              value: Si
+              confidence: 0.7
+      - query: ira
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: estado_animo
+              value: irritación
+              confidence: 0.7
+
 #endregion
