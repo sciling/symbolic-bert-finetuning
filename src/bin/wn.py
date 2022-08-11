@@ -11,6 +11,7 @@
 
 import warnings
 
+import re
 import csv
 import json
 from collections import Counter
@@ -26,6 +27,7 @@ import nltk
 import ruamel.yaml
 import typer
 import spacy_stanza
+import pandas as pd
 
 from nltk.corpus import wordnet as wn
 from nltk.corpus.reader.wordnet import Synset  # pylint: disable=no-name-in-module
@@ -184,7 +186,7 @@ def find_food_syns(word, log=False):
 
     res = []
     for syn in syns:
-        if not find_foods_syns(syn):
+        if not find_relevant_syns(syn):
             continue
 
         res.extend([lemma.name() for lemma in get_lemmas(syn)])
@@ -229,13 +231,13 @@ def find_food_hypos(word, log=False):
     for syn in syns:
         hypos = list(syn.closure(lambda s: s.hyponyms()))
         res.update(hypos)
-        hypos = sorted({f"{lemma.name()}({h.name()})" for h in hypos for lemma in h.lemmas(lang="spa") if not find_hypos(h) and find_foods_syns(h)})
+        hypos = sorted({f"{lemma.name()}({h.name()})" for h in hypos for lemma in h.lemmas(lang="spa") if not find_hypos(h) and find_relevant_syns(h)})
         if log:
             typer.echo(f"{syn} -> {hypos}")
     return res
 
 
-def find_foods_syns(word):
+def find_relevant_syns(word, parent_hyps=food_hyps):
     syns = get_syns(word)
     news = set()
     hypss = Counter()
@@ -244,7 +246,7 @@ def find_foods_syns(word):
         hyps = list(syn.closure(lambda s: s.hypernyms()))
         hypss.update(hyps)
         for hyp in hyps:
-            if hyp.name() in food_hyps:
+            if hyp.name() in parent_hyps:
                 news.add(hyp)
 
     # typer.echo(f"{word} -> {hypss}")
@@ -286,7 +288,7 @@ def get_food_words(foods_fn: Path):
             if word in stopword:
                 continue
 
-            hyps = find_foods_syns(word)
+            hyps = find_relevant_syns(word)
             if word not in stopword and hyps:
                 syns.update(find_food_syns(word))
                 food_words.add(word.lower())
@@ -303,7 +305,7 @@ def get_food_words(foods_fn: Path):
 ignore_ngrams = {"entero"}
 
 
-def get_ngram_syns(sentence, max_ngram=5):
+def get_ngram_syns_pairs(sentence, max_ngram=5):
     sentence = word_tokenize(sentence.replace(",", "").lower())
     n_words = len(sentence)
     seq = []
@@ -314,20 +316,25 @@ def get_ngram_syns(sentence, max_ngram=5):
             ngram = "_".join(sentence[i : i + n])
             if ngram in ignore_ngrams:
                 continue
-            syn = [s for s in get_syns(ngram) if find_foods_syns(s)]
+            syn = [s for s in get_syns(ngram) if find_relevant_syns(s)]
             if syn:
                 advance = n
                 break
 
         if not syn:
-            syn = [sentence[i]]
+            ngram = sentence[i]
+            syn = [ngram]
             advance = 1
             n = 0
 
         # typer.echo(f"{n}-gram({i}+{advance}): {ngram} -> {syn}")
         i += advance
-        seq.append(syn)
+        seq.append((ngram.replace('_', ' '), syn))
     return seq
+
+
+def get_ngram_syns(sentence, max_ngram=5):
+    return [syn for _, syn in get_ngram_syns_pairs(sentence, max_ngram)]
 
 
 def expand_alternatives(syn, do_hypos=False):
@@ -493,8 +500,9 @@ def get_confusing_foods(foods_fn: Path, show_definitions: bool = True, show_lemm
         foods = yaml.load(file)
 
     confusions = defaultdict(set)
+    parts_re = re.compile(r"([,:/]\s*|\s+[yio]\s+)")
     for sentence in foods:
-        parts = sentence.split(", ")
+        parts = parts_re.split(sentence)
         prefs = [" ".join(parts[0:n]) for n in range(1, len(parts) + 1)]
 
         all_ngrams = []
@@ -531,6 +539,83 @@ def get_confusing_foods(foods_fn: Path, show_definitions: bool = True, show_lemm
         yaml.Representer = MyRepresenter
         yaml.indent(mapping=2, sequence=4, offset=2)
         yaml.dump(doc, file)
+
+
+@app.command()
+def get_wordnet_synonyms(
+    entity_fn: Path,
+    export_csv_fn: Path = typer.Option(None),
+    parent_hyps: str = typer.Option(None)
+):
+    nltk.download("omw")
+
+    if parent_hyps:
+        parent_hyps = set(','.split())
+    else:
+        parent_hyps = food_hyps
+
+    entity_name = None
+    doc = {}
+    seen = set()
+    entities = set()
+
+    if entity_fn:
+        with open(entity_fn) as file:
+            csvreader = csv.reader(file, delimiter=',', quotechar='"')
+            for nrow, row in enumerate(csvreader):
+                if nrow == 0:
+                    entity_name = row[0]
+
+                entities.add(row[1])
+                doc[row[1]] = {"synonyms": {r for r in row[2:] if r not in seen}}
+                seen.update(row[2:])
+
+    if not entity_name:
+        typer.echo(f"Could not find entity name in {entity_fn}")
+        raise typer.Exit()
+
+    syns = defaultdict(set)
+    seen = set()
+    parts_re = re.compile(r"([,:/]\s*|\s+[yio]\s+)")
+    with tqdm(doc.items()) as pbar:
+        for entity, data in pbar:
+            for name in tqdm([entity] + list(data.get('synonyms', [])), leave=False):
+                parts = parts_re.split(name)
+                prefs = [" ".join(parts[0:n]) for n in range(1, len(parts) + 1)]
+                pbar.set_description(f"{name} -> {parts} -> {prefs}")
+
+                for pref in tqdm(prefs, leave=False):
+                    pbar.set_description(f"{entity} -> {pref}")
+                    seqs = get_ngram_syns_pairs(pref)
+                    for ngram, seq in seqs:
+                        ngram_syns = {syn for syn in seq if isinstance(syn, Synset) and syn not in seen}
+                        seen.update(ngram_syns)
+                        syns[ngram].update(ngram_syns)
+
+                    syns.update()
+                    # print(f"PREF: {pref} {seqs} {syns}")
+
+    tokens = {}
+    for ngram, syn in syns.items():
+        if not syn:
+            continue
+
+        lemmas = [lemma.name().replace('_', ' ') for s in syn for lemma in get_lemmas(s)]
+        token = ngram
+        print(syn, token, lemmas)
+
+        alt = {}
+        alt["definitions"] = '. '.join([s.definition() for s in syn])
+        alt["synonyms"] = lemmas
+
+        tokens[token] = alt
+
+    if export_csv_fn:
+        with open(export_csv_fn, "w") as file:
+            csvwriter = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            for token, data in sorted(tokens.items()):
+                definition = data.get('definitions', '')
+                csvwriter.writerow([token, definition] + list(sorted(set(data.get('synonyms', [])))))
 
 
 @app.command()
@@ -594,7 +679,12 @@ def summarize(sentence: str, db_fn: Path = typer.Option(None)):
 
 
 @app.command()
-def create_db(vocab_fns: List[Path], entities_fn: Path = typer.Option(None), save_fn: Path = typer.Option(None), redefinitions_fn: Path = typer.Option(None), override_definitions: bool = True):
+def create_db(
+    vocab_fns: List[Path], entities_fn: Path = typer.Option(None),
+    save_fn: Path = typer.Option(None),
+    redefinitions_fn: Path = typer.Option(None),
+    override_definitions: bool = True
+):
     vocab = {}
     redefinitions = {}
 
@@ -659,6 +749,37 @@ def literal_search(text: str, db_fn: Path = typer.Option(None), nbest: int = 4):
     res = searcher.literal_search(text, nbest)
 
     print(json.dumps(res, indent=2, ensure_ascii=False))
+
+
+@app.command()
+def parse_excel(excel_fns: List[str], save_fn: Path = typer.Option(None)):
+    all_docs = {}
+    for excel_fn in tqdm(excel_fns):
+        params = excel_fn.split(':')
+        title_idx = int(params[1]) if len(params) > 1 else 2
+        desc_idx = int(params[2]) if len(params) > 2 else None
+        sheets_dict = pd.read_excel(params[0], sheet_name=None)
+
+        for name, sheet in tqdm(sheets_dict.items(), leave=False):
+            # We assume the first column contains a numerical index for all files
+            # so we ignore the rows without this index.
+            sheet = sheet[pd.to_numeric(sheet[sheet.columns[0]], errors='coerce').notnull()]
+            if desc_idx is None:
+                data = {str(title): '' for title in sheet.iloc[:, title_idx]}
+            else:
+                data = {title: desc for title, desc in zip(sheet.iloc[:, title_idx], sheet.iloc[:, desc_idx]) if isinstance(title, str)}
+            print(name, sheet.shape, len(data), data.keys())
+            # print(name, sheet.shape, len(data), sorted(data.keys()))
+            all_docs.update(data)
+
+    if save_fn:
+        with open(save_fn, "w") as file:
+            csvwriter = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            for name, desc in sorted(all_docs.items()):
+                row = [name, str(desc).replace(',', '').replace('\n', ' '), name.lower()]
+                csvwriter.writerow(row)
+    else:
+        print(all_docs)
 
 
 if __name__ == "__main__":

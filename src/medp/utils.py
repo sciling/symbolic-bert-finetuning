@@ -110,9 +110,9 @@ class NLP:
         # print(f"SEQ: {seq}")
         if fuzzy:
             seq = cls.nlp(' '.join([NLP.correct(t.text) for t in seq]))
-        normalized = [unidecode(cls.singularize_spacy_token(t)) for t in seq if not t.is_punct and not t.is_stop]
+        normalized = [unidecode(cls.singularize_spacy_token(t)) for t in seq if not t.is_punct and not t.is_stop and not t.is_space and t.text]
         # print(f"NORMALIZED: {normalized}")
-        return normalized
+        return [tok for tok in normalized if tok]
 
     @classmethod
     def split(cls, sentence):
@@ -127,7 +127,7 @@ class NLP:
         return cls.singularize(token.text)
 
     @classmethod
-    def update_vocab(cls, vocab, vocab_fn, is_entity=False, redefinitions=None, override_definitions=True):
+    def update_vocab(cls, vocab, vocab_fn, is_entity=False, redefinitions=None, override_definitions=True, compute_embeddings=False):
         with open(vocab_fn) as file:
             csvreader = csv.reader(file, delimiter=',', quotechar='"')
             rows = list(csvreader)
@@ -142,17 +142,21 @@ class NLP:
                     else:
                         desc = noise_re.sub('', redefinitions[token])
 
+                embedding = None
+                if compute_embeddings:
+                    EmbeddingsProcessor.pages_to_embeddings([desc])[0].tolist()
+
                 if token not in vocab:
                     vocab[token] = {
                         'label': row[0],
                         'description': desc,
-                        'embedding': EmbeddingsProcessor.pages_to_embeddings([desc])[0].tolist(),
+                        'embedding': embedding,
                         'synonyms': [],
                     }
-                elif override_definitions:
+                elif override_definitions or not vocab[token]['description']:
                     vocab[token].update({
                         'description': desc,
-                        'embedding': EmbeddingsProcessor.pages_to_embeddings([desc])[0].tolist(),
+                        'embedding': embedding,
                     })
 
                 if is_entity:

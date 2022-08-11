@@ -31,6 +31,8 @@ uvicorn = "^0.18.2"
 tqdm = "^4.64.0"
 Wikipedia-API = "^0.5.4"
 pyspellchecker = "^0.6.3"
+pandas = "^1.4.3"
+openpyxl = "^3.0.10"
 
 
 [tool.poetry.dev-dependencies]
