@@ -29,6 +29,7 @@ import typer
 import spacy_stanza
 import pandas as pd
 
+from unidecode import unidecode
 from nltk.corpus import wordnet as wn
 from nltk.corpus.reader.wordnet import Synset  # pylint: disable=no-name-in-module
 from nltk.tokenize import word_tokenize
@@ -780,6 +781,42 @@ def parse_excel(excel_fns: List[str], save_fn: Path = typer.Option(None)):
                 csvwriter.writerow(row)
     else:
         print(all_docs)
+
+
+@app.command()
+def fix_entities(entities_fn: Path, save_fn: Path):
+    with open(entities_fn) as fileread, open(save_fn, "w") as filewrite:
+        csvreader = csv.reader(fileread, delimiter=',', quotechar='"')
+        csvwriter = csv.writer(filewrite, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        for row in csvreader:
+            csvwriter.writerow([row[0].strip(), row[1].strip()] + list(sorted(set([r.strip().lower() for r in row[2:] if not re.match(r"^\s*$", r)]))))
+
+
+@app.command()
+def entities_to_intents(entities_fn: Path, save_fn: Path):
+    with open(entities_fn) as fileread, open(save_fn, "w") as filewrite:
+        csvreader = csv.reader(fileread, delimiter=',', quotechar='"')
+        csvwriter = csv.writer(filewrite, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        for row in csvreader:
+            intent_name = unidecode(f"{row[0]}_{row[1]}").replace(' ', '_')
+            for cell in sorted(row[1:]):
+                csvwriter.writerow([cell, intent_name])
+
+
+@app.command()
+def conjugate(words: List[str]):
+    # lemmas = {lemma.name() for word in words for syn in get_syns(word) if '.v.' in syn.name() for lemma in get_lemmas(syn)}
+    lemmas = words
+    conjugates = {lemma: NLP.conjugate(lemma) for lemma in lemmas}
+    print(conjugates, [NLP.singularize(lemma) for lemma in lemmas], [NLP.pluralize(lemma) for lemma in lemmas])
+
+
+@app.command()
+def variations(words: List[str]):
+    for word in words:
+        tokens = [NLP.get_variations(token) for token in NLP.analyze(word)]
+        print(generate_alternatives([t[0] for t in tokens]))
+        print(generate_alternatives([t[1] for t in tokens]))
 
 
 if __name__ == "__main__":

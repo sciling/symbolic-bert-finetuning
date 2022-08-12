@@ -16,6 +16,8 @@ from tqdm import tqdm
 from nltk.util import ngrams
 from spacy.tokens import Doc, Token
 from spellchecker import SpellChecker
+from spanishconjugator import Conjugator
+import apertium
 
 cos = CosineSimilarity(dim=1, eps=1e-6)
 
@@ -67,6 +69,8 @@ class DescriptionType(Enum):
 
 
 class NLP:
+    APERTIUM_ANALIZER = None
+    APERTIUM_GENERATOR = None
     SPELLCHECKER = None
     INFLECTOR = None
     NLP = None
@@ -92,12 +96,56 @@ class NLP:
         return cls.SPELLCHECKER
 
     @classmethod
+    def get_apertium_analyzer(cls):
+        if cls.APERTIUM_ANALIZER is None:
+            cls.APERTIUM_ANALIZER = apertium.Analyzer('spa')
+        return cls.APERTIUM_ANALIZER
+
+    @classmethod
+    def get_apertium_generator(cls):
+        if cls.APERTIUM_GENERATOR is None:
+            cls.APERTIUM_GENERATOR = apertium.Generator('spa')
+        return cls.APERTIUM_GENERATOR
+
+    @classmethod
+    def analyze(cls, sentence):
+        return cls.get_apertium_analyzer().analyze(sentence)
+
+    @classmethod
+    def generate(cls, unit):
+        return cls.get_apertium_generator().generate(f"^{unit}$")
+
+    @classmethod
+    def get_variations(cls, unit):
+        # https://wiki.apertium.org/wiki/List_of_symbols
+        res = []
+        nouns = {token.baseform for reading in unit.readings for token in reading if 'n' in token.tags}
+        pps = {token.baseform for reading in unit.readings for token in reading if 'pp' in token.tags}
+        verbs = {token.baseform for reading in unit.readings for token in reading if 'vblex' in token.tags and 'pp' not in token.tags}
+
+        for apnum, conjnum in [('sg', 'yo'), ('pl', 'nosotros')]:
+            gender_number = [f'<m><{apnum}>', f'<f><{apnum}>']
+            units = {f"{noun}<n>{form}" for form in gender_number for noun in nouns}
+            units |= {f"{pp}<vblex><pp>{form}" for form in gender_number for pp in pps}
+
+            variations = {cls.generate(unit) for unit in units}
+
+            verbs = {token.baseform for reading in unit.readings for token in reading if 'vblex' in token.tags and 'pp' not in token.tags}
+            variations |= {form for verb in verbs for form in NLP.conjugate(verb, conjnum)}
+            res.append({var for var in variations if var and not var.startswith('#')} | verbs)
+        return res
+
+    @classmethod
     def correct(cls, text):
         return cls.get_spellchecker().correction(text)
 
     @classmethod
     def nlp(cls, text):
         return cls.get_model()(text)
+
+    @classmethod
+    def pluralize(cls, text):
+        return cls.get_inflector().pluralize(text)
 
     @classmethod
     def singularize(cls, text):
@@ -127,6 +175,10 @@ class NLP:
         return cls.singularize(token.text)
 
     @classmethod
+    def clean_notes(cls, sentence):
+        return note_re.sub('', sentence.lower())
+
+    @classmethod
     def update_vocab(cls, vocab, vocab_fn, is_entity=False, redefinitions=None, override_definitions=True, compute_embeddings=False):
         with open(vocab_fn) as file:
             csvreader = csv.reader(file, delimiter=',', quotechar='"')
@@ -151,6 +203,7 @@ class NLP:
                         'label': row[0],
                         'description': desc,
                         'embedding': embedding,
+                        'alternatives': [],
                         'synonyms': [],
                     }
                 elif override_definitions or not vocab[token]['description']:
@@ -163,7 +216,8 @@ class NLP:
                     vocab[token]['is_entity'] = True
                     vocab[token]['label'] = row[0]
 
-                vocab[token]['synonyms'] = list(set(vocab[token]['synonyms']) | {'_'.join(cls.normalize(alt)) for alt in row[2:]})
+                vocab[token]['alternatives'] = list(set(vocab[token]['alternatives']) | {'_'.join(cls.normalize(alt)) for alt in row[2:]})
+                vocab[token]['synonyms'] = list(set(vocab[token]['synonyms']) | {cls.clean_notes(alt) for alt in [row[0]] + row[2:]})
 
                 # print(f"'{row[0]}' -> vocab[{token}] = {row[1][:80]}")
         return vocab
@@ -269,6 +323,20 @@ class NLP:
             if tokid is not None:
                 vect[tokid] = 1
         return torch.FloatTensor(vect)
+
+    @classmethod
+    def conjugate(cls, word: str, pronoun='yo'):
+        # https://pypi.org/project/spanishconjugator/#:~:text=Tenses%2C%20Moods%20and%20Pronouns%20implemented
+        conjugates = set()
+        # for pronoun in ['yo', 'tu', 'usted', 'nosotros', 'vosotros', 'ustedes']:
+        for pronoun in [pronoun]:
+            for mood in ['indicative', 'conditional']:
+                # for tense in ['present', 'imperfect', 'preterite', 'future', 'present_perfect', 'past_anterior', 'future_perfect', 'conditional_simple']:
+                for tense in ['present', 'imperfect', 'preterite', 'future', 'present_perfect', 'conditional_simple']:
+                    words = Conjugator().conjugate(word, tense, mood, pronoun)
+                    if words:
+                        conjugates.add(words.encode('latin1').decode('utf-8'))
+        return conjugates
 
 
 class SearchEngine:

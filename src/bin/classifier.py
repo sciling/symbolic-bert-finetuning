@@ -19,7 +19,7 @@ cos = CosineSimilarity(dim=1, eps=1e-6)
 
 
 @app.command()
-def few_shot(entities_fn: Path, new_samples: List[str] = typer.Argument(None)):
+def few_shot(entities_fn: Path, new_samples: List[str] = typer.Argument(None), interactive: bool = False):
     typer.echo(f"Processing terms {entities_fn}' ...")
 
     if entities_fn.suffix in ('.yaml', '.yml'):
@@ -43,20 +43,21 @@ def few_shot(entities_fn: Path, new_samples: List[str] = typer.Argument(None)):
         scores = cos(X[i], X)
         index_sorted = torch.argsort(scores)
         output = [(labels[i], scores[i], samples[i]) for i in index_sorted if samples[i] != sample]
-        print(sample, label, list(reversed(output))[0:3])
+        print(f"'{sample}', '{label}', {list(reversed(output))[0:3]}")
         if label == labels[index_sorted[-2]]:
             n_good += 1
 
     total = len(samples)
     print(f"{n_good} / {total} = {n_good/total}")
 
-    n_good = 0
-    new_X = EmbeddingsProcessor.pages_to_embeddings(new_samples)
-    for i, sample in enumerate(new_samples):
-        scores = cos(new_X[i], X)
-        index_sorted = torch.argsort(scores)
-        output = [(labels[i], scores[i], samples[i]) for i in index_sorted if samples[i] != sample]
-        print(sample, list(reversed(output))[0:3])
+    if new_samples:
+        n_good = 0
+        new_X = EmbeddingsProcessor.pages_to_embeddings(new_samples)
+        for i, sample in enumerate(new_samples):
+            scores = cos(new_X[i], X)
+            index_sorted = torch.argsort(scores)
+            output = [(labels[i], scores[i], samples[i]) for i in index_sorted if samples[i] != sample]
+            print(sample, list(reversed(output))[0:3])
 
 
 @app.command()
