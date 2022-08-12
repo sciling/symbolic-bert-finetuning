@@ -814,9 +814,11 @@ def conjugate(words: List[str]):
 @app.command()
 def variations(words: List[str]):
     for word in words:
-        tokens = [NLP.get_variations(token) for token in NLP.analyze(word)]
-        print(generate_alternatives([t[0] for t in tokens]))
-        print(generate_alternatives([t[1] for t in tokens]))
+        analysis = NLP.analyze(word)
+        tokens = [NLP.get_variations(token) for token in analysis]
+        print("TOK", analysis, tokens)
+        print("SG", generate_alternatives([t[0] for t in tokens]))
+        print("PL", generate_alternatives([t[1] for t in tokens]))
 
 
 if __name__ == "__main__":

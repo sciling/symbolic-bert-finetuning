@@ -125,9 +125,11 @@ class NLP:
 
         for apnum, conjnum in [('sg', 'yo'), ('pl', 'nosotros')]:
             gender_number = [f'<m><{apnum}>', f'<f><{apnum}>']
-            units = {f"{noun}<n>{form}" for form in gender_number for noun in nouns}
+            units = {re.sub(r"^[^/]*/", '', str(unit))}
+            units |= {f"{noun}<n>{form}" for form in gender_number for noun in nouns}
             units |= {f"{pp}<vblex><pp>{form}" for form in gender_number for pp in pps}
 
+            print(units)
             variations = {cls.generate(unit) for unit in units}
 
             verbs = {token.baseform for reading in unit.readings for token in reading if 'vblex' in token.tags and 'pp' not in token.tags}
