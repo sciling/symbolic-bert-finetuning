@@ -804,21 +804,13 @@ def entities_to_intents(entities_fn: Path, save_fn: Path):
 
 
 @app.command()
-def conjugate(words: List[str]):
-    # lemmas = {lemma.name() for word in words for syn in get_syns(word) if '.v.' in syn.name() for lemma in get_lemmas(syn)}
-    lemmas = words
-    conjugates = {lemma: NLP.conjugate(lemma) for lemma in lemmas}
-    print(conjugates, [NLP.singularize(lemma) for lemma in lemmas], [NLP.pluralize(lemma) for lemma in lemmas])
-
-
-@app.command()
 def variations(words: List[str]):
     for word in words:
         analysis = NLP.analyze(word)
-        tokens = [NLP.get_variations(token) for token in analysis]
-        print("TOK", analysis, tokens)
-        print("SG", generate_alternatives([t[0] for t in tokens]))
-        print("PL", generate_alternatives([t[1] for t in tokens]))
+        for number in ('sg', 'pl'):
+            tokens = [NLP.get_variations(token, number) for token in analysis]
+            print("TOK", analysis, tokens)
+            print(number.upper(), generate_alternatives([t for t in tokens]))
 
 
 if __name__ == "__main__":

@@ -3,6 +3,7 @@ import json
 import csv
 from typing import Iterable
 from enum import Enum
+import itertools
 
 from unidecode import unidecode
 import spacy_stanza
@@ -14,9 +15,7 @@ import torch
 from torch.nn import CosineSimilarity
 from tqdm import tqdm
 from nltk.util import ngrams
-from spacy.tokens import Doc, Token
 from spellchecker import SpellChecker
-from spanishconjugator import Conjugator
 import apertium
 
 cos = CosineSimilarity(dim=1, eps=1e-6)
@@ -60,6 +59,42 @@ class EmbeddingsProcessor:
 noise_re = re.compile(r"\s*Root -> .*$")
 punct_re = re.compile(r"[^\w\s]*")
 note_re = re.compile(r"\s*\([^\)]*\)")
+
+
+VERBS = [
+    "{lemma}<vblex><pri><{person}><{number}>",  # yo sollozo
+    "haber<vbhaver><pri><{person}><{number}> {lemma}<vblex><pp><m><sg>",  # yo he sollozado
+    "{lemma}<vblex><ifi><{person}><{number}>",  # yo sollocé
+    "haber<vbhaver><prs><{person}><{number}> {lemma}<vblex><pp><m><sg>",  # yo haya sollozado
+    "haber<vbhaver><fts><{person}><{number}> {lemma}<vblex><pp><m><sg>",  # yo hubiere sollozado
+    "{lemma}<vblex><fti><{person}><{number}>",  # yo sollozaré
+    "haber<vbhaver><pii><{person}><{number}> {lemma}<vblex><pp><m><sg>",  # yo había sollozado
+    "haber<vbhaver><cni><{person}><{number}> {lemma}<vblex><pp><m><sg>",  # yo habría sollozado
+    "{lemma}<vblex><pis><{person}><{number}>",  # yo sollozara
+    "estar<vblex><pri><{person}><{number}>, {lemma}<vblex><ger>",  # estoy sollozando
+    "haber<vbhaver><inf> {lemma}<vblex><pp><m><sg>",  # haber sollozado
+    "{lemma}<vblex><inf>",  # sollozar
+    "{lemma}<vblex><pii><{person}><{number}>",  # yo sollozaba
+    "haber<vbhaver><ifi><{person}><{number}> {lemma}<vblex><pp><m><sg>",  # yo hube sollozado
+    "{lemma}<vblex><cni><{person}><{number}>",  # yo sollozaría
+    "{lemma}<vblex><prs><{person}><{number}>",  # yo solloce
+    "haber<vbhaver><pis><{person}><{number}> {lemma}<vblex><pp><m><sg>",  # yo hubiera sollozado
+    "haber<vbhaver><ger> {lemma}<vblex><pp><m><sg>",  # habiendo sollozado
+]
+
+NOUNS = ["{lemma}<n><{gender}><{number}>"]
+PARTICIPLES = ["{lemma}<vblex><pp><{gender}><{number}>"]
+
+
+def permutations(obj):
+    if isinstance(obj, list):
+        return itertools.product(*obj)
+
+    if isinstance(obj, dict):
+        keys, values = zip(*obj.items())
+        return [dict(zip(keys, v)) for v in itertools.product(*values)]
+
+    raise Exception(f"Don't know how to make permutations of {type(obj)}")
 
 
 class DescriptionType(Enum):
@@ -116,26 +151,27 @@ class NLP:
         return cls.get_apertium_generator().generate(f"^{unit}$")
 
     @classmethod
-    def get_variations(cls, unit):
+    def get_variations_type(cls, lemma, _values, options):
+        values = {'lemma': [lemma]}
+        values.update(_values)
+
+        return {option.format(**v) for v in permutations(values) for option in options}
+
+    @classmethod
+    def get_variations(cls, unit, number):
         # https://wiki.apertium.org/wiki/List_of_symbols
-        res = []
         nouns = {token.baseform for reading in unit.readings for token in reading if 'n' in token.tags}
         pps = {token.baseform for reading in unit.readings for token in reading if 'pp' in token.tags}
         verbs = {token.baseform for reading in unit.readings for token in reading if 'vblex' in token.tags and 'pp' not in token.tags}
 
-        for apnum, conjnum in [('sg', 'yo'), ('pl', 'nosotros')]:
-            gender_number = [f'<m><{apnum}>', f'<f><{apnum}>']
-            units = {re.sub(r"^[^/]*/", '', str(unit))}
-            units |= {f"{noun}<n>{form}" for form in gender_number for noun in nouns}
-            units |= {f"{pp}<vblex><pp>{form}" for form in gender_number for pp in pps}
+        units = {re.sub(r"^[^/]*/", '', str(unit))}
+        alts = {'gender': ['m', 'f'], 'number': [number], 'person': ['p1']}
+        units |= {o for noun in nouns for o in cls.get_variations_type(noun, alts, NOUNS)}
+        units |= {o for pp in pps for o in cls.get_variations_type(pp, alts, PARTICIPLES)}
+        units |= {o for verb in verbs for o in cls.get_variations_type(verb, alts, VERBS)}
 
-            print(units)
-            variations = {cls.generate(unit) for unit in units}
-
-            verbs = {token.baseform for reading in unit.readings for token in reading if 'vblex' in token.tags and 'pp' not in token.tags}
-            variations |= {form for verb in verbs for form in NLP.conjugate(verb, conjnum)}
-            res.append({var for var in variations if var and not var.startswith('#')} | verbs)
-        return res
+        variations = {' '.join([cls.generate(part) for part in unit.split(' ')]) for unit in units}
+        return {v for v in variations if '#' not in v}
 
     @classmethod
     def correct(cls, text):
@@ -325,20 +361,6 @@ class NLP:
             if tokid is not None:
                 vect[tokid] = 1
         return torch.FloatTensor(vect)
-
-    @classmethod
-    def conjugate(cls, word: str, pronoun='yo'):
-        # https://pypi.org/project/spanishconjugator/#:~:text=Tenses%2C%20Moods%20and%20Pronouns%20implemented
-        conjugates = set()
-        # for pronoun in ['yo', 'tu', 'usted', 'nosotros', 'vosotros', 'ustedes']:
-        for pronoun in [pronoun]:
-            for mood in ['indicative', 'conditional']:
-                # for tense in ['present', 'imperfect', 'preterite', 'future', 'present_perfect', 'past_anterior', 'future_perfect', 'conditional_simple']:
-                for tense in ['present', 'imperfect', 'preterite', 'future', 'present_perfect', 'conditional_simple']:
-                    words = Conjugator().conjugate(word, tense, mood, pronoun)
-                    if words:
-                        conjugates.add(words.encode('latin1').decode('utf-8'))
-        return conjugates
 
 
 class SearchEngine:

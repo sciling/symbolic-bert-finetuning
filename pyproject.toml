@@ -34,7 +34,7 @@ pyspellchecker = "^0.6.3"
 pandas = "^1.4.3"
 openpyxl = "^3.0.10"
 scikit-learn = "^1.1.2"
-spanishconjugator = "^2.3.2682"
+apertium = "^0.2.3"
 
 
 [tool.poetry.dev-dependencies]
