@@ -597,20 +597,21 @@ class SearchEngine:
         return None
 
     def is_valid_token(self, token, is_new=False):
-        return len(token) >= 4 and token not in self.ignore
+        return len(token) >= 3 and token not in self.ignore
 
     def search(self, sentence, nbest=4, summarized=False, multinomial=False, description_type=DescriptionType.DEFAULT, reuse_description=True, fuzzy=True, use_alts=False):
         embedding = None
         literal_seq = []
         if summarized:
             seq = NLP.get_tokens(sentence, self.vocab, description_type, fuzzy=fuzzy)
-            print(f"seq: {seq}")
+            print(f"SEQ: {seq}")
             seq = {self.normalize(tok) for tok in seq}
-            print(f"desc: {seq}")
             seq = {tok for tok in seq if tok}
+            print(f"DESC: {seq}")
             desc = join_blocks([w for token in seq for w in token.split('_')])
             if multinomial:
-                literal_seq = NLP.get_tokens(sentence, self.vocab, DescriptionType.DEFAULT, fuzzy=fuzzy)
+                literal_seq = [tok for tok in NLP.get_tokens(sentence, self.vocab, DescriptionType.DEFAULT, fuzzy=fuzzy) if self.is_valid_token(tok)]
+                print(f"LITERAL: {literal_seq}")
                 # print(f"LITERAL: {literal_seq} {self.vocab.get(literal_seq[0], {})}")
                 if use_alts:
                     seq_non_entities = [tok for tok in seq if not self.vocab.get(tok, {}).get('is_entity', False)]
