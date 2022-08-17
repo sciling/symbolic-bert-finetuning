@@ -74,7 +74,7 @@ def not_match_response(pattern, output, context):
     if not pattern:
         return matches
 
-    correctResponeOutput = get_isCorrectResponse(output, pattern.get('anything_else',False))
+    correctResponeOutput = get_isCorrectResponse(output, pattern.get('anything_else',False), pattern.get('equal_last_response',False))
 
     intent = output["intents"][0]
     correct = True
@@ -175,7 +175,7 @@ def get_responses(output):
     return [generic]
 
 lastResponse = None
-def get_isCorrectResponse(output,anything_else=False):
+def get_isCorrectResponse(output:dict,anything_else=False, equalLastResp=False):
     actualResponse = None
     for i in range(len(output["generic"])):
         if "text" in output["generic"][len(output["generic"])-i-1]:
@@ -187,8 +187,13 @@ def get_isCorrectResponse(output,anything_else=False):
 
     #confidence = output["intents"][0]["confidence"] > 0.5 or output["entities"] != []
     confidence = True
-    correct = lastResponse != actualResponse and 'nodes_visited' in output['debug'] and (anything_else or "anything_else" not in str(output['debug']['nodes_visited'][-1]['conditions']))
-    print("Correct answer test status: ", lastResponse != actualResponse,'nodes_visited' in output['debug'],"anything_else" not in str(output['debug']['nodes_visited'][-1]['conditions']))
+    correct = (equalLastResp or lastResponse != actualResponse)
+    correct = correct and 'nodes_visited' in output['debug']
+    correct = correct and (anything_else or "anything_else" not in str(output['debug']['nodes_visited'][-1]['conditions']) and 'alternate_responses' not in output)
+    
+    
+    print("Correct answer test status: ", lastResponse, actualResponse , lastResponse != actualResponse,'nodes_visited' in output['debug'] and"anything_else" not in str(output['debug']['nodes_visited'][-1]['conditions']), 'alternate_responses' not in output)
+    print(output.keys())
     globals()["lastResponse"] = actualResponse
     
     return correct
@@ -262,6 +267,8 @@ def run_entity_test(assistant_service, assistant_id, uuid, entity, test):
 
 # Start a dialog and converse with Watson
 def run_test(assistant_service, assistant_id, uuid, test):
+
+    globals()["lastResponse"] = None
     context = test.get("initial_context", {}).copy()
 
     # create a new session
@@ -347,7 +354,6 @@ def run_test(assistant_service, assistant_id, uuid, test):
     response = assistant_service.delete_session(assistant_id=assistant_id, session_id=session_id).get_result()
     print("Session deleted. Bye...")
     return error
-
 
 @app.command(name="test")
 def test_cmd(test_fn: Path, enabled_tests: Optional[List[str]] = typer.Argument(None)):

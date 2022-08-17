@@ -6,6 +6,17 @@ config:
 
 entities:
   estado_animo:
+    lloro:
+      - estoy llorando
+      - lloro
+    cansancio:
+      - cansado
+      - cansancio
+      - agotado
+      - estoy muy agotado
+      - no tengo energías
+      - rebentado
+      - muerto
     irritación:
       - irritado
       - irritación
@@ -14,6 +25,71 @@ entities:
       - enfado
       - molesto
       - furia
+    emociones positivas:
+      - bien
+      - me siento bien
+      - estoy fenomenal
+      - estoy guay
+      - perfectamente
+      - me siento perfectamente
+      - tengo felicidad
+      - muy contento
+      - estoy sosegado
+      - sosegado
+      - guay
+      - perfe
+      - estoy enamorada
+      - estoy enamorado
+      - amor
+      - estoy orgulloso
+      - me siento orgulloso
+      - activo
+      - estoy activo
+      - me siento motivado
+      - motivación
+      - estoy genial
+      - genial
+      - generoso
+      - me siento generoso
+    emociones negativas:
+      - horrible
+      - mal
+      - herido
+      - fatal
+      - muy mal
+      - pues de bajona
+      - dolido
+      - traicionado
+      - solo
+      - mal no, fatal
+  bool:
+    Si:
+      - Porsupuesto
+      - Sí
+      - Sip
+      - Claro
+      - ok
+      - Un poco
+      - Solo un poco
+      - siiiii
+      - dale
+      - adelante
+      - vamos
+    No:
+      - Ni mucho menos
+      - Que va
+      - Nunca
+      - Jamás
+      - Ni hablar
+      - Nop
+      - Noooooo
+      - No mucho
+      - Nada
+      - No que yo sepa
+      - no, gracias
+      - fuera
+      - salir
+      - atras
 
 dialogs:
 
@@ -33,7 +109,7 @@ dialogs:
       - query: ¡Comenzar!
         response:
           confidence: 0.7
-          intent: welcome
+          intent: onboarding_comenzar
   
   - name: welcome_test_2
     initial_context: {}
@@ -41,7 +117,7 @@ dialogs:
       - query: comenzar
         response:
           confidence: 0.7
-          intent: welcome
+          intent: onboarding_comenzar
 
   - name: welcome_test_3
     initial_context: {}
@@ -49,7 +125,7 @@ dialogs:
       - query: empezar
         response:
           confidence: 0.7
-          intent: welcome
+          intent: onboarding_comenzar
           
   - name: welcome_test_4
     initial_context: {}
@@ -57,7 +133,7 @@ dialogs:
       - query: hola
         response:
           confidence: 0.7
-          intent: welcome
+          intent: onboarding_comenzar
   
   - name: welcome_test_5
     initial_context: {}
@@ -65,7 +141,7 @@ dialogs:
       - query: buenas
         response:
           confidence: 0.7
-          intent: welcome
+          intent: onboarding_comenzar
           
   - name: welcome_test_6
     initial_context: {}
@@ -73,7 +149,7 @@ dialogs:
       - query: buenos dias
         response:
           confidence: 0.7
-          intent: welcome
+          intent: onboarding_comenzar
 
   - name: welcome_test_7
     initial_context: {}
@@ -81,7 +157,7 @@ dialogs:
       - query: hola
         response:
           confidence: 0.7
-          intent: welcome
+          intent: onboarding_comenzar
 
   #endregion
 
@@ -107,17 +183,15 @@ dialogs:
   - name: extreme_test_2
     initial_context: {}
     steps:
-      - query: asddffgh
+      - query: ¡Comenzar!
         response:
           confidence: 0.7
-          correct: False
-          intent: onboarding
-      - query: asdfg
+          intent: onboarding_comenzar
+      - query: asdf
         response:
           confidence: 0.7
-          correct: False
-          anything_else: true
-          intent: entity_recognition
+          anything_else: True
+          intent: None
 
   - name: extreme_test_3
     initial_context: {}
@@ -202,10 +276,6 @@ dialogs:
   - name: normal_test_3
     initial_context: {}
     steps:
-      - query: ¡Comenzar!
-        response:
-          confidence: 0.7
-          intent: onboarding_comenzar
       - query: Quiero registrar mis emociones
         response:
           confidence: 0.7
@@ -335,6 +405,7 @@ dialogs:
       - query: ¿Por qué he perdido el interés por hacer cosas?
         response:
           confidence: 0.7
+          equal_last_response: true
           intent: entity_recognition
           entities:
             - name: estado_animo
