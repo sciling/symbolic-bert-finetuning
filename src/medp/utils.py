@@ -3,7 +3,6 @@ import json
 import csv
 from typing import Iterable
 from enum import Enum
-from methodtools import lru_cache
 from queue import Queue
 import itertools
 
@@ -21,6 +20,7 @@ import apertium
 from nltk.util import ngrams
 from nltk.corpus import wordnet as wn
 from streamparser import LexicalUnit
+from methodtools import lru_cache
 
 cos = CosineSimilarity(dim=1, eps=1e-6)
 
@@ -99,7 +99,7 @@ FORMS = {
         # "{lemma}<vblex><pis><{person}><{number}>",  # yo sollozara
         "estar<vblex><pri><{person}><{number}>, {lemma}<vblex><ger>",  # estoy sollozando
         # "haber<vbhaver><inf> {lemma}<vblex><pp><m><sg>",  # haber sollozado
-        "{lemma}<vblex><inf>",  # sollozar
+        # "{lemma}<vblex><inf>",  # sollozar
         "{lemma}<vblex><pii><{person}><{number}>",  # yo sollozaba
         # "haber<vbhaver><ifi><{person}><{number}> {lemma}<vblex><pp><m><sg>",  # yo hube sollozado
         "{lemma}<vblex><cni><{person}><{number}>",  # yo sollozaría
@@ -227,13 +227,13 @@ class NLP:
 
     @lru_cache(maxsize=None)
     @classmethod
-    def get_variations(cls, unit, number, pos=None):
+    def get_variations(cls, unit, number, preunit=None):
         # https://wiki.apertium.org/wiki/List_of_symbols
         alts = {'gender': ['m', 'f', 'mf'], 'number': [number], 'person': ['p1']}
         tags = {tag for reading in unit.readings for token in reading for tag in token.tags}
 
         filters = ['n', 'adj', 'pp']
-        if 'pp' not in tags and (pos is None or pos == 0 or 'inf' not in tags):
+        if 'pp' not in tags and (preunit is None or 'inf' not in tags):
             filters.append('vblex')
 
         units = set()
@@ -562,11 +562,13 @@ class SearchEngine:
             for syn in data.get('synonyms', [])
             if data.get('is_entity', False) and syn not in entities
         })
+        self.entity_syns.update({data['label']: ent for ent, data in self.vocab.items() if data.get('is_entity', False)})
         self.entity_names = {ent for syn, ent in self.entity_syns.items()}
         # print(self.entity_names)
         # print(self.entity_syns)
 
         self.entities = [(ent, data) for ent, data in self.vocab.items() if data.get('is_entity', False)]
+        self.entity_lookup = {data['label']: data for ent, data in self.vocab.items() if data.get('is_entity', False)}
         self.entity_embeddings = torch.stack([torch.FloatTensor(data.get('embedding')) for ent, data in self.entities])
         self.entity_summary_embeddings = torch.stack([torch.FloatTensor(data.get('summaryEmbedding', [])) for ent, data in self.entities])
 
@@ -600,6 +602,18 @@ class SearchEngine:
         return len(token) >= 3 and token not in self.ignore
 
     def search(self, sentence, nbest=4, summarized=False, multinomial=False, description_type=DescriptionType.DEFAULT, reuse_description=True, fuzzy=True, use_alts=False):
+        print(f"SENT: {sentence}")
+        if sentence in self.entity_lookup:
+            return {
+                'tokens': [sentence],
+                'description': sentence,
+                'nbests': [{
+                    'entity': sentence,
+                    'score': 1,
+                    'description': sentence,
+                }],
+            }
+
         embedding = None
         literal_seq = []
         if summarized:
