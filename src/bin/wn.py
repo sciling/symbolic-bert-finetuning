@@ -14,19 +14,18 @@ import warnings
 import re
 import csv
 import json
+import random
 from collections import Counter
 from collections import OrderedDict
 from collections import defaultdict
 from itertools import product
 from pathlib import Path
 from typing import List
-from functools import lru_cache
 
 from tqdm import tqdm
 import nltk
 import ruamel.yaml
 import typer
-import spacy_stanza
 import pandas as pd
 
 from unidecode import unidecode
@@ -34,10 +33,9 @@ from nltk.corpus import wordnet as wn
 from nltk.corpus.reader.wordnet import Synset  # pylint: disable=no-name-in-module
 from nltk.tokenize import word_tokenize
 from nltk.util import ngrams
-from inflector import Inflector, Spanish
 from ruamel.yaml import YAML
 from ruamel.yaml.representer import RoundTripRepresenter
-from medp.utils import SearchEngine, NLP, EmbeddingsProcessor, DescriptionType
+from medp.utils import SearchEngine, NLP, EmbeddingsProcessor, DescriptionType, get_syns, expand_template, clean_spaces
 
 
 warnings.filterwarnings("ignore")
@@ -100,48 +98,6 @@ def explain(word: str):
 
 def get_lemmas(syn, lang="spa"):
     return syn.lemmas(lang=lang)
-
-
-class LazyNlp:
-    INFLECTOR = None
-    NLP = None
-
-    @classmethod
-    def get_model(cls):
-        if cls.NLP is None:
-            cls.NLP = spacy_stanza.load_pipeline("es", processors="tokenize,lemma")
-        return cls.NLP
-
-    @classmethod
-    def get_inflector(cls):
-        if cls.INFLECTOR is None:
-            cls.INFLECTOR = Inflector(Spanish)
-        return cls.INFLECTOR
-
-    @classmethod
-    def nlp(cls, text):
-        return cls.get_model()(text)
-
-    @classmethod
-    def singularize(cls, text):
-        return cls.get_inflector().singularize(text)
-
-
-@lru_cache(maxsize=None)
-def get_syns(word):
-    try:
-        if isinstance(word, str):
-            syns = [wn.synset(word.lower())]
-        else:
-            syns = [word]
-    except ValueError:
-        singular = ' '.join([w.lemma_ for w in LazyNlp.nlp(word)])
-        if singular == word:
-            singular = ' '.join([LazyNlp.singularize(w.text) for w in LazyNlp.nlp(word)])
-        syns = list(set(wn.synsets(word.lower(), lang="spa") + wn.synsets(singular.lower(), lang="spa")))
-        # print(f"SING: {word} -> {singular} -> {syns}")
-
-    return syns
 
 
 def find_defs(word, log=False):
@@ -793,24 +749,111 @@ def fix_entities(entities_fn: Path, save_fn: Path):
 
 
 @app.command()
-def entities_to_intents(entities_fn: Path, save_fn: Path):
+def entities_to_intents(entities_fn: Path, save_fn: Path, max_examples: int = 0):
     with open(entities_fn) as fileread, open(save_fn, "w") as filewrite:
         csvreader = csv.reader(fileread, delimiter=',', quotechar='"')
         csvwriter = csv.writer(filewrite, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         for row in csvreader:
-            intent_name = unidecode(f"{row[0]}_{row[1]}").replace(' ', '_')
-            for cell in sorted(row[1:]):
-                csvwriter.writerow([cell, intent_name])
+            intent_name = f"{row[0]}_{row[1]}".replace(' ', '_')
+            examples = list(set(row[1:]))
+            if max_examples and len(examples) > max_examples:
+                examples = random.sample(examples, k=max_examples)
+            for cell in sorted(examples):
+                csvwriter.writerow([clean_spaces(cell), intent_name])
 
 
 @app.command()
 def variations(words: List[str]):
     for word in words:
-        analysis = NLP.analyze(word)
+        analysis = NLP.tag(word)
         for number in ('sg', 'pl'):
             tokens = [NLP.get_variations(token, number) for token in analysis]
             print("TOK", analysis, tokens)
             print(number.upper(), generate_alternatives([t for t in tokens]))
+
+
+@app.command()
+def convert_form(words: List[str], depth: int=1, threshold: float=None):
+    for word in words:
+        conversions = NLP.convert_form_recursive(word, depth=depth, threshold=threshold)
+        print(f"CONVERSIONS: {word} {conversions}")
+
+
+@app.command()
+def expand_entities(entities_fn: Path, templates_fn: List[Path] = typer.Argument(None), save_fn: Path = typer.Option(None), depth: int = 1, threshold: float = None):
+    with open(entities_fn) as file:
+        csvreader = csv.reader(file, delimiter=',', quotechar='"')
+        entity_rows = [row[:] for row in csvreader]
+
+    seen = {}
+    entities = defaultdict(set)
+
+    for row in entity_rows:
+        entity = ':'.join(row[:2])
+        for syn in row[1:]:
+            if syn in seen:
+                if seen[syn] != entity:
+                    print(f"WARNING: '{syn}' in '{entity}' is already a synonym of '{seen[syn]}'")
+                continue
+            seen[syn] = entity
+            entities[entity].add(syn)
+
+    if templates_fn is None:
+        templates_fn = []
+
+    for template_fn in tqdm(templates_fn):
+        print(f"PROCESSING: {template_fn}")
+        templates = []
+        yaml = YAML(typ="safe")  # default, if not specfied, is 'rt' (round-trip)
+        with open(template_fn) as file:
+            data = yaml.load(file)
+            variables = data.get('variables', {})
+            for ent, values in data.get('entities', {}).items():
+                for val in values:
+                    entity = f"{ent}:{val['value']}"
+                    print(f"VAL: {val}: {variables}")
+                    temps = [temp.format(**variables) for temp in val.get('templates', [])]
+                    templates.append((entity, temps))
+
+        for entity, elems in tqdm(templates, leave=False):
+            vocab = set()
+            for template in tqdm(elems, leave=False):
+                for sentence in tqdm(expand_template(template), leave=False):
+                    print(f"TEMPLATE: {template}: {sentence}")
+                    analysis = NLP.tag(sentence)
+                    words = {sentence}
+
+                    if len(analysis) == 1:
+                        words |= NLP.convert_form_recursive(sentence, depth=depth, threshold=threshold)
+
+                    for word in list(words):
+                        subanalysis = NLP.tag(word)
+                        print(f"SUB: {word}: {subanalysis}")
+                        for number in ('sg', ):  # 'pl'):
+                            tokens = [NLP.get_variations(token, number, pos) for pos, token in enumerate(subanalysis)]
+                            alts = generate_alternatives([t for t in tokens])
+                            # print(f"ALTS[{number}] = {alts}")
+                            words |= alts
+
+                    for syn in list(words):
+                        if seen.get(syn, entity) != entity:
+                            print(f"WARNING: '{syn}' in '{entity}' from template '{template}' is already a synonym of '{seen[syn]}'")
+                            words.remove(syn)
+                        else:
+                            seen[syn] = entity
+
+                    vocab |= words
+
+            print(f"ENTITY: {entity} = {vocab}")
+            entities[entity] |= vocab
+
+    if save_fn:
+        with open(save_fn, 'w') as file:
+            csvwriter = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            for entity, synonyms in entities.items():
+                csvwriter.writerow(entity.split(':') + sorted(synonyms))
+    else:
+        print(json.dumps(entities, indent=2, ensure_ascii=False))
 
 
 if __name__ == "__main__":

@@ -3,6 +3,8 @@ import json
 import csv
 from typing import Iterable
 from enum import Enum
+from methodtools import lru_cache
+from queue import Queue
 import itertools
 
 from unidecode import unidecode
@@ -14,9 +16,11 @@ import numpy as np
 import torch
 from torch.nn import CosineSimilarity
 from tqdm import tqdm
-from nltk.util import ngrams
 from spellchecker import SpellChecker
 import apertium
+from nltk.util import ngrams
+from nltk.corpus import wordnet as wn
+from streamparser import LexicalUnit
 
 cos = CosineSimilarity(dim=1, eps=1e-6)
 
@@ -56,34 +60,57 @@ class EmbeddingsProcessor:
         return web_embeddings
 
 
+@lru_cache(maxsize=None)
+def get_syns(word, lang='spa', **kwargs):
+    try:
+        if isinstance(word, str):
+            syns = [wn.synset(word.lower())]
+        else:
+            syns = [word]
+    except ValueError:
+        singular = join_blocks([w.lemma_ for w in NLP.nlp(word)])
+        if singular == word:
+            singular = join_blocks([NLP.singularize(w.text) for w in NLP.nlp(word)])
+        syns = list(set(wn.synsets(word.lower(), lang=lang, **kwargs) + wn.synsets(singular.lower(), lang=lang, **kwargs)))
+        # print(f"SING: {word} -> {singular} -> {syns}")
+
+    return syns
+
+
 noise_re = re.compile(r"\s*Root -> .*$")
 punct_re = re.compile(r"[^\w\s]*")
 note_re = re.compile(r"\s*\([^\)]*\)")
 
+APERTIUM_FIX = {
+    'para': LexicalUnit('para/para<pr>'),
+    'siento': LexicalUnit('siento/sentir<vblex><pri><p1><sg>'),
+}
 
-VERBS = [
-    "{lemma}<vblex><pri><{person}><{number}>",  # yo sollozo
-    "haber<vbhaver><pri><{person}><{number}> {lemma}<vblex><pp><m><sg>",  # yo he sollozado
-    "{lemma}<vblex><ifi><{person}><{number}>",  # yo sollocé
-    "haber<vbhaver><prs><{person}><{number}> {lemma}<vblex><pp><m><sg>",  # yo haya sollozado
-    "haber<vbhaver><fts><{person}><{number}> {lemma}<vblex><pp><m><sg>",  # yo hubiere sollozado
-    "{lemma}<vblex><fti><{person}><{number}>",  # yo sollozaré
-    "haber<vbhaver><pii><{person}><{number}> {lemma}<vblex><pp><m><sg>",  # yo había sollozado
-    "haber<vbhaver><cni><{person}><{number}> {lemma}<vblex><pp><m><sg>",  # yo habría sollozado
-    "{lemma}<vblex><pis><{person}><{number}>",  # yo sollozara
-    "estar<vblex><pri><{person}><{number}>, {lemma}<vblex><ger>",  # estoy sollozando
-    "haber<vbhaver><inf> {lemma}<vblex><pp><m><sg>",  # haber sollozado
-    "{lemma}<vblex><inf>",  # sollozar
-    "{lemma}<vblex><pii><{person}><{number}>",  # yo sollozaba
-    "haber<vbhaver><ifi><{person}><{number}> {lemma}<vblex><pp><m><sg>",  # yo hube sollozado
-    "{lemma}<vblex><cni><{person}><{number}>",  # yo sollozaría
-    "{lemma}<vblex><prs><{person}><{number}>",  # yo solloce
-    "haber<vbhaver><pis><{person}><{number}> {lemma}<vblex><pp><m><sg>",  # yo hubiera sollozado
-    "haber<vbhaver><ger> {lemma}<vblex><pp><m><sg>",  # habiendo sollozado
-]
-
-NOUNS = ["{lemma}<n><{gender}><{number}>"]
-PARTICIPLES = ["{lemma}<vblex><pp><{gender}><{number}>"]
+FORMS = {
+    'vblex': [
+        "{lemma}<vblex><pri><{person}><{number}>",  # yo sollozo
+        "haber<vbhaver><pri><{person}><{number}> {lemma}<vblex><pp><m><sg>",  # yo he sollozado
+        "{lemma}<vblex><ifi><{person}><{number}>",  # yo sollocé
+        # "haber<vbhaver><prs><{person}><{number}> {lemma}<vblex><pp><m><sg>",  # yo haya sollozado
+        # "haber<vbhaver><fts><{person}><{number}> {lemma}<vblex><pp><m><sg>",  # yo hubiere sollozado
+        # "{lemma}<vblex><fti><{person}><{number}>",  # yo sollozaré
+        # "haber<vbhaver><pii><{person}><{number}> {lemma}<vblex><pp><m><sg>",  # yo había sollozado
+        # "haber<vbhaver><cni><{person}><{number}> {lemma}<vblex><pp><m><sg>",  # yo habría sollozado
+        # "{lemma}<vblex><pis><{person}><{number}>",  # yo sollozara
+        "estar<vblex><pri><{person}><{number}>, {lemma}<vblex><ger>",  # estoy sollozando
+        # "haber<vbhaver><inf> {lemma}<vblex><pp><m><sg>",  # haber sollozado
+        "{lemma}<vblex><inf>",  # sollozar
+        "{lemma}<vblex><pii><{person}><{number}>",  # yo sollozaba
+        # "haber<vbhaver><ifi><{person}><{number}> {lemma}<vblex><pp><m><sg>",  # yo hube sollozado
+        "{lemma}<vblex><cni><{person}><{number}>",  # yo sollozaría
+        # "{lemma}<vblex><prs><{person}><{number}>",  # yo solloce
+        # "haber<vbhaver><pis><{person}><{number}> {lemma}<vblex><pp><m><sg>",  # yo hubiera sollozado
+        # "haber<vbhaver><ger> {lemma}<vblex><pp><m><sg>",  # habiendo sollozado
+    ],
+    'n': ["{lemma}<n><{gender}><{number}>"],
+    'adj': ["{lemma}<adj><{gender}><{number}>"],
+    'pp': ["{lemma}<vblex><pp><{gender}><{number}>"],
+}
 
 
 def permutations(obj):
@@ -97,6 +124,25 @@ def permutations(obj):
     raise Exception(f"Don't know how to make permutations of {type(obj)}")
 
 
+template_re = re.compile(r"(?:\(([^)]*)\)|([^()]*))")
+spaces_re = re.compile(r"(?:^\s+|\s+$|(\s)\s+)")
+
+
+def join_blocks(blocks):
+    return spaces_re.sub(r"\1", ' '.join(blocks))
+
+
+def clean_spaces(string):
+    return spaces_re.sub(r"\1", string)
+
+
+def expand_template(template):
+    blocks = [m.group(1).strip() if m.group(1) else m.group().strip() for m in template_re.finditer(template)]
+    blocks = [block.split('|') for block in blocks if block]
+    print(f"EXP: {template}: {blocks}: {list(permutations(blocks))}")
+    return {join_blocks(parts) for parts in permutations(blocks)}
+
+
 class DescriptionType(Enum):
     DEFAULT = 'default'
     LONG = 'long'
@@ -105,6 +151,7 @@ class DescriptionType(Enum):
 
 class NLP:
     APERTIUM_ANALIZER = None
+    APERTIUM_TAGGER = None
     APERTIUM_GENERATOR = None
     SPELLCHECKER = None
     INFLECTOR = None
@@ -137,18 +184,35 @@ class NLP:
         return cls.APERTIUM_ANALIZER
 
     @classmethod
+    def get_apertium_tagger(cls):
+        if cls.APERTIUM_TAGGER is None:
+            cls.APERTIUM_TAGGER = apertium.Tagger('spa')
+        return cls.APERTIUM_TAGGER
+
+    @classmethod
     def get_apertium_generator(cls):
         if cls.APERTIUM_GENERATOR is None:
             cls.APERTIUM_GENERATOR = apertium.Generator('spa')
         return cls.APERTIUM_GENERATOR
 
     @classmethod
+    def fix_apertium(cls, analysis):
+        return [APERTIUM_FIX.get(tok.wordform, tok) for tok in analysis]
+
+    @classmethod
     def analyze(cls, sentence):
-        return cls.get_apertium_analyzer().analyze(sentence)
+        return cls.fix_apertium(cls.get_apertium_analyzer().analyze(sentence))
+
+    @classmethod
+    def tag(cls, sentence):
+        tags = cls.get_apertium_tagger().tag(sentence)
+        toks = cls.get_apertium_analyzer().analyze(sentence)
+        tags = [LexicalUnit(f"{tok.wordform}/{tag.lexical_unit}") for tag, tok in zip(tags, toks)]
+        return cls.fix_apertium(tags)
 
     @classmethod
     def generate(cls, unit):
-        return cls.get_apertium_generator().generate(f"^{unit}$")
+        return cls.get_apertium_generator().generate(f"^{unit}$").replace('~', '').replace('*', '').replace('#', '')
 
     @classmethod
     def get_variations_type(cls, lemma, _values, options):
@@ -158,19 +222,32 @@ class NLP:
         return {option.format(**v) for v in permutations(values) for option in options}
 
     @classmethod
-    def get_variations(cls, unit, number):
+    def filter_tokens_by_tag(cls, unit, tag):
+        return {token.baseform for reading in unit.readings for token in reading if tag in token.tags}
+
+    @lru_cache(maxsize=None)
+    @classmethod
+    def get_variations(cls, unit, number, pos=None):
         # https://wiki.apertium.org/wiki/List_of_symbols
-        nouns = {token.baseform for reading in unit.readings for token in reading if 'n' in token.tags}
-        pps = {token.baseform for reading in unit.readings for token in reading if 'pp' in token.tags}
-        verbs = {token.baseform for reading in unit.readings for token in reading if 'vblex' in token.tags and 'pp' not in token.tags}
+        alts = {'gender': ['m', 'f', 'mf'], 'number': [number], 'person': ['p1']}
+        tags = {tag for reading in unit.readings for token in reading for tag in token.tags}
 
-        units = {re.sub(r"^[^/]*/", '', str(unit))}
-        alts = {'gender': ['m', 'f'], 'number': [number], 'person': ['p1']}
-        units |= {o for noun in nouns for o in cls.get_variations_type(noun, alts, NOUNS)}
-        units |= {o for pp in pps for o in cls.get_variations_type(pp, alts, PARTICIPLES)}
-        units |= {o for verb in verbs for o in cls.get_variations_type(verb, alts, VERBS)}
+        filters = ['n', 'adj', 'pp']
+        if 'pp' not in tags and (pos is None or pos == 0 or 'inf' not in tags):
+            filters.append('vblex')
 
-        variations = {' '.join([cls.generate(part) for part in unit.split(' ')]) for unit in units}
+        units = set()
+        for tag in filters:
+            tokens = cls.filter_tokens_by_tag(unit, tag)
+            # print(f"TAG[{tag}]: {tokens}: {unit}: {unit.readings}")
+
+            units |= {o for tok in tokens for o in cls.get_variations_type(tok, alts, FORMS[tag])}
+
+        if not units:
+            units.add(unit.wordform)
+
+        variations = {join_blocks([cls.generate(part) for part in unit.split(' ')]) for unit in units}
+        # print(f"UNITS: {units} {variations}")
         return {v for v in variations if '#' not in v}
 
     @classmethod
@@ -180,6 +257,20 @@ class NLP:
     @classmethod
     def nlp(cls, text):
         return cls.get_model()(text)
+
+    @classmethod
+    def longest_common_prefix(cls, word, ref):
+        pairs = list(zip(word, ref))
+        try:
+            return [ac==bc for ac, bc in pairs].index(False)
+        except:
+            return len(pairs)
+
+    @classmethod
+    def find_longest_common_prefix(cls, words, ref):
+        if not words:
+            return None
+        return sorted([(cls.longest_common_prefix(word, ref), word) for word in words], reverse=True)[0][1]
 
     @classmethod
     def pluralize(cls, text):
@@ -195,7 +286,7 @@ class NLP:
         seq = cls.nlp(note_re.sub('', sentence.lower()))
         # print(f"SEQ: {seq}")
         if fuzzy:
-            seq = cls.nlp(' '.join([NLP.correct(t.text) for t in seq]))
+            seq = cls.nlp(join_blocks([NLP.correct(t.text) for t in seq]))
         normalized = [unidecode(cls.singularize_spacy_token(t)) for t in seq if not t.is_punct and not t.is_stop and not t.is_space and t.text]
         # print(f"NORMALIZED: {normalized}")
         return [tok for tok in normalized if tok]
@@ -222,7 +313,7 @@ class NLP:
             csvreader = csv.reader(file, delimiter=',', quotechar='"')
             rows = list(csvreader)
             for row in tqdm(rows, desc=f"Loading '{vocab_fn}'"):
-                token = '_'.join(cls.normalize(row[0]))
+                token = join_blocks(cls.normalize(row[0]))
                 row[1] = row[1].split('###')[0]
                 desc = noise_re.sub('', '. '.join(row))
 
@@ -254,7 +345,7 @@ class NLP:
                     vocab[token]['is_entity'] = True
                     vocab[token]['label'] = row[0]
 
-                vocab[token]['alternatives'] = list(set(vocab[token]['alternatives']) | {'_'.join(cls.normalize(alt)) for alt in row[2:]})
+                vocab[token]['alternatives'] = list(set(vocab[token]['alternatives']) | {join_blocks(cls.normalize(alt)) for alt in row[2:]})
                 vocab[token]['synonyms'] = list(set(vocab[token]['synonyms']) | {cls.clean_notes(alt) for alt in [row[0]] + row[2:]})
 
                 # print(f"'{row[0]}' -> vocab[{token}] = {row[1][:80]}")
@@ -275,7 +366,7 @@ class NLP:
         # sentence = [w for w in punct_re.sub('', sentence).lower().split(' ') if w]
         ngs = set()
         for n in range(1, max_ngram + 1):
-            fullset = [' '.join(ng) for ng in ngrams(sentence, n)]
+            fullset = [join_blocks(ng) for ng in ngrams(sentence, n)]
             valid = {n for n in fullset if cls.is_valid_ngram(n)}
             ngs.update(valid)
         return ngs
@@ -339,7 +430,7 @@ class NLP:
         if reuse_description:
             description = entry.get('description', None)
         entry['summary'] = list(sorted(cls.summarize(entry['label'], vocab, description_type, description)))
-        desc = " ".join([w for token in entry['summary'] for w in token.split('_')])
+        desc = join_blocks([w for token in entry['summary'] for w in token.split('_')])
         # entry['summaryEmbedding'] = EmbeddingsProcessor.pages_to_embeddings([desc])[0].tolist()
         if 'embedding' in entry:
             entry['summaryEmbedding'] = entry['embedding']
@@ -361,6 +452,79 @@ class NLP:
             if tokid is not None:
                 vect[tokid] = 1
         return torch.FloatTensor(vect)
+
+    @classmethod
+    def convert_form(cls, word, from_pos=None, to_pos=None):
+        """ Transform words given from/to POS tags """
+        # based on https://nlpforhackers.io/convert-words-between-forms/
+
+        if from_pos:
+            synsets = get_syns(word, pos=from_pos, lang='spa')
+        else:
+            synsets = get_syns(word, lang='spa')
+
+        # Word not found
+        if not synsets:
+            return []
+
+        # Get all lemmas of the word (consider 'a'and 's' equivalent)
+        lemmas = [
+            lemma
+            for s in synsets
+            for lemma in s.lemmas()
+            if not from_pos or s.name().split('.')[1] == from_pos
+        ]
+
+        # Get related forms
+        derivationally_related_forms = [(lemma, lemma.derivationally_related_forms()) for lemma in lemmas]
+        # print(f"DERIVA: {derivationally_related_forms}")
+
+        # filter only the desired pos (consider 'a' and 's' equivalent)
+        related_noun_lemmas = [
+            lemma
+            for drf in derivationally_related_forms
+            for lemma in drf[1]
+            if not to_pos or lemma.synset().name().split('.')[1] == to_pos
+        ]
+
+        # Extract the words from the lemmas
+        words = [word.name() for lemma in related_noun_lemmas for word in lemma.synset().lemmas(lang='spa')]
+        len_words = len(words)
+
+        # Build the result in the form of a list containing tuples (word, probability)
+        result = [
+            (w, (cls.longest_common_prefix(w, word) + (float(words.count(w)) / len_words)) / (len(word) + 1))
+            for w in set(words)
+        ]
+        result.sort(key=lambda w: -w[1])
+
+        return result
+
+    @classmethod
+    def convert_form_recursive(cls, word, from_pos=None, to_pos=None, threshold=None, depth=1):
+        conversions = set()
+        all_conversions = set()
+        queue = Queue()
+        queue.put((word, 1))
+
+        while not queue.empty():
+            word, curr_depth = queue.get()
+            if curr_depth > depth:
+                continue
+
+            res = NLP.convert_form(word)
+            # print(f"RES: {res}")
+            if not res:
+                continue
+
+            conversions |= {word for word, score in res if (threshold is None or score > threshold)}
+            all_conversions |= {word for word, _ in res}
+
+            for word, score in res:
+                if (threshold is None or score > threshold) and curr_depth + 1 <= depth:
+                    queue.put((word, curr_depth + 1))
+
+        return conversions
 
 
 class SearchEngine:
@@ -386,9 +550,18 @@ class SearchEngine:
             if not self.is_valid_token(token):
                 del self.vocab[token]
 
-        self.entity_syns = {syn: ent for ent, data in self.vocab.items() for syn in data.get('synonyms', []) if not data.get('is_entity', False)}
-        self.entity_syns = {ent: ent for ent, data in self.vocab.items()}
-        self.entity_syns.update({syn: ent for ent, data in self.vocab.items() for syn in data.get('synonyms', []) if data.get('is_entity', False)})
+        entities = {ent for ent, data in self.vocab.items() if data.get('is_entity', False)}
+        self.entity_syns = {
+            syn: ent for ent, data in self.vocab.items()
+            for syn in data.get('synonyms', [])
+            if not data.get('is_entity', False) and syn not in entities
+        }
+        self.entity_syns.update({ent: ent for ent, data in self.vocab.items()})
+        self.entity_syns.update({
+            syn: ent for ent, data in self.vocab.items()
+            for syn in data.get('synonyms', [])
+            if data.get('is_entity', False) and syn not in entities
+        })
         self.entity_names = {ent for syn, ent in self.entity_syns.items()}
         # print(self.entity_names)
         # print(self.entity_syns)
@@ -399,15 +572,16 @@ class SearchEngine:
 
         self.tok2id = {tok: n for n, tok in enumerate(sorted(self.entity_names))}
         self.id2tok = {n: tok for tok, n in self.tok2id.items()}
+        # print(f"ID2TOK: {self.id2tok}")
 
         # After id2tok is computed, because otherwise id2tok might be associated with a synonym and not the main lemma.
         for word, data in list(self.vocab.items()):
             data['synonyms'] = list({tok for tok in data.get('synonyms', []) if self.is_valid_token(tok, is_new=True)})
             data['summary'] = list({tok for tok in data.get('summary', []) + data['synonyms'] if self.is_valid_token(tok)})
-            self.tok2id.update({tok: self.tok2id[self.entity_syns.get(word, word)] for tok in data['synonyms']})
-            self.vocab.update({tok: self.vocab[self.entity_syns.get(word, word)] for tok in data['synonyms']})
+            self.tok2id.update({tok: self.tok2id[self.entity_syns.get(word, word)] for tok in data['synonyms'] if tok not in entities})
+            self.vocab.update({tok: self.vocab[self.entity_syns.get(word, word)] for tok in data['synonyms'] if tok not in entities})
 
-        # print(self.tok2id)
+        # print(f"ID2TOK: {self.id2tok}")
         self.entity_multinomial = []
         for ent, data in self.entities:
             self.entity_multinomial.append(NLP.to_multinomial(data.get('summary', set()), self.tok2id))
@@ -430,9 +604,11 @@ class SearchEngine:
         literal_seq = []
         if summarized:
             seq = NLP.get_tokens(sentence, self.vocab, description_type, fuzzy=fuzzy)
+            print(f"seq: {seq}")
             seq = {self.normalize(tok) for tok in seq}
+            print(f"desc: {seq}")
             seq = {tok for tok in seq if tok}
-            desc = " ".join([w for token in seq for w in token.split('_')])
+            desc = join_blocks([w for token in seq for w in token.split('_')])
             if multinomial:
                 literal_seq = NLP.get_tokens(sentence, self.vocab, DescriptionType.DEFAULT, fuzzy=fuzzy)
                 # print(f"LITERAL: {literal_seq} {self.vocab.get(literal_seq[0], {})}")
@@ -494,6 +670,9 @@ class SearchEngine:
         index_sorted = torch.argsort(scores)
         top_scores = reversed(index_sorted[-nbest:])
         # print([(scores[i], self.entities[i][1]['label']) for i in index_sorted])
+
+        if scores[top_scores[0]] >= 1.0:
+            top_scores = [top_scores[0]]
 
         return [
             {
