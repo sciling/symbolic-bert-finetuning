@@ -28,14 +28,16 @@ import ruamel.yaml
 import typer
 import pandas as pd
 
-from unidecode import unidecode
 from nltk.corpus import wordnet as wn
 from nltk.corpus.reader.wordnet import Synset  # pylint: disable=no-name-in-module
 from nltk.tokenize import word_tokenize
 from nltk.util import ngrams
 from ruamel.yaml import YAML
 from ruamel.yaml.representer import RoundTripRepresenter
-from medp.utils import SearchEngine, NLP, EmbeddingsProcessor, DescriptionType, get_syns, expand_template, clean_spaces
+from medp.utils import (
+    SearchEngine, NLP, EmbeddingsProcessor, DescriptionType,
+    get_syns, expand_template, clean_spaces, load_db
+)
 
 
 warnings.filterwarnings("ignore")
@@ -620,27 +622,12 @@ def find_all(synnames: List[str], export_csv_fn: Path = typer.Option(None)):
 
 
 @app.command()
-def describe(sentence: str, db_fn: Path = typer.Option(None)):
-    with open(db_fn) as file:
-        vocab = json.load(file)
-
-    print(NLP.describe(sentence, vocab))
-
-
-@app.command()
-def summarize(sentence: str, db_fn: Path = typer.Option(None)):
-    with open(db_fn) as file:
-        vocab = json.load(file)
-
-    print(NLP.summarize(sentence, vocab))
-
-
-@app.command()
 def create_db(
-    vocab_fns: List[Path], entities_fn: Path = typer.Option(None),
+    definitions_fns: List[Path], entities_fn: Path = typer.Option(None),
+    vocab_fn: Path = typer.Option(None), ignore_fn: Path = typer.Option(None),
     save_fn: Path = typer.Option(None),
     redefinitions_fn: Path = typer.Option(None),
-    override_definitions: bool = True
+    override_definitions: bool = False
 ):
     vocab = {}
     redefinitions = {}
@@ -650,13 +637,15 @@ def create_db(
             csvreader = csv.reader(file, delimiter=',', quotechar='"')
             for row in csvreader:
                 if len(row) >= 2:
-                    redefinitions[row[0]] = row[1]
-
-    for vocab_fn in vocab_fns:
-        NLP.update_vocab(vocab, vocab_fn, redefinitions=redefinitions, override_definitions=override_definitions)
+                    redefinitions[clean_spaces(row[0])] = clean_spaces(row[1])
 
     if entities_fn:
         NLP.update_vocab(vocab, entities_fn, is_entity=True, redefinitions=redefinitions, override_definitions=override_definitions)
+
+    for definition_fn in definitions_fns:
+        NLP.update_vocab(vocab, definition_fn, redefinitions=redefinitions, override_definitions=override_definitions)
+
+    load_db(vocab, vocab_fn, ignore_fn)
 
     for data in tqdm(vocab.values(), desc="Regenerating descriptions..."):
         if not data.get('description', None):
@@ -668,26 +657,48 @@ def create_db(
 
 
 @app.command()
-def summarize_db(db_fn: Path, save_fn: Path = typer.Option(None), description_type: DescriptionType = DescriptionType.DEFAULT, reuse_descriptions: bool = False):
-    with open(db_fn) as file:
-        db = json.load(file)
+def normalize(words: List[str], fuzzy: bool = True):
+    for word in words:
+        print(f"NORMALIZE: {word} {NLP.normalize(word)}")
 
-    ignore_token = {'conservar'}
-    for token in ignore_token:
-        del db[token]
 
+@app.command()
+def tokenize(words: List[str], db_fn: Path = typer.Option(None), vocab_fn: Path = typer.Option(None), ignore_fn: Path = typer.Option(None), fuzzy: bool = True, subtokens: bool = False, max_ngram: int = 0):
+    db, _ = load_db(db_fn, vocab_fn, ignore_fn)
+    for word in words:
+        print(f"TOKENIZE: {word} {NLP.tokenize(word, db, fuzzy, subtokens, max_ngram)}")
+
+
+@app.command()
+def describe(sentence: str, db_fn: Path = typer.Option(None), vocab_fn: Path = typer.Option(None), ignore_fn: Path = typer.Option(None), description_type: DescriptionType = DescriptionType.DEFAULT, fuzzy: bool = True, max_ngram: int = 5):
+    db, _ = load_db(db_fn, vocab_fn, ignore_fn)
+
+    print(NLP.describe(sentence, db, description_type=description_type, fuzzy=fuzzy, max_ngram=max_ngram))
+
+
+@app.command()
+def summarize(sentence: str, db_fn: Path = typer.Option(None), vocab_fn: Path = typer.Option(None), ignore_fn: Path = typer.Option(None), save_fn: Path = typer.Option(None), description_type: DescriptionType = DescriptionType.DEFAULT, reuse_descriptions: bool = False, max_ngram: int = 5):
+    db, _ = load_db(db_fn, vocab_fn, ignore_fn)
+    entry = NLP.summarizedb_entry({'label': sentence}, db, description_type=description_type, reuse_description=reuse_descriptions)
+    seq = entry['summary']
+    print(seq)
+
+
+@app.command()
+def summarize_db(db_fn: Path, vocab_fn: Path = typer.Option(None), ignore_fn: Path = typer.Option(None), save_fn: Path = typer.Option(None), description_type: DescriptionType = DescriptionType.DEFAULT, reuse_descriptions: bool = False, max_ngram: bool = 0):
+    db, _ = load_db(db_fn, vocab_fn, ignore_fn)
     new_db = {}
     for text, data in tqdm(db.items()):
-        new_db[text] = NLP.summarizedb_entry(data, db, description_type, reuse_descriptions)
+        new_db[text] = NLP.summarizedb_entry(data, db, description_type=description_type, reuse_description=reuse_descriptions, max_ngram=max_ngram)
 
     with open(save_fn, 'w') as file:
         json.dump(new_db, file, indent=2, ensure_ascii=False)
 
 
 @app.command()
-def search(text: str, db_fn: Path = typer.Option(None), ignore_fn: Path = typer.Option(None), nbest: int = 4, summarized: bool = False, multinomial: bool = False, description_type: DescriptionType = DescriptionType.DEFAULT, reuse_description: bool = True, fuzzy=True):
-    searcher = SearchEngine(db_fn, ignore_fn)
-    res = searcher.search(text, nbest, summarized=summarized, multinomial=multinomial, description_type=description_type, reuse_description=reuse_description, fuzzy=fuzzy)
+def search(text: str, db_fn: Path = typer.Option(None), vocab_fn: Path = typer.Option(None), ignore_fn: Path = typer.Option(None), nbest: int = 4, summarized: bool = False, multinomial: bool = False, description_type: DescriptionType = DescriptionType.DEFAULT, reuse_description: bool = False, fuzzy: bool = True, max_ngram: int = 5):
+    searcher = SearchEngine(db_fn, vocab_fn=vocab_fn, ignore_fn=ignore_fn)
+    res = searcher.search(text, nbest, summarized=summarized, multinomial=multinomial, description_type=description_type, reuse_description=reuse_description, fuzzy=fuzzy, max_ngram=max_ngram)
 
     print(json.dumps(res, indent=2, ensure_ascii=False))
 
@@ -733,10 +744,77 @@ def parse_excel(excel_fns: List[str], save_fn: Path = typer.Option(None)):
         with open(save_fn, "w") as file:
             csvwriter = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             for name, desc in sorted(all_docs.items()):
-                row = [name, str(desc).replace(',', '').replace('\n', ' '), name.lower()]
+                row = [name, str(desc).replace(',', '').replace('\n', '. '), name.lower()]
                 csvwriter.writerow(row)
     else:
         print(all_docs)
+
+
+@app.command()
+def extract_vocab(entities_fn: Path, save_fn: Path = typer.Option(None)):
+    vocab = Counter()
+    with open(entities_fn) as file:
+        csvreader = csv.reader(file, delimiter=',', quotechar='"')
+        for row in csvreader:
+            doc = NLP.nlp('. '.join([clean_spaces(r) for r in row]))
+            vocab.update([w.lemma_.lower() for w in doc if w.text and len(w.text) > 1 and w.is_alpha and not w.is_punct and not w.is_stop and not w.is_space])
+            print(doc, {w.text for w in doc if w.pos_ == 'VERB' and len(w.text) > 1 and w.is_alpha and not w.is_punct and not w.is_stop and not w.is_space})
+
+    if save_fn:
+        with open(save_fn, 'w') as file:
+            print(vocab)
+            json.dump(vocab, file, indent=2, ensure_ascii=False)
+    else:
+        print(json.dumps(vocab, indent=2, ensure_ascii=False))
+
+
+@app.command()
+def redefine_entities(entities_fn: Path, definitions_fn: List[Path], vocab_fn: Path = typer.Option(None), ignore_fn: Path = typer.Option(None), save_fn: Path = typer.Option(None)):
+    vocab = set()
+    ignore = set()
+    definitions = {}
+    if vocab_fn:
+        with open(vocab_fn) as file:
+            vocab = set(json.load(file))
+
+    if ignore_fn:
+        with open(ignore_fn) as file:
+            ignore = {w for w, v in json.load(file).items() if v is None}
+
+    for definition_fn in tqdm(definitions_fn):
+        print(f"PROCESSING: {definition_fn}")
+
+        with open(definition_fn) as file:
+            csvreader = csv.reader(file, delimiter=',', quotechar='"')
+            for row in tqdm(csvreader):
+                name = '_'.join(NLP.normalize(row[0]))
+                if name not in definitions:
+                    definitions[name] = row[1]
+
+    entities = []
+    with open(entities_fn) as file:
+        csvreader = csv.reader(file, delimiter=',', quotechar='"')
+        for row in tqdm(csvreader):
+            name = '_'.join(NLP.normalize(row[0]))
+            if not row[1]:
+                row[1] = definitions.get(name, row[0])
+            entities.append(row)
+
+    for row in tqdm(entities):
+        doc = NLP.nlp('. '.join(list({clean_spaces(r).lower() for r in row})))
+        row[1] = ' '.join([
+            w.text.lower()
+            for w in doc
+            if (not vocab or w.lemma_.lower() in vocab) and (not ignore or w.lemma_.lower() not in ignore)
+        ])
+
+    if save_fn:
+        with open(save_fn, 'w') as file:
+            csvwriter = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            for row in entities:
+                csvwriter.writerow(row)
+    else:
+        print(json.dumps(sorted(vocab), indent=2, ensure_ascii=False))
 
 
 @app.command()
@@ -745,7 +823,17 @@ def fix_entities(entities_fn: Path, save_fn: Path):
         csvreader = csv.reader(fileread, delimiter=',', quotechar='"')
         csvwriter = csv.writer(filewrite, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         for row in csvreader:
-            csvwriter.writerow([row[0].strip(), row[1].strip()] + list(sorted(set([r.strip().lower() for r in row[2:] if not re.match(r"^\s*$", r)]))))
+            entity = clean_spaces(row[0])
+            value = clean_spaces(row[1])
+            if len(value) > 64:
+                print(f"WARNING: '{entity}' '{value}' larger then 64 chars (len: {len(value)})")
+                continue
+            syns = [
+                clean_spaces(syn)
+                for syn in sorted(set([r.strip().lower() for r in row[2:] if not re.match(r"^\s*$", r)]))
+                if len(syn) < 64
+            ]
+            csvwriter.writerow([entity, value] + syns)
 
 
 @app.command()
@@ -830,7 +918,10 @@ def expand_entities(entities_fn: Path, templates_fn: List[Path] = typer.Argument
                         subanalysis = NLP.tag(word)
                         print(f"SUB: {word}: {subanalysis}")
                         for number in ('sg', ):  # 'pl'):
-                            tokens = [NLP.get_variations(token, number, pos) for pos, token in enumerate(subanalysis)]
+                            tokens = [
+                                NLP.get_variations(token, number, pretoken)
+                                for pretoken, token in zip([None] + subanalysis, subanalysis)
+                            ]
                             alts = generate_alternatives([t for t in tokens])
                             # print(f"ALTS[{number}] = {alts}")
                             words |= alts

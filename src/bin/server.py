@@ -30,17 +30,17 @@ CACHED = {
 }
 
 for entity in CACHED:
-    CACHED[entity] = SearchEngine(f"db/{entity}.json", "ignore.json")
+    CACHED[entity] = SearchEngine(f"db/{entity}.json", vocab_fn='vocab.json', ignore_fn='ignore.json')
 
 
 @app.get("/search/{entity}")
-def search(entity: str, text: str, nbest: int = 4, summarized: bool = True, multinomial: bool = True, description_type: DescriptionType = DescriptionType.LONG, reuse_description: bool = True, username: str = Depends(check_credentials)):
+def search(entity: str, text: str, nbest: int = 4, summarized: bool = True, multinomial: bool = True, description_type: DescriptionType = DescriptionType.LONG, reuse_description: bool = False, fuzzy: bool = True, max_ngram: int = 5, username: str = Depends(check_credentials)):
     if entity in CACHED:
         searcher = CACHED[entity]
     else:
-        searcher = SearchEngine(f"db/{entity}.json", "ignore.json")
+        searcher = SearchEngine(f"db/{entity}.json", vocab_fn='vocab.json', ignore_fn='ignore.json')
         CACHED[entity] = searcher
 
-    res = searcher.search(text, nbest, summarized=summarized, multinomial=multinomial, description_type=description_type, reuse_description=reuse_description)
+    res = searcher.search(text, nbest, summarized=summarized, multinomial=multinomial, description_type=description_type, reuse_description=reuse_description, fuzzy=fuzzy, max_ngram=max_ngram)
 
     return res

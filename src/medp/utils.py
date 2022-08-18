@@ -100,9 +100,9 @@ FORMS = {
         "estar<vblex><pri><{person}><{number}>, {lemma}<vblex><ger>",  # estoy sollozando
         # "haber<vbhaver><inf> {lemma}<vblex><pp><m><sg>",  # haber sollozado
         # "{lemma}<vblex><inf>",  # sollozar
-        "{lemma}<vblex><pii><{person}><{number}>",  # yo sollozaba
+        # "{lemma}<vblex><pii><{person}><{number}>",  # yo sollozaba
         # "haber<vbhaver><ifi><{person}><{number}> {lemma}<vblex><pp><m><sg>",  # yo hube sollozado
-        "{lemma}<vblex><cni><{person}><{number}>",  # yo sollozaría
+        # "{lemma}<vblex><cni><{person}><{number}>",  # yo sollozaría
         # "{lemma}<vblex><prs><{person}><{number}>",  # yo solloce
         # "haber<vbhaver><pis><{person}><{number}> {lemma}<vblex><pp><m><sg>",  # yo hubiera sollozado
         # "haber<vbhaver><ger> {lemma}<vblex><pp><m><sg>",  # habiendo sollozado
@@ -125,21 +125,21 @@ def permutations(obj):
 
 
 template_re = re.compile(r"(?:\(([^)]*)\)|([^()]*))")
-spaces_re = re.compile(r"(?:^\s+|\s+$|(\s)\s+)")
+spaces_re = re.compile(r"(?:^\s+|[\s]+$|(\s)\s+)")
 
 
-def join_blocks(blocks):
-    return spaces_re.sub(r"\1", ' '.join(blocks))
+def join_blocks(blocks, sep=' '):
+    return spaces_re.sub(r"\1", sep.join(blocks))
 
 
 def clean_spaces(string):
-    return spaces_re.sub(r"\1", string)
+    return spaces_re.sub(r"\1", string.replace('/', ' '))
 
 
 def expand_template(template):
     blocks = [m.group(1).strip() if m.group(1) else m.group().strip() for m in template_re.finditer(template)]
     blocks = [block.split('|') for block in blocks if block]
-    print(f"EXP: {template}: {blocks}: {list(permutations(blocks))}")
+    # print(f"EXP: {template}: {blocks}: {list(permutations(blocks))}")
     return {join_blocks(parts) for parts in permutations(blocks)}
 
 
@@ -176,6 +176,13 @@ class NLP:
         if cls.SPELLCHECKER is None:
             cls.SPELLCHECKER = SpellChecker(language='es')
         return cls.SPELLCHECKER
+
+    @classmethod
+    def update_spellchecker(cls, vocab):
+        sc = cls.get_spellchecker()
+        wf = sc.word_frequency
+        wf.dictionary.update({v for v in vocab if v not in wf.dictionary})
+        wf._update_dictionary()
 
     @classmethod
     def get_apertium_analyzer(cls):
@@ -233,8 +240,10 @@ class NLP:
         tags = {tag for reading in unit.readings for token in reading for tag in token.tags}
 
         filters = ['n', 'adj', 'pp']
-        if 'pp' not in tags and (preunit is None or 'inf' not in tags):
+        if 'pp' not in tags and (preunit is None or preunit.wordform == 'me' or 'inf' not in tags):
             filters.append('vblex')
+            if preunit is not None and preunit.wordform == 'me':
+                alts['person'] = ['p3']
 
         units = set()
         for tag in filters:
@@ -283,7 +292,7 @@ class NLP:
     @classmethod
     def normalize(cls, sentence, fuzzy=None):
         # print(f"SENT: {sentence}")
-        seq = cls.nlp(note_re.sub('', sentence.lower()))
+        seq = cls.nlp(clean_spaces(note_re.sub('', sentence.lower())))
         # print(f"SEQ: {seq}")
         if fuzzy:
             seq = cls.nlp(join_blocks([NLP.correct(t.text) for t in seq]))
@@ -313,9 +322,11 @@ class NLP:
             csvreader = csv.reader(file, delimiter=',', quotechar='"')
             rows = list(csvreader)
             for row in tqdm(rows, desc=f"Loading '{vocab_fn}'"):
-                token = join_blocks(cls.normalize(row[0]))
-                row[1] = row[1].split('###')[0]
-                desc = noise_re.sub('', '. '.join(row))
+                row = [clean_spaces(r) for r in row]
+                token = join_blocks(cls.normalize(row[0]), sep='_')
+                # print(f"TOK: {cls.normalize(row[0])} {token}")
+                row[1] = noise_re.sub('', row[1].split('###')[0])
+                desc = '. '.join(list({clean_spaces(r).lower() for r in row}))
 
                 if redefinitions and token in redefinitions:
                     if redefinitions[token] == 'DROP':
@@ -345,7 +356,7 @@ class NLP:
                     vocab[token]['is_entity'] = True
                     vocab[token]['label'] = row[0]
 
-                vocab[token]['alternatives'] = list(set(vocab[token]['alternatives']) | {join_blocks(cls.normalize(alt)) for alt in row[2:]})
+                vocab[token]['alternatives'] = list(set(vocab[token]['alternatives']) | {join_blocks(cls.normalize(alt), sep='_') for alt in row[2:]})
                 vocab[token]['synonyms'] = list(set(vocab[token]['synonyms']) | {cls.clean_notes(alt) for alt in [row[0]] + row[2:]})
 
                 # print(f"'{row[0]}' -> vocab[{token}] = {row[1][:80]}")
@@ -358,6 +369,8 @@ class NLP:
     @classmethod
     def is_valid_ngram(cls, sentence):
         seq = cls.nlp(sentence)
+        if not seq:
+            return False
         return not seq[0].is_stop and not seq[0].like_num and not seq[0].is_punct and not seq[-1].is_stop and not seq[-1].is_punct
 
     @classmethod
@@ -372,13 +385,15 @@ class NLP:
         return ngs
 
     @classmethod
-    def tokenize(cls, sentence, vocab, fuzzy=None):
-        if vocab:
+    def tokenize(cls, sentence, vocab, fuzzy=None, subtokens=False, max_ngram_len=None):
+        if vocab and not max_ngram_len:
             max_ngram_len = max(1, max([len(w.split('_')) for w in vocab]))
-        else:
-            max_ngram_len = 1
+
         sentence = cls.normalize(sentence, fuzzy=fuzzy)
         total_words = len(sentence)
+
+        max_ngram_len = min(max_ngram_len, total_words)
+        # print(f"SENTENCE: {sentence}. max_ngram_len: {max_ngram_len}")
 
         seq = []
 
@@ -386,26 +401,33 @@ class NLP:
         while i < total_words:
             ngram = None
             advance = 1
-            for n_words in range(max_ngram_len, 0, -1):
-                ngram = '_'.join(sentence[i : i + n_words])
+            for n_words in range(min(max_ngram_len, total_words - i), 0, -1):
+                ngram = join_blocks(sentence[i : i + n_words], sep='_')
 
-                # print(f"NGRAM: {ngram}: {ngram in vocab}")
+                # print(f"NGRAM: sentence[{i} : {i} + {n_words}] = {ngram}: {ngram in vocab}")
                 if ngram in vocab:
                     advance = n_words
-                    break
+                    if subtokens:
+                        seq.append(ngram)
+                        # print(f"SUB: {n_words}-gram({i}+{advance}): {ngram}: {seq}")
+                    else:
+                        break
+
+            if not subtokens:
+                seq.append(ngram)
+                # print(f"{n_words}-gram({i}+{advance}): {ngram}: {seq}")
 
             i += advance
-            seq.append(ngram)
-            # print(f"{n_words}-gram({i}+{advance}): {ngram}: {seq}")
         return seq
 
     @classmethod
-    def get_tokens(cls, text, vocab, description_type=DescriptionType.DEFAULT, fuzzy=None):
+    def get_tokens(cls, text, vocab, description_type=DescriptionType.DEFAULT, max_ngram=5, fuzzy=None):
         # print(f"PREEDES: '{text}'")
         if description_type == DescriptionType.LONG:
-            all_ngrams = cls.get_all_ngrams(text, fuzzy=fuzzy)
-            # print(f"NGRAMTOKS: {sentence} '{description}' {all_ngrams}")
-            tokens = {'_'.join(cls.normalize(token)) for token in all_ngrams}
+            tokens = cls.tokenize(text, vocab, fuzzy=fuzzy, subtokens=True, max_ngram_len=max_ngram)
+            # all_ngrams = cls.get_all_ngrams(text, fuzzy=fuzzy, max_ngram=max_ngram)
+            # # print(f"NGRAMTOKS: {sentence} '{description}' {all_ngrams}")
+            # tokens = {join_blocks(cls.normalize(token), sep='_') for token in all_ngrams}
         elif description_type == DescriptionType.SHORT:
             tokens = cls.tokenize(text, vocab={}, fuzzy=None)
         else:
@@ -414,24 +436,23 @@ class NLP:
         return tokens
 
     @classmethod
-    def summarize(cls, sentence, vocab, description_type=DescriptionType.DEFAULT, description=None):
-        # print(f"INITDES: '{description}'")
+    def summarize(cls, sentence, vocab, description_type=DescriptionType.DEFAULT, description=None, max_ngram=5):
+        # print(f"INITSUM: '{description}'")
         if not description:
-            _, description = cls.describe(sentence, vocab, description_type=description_type)
-        # print(f"POSTDES: '{description}'")
-        tokens = cls.get_tokens(description, vocab, description_type)
+            _, description = cls.describe(sentence, vocab, description_type=description_type, max_ngram=max_ngram)
+        # print(f"POSTSUM: '{description}'")
+        tokens = cls.get_tokens(description, vocab, description_type=description_type, max_ngram=max_ngram)
         summary = {token for token in tokens if token in vocab}
         # print(f"SUMMARIZE({len(vocab)}, {description_type}): {sentence} {tokens} {summary}")
         return summary
 
     @classmethod
-    def summarizedb_entry(cls, entry, vocab, description_type=DescriptionType.DEFAULT, reuse_description=False):
+    def summarizedb_entry(cls, entry, vocab, description_type=DescriptionType.DEFAULT, reuse_description=False, max_ngram=5):
         description = None
         if reuse_description:
             description = entry.get('description', None)
-        entry['summary'] = list(sorted(cls.summarize(entry['label'], vocab, description_type, description)))
+        entry['summary'] = list(sorted(cls.summarize(entry['label'], vocab, description_type, description, max_ngram)))
         desc = join_blocks([w for token in entry['summary'] for w in token.split('_')])
-        # entry['summaryEmbedding'] = EmbeddingsProcessor.pages_to_embeddings([desc])[0].tolist()
         if 'embedding' in entry:
             entry['summaryEmbedding'] = entry['embedding']
         else:
@@ -439,8 +460,9 @@ class NLP:
         return entry
 
     @classmethod
-    def describe(cls, sentence, vocab, description_type=DescriptionType.DEFAULT):
-        seq = cls.get_tokens(sentence, vocab, description_type)
+    def describe(cls, sentence, vocab, description_type=DescriptionType.DEFAULT, max_ngram=5, fuzzy=None):
+        seq = cls.get_tokens(sentence, vocab, description_type, max_ngram=max_ngram, fuzzy=fuzzy)
+        # print([vocab[w] for w in seq if w in vocab])
         description = '. '.join(vocab[w].get('description', '') for w in seq if w in vocab)
         return seq, description
 
@@ -527,28 +549,55 @@ class NLP:
         return conversions
 
 
-class SearchEngine:
-    def __init__(self, db_fn, ignore_fn=None):
+def load_db(db_fn, vocab_fn, ignore_fn):
+    if isinstance(db_fn, dict):
+        db = db_fn
+    else:
         with open(db_fn) as file:
-            self.vocab = json.load(file)
+            db = json.load(file)
 
-        if ignore_fn:
-            with open(ignore_fn) as file:
-                data = json.load(file)
-            self.ignore = {v for v, d in data.items() if d is None}
-            self.synonyms = {v: d for v, d in data.items() if d is not None}
+    if vocab_fn:
+        with open(vocab_fn) as file:
+            data = json.load(file)
 
-            for token, syns in list(self.synonyms.items()):
-                if token in self.vocab:
-                    synonyms = self.vocab[token].get('synonyms', [])
-                    self.vocab[token]['synonyms'] = list(set(synonyms + syns))
+        for token, summary in data.items():
+            if token not in db:
+                db[token] = {
+                    "label": token,
+                    "description": token,
+                    "embedding": None,
+                    "alternatives": [token],
+                    "synonyms": [token],
+                    "summary": [token],
+                    "summaryEmbedding": None,
+                }
 
-        else:
-            self.ignore = set()
+            # print(f"VOCAB: {token} {type(summary)} {summary}")
+            if isinstance(summary, list):
+                print(f"REPLACE: {token}: {summary}")
+                db[token]['summary'] = summary
 
-        for token in set(self.vocab):
-            if not self.is_valid_token(token):
-                del self.vocab[token]
+    ignore = set()
+    if ignore_fn:
+        with open(ignore_fn) as file:
+            data = json.load(file)
+
+        ignore |= {w for w, v in data.items() if v is None}
+        synonyms = {v: d for v, d in data.items() if d is not None}
+        for token, syns in list(synonyms.items()):
+            if token in db:
+                synonyms = db[token].get('synonyms', [])
+                db[token]['synonyms'] = list(set(synonyms + syns))
+
+    NLP.update_spellchecker({v: 1 for v in db})
+    return db, ignore
+
+
+class SearchEngine:
+    def __init__(self, db_fn, vocab_fn=None, ignore_fn=None):
+        self.vocab, self.ignore = load_db(db_fn, vocab_fn, ignore_fn)
+
+        NLP.update_spellchecker({v: 1 for v in self.vocab})
 
         entities = {ent for ent, data in self.vocab.items() if data.get('is_entity', False)}
         self.entity_syns = {
@@ -569,8 +618,10 @@ class SearchEngine:
 
         self.entities = [(ent, data) for ent, data in self.vocab.items() if data.get('is_entity', False)]
         self.entity_lookup = {data['label']: data for ent, data in self.vocab.items() if data.get('is_entity', False)}
-        self.entity_embeddings = torch.stack([torch.FloatTensor(data.get('embedding')) for ent, data in self.entities])
-        self.entity_summary_embeddings = torch.stack([torch.FloatTensor(data.get('summaryEmbedding', [])) for ent, data in self.entities])
+        if self.entities[0][1].get('embedding', None):
+            self.entity_embeddings = torch.stack([torch.FloatTensor(data['embedding']) if 'embedding' in data else [] for ent, data in self.entities])
+        if self.entities[0][1].get('summaryEmbedding', None):
+            self.entity_summary_embeddings = torch.stack([torch.FloatTensor(data['summaryEmbedding']) if 'summaryEmbedding' in data else [] for ent, data in self.entities])
 
         self.tok2id = {tok: n for n, tok in enumerate(sorted(self.entity_names))}
         self.id2tok = {n: tok for tok, n in self.tok2id.items()}
@@ -579,7 +630,9 @@ class SearchEngine:
         # After id2tok is computed, because otherwise id2tok might be associated with a synonym and not the main lemma.
         for word, data in list(self.vocab.items()):
             data['synonyms'] = list({tok for tok in data.get('synonyms', []) if self.is_valid_token(tok, is_new=True)})
-            data['summary'] = list({tok for tok in data.get('summary', []) + data['synonyms'] if self.is_valid_token(tok)})
+            # synonyms = [tok for syn in data.get('synonyms', []) for tok in join_blocks(NLP.normalize(syn), sep='_')]
+            # data['summary'] = list({tok for tok in data.get('summary', []) + synonyms if self.is_valid_token(tok)})
+            data['summary'] = list({tok for tok in data.get('summary', []) if self.is_valid_token(tok)})
             self.tok2id.update({tok: self.tok2id[self.entity_syns.get(word, word)] for tok in data['synonyms'] if tok not in entities})
             self.vocab.update({tok: self.vocab[self.entity_syns.get(word, word)] for tok in data['synonyms'] if tok not in entities})
 
@@ -601,14 +654,18 @@ class SearchEngine:
     def is_valid_token(self, token, is_new=False):
         return len(token) >= 3 and token not in self.ignore
 
-    def search(self, sentence, nbest=4, summarized=False, multinomial=False, description_type=DescriptionType.DEFAULT, reuse_description=True, fuzzy=True, use_alts=False):
-        print(f"SENT: {sentence}")
+    def search(self, sentence, nbest=4, summarized=False, multinomial=False, description_type=DescriptionType.DEFAULT, reuse_description=True, fuzzy=True, use_alts=False, max_ngram=5):
+        literal_entity = sentence
+        sentence = clean_spaces(sentence)
+        # print(f"SENT: {sentence}")
+
+        # exact match
         if sentence in self.entity_lookup:
             return {
                 'tokens': [sentence],
                 'description': sentence,
                 'nbests': [{
-                    'entity': sentence,
+                    'entity': literal_entity,
                     'score': 1,
                     'description': sentence,
                 }],
@@ -617,14 +674,16 @@ class SearchEngine:
         embedding = None
         literal_seq = []
         if summarized:
-            seq = NLP.get_tokens(sentence, self.vocab, description_type, fuzzy=fuzzy)
-            print(f"SEQ: {seq}")
+            seq, desc = NLP.describe(sentence, self.vocab, description_type=description_type, fuzzy=fuzzy, max_ngram=max_ngram)
+            # print(f"DESC: {seq} {desc}")
+            seq = NLP.get_tokens(sentence, self.vocab, description_type, fuzzy=fuzzy, max_ngram=max_ngram)
+            # print(f"SEQ: {seq}")
             seq = {self.normalize(tok) for tok in seq}
             seq = {tok for tok in seq if tok}
-            print(f"DESC: {seq}")
+            # print(f"DESC: {seq}")
             desc = join_blocks([w for token in seq for w in token.split('_')])
             if multinomial:
-                literal_seq = [tok for tok in NLP.get_tokens(sentence, self.vocab, DescriptionType.DEFAULT, fuzzy=fuzzy) if self.is_valid_token(tok)]
+                literal_seq = [tok for tok in NLP.get_tokens(sentence, self.vocab, DescriptionType.DEFAULT, fuzzy=fuzzy, max_ngram=max_ngram) if self.is_valid_token(tok)]
                 print(f"LITERAL: {literal_seq}")
                 # print(f"LITERAL: {literal_seq} {self.vocab.get(literal_seq[0], {})}")
                 if use_alts:
@@ -648,7 +707,7 @@ class SearchEngine:
                 seq = entry['summary']
                 embedding = torch.FloatTensor(entry['summaryEmbedding'])
         else:
-            seq, desc = NLP.describe(sentence, self.vocab)
+            seq, desc = NLP.describe(sentence, self.vocab, max_ngram=max_ngram)
         desc = f"{sentence}. {desc}"
         print(f"SEARCH: {sentence}: {seq}: {desc}")
 

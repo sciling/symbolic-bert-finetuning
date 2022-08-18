@@ -61,7 +61,7 @@ def few_shot(entities_fn: Path, new_samples: List[str] = typer.Argument(None), i
 
 
 @app.command()
-def zero_shot(entities_fn: Path):
+def zero_shot(entities_fn: Path, multi_label: bool = False):
     typer.echo(f"Processing terms {entities_fn}' ...")
 
     yaml = YAML(typ="safe")  # default, if not specfied, is 'rt' (round-trip)
@@ -77,7 +77,8 @@ def zero_shot(entities_fn: Path):
     res = classifier(
         samples,
         candidate_labels=candidate_labels,
-        hypothesis_template="Este ejemplo es {}."
+        hypothesis_template="Este ejemplo es {}.",
+        multi_class=multi_label
     )
 
     output = [r['labels'][0] for r in res]
