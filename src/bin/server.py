@@ -42,5 +42,7 @@ def search(entity: str, text: str, nbest: int = 4, summarized: bool = True, mult
         CACHED[entity] = searcher
 
     res = searcher.search(text, nbest, summarized=summarized, multinomial=multinomial, description_type=description_type, reuse_description=reuse_description, fuzzy=fuzzy, max_ngram=max_ngram)
+    
+    print(f"RES: {res}")
 
     return res
