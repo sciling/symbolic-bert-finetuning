@@ -29,10 +29,9 @@ class EmbeddingsProcessor:
     EMBEDDINGS_MODEL = None
 
     @classmethod
-    def get_model(cls):
+    def get_model(cls, model="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"):
         if cls.EMBEDDINGS_MODEL is None:
-            # cls.EMBEDDINGS_MODEL = SentenceTransformer("paraphrase-distilroberta-base-v2")
-            cls.EMBEDDINGS_MODEL = SentenceTransformer("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
+            cls.EMBEDDINGS_MODEL = SentenceTransformer(model)
             if torch.cuda.is_available():
                 print(f"CUDA: {torch.cuda.get_device_name(0)}")
             else:
@@ -652,7 +651,7 @@ class SearchEngine:
         return None
 
     def is_valid_token(self, token, is_new=False):
-        return len(token) >= 3 and token not in self.ignore
+        return len(token) >= 2 and token not in self.ignore
 
     def search(self, sentence, nbest=4, summarized=False, multinomial=False, description_type=DescriptionType.DEFAULT, reuse_description=True, fuzzy=True, use_alts=False, max_ngram=5):
         literal_entity = sentence

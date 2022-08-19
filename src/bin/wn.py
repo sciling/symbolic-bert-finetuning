@@ -696,9 +696,9 @@ def summarize_db(db_fn: Path, vocab_fn: Path = typer.Option(None), ignore_fn: Pa
 
 
 @app.command()
-def search(text: str, db_fn: Path = typer.Option(None), vocab_fn: Path = typer.Option(None), ignore_fn: Path = typer.Option(None), nbest: int = 4, summarized: bool = False, multinomial: bool = False, description_type: DescriptionType = DescriptionType.DEFAULT, reuse_description: bool = False, fuzzy: bool = True, max_ngram: int = 5):
+def search(text: str, db_fn: Path = typer.Option(None), vocab_fn: Path = typer.Option(None), ignore_fn: Path = typer.Option(None), nbest: int = 4, summarized: bool = False, multinomial: bool = False, description_type: DescriptionType = DescriptionType.DEFAULT, reuse_description: bool = False, fuzzy: bool = True, max_ngram: int = 5, use_alts: bool = False):
     searcher = SearchEngine(db_fn, vocab_fn=vocab_fn, ignore_fn=ignore_fn)
-    res = searcher.search(text, nbest, summarized=summarized, multinomial=multinomial, description_type=description_type, reuse_description=reuse_description, fuzzy=fuzzy, max_ngram=max_ngram)
+    res = searcher.search(text, nbest, summarized=summarized, multinomial=multinomial, description_type=description_type, reuse_description=reuse_description, fuzzy=fuzzy, max_ngram=max_ngram, use_alts=use_alts)
 
     print(json.dumps(res, indent=2, ensure_ascii=False))
 
@@ -818,7 +818,7 @@ def redefine_entities(entities_fn: Path, definitions_fn: List[Path], vocab_fn: P
 
 
 @app.command()
-def fix_entities(entities_fn: Path, save_fn: Path):
+def fix_entities(entities_fn: Path, save_fn: Path, max_examples: int = 0):
     with open(entities_fn) as fileread, open(save_fn, "w") as filewrite:
         csvreader = csv.reader(fileread, delimiter=',', quotechar='"')
         csvwriter = csv.writer(filewrite, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
@@ -833,6 +833,8 @@ def fix_entities(entities_fn: Path, save_fn: Path):
                 for syn in sorted(set([r.strip().lower() for r in row[2:] if not re.match(r"^\s*$", r)]))
                 if len(syn) < 64
             ]
+            if max_examples and len(syns) > max_examples:
+                syns = random.sample(syns, k=max_examples)
             csvwriter.writerow([entity, value] + syns)
 
 
