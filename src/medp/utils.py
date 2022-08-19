@@ -156,12 +156,15 @@ class NLP:
     INFLECTOR = None
     NLP = None
     STOPWORDS = {'tipo'}
+    NONSTOPWORDS = {'te'}
 
     @classmethod
     def get_model(cls):
         if cls.NLP is None:
             cls.NLP = spacy_stanza.load_pipeline("es", processors="tokenize,lemma")
             cls.NLP.Defaults.stop_words |= cls.STOPWORDS
+            for word in cls.NONSTOPWORDS:
+                cls.NLP.Defaults.stop_words.remove(word)
         return cls.NLP
 
     @classmethod
@@ -295,7 +298,7 @@ class NLP:
         # print(f"SEQ: {seq}")
         if fuzzy:
             seq = cls.nlp(join_blocks([NLP.correct(t.text) for t in seq]))
-        normalized = [unidecode(cls.singularize_spacy_token(t)) for t in seq if not t.is_punct and not t.is_stop and not t.is_space and t.text]
+        normalized = [unidecode(cls.singularize_spacy_token(t)) if t.text not in {'te'} else t.text for t in seq if not t.is_punct and not t.is_stop and not t.is_space and t.text]
         # print(f"NORMALIZED: {normalized}")
         return [tok for tok in normalized if tok]
 
