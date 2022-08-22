@@ -280,12 +280,12 @@ dialogs:
         response:
           confidence: 0.7
           anything_else: true
-          intent: onboarding
+          intent: registrar_emociones
       - query: bien
         response:
           confidence: 0.7
           anything_else: true
-          intent: onboarding
+          intent: estado_animo_emociones_positivas
           entities:
             - name: estado_animo
               value: emociones positivas
@@ -310,7 +310,7 @@ dialogs:
       - query: horrible
         response:
           confidence: 0.7
-          intent: entity_recognition
+          intent: estado_animo_emociones_negativas
           entities:
             - name: estado_animo
               value: emociones negativas
@@ -343,7 +343,7 @@ dialogs:
       - query: nerviosismo
         response:
           confidence: 0.7
-          intent: entity_recognition
+          intent: estado_animo_nervioso
           entities:
             - name: estado_animo
               value: nervioso
@@ -432,7 +432,7 @@ dialogs:
       - query: ira
         response:
           confidence: 0.7
-          intent: entity_recognition
+          intent: estado_animo_irritacion
           entities:
             - name: estado_animo
               value: irritación
