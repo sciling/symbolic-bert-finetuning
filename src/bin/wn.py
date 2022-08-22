@@ -27,8 +27,11 @@ import nltk
 import ruamel.yaml
 import typer
 import pandas as pd
+import numpy as np
 
+import spacy
 from nltk.corpus import wordnet as wn
+from nltk.corpus import sentiwordnet as swn
 from nltk.corpus.reader.wordnet import Synset  # pylint: disable=no-name-in-module
 from nltk.tokenize import word_tokenize
 from nltk.util import ngrams
@@ -577,6 +580,77 @@ def get_wordnet_synonyms(
                 csvwriter.writerow([token, definition] + list(sorted(set(data.get('synonyms', [])))))
 
 
+def find_food_hypos(word, log=False):
+    syns = get_syns(word)
+
+    res = set()
+    for syn in syns:
+        hypos = list(syn.closure(lambda s: s.hyponyms()))
+        res.update(hypos)
+        hypos = sorted({f"{lemma.name()}({h.name()})" for h in hypos for lemma in h.lemmas(lang="spa") if not find_hypos(h) and find_relevant_syns(h)})
+        if log:
+            typer.echo(f"{syn} -> {hypos}")
+    return res
+
+
+@app.command()
+def filter_by_wordnet(
+    entity: str,
+    all_entities_fn: Path,
+    vocab_fn: Path,
+    export_csv_fn: Path = typer.Option(None),
+    parent_hyps: str = typer.Option(None),
+    entity_value: str = 'vocabulario'
+):
+    nltk.download("omw")
+
+    if parent_hyps:
+        parent_hyps = set(','.split())
+    else:
+        parent_hyps = food_hyps
+
+    vocab = set()
+
+    entities = []
+    seen = set()
+    with open(all_entities_fn) as file:
+        csvreader = csv.reader(file, delimiter=',', quotechar='"')
+        for row in csvreader:
+            if row[0] == entity and row[1] == 'vocabulario':
+                continue
+            entities.append(row)
+            seen.update({clean_spaces(r).lower() for r in row[2:]})
+
+    with open(vocab_fn) as file:
+        csvreader = csv.reader(file, delimiter=',', quotechar='"')
+        for row in csvreader:
+            if not row:
+                continue
+
+            word = clean_spaces(row[0]).lower().replace('"', '')
+
+            if len(word) < 3 or word in seen:
+                continue
+
+            accept_word = True
+            if len(word) < 6:
+                hyps = find_relevant_syns(word, parent_hyps)
+                if not hyps:
+                    # print(f"{word}")
+                    accept_word = False
+            if accept_word:
+                vocab.add(word)
+
+    vocab = sorted(vocab)
+
+    if export_csv_fn:
+        with open(export_csv_fn, "w") as file:
+            csvwriter = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            csvwriter.writerow([entity, entity_value] + vocab)
+    else:
+        print('\n'.join(vocab))
+
+
 @app.command()
 def get_synsets_with_prefix(prefix: str):
     typer.echo(f"Processing {prefix}")
@@ -870,23 +944,24 @@ def convert_form(words: List[str], depth: int=1, threshold: float=None):
 
 
 @app.command()
-def expand_entities(entities_fn: Path, templates_fn: List[Path] = typer.Argument(None), save_fn: Path = typer.Option(None), depth: int = 1, threshold: float = None):
-    with open(entities_fn) as file:
-        csvreader = csv.reader(file, delimiter=',', quotechar='"')
-        entity_rows = [row[:] for row in csvreader]
-
+def expand_entities(templates_fn: List[Path] = typer.Argument(None), entities_fn: Path = typer.Option(None), vars_fn: List[Path] = typer.Option(None), save_fn: Path = typer.Option(None), depth: int = 1, threshold: float = None, max_syns: int = 0):
     seen = {}
     entities = defaultdict(set)
 
-    for row in entity_rows:
-        entity = ':'.join(row[:2])
-        for syn in row[1:]:
-            if syn in seen:
-                if seen[syn] != entity:
-                    print(f"WARNING: '{syn}' in '{entity}' is already a synonym of '{seen[syn]}'")
-                continue
-            seen[syn] = entity
-            entities[entity].add(syn)
+    if entities_fn:
+        with open(entities_fn) as file:
+            csvreader = csv.reader(file, delimiter=',', quotechar='"')
+            entity_rows = [row[:] for row in csvreader]
+
+        for row in entity_rows:
+            entity = ':'.join(row[:2])
+            for syn in row[1:]:
+                if syn in seen:
+                    if seen[syn] != entity:
+                        print(f"WARNING: '{syn}' in '{entity}' is already a synonym of '{seen[syn]}'")
+                    continue
+                seen[syn] = entity
+                entities[entity].add(syn)
 
     if templates_fn is None:
         templates_fn = []
@@ -898,6 +973,17 @@ def expand_entities(entities_fn: Path, templates_fn: List[Path] = typer.Argument
         with open(template_fn) as file:
             data = yaml.load(file)
             variables = data.get('variables', {})
+
+            if vars_fn:
+                for var_fn in vars_fn:
+                    with open(var_fn) as file:
+                        csvreader = csv.reader(file, delimiter=',', quotechar='"')
+                        for row in csvreader:
+                            if row[0] not in variables:
+                                variables[row[0]] = row[1]
+                            else:
+                                variables[row[0]] += "|" + row[1]
+
             for ent, values in data.get('entities', {}).items():
                 for val in values:
                     entity = f"{ent}:{val['value']}"
@@ -910,23 +996,25 @@ def expand_entities(entities_fn: Path, templates_fn: List[Path] = typer.Argument
             for template in tqdm(elems, leave=False):
                 for sentence in tqdm(expand_template(template), leave=False):
                     print(f"TEMPLATE: {template}: {sentence}")
-                    analysis = NLP.tag(sentence)
                     words = {sentence}
 
-                    if len(analysis) == 1:
-                        words |= NLP.convert_form_recursive(sentence, depth=depth, threshold=threshold)
+                    if False:
+                        analysis = NLP.tag(sentence)
+                        if len(analysis) == 1:
+                            words |= NLP.convert_form_recursive(sentence, depth=depth, threshold=threshold)
 
-                    for word in list(words):
-                        subanalysis = NLP.tag(word)
-                        print(f"SUB: {word}: {subanalysis}")
-                        for number in ('sg', ):  # 'pl'):
-                            tokens = [
-                                NLP.get_variations(token, number, pretoken)
-                                for pretoken, token in zip([None] + subanalysis, subanalysis)
-                            ]
-                            alts = generate_alternatives([t for t in tokens])
-                            # print(f"ALTS[{number}] = {alts}")
-                            words |= alts
+                    if False:
+                        for word in list(words):
+                            subanalysis = NLP.tag(word)
+                            print(f"SUB: {word}: {subanalysis}")
+                            for number in ('sg', ):  # 'pl'):
+                                tokens = [
+                                    NLP.get_variations(token, number, pretoken)
+                                    for pretoken, token in zip([None] + subanalysis, subanalysis)
+                                ]
+                                alts = generate_alternatives([t for t in tokens])
+                                # print(f"ALTS[{number}] = {alts}")
+                                words |= alts
 
                     for syn in list(words):
                         if seen.get(syn, entity) != entity:
@@ -944,9 +1032,122 @@ def expand_entities(entities_fn: Path, templates_fn: List[Path] = typer.Argument
         with open(save_fn, 'w') as file:
             csvwriter = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             for entity, synonyms in entities.items():
+                if max_syns and len(synonyms) > max_syns:
+                    synonyms = list(synonyms)
+                    random.shuffle(synonyms)
+                    synonyms = synonyms[:max_syns]
                 csvwriter.writerow(entity.split(':') + sorted(synonyms))
     else:
         print(json.dumps(entities, indent=2, ensure_ascii=False))
+
+
+@app.command()
+def dump_sentiwordnet(fix_fn: Path = typer.Option(None), sel_fn: Path = typer.Option(None), threshold: float = 0.25, save_fn: Path = typer.Option(None)):
+    syns = list(swn.all_senti_synsets())
+    lemmas = defaultdict(list)
+    for ssyn in syns:
+        syn = ssyn.synset
+        for lemma in get_lemmas(syn):
+            lemma = lemma.name().replace('_', ' ')
+            classes = ['positive', 'neutral', 'negative']
+            scores = [ssyn.pos_score(), ssyn.obj_score(), ssyn.neg_score()]
+            ci = np.argmax(scores)
+
+            lemmas[lemma].append([classes[ci], lemma, scores[ci], syn.name(), syn.pos()] + scores)
+
+    if sel_fn:
+        with open(sel_fn) as file:
+            csvreader = csv.reader(file, delimiter=',', quotechar='"')
+            for row in csvreader:
+                lemma = clean_spaces(row[1])
+                if lemma not in lemmas:
+                    sentiment = row[7]
+                    score = float(row[6])
+                    if score < threshold:
+                        sentiment = 'neutral'
+                        score = 1.0 - score
+                        scores = [(1.0 - score) / 2, score, (1.0 - score) / 2]
+                    else:
+                        if clean_spaces(row[7]) in {'Alegría', 'Sorpresa'}:
+                            sentiment = 'positive'
+                            scores = [score, (1.0 - score) / 2, (1.0 - score) / 2]
+                        elif clean_spaces(row[7]) in {'Enojo', 'Miedo', 'Repulsión', 'Tristeza'}:
+                            sentiment = 'negative'
+                            scores = [(1.0 - score) / 2, (1.0 - score) / 2, score]
+                        else:
+                            print(f"WARNING: unknown sentiment '{sentiment}'")
+                            continue
+
+                    lemmas[lemma].append([sentiment, lemma, score, '<unk>', '<unk>'] + scores)
+
+    if fix_fn:
+        with open(fix_fn) as file:
+            csvreader = csv.reader(file, delimiter=',', quotechar='"')
+            for row in csvreader:
+                lemma = clean_spaces(row[1])
+                sentiment = row[0]
+                score = float(row[3])
+                if sentiment == 'neutral':
+                    scores = [(1.0 - score) / 2, score, (1.0 - score) / 2]
+                elif sentiment == 'positive':
+                    scores = [score, (1.0 - score) / 2, (1.0 - score) / 2]
+                elif sentiment == 'negative':
+                    scores = [(1.0 - score) / 2, (1.0 - score) / 2, score]
+                else:
+                    print(f"WARNING: unknown sentiment '{sentiment}'")
+                    continue
+
+                lemmas[lemma] = [[sentiment, lemma, score, '<unk>', '<unk>'] + scores]
+
+    if save_fn:
+        with open(save_fn, 'w') as file:
+            csvwriter = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            for lemma, options in sorted(lemmas.items()):
+                for option in sorted(options):
+                    csvwriter.writerow(option)
+    else:
+        print(json.dumps(lemmas, indent=2, ensure_ascii=False))
+
+
+@app.command()
+def pre_classify(sent_fn: Path, text_fns: List[Path], save_fn: Path = typer.Option(None), min_count: int = 0):
+    nlp = spacy.load('es_core_news_lg')
+
+    positive = {}
+    negative = {}
+    vocab = defaultdict(Counter)
+    with open(sent_fn) as file:
+        csvreader = csv.reader(file, delimiter=',', quotechar='"')
+        for row in csvreader:
+            if row[0] == 'positive':
+                positive[row[1]] = float(row[2])
+            elif row[0] == 'negative':
+                negative[row[1]] = float(row[2])
+
+    for text_fn in text_fns:
+        with open(text_fn) as file:
+            lines = file.read().split('\n')
+
+        for line in lines:
+            doc = nlp(line)
+            toks = [t for t in doc if not t.is_punct and not t.is_stop and not t.is_space]
+            poses = {t.pos_ for t in toks}
+            for pos in poses:
+                vocab[pos].update([t.lemma_ for t in toks if t.pos_ == pos])
+                print(f"POS {pos}: { {t.lemma_ for t in toks if t.pos_ == pos} }")
+            pos = sum([positive.get(t.lemma_, 0) for t in doc])
+            neg = sum([negative.get(t.lemma_, 0) for t in doc])
+            is_first_person = any(['1' in t.morph.get("Person") and 'Sing' in t.morph.get("Number") for t in doc])
+            print(f"{is_first_person} # {pos - neg}: {doc} -> +{pos}: {[t.lemma_ for t in doc if t.lemma_ in positive]} | -{neg}: {[t.lemma_ for t in doc if t.lemma_ in negative]}")
+
+    if save_fn:
+        with open(save_fn, 'w') as file:
+            csvwriter = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            for pos, counts in vocab.items():
+                for count, word in sorted([(c, w) for w, c in counts.items() if not min_count or c >= min_count], reverse=True):
+                    csvwriter.writerow([pos, word, count, positive.get(word, None), negative.get(word, None)])
+    else:
+        print(json.dumps(vocab, indent=2, ensure_ascii=False))
 
 
 if __name__ == "__main__":

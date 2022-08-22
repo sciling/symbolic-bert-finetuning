@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style text="text/css">
+    #result div {
+      background-color: lightgrey;
+      display: inline-block;
+      margin: 5px;
+    }
+    #result div.chosen {
+      background-color: lime;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Sentiment test</h1>
+    <div class="form-group">
+      <label for"text">Text:</label>
+      <input id="text" class="form-control" autocomplete="off" />
+    </div>
+    <button id="classify" class="btn btn-primary">classify</button>
+  </div>
+  <div class="container">
+    <div id="result" class=form-group">
+      <button class="btn" id="estado_animo_positive">positive</button>
+      <button class="btn" id="estado_animo_neutral">neutral</button>
+      <button class="btn" id="estado_animo_negative">negative</button>
+    </div>
+
+  <script type="text/javascript">
+    function classify() {
+      var sentence = $('#text').val();
+      console.log('SENTENCE:', sentence);
+
+      var settings = {
+        "url": "/sentiment",
+        "method": "POST",
+        "timeout": 0,
+        "dataType": "json",
+        "headers": {
+          "Authorization": "Basic c2NpbGluZzpzY2lsaW5n",
+          "Content-Type": "application/json",
+        },
+        "data": JSON.stringify({
+          "text": sentence,
+        }),
+      };
+
+      $.ajax(settings).done(function (response) {
+        console.log('response', response)
+        $("#" + response.result[0][0]).addClass('btn-success');
+        $("#" + response.result[0][0]).removeClass('btn-danger');
+        $("#" + response.result[1][0]).addClass('btn-danger');
+        $("#" + response.result[1][0]).removeClass('btn-success');
+        $("#" + response.result[2][0]).addClass('btn-danger');
+        $("#" + response.result[2][0]).removeClass('btn-success');
+
+      });
+
+    }
+
+    function fixLabel(name) {
+      return function() {
+        var sentence = $('#text').val();
+        console.log('fix', sentence, name);
+        var settings = {
+          "url": "/sentiment-fix",
+          "method": "POST",
+          "timeout": 0,
+          "dataType": "json",
+          "headers": {
+            "Authorization": "Basic c2NpbGluZzpzY2lsaW5n",
+            "Content-Type": "application/json",
+          },
+          "data": JSON.stringify({
+            "text": sentence,
+            "label": name,
+          }),
+        };
+
+        $.ajax(settings).done(function (response) {
+          console.log('Done', response);
+          classify();
+        });
+      }
+    }
+
+    let classes = ['estado_animo_positive', 'estado_animo_neutral', 'estado_animo_negative'];
+    for (var i in classes) {
+      $('#' + classes[i]).click(fixLabel(classes[i]));
+    }
+
+    $('#classify').click(classify);
+    $('#text').keypress(function(e) {
+      if (e.which == 13) classify();
+    });
+
+  </script>
+
+
+</body>
+</html>
