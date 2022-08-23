@@ -49,7 +49,8 @@ def get_clean_soup(soup):
     remove(soup, [
         'header', 'footer', 'aside', 'menu', 'nav',
     ], [
-        'threads', 'replies',
+        'threads', 'replies', 'header',
+        'af-seealso-video-container', 'forum-threads-help',
     ], [
         'fa-clock', 'hide_mobile',
         'mycode_u', 'mycode_i', 'mycode_quote', 'mycode_hr',
@@ -59,6 +60,13 @@ def get_clean_soup(soup):
         'for_answer__navigation', 'app_layout_right',
         'app_layout_top', 'topic_nav',
         'for_topic__question__more',
+        'af-see-last-thread-container',
+        'af-cta-cant-find-answer',
+        'ad-container',
+        'af-forum-seo-links',
+        'af-bread-crumb', 'unfyas', 'af-last-response-header',
+        'af-post-title', 'af-toggle-text', 'af-post-header',
+        'af-btns-wrapper', 'forum-expert-club-products',
     ])
     return soup
 

@@ -63,33 +63,46 @@ async def sentiment_html(request: Request):
     return templates.TemplateResponse("sentiment.html", {"request": request})
 
 
+@app.get("/mood", response_class=HTMLResponse)
+async def sentiment_html(request: Request):
+    return templates.TemplateResponse("mood.html", {"request": request})
+
+
 class Sentence(BaseModel):
     text: str
     label: Optional[str]
 
 
-classifier = Classifier('./train.dir')
-try:
-    with open("sentiment-database.json") as file:
-        sentiment = json.load(file)
-except:
-    sentiment = {}
+models = {
+    'sentiment': {
+        'model': None,
+        'model_name': 'train.dir',
+        'database_fn': 'sentiment-database.json',
+    },
+    'mood': {
+        'model': None,
+        'model_name': 'train2.dir',
+        'database_fn': 'mood-database.json',
+    },
+}
 
 
-@app.post("/sentiment", response_class=JSONResponse)
-async def classify_sentiment(sentence: Sentence):
+def load_model(model_name: str):
+    data = models.get(model_name, None)
+    if not data:
+        return None
+
+    if data.get('model', None) is None:
+        data['model'] = Classifier(**data)
+
+    return models[model_name].get('model', None)
+
+
+def classify(model_name: str, sentence: Sentence):
     sentence.text = clean_spaces(sentence.text)
+    classifier = load_model(model_name)
 
-    if sentence.text in sentiment:
-        part = {"estado_animo_positive": 0, "estado_animo_neutral": 0, "estado_animo_negative": 0}
-        part[sentiment[sentence.text]] = 1.0
-        result = [(c, s) for s, c in sorted([(s, c) for c, s in part.items()], reverse=True)]
-    else:
-        result = [(c, s) for s, c in classifier.classify(sentence.text)]
-        sentiment[sentence.text] = result[0][0]
-
-        with open("sentiment-database.json", "w") as file:
-            json.dump(sentiment, file, indent=2, ensure_ascii=False)
+    result = [(c, s) for s, c in classifier.classify(sentence.text)]
 
     return {
         "text": sentence.text,
@@ -97,14 +110,32 @@ async def classify_sentiment(sentence: Sentence):
     }
 
 
-@app.post("/sentiment-fix", response_class=JSONResponse)
-async def fix_sentiment(sentence: Sentence):
-    sentiment[sentence.text] = sentence.label
-
-    with open("sentiment-database.json", "w") as file:
-        json.dump(sentiment, file, indent=2, ensure_ascii=False)
+def fix(model_name: str, sentence: Sentence):
+    sentence.text = clean_spaces(sentence.text)
+    classifier = load_model(model_name)
+    classifier.fix(sentence.text, sentence.label)
 
     return {
         "text": sentence.text,
         "label": sentence.label,
     }
+
+
+@app.post("/sentiment", response_class=JSONResponse)
+async def classify_sentiment(sentence: Sentence):
+    return classify('sentiment', sentence)
+
+
+@app.post("/sentiment-fix", response_class=JSONResponse)
+async def fix_sentiment(sentence: Sentence):
+    return fix('sentiment', sentence)
+
+
+@app.post("/mood", response_class=JSONResponse)
+async def classify_mood(sentence: Sentence):
+    return classify('mood', sentence)
+
+
+@app.post("/mood-fix", response_class=JSONResponse)
+async def fix_mood(sentence: Sentence):
+    return fix('mood', sentence)

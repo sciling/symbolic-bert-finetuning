@@ -12,6 +12,7 @@
 import warnings
 
 import re
+import sys
 import csv
 import json
 import random
@@ -55,6 +56,9 @@ class MyRepresenter(RoundTripRepresenter):
 
 ruamel.yaml.add_representer(OrderedDict, MyRepresenter.represent_dict, representer=MyRepresenter)
 
+
+def eprint(*args, **kwargs):
+    print(*args, file=sys.stderr, **kwargs)
 
 food_hyps = {"food.n.01", "food.n.02", "meal.n.01", "animal.n.01", "fungus.n.01", "plant.n.02"}
 food_hyps.update({s.name() for s in wn.all_synsets("n") if s.name().startswith("edible_")})
@@ -1118,22 +1122,73 @@ def pre_classify(sent_fn: Path, text_fns: List[Path], save_fn: Path = typer.Opti
     vocab = defaultdict(Counter)
     with open(sent_fn) as file:
         csvreader = csv.reader(file, delimiter=',', quotechar='"')
-        for row in csvreader:
+        for row in tqdm(csvreader):
             if row[0] == 'positive':
                 positive[row[1]] = float(row[2])
             elif row[0] == 'negative':
                 negative[row[1]] = float(row[2])
 
-    for text_fn in text_fns:
+    for text_fn in tqdm(text_fns):
         with open(text_fn) as file:
             lines = file.read().split('\n')
 
-        for line in lines:
+        for line in tqdm(lines, leave=False):
             doc = nlp(line)
             toks = [t for t in doc if not t.is_punct and not t.is_stop and not t.is_space]
             poses = {t.pos_ for t in toks}
             for pos in poses:
                 vocab[pos].update([t.lemma_ for t in toks if t.pos_ == pos])
+                print(f"POS {pos}: { {t.lemma_ for t in toks if t.pos_ == pos} }")
+            pos = sum([positive.get(t.lemma_, 0) for t in doc])
+            neg = sum([negative.get(t.lemma_, 0) for t in doc])
+            is_first_person = any(['1' in t.morph.get("Person") and 'Sing' in t.morph.get("Number") for t in doc])
+            print(f"{is_first_person} # {pos - neg}: {doc} -> +{pos}: {[t.lemma_ for t in doc if t.lemma_ in positive]} | -{neg}: {[t.lemma_ for t in doc if t.lemma_ in negative]}")
+
+    if save_fn:
+        with open(save_fn, 'w') as file:
+            csvwriter = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            for pos, counts in vocab.items():
+                for count, word in sorted([(c, w) for w, c in counts.items() if not min_count or c >= min_count], reverse=True):
+                    csvwriter.writerow([pos, word, count, positive.get(word, None), negative.get(word, None)])
+    else:
+        print(json.dumps(vocab, indent=2, ensure_ascii=False))
+
+
+@app.command()
+def pre_classify_vocab(sent_fn: Path, text_fns: List[Path], save_fn: Path = typer.Option(None), min_count: int = 0):
+    nlp = spacy.load('es_core_news_lg')
+
+    positive = {}
+    negative = {}
+    vocab = defaultdict(Counter)
+    with open(sent_fn) as file:
+        csvreader = csv.reader(file, delimiter=',', quotechar='"')
+        for row in tqdm(csvreader):
+            if row[0] == 'positive':
+                positive[row[1]] = float(row[2])
+            elif row[0] == 'negative':
+                negative[row[1]] = float(row[2])
+
+    for text_fn in tqdm(text_fns):
+        with open(text_fn) as file:
+            lines = file.read().split('\n')
+
+        for line in tqdm(lines, leave=False):
+            line = clean_spaces(line).split(' ')
+            if not line:
+                continue
+
+            print(f"LINE: {line}")
+            try:
+                count = int(line[0])
+            except:
+                continue
+
+            doc = nlp(line[1])
+            toks = [t for t in doc if not t.is_punct and not t.is_stop and not t.is_space and not t.is_oov]
+            poses = {t.pos_ for t in toks}
+            for pos in poses:
+                vocab[pos].update({t.lemma_: count for t in toks if t.pos_ == pos})
                 print(f"POS {pos}: { {t.lemma_ for t in toks if t.pos_ == pos} }")
             pos = sum([positive.get(t.lemma_, 0) for t in doc])
             neg = sum([negative.get(t.lemma_, 0) for t in doc])
