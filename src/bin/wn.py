@@ -948,9 +948,14 @@ def convert_form(words: List[str], depth: int=1, threshold: float=None):
 
 
 @app.command()
-def expand_entities(templates_fn: List[Path] = typer.Argument(None), entities_fn: Path = typer.Option(None), vars_fn: List[Path] = typer.Option(None), save_fn: Path = typer.Option(None), depth: int = 1, threshold: float = None, max_syns: int = 0):
+def expand_entities(
+        templates_fn: List[Path] = typer.Argument(None), entities_fn: Path = typer.Option(None), vars_fn: List[Path] = typer.Option(None),
+        save_fn: Path = typer.Option(None), depth: int = 1, threshold: float = None, max_syns: int = 0, prefix: str = '', entity_values: str = None
+):
     seen = {}
     entities = defaultdict(set)
+    if entity_values is not None:
+        entity_values = entity_values.split(',')
 
     if entities_fn:
         with open(entities_fn) as file:
@@ -990,7 +995,9 @@ def expand_entities(templates_fn: List[Path] = typer.Argument(None), entities_fn
 
             for ent, values in data.get('entities', {}).items():
                 for val in values:
-                    entity = f"{ent}:{val['value']}"
+                    if entity_values and val['value'] not in entity_values:
+                        continue
+                    entity = f"{ent}:{prefix}{val['value']}"
                     print(f"VAL: {val}: {variables}")
                     temps = [temp.format(**variables) for temp in val.get('templates', [])]
                     templates.append((entity, temps))

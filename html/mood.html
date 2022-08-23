@@ -26,19 +26,19 @@
     </div>
     <button id="classify" class="btn btn-primary">classify</button>
   </div>
+  <hr/>
   <div class="container">
-    <div id="result" class=form-group">
-    </div>
+    <div id="sentiment" class=form-group"></div>
+  </div>
+  <hr/>
+  <div class="container">
+    <div id="mood" class=form-group"></div>
+  </div>
 
   <script type="text/javascript">
-
-    let $result = $('#result');
-    function classify() {
-      var sentence = $('#text').val();
-      console.log('SENTENCE:', sentence);
-
+    function request(url, data) {
       var settings = {
-        "url": "/mood",
+        "url": url,
         "method": "POST",
         "timeout": 0,
         "dataType": "json",
@@ -46,12 +46,15 @@
           "Authorization": "Basic c2NpbGluZzpzY2lsaW5n",
           "Content-Type": "application/json",
         },
-        "data": JSON.stringify({
-          "text": sentence,
-        }),
+        "data": JSON.stringify(data),
       };
 
-      $.ajax(settings).done(function (response) {
+      return $.ajax(settings);
+    }
+
+    function setResponse(id) {
+      return function (response) {
+        let $result = $("#" + id);
         $result.empty();
         console.log('response', response)
         response.result.forEach(function(e, i) {
@@ -59,43 +62,45 @@
           $button.attr('id', e[0]);
           $button.html(e[0] + ": " + e[1].toFixed(2));
           $button.addClass(i==0?'btn-success':'btn-danger');
-          $button.click(fixLabel(e[0]));
+          $button.click(fixLabel(id, e[0]));
           $result.append($button);
-        });
-
-      });
-
-    }
-
-    function fixLabel(name) {
-      return function() {
-        var sentence = $('#text').val();
-        console.log('fix', sentence, name);
-        var settings = {
-          "url": "/mood-fix",
-          "method": "POST",
-          "timeout": 0,
-          "dataType": "json",
-          "headers": {
-            "Authorization": "Basic c2NpbGluZzpzY2lsaW5n",
-            "Content-Type": "application/json",
-          },
-          "data": JSON.stringify({
-            "text": sentence,
-            "label": name,
-          }),
-        };
-
-        $.ajax(settings).done(function (response) {
-          console.log('Done', response);
-          classify();
         });
       }
     }
 
-    $('#classify').click(classify);
+
+    function classify(id) {
+      return function() {
+        var sentence = $('#text').val();
+        console.log('SENTENCE:', sentence);
+
+        return request("/" + id, {"text": sentence})
+        .done(setResponse(id));
+      }
+    }
+
+    function fixLabel(id, name) {
+      return function() {
+        var sentence = $('#text').val();
+        console.log('fix', sentence, name);
+
+        return request("/" + id + "-fix", {"text": sentence, "label": name})
+        .done(function (response) {
+          console.log('Done', response);
+          return classify(id);
+        });
+      }
+    }
+
+    function doClick() {
+      classify('sentiment')()
+      .then(classify('mood'));
+    }
+
+    $('#classify').click(doClick);
+
     $('#text').keypress(function(e) {
-      if (e.which == 13) classify();
+      if (e.which == 13) doClick();
     });
 
   </script>
