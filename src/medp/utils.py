@@ -343,6 +343,7 @@ class NLP:
                 if token not in vocab:
                     vocab[token] = {
                         'label': row[0],
+                        'normalized': token,
                         'description': desc,
                         'embedding': embedding,
                         'alternatives': [],
@@ -359,7 +360,7 @@ class NLP:
                     vocab[token]['label'] = row[0]
 
                 vocab[token]['alternatives'] = list(set(vocab[token]['alternatives']) | {join_blocks(cls.normalize(alt), sep='_') for alt in row[2:]})
-                vocab[token]['synonyms'] = list(set(vocab[token]['synonyms']) | {cls.clean_notes(alt) for alt in [row[0]] + row[2:]})
+                vocab[token]['synonyms'] = list(set(vocab[token]['synonyms']) | {join_blocks(cls.normalize(alt), sep='_') for alt in [row[0]] + row[2:]})
 
                 # print(f"'{row[0]}' -> vocab[{token}] = {row[1][:80]}")
         return vocab
@@ -395,6 +396,8 @@ class NLP:
         total_words = len(sentence)
 
         max_ngram_len = min(max_ngram_len, total_words)
+        # print(f"SENTENCE: {sentence}. max_ngram_len: {max_ngram_len}")
+        sentence = [vocab.get(t, {}).get('normalized', t) for t in sentence]
         # print(f"SENTENCE: {sentence}. max_ngram_len: {max_ngram_len}")
 
         seq = []
@@ -464,7 +467,7 @@ class NLP:
     @classmethod
     def describe(cls, sentence, vocab, description_type=DescriptionType.DEFAULT, max_ngram=5, fuzzy=None):
         seq = cls.get_tokens(sentence, vocab, description_type, max_ngram=max_ngram, fuzzy=fuzzy)
-        # print([vocab[w] for w in seq if w in vocab])
+        print(f"DESC: {seq}: {[vocab[w] for w in seq if w in vocab]}")
         description = '. '.join(vocab[w].get('description', '') for w in seq if w in vocab)
         return seq, description
 
@@ -558,6 +561,10 @@ def load_db(db_fn, vocab_fn, ignore_fn):
         with open(db_fn) as file:
             db = json.load(file)
 
+    for tok, data in db.items():
+        if 'normalized' not in data:
+            data['normalized'] = tok
+
     if vocab_fn:
         with open(vocab_fn) as file:
             data = json.load(file)
@@ -566,6 +573,7 @@ def load_db(db_fn, vocab_fn, ignore_fn):
             if token not in db:
                 db[token] = {
                     "label": token,
+                    "normalized": token,
                     "description": token,
                     "embedding": None,
                     "alternatives": [token],
@@ -598,8 +606,6 @@ def load_db(db_fn, vocab_fn, ignore_fn):
 class SearchEngine:
     def __init__(self, db_fn, vocab_fn=None, ignore_fn=None):
         self.vocab, self.ignore = load_db(db_fn, vocab_fn, ignore_fn)
-
-        NLP.update_spellchecker({v: 1 for v in self.vocab})
 
         entities = {ent for ent, data in self.vocab.items() if data.get('is_entity', False)}
         self.entity_syns = {
@@ -638,6 +644,12 @@ class SearchEngine:
             self.tok2id.update({tok: self.tok2id[self.entity_syns.get(word, word)] for tok in data['synonyms'] if tok not in entities})
             self.vocab.update({tok: self.vocab[self.entity_syns.get(word, word)] for tok in data['synonyms'] if tok not in entities})
 
+        with open('/tmp/vocab.json', 'w') as file:
+            json.dump(self.vocab, file, indent=2, ensure_ascii=False)
+
+        # Update spellchecker after synonymous have been added to the vocab
+        NLP.update_spellchecker({v: 1 for v in self.vocab})
+
         # print(f"ID2TOK: {self.id2tok}")
         self.entity_multinomial = []
         for ent, data in self.entities:
@@ -659,12 +671,21 @@ class SearchEngine:
     def search(self, sentence, nbest=4, summarized=False, multinomial=False, description_type=DescriptionType.DEFAULT, reuse_description=True, fuzzy=True, use_alts=False, max_ngram=5):
         literal_entity = sentence
         sentence = clean_spaces(sentence)
-        # print(f"SENT: {sentence}")
+        tokens = NLP.tokenize(sentence, self.vocab, fuzzy=fuzzy)
+        print(f"EXACT: {sentence} {tokens}")
 
         # exact match
+        exact_data = None
         if sentence in self.entity_lookup:
+            exact_data = self.entity_lookup[sentence]
+            print(f"EXACT STRING: {sentence} {exact_data}")
+        if len(tokens) == 1 and self.vocab.get(tokens[0], {}).get('is_entity', False):
+            exact_data = self.vocab[tokens[0]]
+            literal_entity = exact_data['label']
+            print(f"EXACT TOKEN: {tokens} {exact_data}")
+        if exact_data:
             return {
-                'tokens': [sentence],
+                'tokens': tokens,
                 'description': sentence,
                 'nbests': [{
                     'entity': literal_entity,
@@ -724,7 +745,7 @@ class SearchEngine:
             'nbests': result,
         }
 
-    def literal_search(self, desc, nbest=4, embedding=None, multinomial=False):
+    def literal_search(self, desc, nbest=4, embedding=None, multinomial=False, entity_coverage_factor=5):
         is_summary = embedding is not None
         if is_summary:
             if multinomial:
@@ -737,8 +758,8 @@ class SearchEngine:
 
         if is_summary:
             mult = torch.mul(embedding, entity_embeddings).sum(dim=1)
-            entity_coverage = mult / entity_embeddings.sum(dim=1)
-            scores = (mult + entity_coverage) / (embedding.sum() + 1.0)
+            entity_coverage = (entity_embeddings.sum(dim=1) - mult) / entity_coverage_factor
+            scores = (mult - entity_coverage) / (embedding.sum())
             # scores = mult / embedding.sum()
         else:
             scores = cos(entity_embeddings, embedding)
@@ -747,6 +768,10 @@ class SearchEngine:
         top_scores = reversed(index_sorted[-nbest:])
         # print([(scores[i], self.entities[i][1]['label']) for i in index_sorted])
 
+        # If scores too low, use scores without discounting entity_coverage
+        if scores[top_scores[0]] <= 0:
+            scores = mult / embedding.sum()
+
         if scores[top_scores[0]] >= 1.0:
             top_scores = [top_scores[0]]
 
@@ -754,6 +779,8 @@ class SearchEngine:
             {
                 'entity': self.entities[i][1]['label'],
                 'score': scores[i].item(),
+                'search_matches': mult[i].item(),
+                'entity_missing': entity_coverage[i].item() * entity_coverage_factor,
                 'description': self.entities[i][1]['summary' if is_summary else 'description'],
             }
             for i in top_scores if scores[i].item() > 0

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style text="text/css">
+    #result div {
+      background-color: lightgrey;
+      display: inline-block;
+      margin: 5px;
+    }
+    #result button {
+      margin: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Mood test</h1>
+    <div class="form-group">
+      <label for"text">Text:</label>
+      <input id="text" class="form-control" autocomplete="off" />
+    </div>
+    <button id="classify" class="btn btn-primary">classify</button>
+  </div>
+  <div class="container">
+    <div id="result" class=form-group">
+    </div>
+
+  <script type="text/javascript">
+
+    let $result = $('#result');
+    function classify() {
+      var sentence = $('#text').val();
+      console.log('SENTENCE:', sentence);
+
+      var settings = {
+        "url": "/mood",
+        "method": "POST",
+        "timeout": 0,
+        "dataType": "json",
+        "headers": {
+          "Authorization": "Basic c2NpbGluZzpzY2lsaW5n",
+          "Content-Type": "application/json",
+        },
+        "data": JSON.stringify({
+          "text": sentence,
+        }),
+      };
+
+      $.ajax(settings).done(function (response) {
+        $result.empty();
+        console.log('response', response)
+        response.result.forEach(function(e, i) {
+          let $button = $('<button class="btn"></button>');
+          $button.attr('id', e[0]);
+          $button.html(e[0] + ": " + e[1].toFixed(2));
+          $button.addClass(i==0?'btn-success':'btn-danger');
+          $button.click(fixLabel(e[0]));
+          $result.append($button);
+        });
+
+      });
+
+    }
+
+    function fixLabel(name) {
+      return function() {
+        var sentence = $('#text').val();
+        console.log('fix', sentence, name);
+        var settings = {
+          "url": "/mood-fix",
+          "method": "POST",
+          "timeout": 0,
+          "dataType": "json",
+          "headers": {
+            "Authorization": "Basic c2NpbGluZzpzY2lsaW5n",
+            "Content-Type": "application/json",
+          },
+          "data": JSON.stringify({
+            "text": sentence,
+            "label": name,
+          }),
+        };
+
+        $.ajax(settings).done(function (response) {
+          console.log('Done', response);
+          classify();
+        });
+      }
+    }
+
+    $('#classify').click(classify);
+    $('#text').keypress(function(e) {
+      if (e.which == 13) classify();
+    });
+
+  </script>
+
+
+</body>
+</html>
