@@ -87,7 +87,7 @@
         return request("/" + id + "-fix", {"text": sentence, "label": name})
         .done(function (response) {
           console.log('Done', response);
-          return classify(id);
+          return classify(id)();
         });
       }
     }
