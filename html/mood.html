@@ -57,9 +57,9 @@
         let $result = $("#" + id);
         $result.empty();
         console.log('response', response)
-	let best = response.result[0][0];
-	let sorted =[... response.result];
-	sorted.sort((a, b) => a[0].localeCompare(b[0]));
+        let best = response.result[0][0];
+        let sorted =[... response.result];
+        sorted.sort((a, b) => a[0].localeCompare(b[0]));
         sorted.forEach(function(e, i) {
           let $button = $('<button class="btn"></button>');
           $button.attr('id', e[0]);
