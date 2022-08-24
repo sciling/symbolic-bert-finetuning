@@ -2,6 +2,7 @@
 
 import os
 import json
+import asyncio
 from typing import Optional
 
 from fastapi import Depends, FastAPI, Request, HTTPException, status
@@ -64,7 +65,7 @@ async def sentiment_html(request: Request):
 
 
 @app.get("/mood", response_class=HTMLResponse)
-async def sentiment_html(request: Request):
+async def mood_html(request: Request):
     return templates.TemplateResponse("mood.html", {"request": request})
 
 
@@ -98,7 +99,7 @@ def load_model(model_name: str):
     return models[model_name].get('model', None)
 
 
-def classify(model_name: str, sentence: Sentence):
+async def classify(model_name: str, sentence: Sentence):
     sentence.text = clean_spaces(sentence.text)
     classifier = load_model(model_name)
 
@@ -110,7 +111,7 @@ def classify(model_name: str, sentence: Sentence):
     }
 
 
-def fix(model_name: str, sentence: Sentence):
+async def fix(model_name: str, sentence: Sentence):
     sentence.text = clean_spaces(sentence.text)
     classifier = load_model(model_name)
     classifier.fix(sentence.text, sentence.label)
@@ -123,19 +124,50 @@ def fix(model_name: str, sentence: Sentence):
 
 @app.post("/sentiment", response_class=JSONResponse)
 async def classify_sentiment(sentence: Sentence):
-    return classify('sentiment', sentence)
+    return await classify('sentiment', sentence)
 
 
 @app.post("/sentiment-fix", response_class=JSONResponse)
 async def fix_sentiment(sentence: Sentence):
-    return fix('sentiment', sentence)
+    return await fix('sentiment', sentence)
 
 
 @app.post("/mood", response_class=JSONResponse)
 async def classify_mood(sentence: Sentence):
-    return classify('mood', sentence)
+    return await classify('mood', sentence)
 
 
 @app.post("/mood-fix", response_class=JSONResponse)
 async def fix_mood(sentence: Sentence):
-    return fix('mood', sentence)
+    return await fix('mood', sentence)
+
+
+@app.get("/estado_animo/{text}", response_class=JSONResponse)
+async def estado_animo(text: str):
+    sentence = Sentence(text=text)
+    tasks = [classify('sentiment', sentence), classify('mood', sentence)]
+    sentiment, mood = await asyncio.gather(*tasks)
+    sentiment = {m.replace('estado_animo_', ''): c for m, c in sentiment['result']}
+    mood = {m.replace('estado_animo_', ''): c for m, c in mood['result']}
+
+    results = {
+        'neutral': sentiment.get('neutral', .0),
+        'emociones_positivas': sentiment.get('positive', .0) + sentiment.get('negative', .0) * mood.get('emociones_positivas', .0),
+    }
+    results.update({m: s * sentiment.get('negative', .0) for m, s in mood.items() if m != 'emociones_positivas'})
+    print(f"SENTIMENT: {sentiment}")
+    print(f"MOOD: {mood}")
+    print(f"RESULTS: {results}")
+
+    nbests = [
+        {
+            'entity': m,
+            'score': c,
+        }
+        for c, m in sorted([(c, m) for m, c in results.items()], reverse=True)
+    ]
+
+    return {
+        "text": sentence.text,
+        "nbests": nbests,
+    }
