@@ -22,6 +22,7 @@ entities:
       templates:
         - ({negative})
         - ({no}|{ojalá}) ({positive})
+        - ({ojalá}) ({no}) ({positive})
         - estoy ({negative})
         - ({no}) estoy ({positive})
         - ({no}) ({muy}|) ({bien})
@@ -35,6 +36,7 @@ entities:
       templates:
         - ({positive})
         - ({no}) ({ojalá}|) ({negative})
+        - ({ojalá}) ({no}) ({negative})
         - ({ojalá}) ({seguir} ({positive})
         - estoy ({positive})
         - ({no}) estoy ({negative})
@@ -56,3 +58,5 @@ entities:
         - ({estoy}) ({más}) ({neutral})
         - mi ({neutral}) ha ({aumentado})
         - mi ({neutral}) ha ({disminuido})
+        - ({ojalá}) ({no}) ({neutral})
+
