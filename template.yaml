@@ -5,7 +5,7 @@ variables:
   bien: bueno|buena|bien
   mal: malo|mala|mal|regular|regulinchi
   no: no|ni|nisiquiera
-  ojalá: ojalá|quisiera|me gustaría|desearía|querría
+  ojalá: ojalá|quisiera|me gustaría|desearía|querría|algún día
   nisiquiera:
   seguir: seguir|continuar
   estoy: estoy|tengo|me siento
