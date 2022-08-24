@@ -57,11 +57,14 @@
         let $result = $("#" + id);
         $result.empty();
         console.log('response', response)
-        response.result.forEach(function(e, i) {
+	let best = response.result[0][0];
+	let sorted =[... response.result];
+	sorted.sort((a, b) => a[0].localeCompare(b[0]));
+        sorted.forEach(function(e, i) {
           let $button = $('<button class="btn"></button>');
           $button.attr('id', e[0]);
-          $button.html(e[0] + ": " + e[1].toFixed(2));
-          $button.addClass(i==0?'btn-success':'btn-danger');
+          $button.html(e[0].replace('estado_animo_', '') + ": " + e[1].toFixed(2));
+          $button.addClass(e[0]==best?'btn-success':'btn-danger');
           $button.click(fixLabel(id, e[0]));
           $result.append($button);
         });
@@ -87,7 +90,7 @@
         return request("/" + id + "-fix", {"text": sentence, "label": name})
         .done(function (response) {
           console.log('Done', response);
-          return classify(id);
+          return classify(id)();
         });
       }
     }
