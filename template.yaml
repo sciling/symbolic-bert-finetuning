@@ -1,0 +1,58 @@
+variables:
+  negative: cansado|fatigado|extenuado|agotado|trabajado|cascado|derrotado|destrozado|roto|exhausto|fatigoso|molido|rendido|harto|desmayado|hecho polvo|hecho migas|para el arrastre|desvelado|estresado|agobiado|presionado|abandonado,aburrido|apático|dejado|descontento|descuidado|indiferente|perezoso|insatisfecho|inapetecido|pasota|reticente|tedioso
+  positive: descansado|fortalecido|fresco|sosegado|tranquilo|reposado|cómodo|apacible|placentero|apaciguado|reconfortado|dormido|divertido|cuidado|contento|interesado|activo|satisfecho|apetecido
+  muy: muy|demasiado
+  bien: bueno|buena|bien
+  mal: malo|mala|mal|regular|regulinchi
+  no: no|ni|nisiquiera
+  ojalá: ojalá|quisiera|me gustaría|desearía|querría
+  nisiquiera:
+  seguir: seguir|continuar
+  estoy: estoy|tengo|me siento
+  menos: menos
+  más: más
+  controlar: controlar|dirigir|dominar|manejar
+  descontrolar: descontrolar|desordenar|desbarajustar|desenfrenar
+  disminuido: disminuido|menguado|bajado|reducido|decrementado
+  aumentado: aumentado|crecido|subido|incrementado
+
+entities:
+  estado_animo:
+    - value: negative
+      templates:
+        - ({negative})
+        - ({no}|{ojalá}) ({positive})
+        - estoy ({negative})
+        - ({no}) estoy ({positive})
+        - ({no}) ({muy}|) ({bien})
+        - ({muy}|) ({mal})
+        - ({estoy}) ({menos}) ({positive})
+        - ({estoy}) ({más}) ({negative})
+        - ({descontrolar}) ({negative})
+        - mi ({negative}) ha ({aumentado})
+        - mi ({positive}) ha ({disminuido})
+    - value: positive
+      templates:
+        - ({positive})
+        - ({no}) ({ojalá}|) ({negative})
+        - ({ojalá}) ({seguir} ({positive})
+        - estoy ({positive})
+        - ({no}) estoy ({negative})
+        - ({muy}|) (bueno|buena|bien)
+        - ({no}) ({muy}|) ({mal})
+        - ({estoy}) ({menos}) ({negative})
+        - ({estoy}) ({más}) ({positive})
+        - ({descontrolar}) ({positive})
+        - ({controlar}) ({negative})
+        - mi ({positive}) ha ({aumentado})
+        - mi ({negative}) ha ({disminuido})
+    - value: neutral
+      templates:
+        - ({neutral})
+        - ({no}) ({neutral})
+        - estoy ({neutral})
+        - ({no}) estoy ({neutral})
+        - ({estoy}) ({menos}) ({neutral})
+        - ({estoy}) ({más}) ({neutral})
+        - mi ({neutral}) ha ({aumentado})
+        - mi ({neutral}) ha ({disminuido})
