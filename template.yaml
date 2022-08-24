@@ -16,7 +16,8 @@ variables:
   disminuido: disminuido|menguado|bajado|reducido|decrementado
   aumentado: aumentado|crecido|subido|incrementado
   dificultad: dificil|tengo dificultad para|me cuesta|me costara|tuviera dificultad para
-
+  querer: me gusta|quiero|deseo
+  sentir: sentir|tener|estar
 entities:
   estado_animo:
     - value: negative
@@ -33,8 +34,8 @@ entities:
         - ({descontrolar}) ({negative})
         - mi ({negative}) ha ({aumentado})
         - mi ({positive}) ha ({disminuido})
-        - ({ojalá}) que ({no}) ({dificultad} {negative})
-        - ({no}) me gusta estar ({negative})
+        - ({ojalá}) que ({no}) ({dificultad}) ({negative})
+        - ({no}) ({querer}) ({sentir}) ({negative})
     - value: positive
       templates:
         - ({positive})
@@ -53,6 +54,7 @@ entities:
         - mi ({negative}) ha ({disminuido})
         - ({ojalá}) que ({no}) ({dificultad} {positive})
         - me gusta estar ({positive})
+        - ({no}) ({querer}) ({sentir}) ({positive})
     - value: neutral
       templates:
         - ({neutral})
@@ -66,5 +68,5 @@ entities:
         - ({ojalá}) ({no}) ({neutral})
         - ({ojalá}) que ({no}) ({dificultad} {neutral})
         - ({no}) me gusta estar ({neutral})
-        - me gusta estar ({neutral})
+        - ({no}) ({querer}) ({sentir}) ({neutral})
 
