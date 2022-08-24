@@ -164,7 +164,7 @@ async def estado_animo(text: str):
             'entity': m,
             'score': c,
         }
-        for c, m in sorted([(c, m) for m, c in results.items()], reverse=True)
+        for c, m in sorted([(c, m) for m, c in results.items()], reverse=True) if c > 0
     ]
 
     return {
