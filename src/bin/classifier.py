@@ -13,6 +13,7 @@ import torch
 from torch.nn import CosineSimilarity
 from transformers import AutoTokenizer, BertForSequenceClassification, AutoModelForSequenceClassification, TrainingArguments, Trainer
 from datasets import load_metric, load_dataset
+from spellchecker import SpellChecker
 import spacy
 from spacy.attrs import LOWER, POS, ENT_TYPE, IS_ALPHA, DEP, LEMMA, LOWER, IS_PUNCT, IS_DIGIT, IS_SPACE, IS_STOP
 from spacy.tokens.doc import Doc
@@ -38,9 +39,10 @@ def p(doc):
 
 
 class Classifier:
-    def __init__(self, model_name, is_multilabel=False, database_fn=None, **kwargs):
+    def __init__(self, model_name, is_multilabel=False, database_fn=None, spellcheck=True, **kwargs):
         self.model_name = model_name
         self.database_fn = database_fn
+        self.spellchecker = SpellChecker(language='es') if spellcheck else None
 
         self.tokenizer = AutoTokenizer.from_pretrained(model_name)
         if is_multilabel:
@@ -67,6 +69,9 @@ class Classifier:
                 json.dump(self.database, file, indent=2, ensure_ascii=False)
 
     def classify(self, text):
+        if self.spellchecker:
+            text = ' '.join(self.spellchecker.correction(d.text) for d in nlp(text))
+
         if self.database is not None and text in self.database:
             part = {k: .0 for k in self.labels}
             part[self.database[text]] = 1.0
@@ -258,6 +263,87 @@ def zero_shot(entities_fn: Path, multi_label: bool = False):
 
 @app.command()
 def train(train_fn: Path, dev_fn: Path, output_dir: Path = 'train.dir', model_name: str = spanish_bert, cache_dir: Path = 'cache.dir', max_seq_length: int = 128, num_train_epochs: int = 3, learning_rate: float = 2e-5, problem_type: str = 'single_label_classification'):
+
+    data_files = {
+        'train': str(train_fn),
+        'validation': str(dev_fn),
+    }
+
+    # Loading a dataset from local csv files
+    dataset = load_dataset(
+        "csv",
+        data_files=data_files,
+        cache_dir=str(cache_dir)
+    )
+
+    label_list = dataset["train"].unique("label")
+    label_list.sort()  # Let's sort it for determinism
+    num_labels = len(label_list)
+    label_to_id = {v: i for i, v in enumerate(label_list)}
+
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    max_seq_length = min(max_seq_length, tokenizer.model_max_length)
+
+    def tokenize_function(examples):
+        result = tokenizer(examples["sentence"], padding="max_length", max_length=max_seq_length, truncation=True)
+        # Map labels to IDs (not necessary for GLUE tasks)
+        if label_to_id is not None and "label" in examples:
+            result["label"] = [(label_to_id[label] if label != -1 else -1) for label in examples["label"]]
+
+        return result
+
+    tokenized_datasets = dataset.map(tokenize_function, batched=True)
+
+    model = AutoModelForSequenceClassification.from_pretrained(
+        model_name,
+        problem_type=problem_type,
+        num_labels=num_labels,
+        label2id=label_to_id,
+        id2label={id: label for label, id in label_to_id.items()},
+        ignore_mismatched_sizes=True
+    )
+    model.classifier = nn.Linear(model.config.hidden_size, num_labels)
+    print(model)
+
+    training_args = TrainingArguments(
+        output_dir=str(output_dir),
+        overwrite_output_dir=True,
+        per_device_train_batch_size=16,
+        learning_rate=learning_rate,
+        num_train_epochs=num_train_epochs
+    )
+
+    metric = load_metric("accuracy")
+
+    def compute_metrics(eval_pred):
+        logits, labels = eval_pred
+        predictions = np.argmax(logits, axis=-1)
+        return metric.compute(predictions=predictions, references=labels)
+
+    trainer = Trainer(
+        model=model,
+        args=training_args,
+        train_dataset=tokenized_datasets['train'],
+        eval_dataset=tokenized_datasets['validation'],
+        compute_metrics=compute_metrics,
+    )
+
+    train_result = trainer.train()
+
+    metrics = train_result.metrics
+    trainer.save_model()  # Saves the tokenizer too for easy upload
+
+    trainer.log_metrics("train", metrics)
+    trainer.save_metrics("train", metrics)
+    trainer.save_state()
+
+    metrics = trainer.evaluate(eval_dataset=tokenized_datasets['validation'])
+    trainer.log_metrics("eval", metrics)
+    trainer.save_metrics("eval", metrics)
+
+
+@app.command()
+def mtl_train(train_fn: Path, dev_fn: Path, output_dir: Path = 'mtl_train.dir', model_name: str = spanish_bert, cache_dir: Path = 'cache.dir', max_seq_length: int = 128, num_train_epochs: int = 3, learning_rate: float = 2e-5):
 
     data_files = {
         'train': str(train_fn),
