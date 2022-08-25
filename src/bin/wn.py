@@ -729,7 +729,7 @@ def create_db(
     for data in tqdm(vocab.values(), desc="Regenerating descriptions..."):
         if not data.get('description', None):
             data['description'] = NLP.describe(data['label'], vocab)
-            data['embedding'] = EmbeddingsProcessor.pages_to_embeddings([data['description']])[0].tolist()
+            # data['embedding'] = EmbeddingsProcessor.pages_to_embeddings([data['description']])[0].tolist()
 
     with open(save_fn, 'w') as file:
         json.dump(vocab, file, indent=2, ensure_ascii=False)

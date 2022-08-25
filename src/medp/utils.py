@@ -7,6 +7,7 @@ from queue import Queue
 import itertools
 
 from unidecode import unidecode
+import spacy
 import spacy_stanza
 from inflector import Inflector, Spanish
 from sentence_transformers import SentenceTransformer
@@ -161,7 +162,8 @@ class NLP:
     @classmethod
     def get_model(cls):
         if cls.NLP is None:
-            cls.NLP = spacy_stanza.load_pipeline("es", processors="tokenize,lemma")
+            cls.NLP = spacy.load('es_core_news_lg')
+            # cls.NLP = spacy_stanza.load_pipeline("es", processors="tokenize,lemma")
             cls.NLP.Defaults.stop_words |= cls.STOPWORDS
             for word in cls.NONSTOPWORDS:
                 cls.NLP.Defaults.stop_words.remove(word)
@@ -441,10 +443,11 @@ class NLP:
         return tokens
 
     @classmethod
-    def summarize(cls, sentence, vocab, description_type=DescriptionType.DEFAULT, description=None, max_ngram=5):
-        # print(f"INITSUM: '{description}'")
+    def summarize(cls, sentence, vocab, description_type=DescriptionType.DEFAULT, description=None, max_ngram=5, fuzzy=None):
+        # print(f"INITSUM: '{sentence}'")
         if not description:
             _, description = cls.describe(sentence, vocab, description_type=description_type, max_ngram=max_ngram)
+
         # print(f"POSTSUM: '{description}'")
         tokens = cls.get_tokens(description, vocab, description_type=description_type, max_ngram=max_ngram)
         summary = {token for token in tokens if token in vocab}
@@ -453,22 +456,23 @@ class NLP:
 
     @classmethod
     def summarizedb_entry(cls, entry, vocab, description_type=DescriptionType.DEFAULT, reuse_description=False, max_ngram=5):
+        label = entry['label']
         description = None
         if reuse_description:
             description = entry.get('description', None)
-        entry['summary'] = list(sorted(cls.summarize(entry['label'], vocab, description_type, description, max_ngram)))
-        desc = join_blocks([w for token in entry['summary'] for w in token.split('_')])
-        if 'embedding' in entry:
-            entry['summaryEmbedding'] = entry['embedding']
-        else:
-            entry['summaryEmbedding'] = EmbeddingsProcessor.pages_to_embeddings([desc])[0].tolist()
+        entry['summary'] = list(sorted(cls.summarize(label, vocab, description_type, description, max_ngram)))
+        # desc = join_blocks([w for token in entry['summary'] for w in token.split('_')])
+        # if 'embedding' in entry:
+        #     entry['summaryEmbedding'] = entry['embedding']
+        # else:
+        #     entry['summaryEmbedding'] = EmbeddingsProcessor.pages_to_embeddings([desc])[0].tolist()
         return entry
 
     @classmethod
     def describe(cls, sentence, vocab, description_type=DescriptionType.DEFAULT, max_ngram=5, fuzzy=None):
         seq = cls.get_tokens(sentence, vocab, description_type, max_ngram=max_ngram, fuzzy=fuzzy)
-        print(f"DESC: {seq}: {[vocab[w] for w in seq if w in vocab]}")
         description = '. '.join(vocab[w].get('description', '') for w in seq if w in vocab)
+        # print(f"DESCRIBE: {seq}: {[vocab[w] for w in seq if w in vocab]} {description}")
         return seq, description
 
     @classmethod
@@ -586,10 +590,14 @@ def load_db(db_fn, vocab_fn, ignore_fn):
 
             # print(f"VOCAB: {token} {type(summary)} {summary}")
             if isinstance(summary, list):
-                print(f"REPLACE: {token}: {summary}")
+                print(f"REPLACE SUMMARY: {token}: {summary}")
                 db[token]['summary'] = summary
-            # else:
-            #     print(f"NOT REPLACE: {token}: {summary}")
+                if not db[token].get('is_entity', False):
+                    db[token]['expand'] = True
+            elif isinstance(summary, int):
+                pass
+            else:
+                print(f"NOT REPLACE: {token}: {summary}")
 
     ignore = set()
     if ignore_fn:
@@ -602,6 +610,8 @@ def load_db(db_fn, vocab_fn, ignore_fn):
             if token in db:
                 synonyms = db[token].get('synonyms', [])
                 db[token]['synonyms'] = list(set(synonyms + syns))
+                # for syn in syns:
+                #     db[syn] = db[token]
 
     NLP.update_spellchecker({v: 1 for v in db})
     return db, ignore
@@ -654,7 +664,8 @@ class SearchEngine:
         # Update spellchecker after synonymous have been added to the vocab
         NLP.update_spellchecker({v: 1 for v in self.vocab})
 
-        # print(f"ID2TOK: {self.id2tok}")
+        # print(f"ID2TOK: {json.dumps(self.tok2id, indent=2, ensure_ascii=False)}")
+        # print(f"ID2TOK: {json.dumps(self.id2tok, indent=2, ensure_ascii=False)}")
         self.entity_multinomial = []
         for ent, data in self.entities:
             self.entity_multinomial.append(NLP.to_multinomial(data.get('summary', set()), self.tok2id))
@@ -701,13 +712,19 @@ class SearchEngine:
         embedding = None
         literal_seq = []
         if summarized:
-            seq, desc = NLP.describe(sentence, self.vocab, description_type=description_type, fuzzy=fuzzy, max_ngram=max_ngram)
-            # print(f"DESC: {seq} {desc}")
+            # seq, desc = NLP.describe(sentence, self.vocab, description_type=description_type, fuzzy=fuzzy, max_ngram=max_ngram)
+            # print(f"DESC: {seq}")
             seq = NLP.get_tokens(sentence, self.vocab, description_type, fuzzy=fuzzy, max_ngram=max_ngram)
+
+            # expand
+            def get_toks(tok):
+                return self.vocab[tok]['summary'] if self.vocab[tok].get('expand', False) else [tok]
+            seq = {t for tok in seq for t in get_toks(tok)}
+
             # print(f"SEQ: {seq}")
             seq = {self.normalize(tok): '' for tok in seq}
             seq = {tok: '' for tok in seq if tok}
-            # print(f"DESC: {seq}")
+            print(f"SUMMARIZED: {seq}")
             desc = join_blocks([w for token in seq for w in token.split('_')])
             if multinomial:
                 literal_seq = [tok for tok in NLP.get_tokens(sentence, self.vocab, DescriptionType.DEFAULT, fuzzy=fuzzy, max_ngram=max_ngram) if self.is_valid_token(tok)]
@@ -739,7 +756,6 @@ class SearchEngine:
         desc = f"{sentence}. {desc}"
         print(f"SEARCH: {sentence}: {seq}: {desc}")
 
-
         result = self.literal_search(desc, nbest, embedding=embedding, multinomial=multinomial)
         if len(result) == 0 and not use_alts:
             return self.search(sentence, nbest=nbest, summarized=summarized, multinomial=multinomial, description_type=description_type, reuse_description=reuse_description, use_alts=True)
@@ -750,7 +766,7 @@ class SearchEngine:
             'nbests': result,
         }
 
-    def literal_search(self, desc, nbest=4, embedding=None, multinomial=False, entity_coverage_factor=5):
+    def literal_search(self, desc, nbest=4, embedding=None, multinomial=False, entity_coverage_factor=10):
         is_summary = embedding is not None
         if is_summary:
             if multinomial:
