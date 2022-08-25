@@ -293,7 +293,7 @@ def train(train_fn: Path, dev_fn: Path, output_dir: Path = 'train.dir', model_na
     max_seq_length = min(max_seq_length, tokenizer.model_max_length)
 
     def tokenize_function(examples):
-        result = tokenizer(examples["sentence"], padding="max_length", max_length=max_seq_length, truncation=True)
+        result = tokenizer([t if t else '' for t in examples["sentence"]], padding="max_length", max_length=max_seq_length, truncation=True)
         # Map labels to IDs (not necessary for GLUE tasks)
         if label_to_id is not None and "label" in examples:
             result["label"] = [(label_to_id[label] if label != -1 else -1) for label in examples["label"]]

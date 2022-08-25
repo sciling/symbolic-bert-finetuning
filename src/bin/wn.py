@@ -11,6 +11,7 @@
 
 import warnings
 
+import os
 import re
 import sys
 import csv
@@ -773,12 +774,35 @@ def summarize_db(db_fn: Path, vocab_fn: Path = typer.Option(None), ignore_fn: Pa
         json.dump(new_db, file, indent=2, ensure_ascii=False)
 
 
-@app.command()
-def search(text: str, db_fn: Path = typer.Option(None), vocab_fn: Path = typer.Option(None), ignore_fn: Path = typer.Option(None), nbest: int = 4, summarized: bool = False, multinomial: bool = False, description_type: DescriptionType = DescriptionType.DEFAULT, reuse_description: bool = False, fuzzy: bool = True, max_ngram: int = 5, use_alts: bool = False):
-    searcher = SearchEngine(db_fn, vocab_fn=vocab_fn, ignore_fn=ignore_fn)
-    res = searcher.search(text, nbest, summarized=summarized, multinomial=multinomial, description_type=description_type, reuse_description=reuse_description, fuzzy=fuzzy, max_ngram=max_ngram, use_alts=use_alts)
+def split_args(line):
+    spl = line.split(';')
+    return spl[0], set(spl[1:])
 
-    print(json.dumps(res, indent=2, ensure_ascii=False))
+@app.command()
+def search(_texts: List[str], db_fn: Path = typer.Option(None), vocab_fn: Path = typer.Option(None), ignore_fn: Path = typer.Option(None), nbest: int = 4, summarized: bool = False, multinomial: bool = False, description_type: DescriptionType = DescriptionType.DEFAULT, reuse_description: bool = False, fuzzy: bool = True, max_ngram: int = 5, use_alts: bool = False):
+    searcher = SearchEngine(db_fn, vocab_fn=vocab_fn, ignore_fn=ignore_fn)
+
+    texts = []
+    for text in _texts:
+        if os.path.isfile(text):
+            with open(text) as file:
+                texts.extend([split_args(line) for line in file.read().split('\n') if clean_spaces(line)])
+        else:
+            texts.append(split_args(text))
+
+    errors = set()
+    for text, labels in tqdm(texts):
+        print(f"Searching: '{text}'")
+        res = searcher.search(text, nbest, summarized=summarized, multinomial=multinomial, description_type=description_type, reuse_description=reuse_description, fuzzy=fuzzy, max_ngram=max_ngram, use_alts=use_alts)
+        resl = {e['entity'] for e in res['nbests']}
+        found = all([label in resl for label in labels])
+        print(f"FOUND: {found}")
+        if not found:
+            errors.add(text)
+
+        print(json.dumps(res, indent=2, ensure_ascii=False))
+
+    eprint(f"ERRORS: {errors}")
 
 
 @app.command()
@@ -1006,7 +1030,7 @@ def expand_entities(
             vocab = set()
             for template in tqdm(elems, leave=False):
                 for sentence in tqdm(expand_template(template), leave=False):
-                    print(f"TEMPLATE: {template}: {sentence}")
+                    # print(f"TEMPLATE: {template}: {sentence}")
                     words = {sentence}
 
                     if False:
@@ -1017,7 +1041,7 @@ def expand_entities(
                     if False:
                         for word in list(words):
                             subanalysis = NLP.tag(word)
-                            print(f"SUB: {word}: {subanalysis}")
+                            # print(f"SUB: {word}: {subanalysis}")
                             for number in ('sg', ):  # 'pl'):
                                 tokens = [
                                     NLP.get_variations(token, number, pretoken)
@@ -1029,14 +1053,15 @@ def expand_entities(
 
                     for syn in list(words):
                         if seen.get(syn, entity) != entity:
-                            print(f"WARNING: '{syn}' in '{entity}' from template '{template}' is already a synonym of '{seen[syn]}'")
+                            # print(f"WARNING: '{syn}' in '{entity}' from template '{template}' is already a synonym of '{seen[syn]}'")
+                            print(f"WARNING: '{syn}' in '{entity}' is already a synonym of '{seen[syn]}'")
                             words.remove(syn)
                         else:
                             seen[syn] = entity
 
                     vocab |= words
 
-            print(f"ENTITY: {entity} = {vocab}")
+            # print(f"ENTITY: {entity} = {vocab}")
             entities[entity] |= vocab
 
     if save_fn:

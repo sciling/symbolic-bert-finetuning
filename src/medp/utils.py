@@ -472,12 +472,14 @@ class NLP:
         return seq, description
 
     @classmethod
-    def to_multinomial(cls, summary, tok2id):
+    def to_multinomial(cls, summary, tok2id, decay=None):
         vect = [0] * len(tok2id)
-        for tok in summary:
+        for pos, tok in enumerate(summary):
             tokid = tok2id.get(tok, None)
             if tokid is not None:
-                vect[tokid] = 1
+                vect[tokid] = 1.0
+                if decay:
+                    vect[tokid] += decay / (pos + 1)
         return torch.FloatTensor(vect)
 
     @classmethod
@@ -586,6 +588,8 @@ def load_db(db_fn, vocab_fn, ignore_fn):
             if isinstance(summary, list):
                 print(f"REPLACE: {token}: {summary}")
                 db[token]['summary'] = summary
+            # else:
+            #     print(f"NOT REPLACE: {token}: {summary}")
 
     ignore = set()
     if ignore_fn:
@@ -701,8 +705,8 @@ class SearchEngine:
             # print(f"DESC: {seq} {desc}")
             seq = NLP.get_tokens(sentence, self.vocab, description_type, fuzzy=fuzzy, max_ngram=max_ngram)
             # print(f"SEQ: {seq}")
-            seq = {self.normalize(tok) for tok in seq}
-            seq = {tok for tok in seq if tok}
+            seq = {self.normalize(tok): '' for tok in seq}
+            seq = {tok: '' for tok in seq if tok}
             # print(f"DESC: {seq}")
             desc = join_blocks([w for token in seq for w in token.split('_')])
             if multinomial:
@@ -712,18 +716,19 @@ class SearchEngine:
                 if use_alts:
                     seq_non_entities = [tok for tok in seq if not self.vocab.get(tok, {}).get('is_entity', False)]
                     alts = {
-                        self.normalize(alt)
+                        self.normalize(alt): ''
                         for tok in seq_non_entities
                         for alt in self.vocab.get(tok, {}).get('summary', []) + seq_non_entities
                     }
-                    seq |= alts
+                    seq.update(alts)
 
                 elif len(literal_seq) == 1 and self.vocab.get(literal_seq[0], {}).get('is_entity', False):
                     token = self.normalize(literal_seq[0])
                     # print(f"LITERAL: {literal_seq} {token}")
                     seq = self.vocab.get(token, {}).get('summary', [])
 
-                embedding = NLP.to_multinomial(seq, self.tok2id)
+                print(f"MULTINOMIAL_TOKENS: {seq}")
+                embedding = NLP.to_multinomial(seq, self.tok2id, decay=0.01)
                 seq = list(seq)
             else:
                 entry = NLP.summarizedb_entry({'label': sentence}, self.vocab, description_type=description_type, reuse_description=reuse_description)
