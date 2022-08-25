@@ -69,14 +69,22 @@ class Classifier:
                 json.dump(self.database, file, indent=2, ensure_ascii=False)
 
     def classify(self, text):
-        if self.spellchecker:
-            text = ' '.join(self.spellchecker.correction(d.text) for d in nlp(text))
-
+        # If literal match is found return from database.
         if self.database is not None and text in self.database:
             part = {k: .0 for k in self.labels}
             part[self.database[text]] = 1.0
             return sorted([(s, c) for c, s in part.items()], reverse=True)
 
+        if self.spellchecker:
+            text = ' '.join(self.spellchecker.correction(d.text) for d in nlp(text))
+
+        # If spell corrected match is found return from database.
+        if self.database is not None and text in self.database:
+            part = {k: .0 for k in self.labels}
+            part[self.database[text]] = 1.0
+            return sorted([(s, c) for c, s in part.items()], reverse=True)
+
+        # Otherwise, classify
         inputs = self.tokenizer(text, return_tensors="pt")
         with torch.no_grad():
             logits = self.model(**inputs).logits.flatten()
