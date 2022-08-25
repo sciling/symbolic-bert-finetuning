@@ -36,6 +36,7 @@ entities:
         - mi ({positive}) ha ({disminuido})
         - ({ojalá}) que ({no}) ({dificultad}) ({negative})
         - ({no}) ({querer}) ({sentir}) ({negative})
+        - ({no}) ({querer}) ({sentir}) ({positive})
     - value: positive
       templates:
         - ({positive})
@@ -52,7 +53,8 @@ entities:
         - ({controlar}) ({negative})
         - mi ({positive}) ha ({aumentado})
         - mi ({negative}) ha ({disminuido})
-        - ({ojalá}) que ({no}) ({dificultad} {positive})
+        - ({ojalá}) que ({no}) ({dificultad}) ({positive})
+        - me gusta estar ({positive})
     - value: neutral
       templates:
         - ({neutral})
@@ -64,8 +66,8 @@ entities:
         - mi ({neutral}) ha ({aumentado})
         - mi ({neutral}) ha ({disminuido})
         - ({ojalá}) ({no}) ({neutral})
-        - ({ojalá}) que ({no}) ({dificultad} {neutral})
-        - ({no}) me gusta estar ({neutral})
+        - ({ojalá}) que ({no}) ({dificultad}) ({neutral})
+        - ({no}|) me gusta estar ({neutral})
         - ({no}) ({querer}) ({sentir}) ({neutral})
         - ({querer}) ({sentir}) ({neutral})
 
