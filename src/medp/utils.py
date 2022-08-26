@@ -601,10 +601,10 @@ def load_db(db_fn, vocab_fn, ignore_fn):
 
             # print(f"VOCAB: {token} {type(summary)} {summary}")
             if isinstance(summary, list):
-                print(f"REPLACE SUMMARY: {token}: {summary}")
                 db[token]['summary'] = summary
                 if not db[token].get('is_entity', False):
                     db[token]['expand'] = True
+                print(f"REPLACE SUMMARY: {token} [{db[token].get('expand', False)}]: {summary}")
             elif isinstance(summary, int):
                 pass
             else:

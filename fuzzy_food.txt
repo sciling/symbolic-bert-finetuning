@@ -52,3 +52,8 @@ queso asado con mojo;Queso asado con mojo picón
 vaso de samorejo;Salmorejo
 croisant;Croissant
 curasán;Croissant
+arroz_horno;Arroz con costra
+piña;Piña
+perejil fresco;Perejil, fresco
+aceite de oliva;Aceite de oliva
+aceite;Aceite de oliva;Aceite de oliva virgen extra
