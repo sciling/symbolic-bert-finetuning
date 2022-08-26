@@ -294,13 +294,24 @@ class NLP:
         return cls.get_inflector().singularize(text)
 
     @classmethod
+    def normalize_token(cls, token):
+        # we don't want té (chai) to be confused and ignored as a pronoun stopword.
+        # we want sin to be kept for 'sin alcohol' drinks.
+        if token.text in {'te', 'sin'}:
+            return token.text
+        if not token.is_punct and not token.is_stop and not token.is_space and token.text:
+            return unidecode(cls.singularize_spacy_token(token))
+        return None
+
+    @classmethod
     def normalize(cls, sentence, fuzzy=None):
         # print(f"SENT: {sentence}")
         seq = cls.nlp(clean_spaces(note_re.sub('', sentence.lower())))
-        # print(f"SEQ: {seq}")
+        # print(f"SEQ: {list(seq)}")
         if fuzzy:
             seq = cls.nlp(join_blocks([NLP.correct(t.text) for t in seq]))
-        normalized = [unidecode(cls.singularize_spacy_token(t)) if t.text not in {'te'} else t.text for t in seq if not t.is_punct and not t.is_stop and not t.is_space and t.text]
+            # print(f"FUZZY: {list(seq)}")
+        normalized = [cls.normalize_token(t) for t in seq]
         # print(f"NORMALIZED: {normalized}")
         return [tok for tok in normalized if tok]
 
@@ -721,7 +732,7 @@ class SearchEngine:
                 return self.vocab[tok]['summary'] if self.vocab[tok].get('expand', False) else [tok]
             seq = {t for tok in seq for t in get_toks(tok)}
 
-            # print(f"SEQ: {seq}")
+            print(f"SEQ: {seq}")
             seq = {self.normalize(tok): '' for tok in seq}
             seq = {tok: '' for tok in seq if tok}
             print(f"SUMMARIZED: {seq}")

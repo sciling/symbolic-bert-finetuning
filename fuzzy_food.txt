@@ -1,0 +1,54 @@
+8 unidades de manzana;Manzana
+albahaca con piñones;Albahaca;Piñon
+arroz;Arroz
+arroz a banda;Arroz a banda
+arroz banda;Arroz a banda
+arroz con conejo y pollo;Paella
+arroz con conejo;Paella
+arroz con pollo;Paella
+arroz con pollo y conejo;Paella
+arroz de pollo y conejo;Paella
+berenjena pimiento cebolla;Pisto
+berenjena pimiento cebolla asada;Pisto;Esgarraet
+cafe;Café, infusión
+café;Café, infusión
+cafe con chocolate;Café, infusión
+café con leche;Café, con leche
+curry;Curry
+escalivada;Esgarraet
+garbanzos;Garbanzo, hervido;Garbanzo, en conserva
+Habas con ajetes, setas y gambas;Habas con ajetes, setas y gambas
+lentejas;Lenteja, en conserva;Lenteja, hervida
+lentejas con chorizo;Lentejas estofadas con chorizo
+manzana;Manzana
+manzanas;Manzana
+paella;Paella
+papas a lo pobre;Papas arrugás con mojo picón
+pimiento  asada;Pimiento rojo, crudo;Esgarraet
+pimiento  asado;Pimiento rojo, crudo;Esgarraet
+pimiento  frito;Pimiento, frito
+sushi;Ensalada de pescado con arroz;Paella
+ternasco;Cordero, parte sin especificar
+una taza café;Café, infusión
+una taza te;Té, infusión, con leche
+una taza té;Té, infusión, con leche
+un plato de arroz;Arroz
+un plato de manzanas;Manzana
+un vaso te;Té, infusión, con leche
+un vaso té;Té, infusión, con leche
+tostada con aceite;Tostadas con tomate y aceite
+croisant de chocolate;Croissant de chocolate
+curasan de chocolate;Croissant de chocolate
+yogur;Yogur, enriquecido, natural;Yogur, enriquecido, sabor, s e
+papas arrugadas;Papas arrugás con mojo picón
+papas arrugás;Papas arrugás con mojo picón
+cerveza;Cerveza con alcohol
+empanadilla de atún;Empanadilla
+leche de soja;Bebida de soja
+mouse de chocolate;Mousse de chocolate
+mus de chocolate;Mousse de chocolate
+mus;Mousse de chocolate
+queso asado con mojo;Queso asado con mojo picón
+vaso de samorejo;Salmorejo
+croisant;Croissant
+curasán;Croissant
