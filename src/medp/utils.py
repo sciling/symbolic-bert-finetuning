@@ -4,11 +4,11 @@ import csv
 from typing import Iterable
 from enum import Enum
 from queue import Queue
-import itertools
+# import itertools
 
+from tqdm.contrib import itertools
 from unidecode import unidecode
 import spacy
-import spacy_stanza
 from inflector import Inflector, Spanish
 from sentence_transformers import SentenceTransformer
 from sentence_transformers import util
@@ -805,6 +805,9 @@ class SearchEngine:
             scores = mult / embedding.sum()
 
         if scores[top_scores[0]] >= 1.0:
+            top_scores = [top_scores[0]]
+
+        if scores[top_scores[0]] >= 0.9 and (len(top_scores) == 1 or scores[top_scores[1]] <= 0.5):
             top_scores = [top_scores[0]]
 
         return [

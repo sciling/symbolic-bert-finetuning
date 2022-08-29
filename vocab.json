@@ -26,13 +26,34 @@
      "atun",
      "pisto"
   ],
+  "pescado_frito": ["pescado", "frito"],
+  "leche_materno": ["never", "ever", "you", "should", "appear", "except", "for", "exact", "match"],
+  "leche_vaca": ["leche", "vaca"],
+  "leche_vaca_entero": [
+      "entero",
+      "leche"
+  ],
+  "leche_desnatado_pasteurizado": [
+      "desnatado",
+      "leche"
+  ],
+  "leche_semidesnatado_pasteurizado": [
+      "semidesnatado",
+      "leche"
+  ],
+  "pan_blanco_barra": [
+      "blanco",
+      "pan",
+      "pan_blanco"
+  ],
+  "bebida_avena": ["leche", "bebida", "avena", "soja"],
   "manzana": ["manzana", "fruta"],
   "arroz_horno": ["arroz", "horno", "garbanzos", "morcilla", "patata", "longaniza", "tomate", "caldo"],
-  "mu": ["mousse"],
+  "mousse_chocolate": 1,
   "curar": ["croissant"],
   "te_infusion_leche": ["te", "leche"],
-  "papa_arruga": ["patata", "papa_arruga"],
-  "papa_arruga_mojo_picon": ["patata", "mojo", "pico"],
+  "papa_arruga": ["patata", "papa_arruga", "arruga"],
+  "papa_arruga_mojo_picon": ["patata", "arruga", "mojo", "pico"],
   "queso_asado_mojo_picon": ["queso", "asado", "mojo", "pico"],
   "tostada_tomate_aceite_oliva": ["aceite", "tomate", "tostada"],
   "tostada_aguacate_granada": ["tostada", "aguacate", "granada", "aceite"],
@@ -50,6 +71,32 @@
   "lenteja_verdura": ["lenteja", "verdura"],
   "lenteja_estofada_verdura_arroz_integral": ["lenteja", "verdura", "estofado", "arroz", "arroz_integral"],
   "berenjena_relleno_verdura": ["berenjena", "berenjena_relleno", "verdura"],
+  "macarron_bolonesa": [
+      "carne",
+      "cebolla",
+      "frito",
+      "leche",
+      "bolones",
+      "macarron",
+      "macarron_bolonesa"
+  ],
+  "macarron_chorizo_queso_gratinado": [
+      "macarron",
+      "cebolla",
+      "chorizo",
+      "queso",
+      "tomate"
+  ],
+  "macarron_tomate_atun": [
+    "atun",
+    "macarron",
+    "tomate"
+  ],
+  "macarron_legumbre_verdura": [
+    "legumbre",
+    "macarron",
+    "verdura"
+  ],
   "patata": ["papa"],
   "aceite": 293,
   "aceituna": 18,
@@ -1120,7 +1167,7 @@
   "seitan": 8,
   "selvatico": 1,
   "semicurado": 2,
-  "semidesnatadama": 4,
+  "semidesnatado": 4,
   "semilla": 11,
   "semola": 2,
   "semolo": 2,

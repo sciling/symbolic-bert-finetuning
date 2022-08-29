@@ -1022,13 +1022,14 @@ def expand_entities(
                     if entity_values and val['value'] not in entity_values:
                         continue
                     entity = f"{ent}:{prefix}{val['value']}"
-                    print(f"VAL: {val}: {variables}")
+                    # print(f"VAL: {val}: {variables}")
                     temps = [temp.format(**variables) for temp in val.get('templates', [])]
                     templates.append((entity, temps))
 
         for entity, elems in tqdm(templates, leave=False):
             vocab = set()
             for template in tqdm(elems, leave=False):
+                print(f"PROCESSING: {entity} {template}")
                 for sentence in tqdm(expand_template(template), leave=False):
                     # print(f"TEMPLATE: {template}: {sentence}")
                     words = {sentence}

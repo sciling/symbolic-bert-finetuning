@@ -57,3 +57,14 @@ piña;Piña
 perejil fresco;Perejil, fresco
 aceite de oliva;Aceite de oliva
 aceite;Aceite de oliva;Aceite de oliva virgen extra
+Macarrones con queso;Macarrones con chorizo y queso gratinados (cuanto queso)
+Pan;Pan blanco, de barra
+macarrones boloñesa;Macarrones a la boloñesa
+bebida de avena;Bebida de soja
+leche de avena;Bebida de soja
+salmorejo;Salmorejo
+arroz a la cubana;Arroz a la cubana
+arroz a banda;Arroz a banda
+caracoles;Caracol
+pescaito frito;Boquerón, frito;Pescado, genérico
+leche;Leche, semidesnatada, pasteurizada;Leche de vaca, entera;Leche, desnatada, pasteurizada
