@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style text="text/css">
+    #result div {
+      background-color: lightgrey;
+      display: inline-block;
+      margin: 5px;
+    }
+    #result button {
+      margin: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Food test</h1>
+    <div class="form-group">
+      <label for"text">Text:</label>
+      <input id="text" class="form-control" autocomplete="off" />
+    </div>
+    <button id="classify" class="btn btn-primary">classify</button>
+  </div>
+  <hr/>
+  <div class="container">
+    <div id="food" class=form-group"></div>
+  </div>
+
+  <script type="text/javascript">
+    function request(url, data, method="POST") {
+      var settings = {
+        "url": url,
+        "method": method,
+        "timeout": 0,
+        "dataType": "json",
+        "headers": {
+          "Authorization": "Basic c2NpbGluZzpzY2lsaW5n",
+          "Content-Type": "application/json",
+        },
+        "data": method == "POST"?JSON.stringify(data):data,
+      };
+
+      console.log("AJAX", settings);
+      return $.ajax(settings);
+    }
+
+    function setResponse(id) {
+      return function (response) {
+        let $result = $("#" + id);
+        $result.empty();
+        console.log('response', response)
+        let foods = response.foods;
+        foods.forEach(function(food, i) {
+          let $info = $('<div class="container"></div>');
+          ['quantity', 'unit', 'food'].forEach(function(e) {
+            let $div = $(`<div class="form-group">
+              <label for"text">${e}:</label> <span>${food[e]}</span>
+            </div>`);
+            $info.append($div);
+          });
+
+          if (!food.search || !food.search.nbests || food.search.nbests.length == 0) {
+            console.warning("No search result found!");
+          } else {
+            let best = food.search.nbests[0].entity;
+            food.search.nbests.forEach(function(sr) {
+
+              let $container = $(`<div class="container" id="${sr.entity}">${sr.entity} (${sr.score.toFixed(2)})</div>`);
+              let $button = $(`<button id="${sr.entity}-minus" class="btn">-</button>`);
+              $button.addClass(sr.sign == '-'?'btn-success':'btn-danger');
+              $button.click(fixLabel(id, food.food, sr.entity, '-'));
+              $container.append($button);
+
+              $button = $(`<button id="${sr.entity}-neutral" class="btn">~</button>`);
+              $button.addClass(sr.sign == '~'?'btn-success':'btn-danger');
+              $button.click(fixLabel(id, food.food, sr.entity, '~'));
+              $container.append($button);
+
+              $button = $(`<button id="${sr.entity}-plus" class="btn">+</button>`);
+              $button.addClass(sr.sign == '+'?'btn-success':'btn-danger');
+              $button.click(fixLabel(id, food.food, sr.entity, '+'));
+              $container.append($button);
+
+              $info.append($container);
+            });
+          }
+
+          $info.append($('<hr/>'));
+          $result.append($info);
+
+        });
+      }
+    }
+
+
+    function classify(id) {
+      return function() {
+        var sentence = $('#text').val();
+        console.log('SENTENCE:', sentence);
+
+        return request("/parse-food", {"text": sentence}, 'GET')
+        .done(setResponse(id));
+      }
+    }
+
+    function fixLabel(id, food, name, sign) {
+      return function() {
+        var sentence = $('#text').val();
+        console.log('fix', food, name, sign);
+
+        return request("/" + id + "-fix", {"food": food, "entity": name, "sign": sign})
+        .done(function (response) {
+          console.log('Done', response);
+          return classify(id)();
+        });
+      }
+    }
+
+    function doClick() {
+      classify('food')();
+    }
+
+    $('#classify').click(doClick);
+
+    $('#text').keypress(function(e) {
+      if (e.which == 13) doClick();
+    });
+
+  </script>
+
+
+</body>
+</html>
