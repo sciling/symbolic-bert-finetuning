@@ -63,7 +63,10 @@ def search(
         fuzzy=fuzzy, max_ngram=max_ngram
     )
 
-    SEARCH_DB[text] = res
+    SEARCH_DB[text] = {
+        'text': text,
+        'result': res,
+    }
 
     print(f"RES: {res}")
 
