@@ -142,7 +142,7 @@ async def fix_mood(sentence: Sentence):
     return await fix('mood', sentence)
 
 
-@app.get("/estado_animo/{text}", response_class=JSONResponse)
+@app.get("/estado_animo", response_class=JSONResponse)
 async def estado_animo(text: str):
     sentence = Sentence(text=text)
     tasks = [classify('sentiment', sentence), classify('mood', sentence)]
@@ -161,13 +161,17 @@ async def estado_animo(text: str):
 
     nbests = [
         {
-            'entity': m,
+            'entity': m.replace('_', ' '),
             'score': c,
         }
         for c, m in sorted([(c, m) for m, c in results.items()], reverse=True) if c > 0.01
     ]
 
-    return {
+    res = {
         "text": sentence.text,
         "nbests": nbests,
     }
+    
+    print(f"RES: {text} = {res}")
+
+    return res
