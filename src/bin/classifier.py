@@ -31,7 +31,7 @@ from spacy.tokens.doc import Doc  # pylint: disable=no-name-in-module
 import numpy as np
 from pydantic import BaseModel
 
-from medp.utils import EmbeddingsProcessor
+from medp.utils import EmbeddingsProcessor, Database
 
 app = typer.Typer()
 
@@ -52,7 +52,6 @@ def p(doc):
 class Classifier:
     def __init__(self, model_name, is_multilabel=False, database_fn=None, spellcheck=True, **kwargs):
         self.model_name = model_name
-        self.database_fn = database_fn
         self.spellchecker = SpellChecker(language='es') if spellcheck else None
 
         self.tokenizer = AutoTokenizer.from_pretrained(model_name)
@@ -66,24 +65,25 @@ class Classifier:
 
         self.database = None
         if database_fn:
-            try:
-                with open(database_fn) as file:
-                    self.database = json.load(file)
-            except:
-                self.database = {}
+            self.database = Database(database_fn)
+
+    def store(self, text, label, res):
+        if self.database is not None:
+            self.database.set(text, 'label', label)
+            self.database.set(text, 'result', res)
 
     def fix(self, text, label):
         if self.database is not None:
-            self.database[text] = label
-
-            with open(self.database_fn, "w") as file:
-                json.dump(self.database, file, indent=2, ensure_ascii=False)
+            self.database.set(text, 'correction', label)
 
     def classify(self, text):
         # If literal match is found return from database.
         if self.database is not None and text in self.database:
             part = {k: .0 for k in self.labels}
-            part[self.database[text]] = 1.0
+            if 'correction' in self.database[text]:
+                part[self.database[text]['correction']] = 1.0
+            else:
+                part[self.database[text]['label']] = 1.0
             return sorted([(s, c) for c, s in part.items()], reverse=True)
 
         if self.spellchecker:
@@ -92,7 +92,10 @@ class Classifier:
         # If spell corrected match is found return from database.
         if self.database is not None and text in self.database:
             part = {k: .0 for k in self.labels}
-            part[self.database[text]] = 1.0
+            if 'correction' in self.database[text]:
+                part[self.database[text]['correction']] = 1.0
+            else:
+                part[self.database[text]['label']] = 1.0
             return sorted([(s, c) for c, s in part.items()], reverse=True)
 
         # Otherwise, classify
@@ -101,7 +104,7 @@ class Classifier:
             logits = self.model(**inputs).logits.flatten()
             proba = [p.item() for p in nn.functional.softmax(logits, dim=0)]
         res = sorted(zip(proba, self.labels), reverse=True)
-        self.fix(text, res[0][1])
+        self.store(text, res[0][1], res)
         return res
 
 
