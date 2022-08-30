@@ -3,22 +3,33 @@
 import csv
 import json
 from pathlib import Path
-from typing import List
+from typing import Optional, List
+from itertools import zip_longest
 import random
 
 import typer
 from ruamel.yaml import YAML
-from transformers import pipeline
 import torch
+from torch import nn
 from torch.nn import CosineSimilarity
-from transformers import AutoTokenizer, BertForSequenceClassification, AutoModelForSequenceClassification, TrainingArguments, Trainer
+from transformers import (
+    pipeline,
+    AutoTokenizer,
+    PreTrainedTokenizerFast,
+    BertForSequenceClassification,
+    AutoModelForTokenClassification,
+    AutoModelForSequenceClassification,
+    TrainingArguments,
+    Trainer,
+    DataCollatorForTokenClassification,
+)
 from datasets import load_metric, load_dataset
 from spellchecker import SpellChecker
 import spacy
-from spacy.attrs import LOWER, POS, ENT_TYPE, IS_ALPHA, DEP, LEMMA, LOWER, IS_PUNCT, IS_DIGIT, IS_SPACE, IS_STOP
-from spacy.tokens.doc import Doc
+from spacy.attrs import LOWER, POS, ENT_TYPE, IS_ALPHA, DEP, LEMMA, IS_PUNCT, IS_DIGIT, IS_SPACE, IS_STOP  # pylint: disable=no-name-in-module
+from spacy.tokens.doc import Doc  # pylint: disable=no-name-in-module
 import numpy as np
-from torch import nn
+from pydantic import BaseModel
 
 from medp.utils import EmbeddingsProcessor
 
@@ -94,7 +105,7 @@ class Classifier:
         return res
 
 
-def remove_tokens(doc, index_to_del, list_attr=[LOWER, POS, ENT_TYPE, IS_ALPHA, DEP, LEMMA, LOWER, IS_PUNCT, IS_DIGIT, IS_SPACE, IS_STOP]):
+def remove_tokens(doc, index_to_del, list_attr=[LOWER, POS, ENT_TYPE, IS_ALPHA, DEP, LEMMA, IS_PUNCT, IS_DIGIT, IS_SPACE, IS_STOP]):
     """
     Remove tokens from a Spacy *Doc* object without losing
     associated information (PartOfSpeech, Dependance, Lemma, extensions, ...)
@@ -334,6 +345,280 @@ def train(train_fn: Path, dev_fn: Path, output_dir: Path = 'train.dir', model_na
         train_dataset=tokenized_datasets['train'],
         eval_dataset=tokenized_datasets['validation'],
         compute_metrics=compute_metrics,
+    )
+
+    train_result = trainer.train()
+
+    metrics = train_result.metrics
+    trainer.save_model()  # Saves the tokenizer too for easy upload
+
+    trainer.log_metrics("train", metrics)
+    trainer.save_metrics("train", metrics)
+    trainer.save_state()
+
+    metrics = trainer.evaluate(eval_dataset=tokenized_datasets['validation'])
+    trainer.log_metrics("eval", metrics)
+    trainer.save_metrics("eval", metrics)
+
+
+def post_tokenize(sentences, marks):
+    tokens_list = []
+    tags_list = []
+    for sentence in sentences:
+        tokens = [t.text for t in nlp(sentence)]
+        new_tokens = []
+        tags = []
+        tag = 'O'
+
+        for tok in tokens:
+            if tok in marks:
+                if tok.startswith('B-'):
+                    tag = tok
+                else:
+                    tag = 'O'
+            else:
+                new_tokens.append(tok)
+                tags.append(tag)
+
+                if tag.startswith('B-'):
+                    tag = tag.replace('B-', 'E-')
+
+        tokens_list.append(new_tokens)
+        tags_list.append(tags)
+
+        # print(f"TOKENS: {new_tokens}")
+        # print(f"TAGS  : {tags}")
+
+    return tokens_list, tags_list
+
+
+def get_most_likely(sentence_logits, labels):
+    res = []
+    for logits in sentence_logits:
+        proba = [p.item() for p in nn.functional.softmax(logits, dim=0)]
+        proba = sorted(zip(proba, labels), reverse=True)
+
+        tag = proba[0][1]
+        res.append(tag)
+    return res
+
+
+class Food(BaseModel):
+    quantity: Optional[str]
+    unit: Optional[str]
+    food: Optional[str]
+
+
+class Tagger:
+    def __init__(self, model_name, max_seq_length=128, **kwargs):
+        self.model_name = model_name
+        self.max_seq_length = max_seq_length
+
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
+        self.model = AutoModelForTokenClassification.from_pretrained(model_name)
+        self.labels = [label for _, label in sorted(self.model.config.id2label.items())]
+
+    def tag(self, sentence):
+        # Otherwise, classify
+        tokens = [t.text for t in nlp(sentence)]
+        inputs = self.tokenizer(
+            tokens,
+            padding=False,
+            truncation=True,
+            max_length=self.max_seq_length,
+            # We use this argument because the texts in our dataset are lists of words (with a label for each word).
+            is_split_into_words=True,
+            return_tensors="pt",
+        )
+
+        with torch.no_grad():
+            subtoken_logits = self.model(**inputs).logits[0]
+
+        sublabels = get_most_likely(subtoken_logits, self.labels)
+
+        subtoken_ids = inputs.word_ids(batch_index=0)
+        labels = [None] * len(tokens)
+        for pos, sid in enumerate(subtoken_ids):
+            if sid is not None and sid not in labels:
+                labels[sid] = sublabels[pos]
+
+        print(f"PAIRS: {list(zip(tokens, labels))}")
+
+        mapping = {
+            'CANTIDAD': 'quantity',
+            'UNIDAD': 'unit',
+            'FOOD': 'food',
+        }
+
+        res = {
+            'foods': []
+        }
+
+        current = None
+        current_tag = None
+        current_mtag = None
+        text = []
+        for sid, (tag, next_tag) in enumerate(zip_longest(labels, labels[1:])):
+            bare_tag = tag.replace('B-', '').replace('E-', '')
+
+            # if it's the start of a new slot
+            if tag.startswith('B-') or not current_tag and tag.startswith('E-'):
+                current_tag = f"E-{bare_tag}"
+                current_mtag = mtag = mapping.get(bare_tag, None)
+                print(f"START: {bare_tag} {mtag} {getattr(current, current_mtag, None)}")
+                # and the tag is a Food attribute
+                if mtag is not None:
+                    # and the slot is already filled, then create a new food.
+                    if not current or (current_mtag and getattr(current, current_mtag, None) is not None):
+                        print("New food")
+                        current = Food()
+                        res['foods'].append(current)
+
+            # if we are in the middle of a tag
+            if current_tag is not None:
+                # and the next tag is also part of that tag, then append text and continue
+                if next_tag == current_tag:
+                    print(f"APPEND: {tokens[sid]} {tag}")
+                    text.append(tokens[sid])
+                    continue
+                # else we need to close tag and store value.
+                else:
+                    print(f"SET: {tokens[sid]} {tag}")
+                    if current and current_mtag and getattr(current, current_mtag, None) is not None:
+                        print(f"NEWSETATTR: |{current}|, {current_mtag}, '{' '.join(text)}'")
+                        setattr(current, current_mtag, ' '.join(text))
+                    else:
+                        res[current_tag] = ' '.join(text)
+
+                    text = []
+                    current = None
+                    current_tag = None
+                    current_mtag = None
+            else:
+                print(f"IGNORE: {tokens[sid]} {tag}")
+
+        print(res)
+        return res
+
+
+@app.command()
+def train_token(train_fn: Path, dev_fn: Path, output_dir: Path = 'train.dir', model_name: str = spanish_bert, cache_dir: Path = 'cache.dir', max_seq_length: int = 128, num_train_epochs: int = 3, learning_rate: float = 2e-5):
+
+    data_files = {
+        'train': str(train_fn),
+        'validation': str(dev_fn),
+    }
+
+    # Loading a dataset from local csv files
+    dataset = load_dataset(
+        "csv",
+        data_files=data_files,
+        cache_dir=str(cache_dir)
+    )
+    dataset = dataset.map(remove_columns=['label'])
+    print(dataset)
+
+    label_list = ['B-FOOD', 'E-FOOD', 'B-UNIDAD', 'E-UNIDAD', 'B-CANTIDAD', 'E-CANTIDAD', 'B-TOMA', 'E-TOMA', 'O']
+    label_list.sort()  # Let's sort it for determinism
+    num_labels = len(label_list)
+    label_to_id = {v: i for i, v in enumerate(label_list)}
+
+    tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
+
+    # Tokenizer check: this script requires a fast tokenizer.
+    if not isinstance(tokenizer, PreTrainedTokenizerFast):
+        raise ValueError(
+            "This example script only works for models that have a fast tokenizer. Checkout the big table of models at"
+            " https://huggingface.co/transformers/index.html#supported-frameworks to find the model types that meet"
+            " this requirement"
+        )
+
+    # Map that sends B-Xxx label to its I-Xxx counterpart
+    b_to_e_label = []
+    for idx, label in enumerate(label_list):
+        if label.startswith("B-") and label.replace("B-", "E-") in label_list:
+            b_to_e_label.append(label_list.index(label.replace("B-", "E-")))
+        else:
+            b_to_e_label.append(idx)
+
+    max_seq_length = min(max_seq_length, tokenizer.model_max_length)
+    label_all_tokens = True
+
+    def tokenize_and_align_labels(examples):
+        tokens, tags = post_tokenize(examples['sentence'], label_list)
+        tokenized_inputs = tokenizer(
+            tokens,
+            padding=False,
+            truncation=True,
+            max_length=max_seq_length,
+            # We use this argument because the texts in our dataset are lists of words (with a label for each word).
+            is_split_into_words=True,
+        )
+
+        labels = []
+        tlabels = []
+        for i, label in enumerate(tags):
+            word_ids = tokenized_inputs.word_ids(batch_index=i)
+            previous_word_idx = None
+            label_ids = []
+            label_toks = []
+            for word_idx in word_ids:
+                # Special tokens have a word id that is None. We set the label to -100 so they are automatically
+                # ignored in the loss function.
+                if word_idx is None:
+                    label_ids.append(-100)
+                    label_toks.append(None)
+                # We set the label for the first token of each word.
+                elif word_idx != previous_word_idx:
+                    lab = label[word_idx]
+                    label_ids.append(label_to_id[lab])
+                    label_toks.append(lab)
+                # For the other tokens in a word, we set the label to either the current label or -100, depending on
+                # the label_all_tokens flag.
+                else:
+                    if label_all_tokens:
+                        label_ids.append(b_to_e_label[label_to_id[label[word_idx]]])
+                        label_toks.append(label[word_idx].replace('B-', 'E-'))
+                    else:
+                        label_ids.append(-100)
+                        label_toks.append(None)
+                previous_word_idx = word_idx
+
+            labels.append(label_ids)
+            tlabels.append(label_toks)
+            # print(f"TOKENS: {tokenizer.convert_ids_to_tokens(tokenized_inputs['input_ids'][i])}")
+            # print(f"LABELS: {label_toks}")
+        tokenized_inputs["labels"] = labels
+        return tokenized_inputs
+
+    tokenized_datasets = dataset.map(tokenize_and_align_labels, batched=True)
+    # print(tokenized_datasets)
+    data_collator = DataCollatorForTokenClassification(tokenizer=tokenizer)
+
+    model = AutoModelForTokenClassification.from_pretrained(
+        model_name,
+        num_labels=num_labels,
+        label2id=label_to_id,
+        id2label={id: label for label, id in label_to_id.items()},
+        ignore_mismatched_sizes=True
+    )
+    print(model)
+
+    training_args = TrainingArguments(
+        output_dir=str(output_dir),
+        overwrite_output_dir=True,
+        per_device_train_batch_size=16,
+        learning_rate=learning_rate,
+        num_train_epochs=num_train_epochs
+    )
+
+    trainer = Trainer(
+        model=model,
+        args=training_args,
+        train_dataset=tokenized_datasets['train'],
+        eval_dataset=tokenized_datasets['validation'],
+        tokenizer=tokenizer,
+        data_collator=data_collator,
     )
 
     train_result = trainer.train()
