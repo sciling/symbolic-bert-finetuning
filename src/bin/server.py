@@ -63,11 +63,14 @@ def search(
         fuzzy=fuzzy, max_ngram=max_ngram
     )
 
+    SEARCH_DB[text] = res
+
     print(f"RES: {res}")
 
     return res
 
 
+SEARCH_DB = Database('food-search.json')
 REQUEST_DB = Database('request.json')
 
 
@@ -194,7 +197,7 @@ async def estado_animo(text: str):
         "text": sentence.text,
         "nbests": nbests,
     }
-    
+
     print(f"RES: {text} = {res}")
 
     return res

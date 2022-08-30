@@ -4,6 +4,7 @@ import csv
 from typing import Iterable
 from enum import Enum
 from queue import Queue
+from os.path import exists
 # import itertools
 
 from tqdm.contrib import itertools
@@ -34,12 +35,13 @@ class Database(dict):
 
     def set(self, parent, key, value):
         with FileLock(f"{self.filename}.lock"):
-            with open(self.filename) as file:
-                try:
-                    data = json.load(file)
-                    super().update(data)
-                except json.decoder.JSONDecodeError:
-                    pass
+            if exists(self.filename):
+                with open(self.filename) as file:
+                    try:
+                        data = json.load(file)
+                        super().update(data)
+                    except json.decoder.JSONDecodeError:
+                        pass
 
             if parent not in self:
                 super().__setitem__(parent, {})
@@ -49,20 +51,20 @@ class Database(dict):
             with open(self.filename, 'w') as file:
                 json.dump(self, file, indent=2, ensure_ascii=False)
 
-
     def __setitem__(self, key, value):
         with FileLock(f"{self.filename}.lock"):
-            with open(self.filename) as file:
-                try:
-                    data = json.load(file)
-                    super().update(data)
-                except json.decoder.JSONDecodeError:
-                    pass
+            if exists(self.filename):
+                with open(self.filename) as file:
+                    try:
+                        data = json.load(file)
+                        super().update(data)
+                    except json.decoder.JSONDecodeError:
+                        pass
 
             super().__setitem__(key, value)
 
             with open(self.filename, 'w') as file:
-                json.dump(self, file, indent=2, ensure_ascii=True)
+                json.dump(self, file, indent=2, ensure_ascii=False)
 
 
 class EmbeddingsProcessor:
