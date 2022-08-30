@@ -74,3 +74,4 @@ vino blanco;Vino blanco
 vino tinto;Vino tinto
 tinto;Vino tinto
 rosado;Vino rosado
+yema de huevo;

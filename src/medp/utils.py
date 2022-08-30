@@ -180,6 +180,7 @@ def clean_spaces(string):
 def expand_template(template):
     blocks = [m.group(1).strip() if m.group(1) else m.group().strip() for m in template_re.finditer(template)]
     blocks = [block.split('|') for block in blocks if block]
+    print(f"BLOCKS: {[t[:5] for t in blocks]}")
     # print(f"EXP: {template}: {blocks}: {list(permutations(blocks))}")
     return {join_blocks(parts) for parts in permutations(blocks)}
 

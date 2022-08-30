@@ -77,8 +77,22 @@ def search(
     return res
 
 
+class FoodFix(BaseModel):
+    food: str
+    entity: str
+    sign: str
+
+
+@app.post("/food-fix", response_class=JSONResponse)
+async def food_fix(food_fix: FoodFix):
+    key = f"{food_fix.food}~{food_fix.entity}"
+    FOOD_FIX_DB[key] = jsonable_encoder(food_fix)
+    print(f"FIX: {key} = {FOOD_FIX_DB[key]}")
+    return {'message': 'OK'}
+
+
 @app.get("/parse-food")
-def parse_food(
+async def parse_food(
     text: str, nbest: int = 4, summarized: bool = True,
     multinomial: bool = True, description_type: DescriptionType = DescriptionType.LONG,
     reuse_description: bool = False, fuzzy: bool = True, max_ngram: int = 5,
@@ -95,6 +109,10 @@ def parse_food(
             description_type=description_type, reuse_description=reuse_description,
             fuzzy=fuzzy, max_ngram=max_ngram
         )
+        for sr in food.search.get('nbests',[]):
+            key = f"{food.food}~{sr['entity']}"
+            sr['sign'] = FOOD_FIX_DB.get(key, {}).get('sign', '~')
+            print(f"SR: {sr}; KEY: {key}")
 
     TAGGER_DB[text] = {
         'text': text,
@@ -106,6 +124,7 @@ def parse_food(
     return res
 
 
+FOOD_FIX_DB = Database('food-fix.json')
 SEARCH_DB = Database('food-search.json')
 TAGGER_DB = Database('food-tagger.json')
 REQUEST_DB = Database('request.json')
@@ -130,6 +149,11 @@ async def sentiment_html(request: Request):
 @app.get("/mood", response_class=HTMLResponse)
 async def mood_html(request: Request):
     return templates.TemplateResponse("mood.html", {"request": request})
+
+
+@app.get("/food", response_class=HTMLResponse)
+async def food_html(request: Request):
+    return templates.TemplateResponse("food.html", {"request": request})
 
 
 class Sentence(BaseModel):
