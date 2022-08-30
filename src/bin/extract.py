@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
 import re
+import json
 from pathlib import Path
 from typing import List
 
@@ -122,6 +123,44 @@ def extract_text(html_fns: List[Path], clean: bool = True, summarize: bool = Tru
         text_lines = cleaner.extract_lines(bs, do_sentence_split=True)
 
         print('\n'.join(text_lines))
+
+
+@app.command()
+def extract_recetasderechupete(html_fns: List[Path], clean: bool = True, summarize: bool = True):
+    lists = [fn for fn in html_fns if fn.suffix == '.list']
+    html_fns = [fn for fn in html_fns if not fn.suffix == '.list']
+
+    for fn in lists:
+        with open(fn) as file:
+            html_fns.extend([Path(line) for line in file.read().split('\n') if clean_spaces(line)])
+
+    print(f"Processing {len(html_fns)} urls ...")
+    for html_fn in html_fns:
+        try:
+            with open(html_fn) as file:
+                html = file.read()
+        except UnicodeDecodeError:
+            print(f"WARNING: {html_fn} could not be processed")
+            return None
+        except IsADirectoryError:
+            return None
+
+        bs = BeautifulSoup(html, "lxml")
+
+        script = bs.find('script', {"id": 'recipejson'})
+        if script:
+            text = script.get_text().replace('\t', '').replace('\n', '')
+            if text:
+                try:
+                    data = json.loads(text)
+                    string = json.dumps(data, indent=None, ensure_ascii=False)
+                    print(string)
+                except:
+                    print(f"KK: {html_fn} {text}")
+            else:
+                print(f"EMPTY: {html_fn}")
+        else:
+            print(f"UNK: {html_fn}")
 
 
 if __name__ == "__main__":

@@ -1,19 +1,19 @@
 #! /usr/bin/env python
 
 import os
-import json
 import asyncio
 from typing import Optional
+from collections import defaultdict
 
 from fastapi import Depends, FastAPI, Request, HTTPException, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, JSONResponse
-from pydantic import BaseModel
+from pydantic import BaseModel  # pylint: disable=no-name-in-module
 
 
-from medp.utils import SearchEngine, DescriptionType, clean_spaces
+from medp.utils import SearchEngine, DescriptionType, clean_spaces, Database
 from bin.classifier import Classifier
 
 app = FastAPI()
@@ -45,18 +45,41 @@ for entity in CACHED:
 
 
 @app.get("/search/{entity}")
-def search(entity: str, text: str, nbest: int = 4, summarized: bool = True, multinomial: bool = True, description_type: DescriptionType = DescriptionType.LONG, reuse_description: bool = False, fuzzy: bool = True, max_ngram: int = 5, username: str = Depends(check_credentials)):
+def search(
+    entity: str, text: str, nbest: int = 4, summarized: bool = True,
+    multinomial: bool = True, description_type: DescriptionType = DescriptionType.LONG,
+    reuse_description: bool = False, fuzzy: bool = True, max_ngram: int = 5,
+    username: str = Depends(check_credentials)
+):
     if entity in CACHED:
         searcher = CACHED[entity]
     else:
         searcher = SearchEngine(f"db/{entity}.json", vocab_fn='vocab.json', ignore_fn='ignore.json')
         CACHED[entity] = searcher
 
-    res = searcher.search(text, nbest, summarized=summarized, multinomial=multinomial, description_type=description_type, reuse_description=reuse_description, fuzzy=fuzzy, max_ngram=max_ngram)
+    res = searcher.search(
+        text, nbest, summarized=summarized, multinomial=multinomial,
+        description_type=description_type, reuse_description=reuse_description,
+        fuzzy=fuzzy, max_ngram=max_ngram
+    )
 
     print(f"RES: {res}")
 
     return res
+
+
+REQUEST_DB = Database('request.json')
+
+
+@app.get("/request")
+def request(text: str, username: str = Depends(check_credentials)):
+    if text in REQUEST_DB:
+        REQUEST_DB[text] = REQUEST_DB[text] + 1
+    else:
+        REQUEST_DB[text] = 1
+
+    print(f"REQUEST: {text}")
+    return {'request': text}
 
 
 @app.get("/sentiment", response_class=HTMLResponse)

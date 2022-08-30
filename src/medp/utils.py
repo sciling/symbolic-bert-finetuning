@@ -22,8 +22,29 @@ from nltk.util import ngrams
 from nltk.corpus import wordnet as wn
 from streamparser import LexicalUnit
 from methodtools import lru_cache
+from filelock import FileLock
+
 
 cos = CosineSimilarity(dim=1, eps=1e-6)
+
+
+class Database(dict):
+    def __init__(self, filename):
+        self.filename = filename
+
+    def __setitem__(self, key, value):
+        with FileLock(self.filename):
+            with open(self.filename) as file:
+                try:
+                    data = json.load(file)
+                    super().update(data)
+                except json.decoder.JSONDecodeError:
+                    pass
+
+            super().__setitem__(key, value)
+
+            with open(self.filename, 'w') as file:
+                json.dump(self, file, indent=2, ensure_ascii=True)
 
 
 class EmbeddingsProcessor:
