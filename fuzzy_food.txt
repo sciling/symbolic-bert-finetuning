@@ -66,5 +66,11 @@ salmorejo;Salmorejo
 arroz a la cubana;Arroz a la cubana
 arroz a banda;Arroz a banda
 caracoles;Caracol
-pescaito frito;Boquerón, frito;Pescado, genérico
+pescaito frito;Boquerón, frito
 leche;Leche, semidesnatada, pasteurizada;Leche de vaca, entera;Leche, desnatada, pasteurizada
+guacamole;Aguacate
+vino;Vino blanco;Vino tinto
+vino blanco;Vino blanco
+vino tinto;Vino tinto
+tinto;Vino tinto
+rosado;Vino rosado

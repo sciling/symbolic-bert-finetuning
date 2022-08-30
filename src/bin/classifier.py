@@ -1,9 +1,10 @@
 #! /usr/bin/env python
 
+import re
 import csv
 import json
 from pathlib import Path
-from typing import Optional, List
+from typing import Optional, List, Any
 from itertools import zip_longest
 import random
 
@@ -28,8 +29,11 @@ from spellchecker import SpellChecker
 import spacy
 from spacy.attrs import LOWER, POS, ENT_TYPE, IS_ALPHA, DEP, LEMMA, IS_PUNCT, IS_DIGIT, IS_SPACE, IS_STOP  # pylint: disable=no-name-in-module
 from spacy.tokens.doc import Doc  # pylint: disable=no-name-in-module
+from spacy.tokenizer import Tokenizer
 import numpy as np
 from pydantic import BaseModel
+from text_to_num import text2num
+import text_to_num
 
 from medp.utils import EmbeddingsProcessor, Database
 
@@ -41,9 +45,34 @@ spanish_bert = 'dccuchile/bert-base-spanish-wwm-uncased'
 spanish_zeroshot = 'Recognai/zeroshot_selectra_medium'
 
 
+def my_tokenizer_pri(nlp):
+    prefix_re = re.compile(r'''^[±\-\+0-9., ]+[0-9 ]+''')
+    infix_re = re.compile(r'''[/]''')
+    return Tokenizer(
+        nlp.vocab,
+        {},
+        prefix_search=prefix_re.search,
+        suffix_search=nlp.tokenizer.suffix_search,
+        infix_finditer=infix_re.finditer,
+        token_match=nlp.tokenizer.token_match
+    )
+
 # nlp = spacy.load('es_dep_news_trf')
 nlp = spacy.load('es_core_news_lg')
+nlp.tokenizer = my_tokenizer_pri(nlp)
 
+
+def to_number(string):
+    try:
+        return text2num(string, 'es')
+    except ValueError:
+        if string == 'una':
+            return 1
+        else:
+            try:
+                return int(string)
+            except ValueError:
+                return string
 
 def p(doc):
     print([f"{t.text}:{t.lemma_}:{t.pos_}:{t.dep_}:{t.head.text}->{[child for child in t.children]}" for t in doc])
@@ -410,6 +439,7 @@ class Food(BaseModel):
     quantity: Optional[str]
     unit: Optional[str]
     food: Optional[str]
+    search: Optional[Any]
 
 
 class Tagger:
@@ -445,6 +475,7 @@ class Tagger:
             if sid is not None and sid not in labels:
                 labels[sid] = sublabels[pos]
 
+        print(f"PAIRS: {list(zip(self.tokenizer.convert_ids_to_tokens(inputs['input_ids'][0]), sublabels))}")
         print(f"PAIRS: {list(zip(tokens, labels))}")
 
         mapping = {
@@ -486,15 +517,19 @@ class Tagger:
                     continue
                 # else we need to close tag and store value.
                 else:
-                    print(f"SET: {tokens[sid]} {tag}")
-                    if current and current_mtag and getattr(current, current_mtag, None) is not None:
+                    text.append(tokens[sid])
+                    print(f"SET: {tokens[sid]} {tag} |{current}|, {current_mtag}, '{' '.join(text)}'")
+                    if current and current_mtag:
                         print(f"NEWSETATTR: |{current}|, {current_mtag}, '{' '.join(text)}'")
-                        setattr(current, current_mtag, ' '.join(text))
+                        if mtag == 'quantity':
+                            value = to_number(' '.join(text))
+                        else:
+                            value = ' '.join(text)
+                        setattr(current, current_mtag, value)
                     else:
                         res[current_tag] = ' '.join(text)
 
                     text = []
-                    current = None
                     current_tag = None
                     current_mtag = None
             else:

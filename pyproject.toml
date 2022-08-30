@@ -36,6 +36,7 @@ openpyxl = "^3.0.10"
 scikit-learn = "^1.1.2"
 apertium = "^0.2.3"
 filelock = "^3.8.0"
+text2num = "^2.4.0"
 
 
 [tool.poetry.dev-dependencies]

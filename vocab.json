@@ -5,6 +5,16 @@
   "cordero_especificar": ["cordero"],
   "costilla_cordero": 1,
   "cordero_costilla_crudo": ["costilla_cordero", "cordero", "costilla"],
+  "venir_blanco": ["vino", "blanco"],
+  "venir_tinto": ["vino", "tinto"],
+  "venir_rosado": ["vino", "rosado"],
+  "vinagre_venir": ["vinagre", "vino", "vinagre_vino"],
+  "boqueron_frito": ["boqueron", "frito", "pescadito_frito"],
+  "cava": ["cava"],
+  "guacamole": [
+    "aguacate",
+    "pimiento"
+  ],
   "escalivar": [
     "cebolla",
     "berenjena",
@@ -52,6 +62,7 @@
   "mousse_chocolate": 1,
   "curar": ["croissant"],
   "te_infusion_leche": ["te", "leche"],
+  "solanum_tuberosum_pobre": ["patata", "frita"],
   "papa_arruga": ["patata", "papa_arruga", "arruga"],
   "papa_arruga_mojo_picon": ["patata", "arruga", "mojo", "pico"],
   "queso_asado_mojo_picon": ["queso", "asado", "mojo", "pico"],
@@ -71,6 +82,7 @@
   "lenteja_verdura": ["lenteja", "verdura"],
   "lenteja_estofada_verdura_arroz_integral": ["lenteja", "verdura", "estofado", "arroz", "arroz_integral"],
   "berenjena_relleno_verdura": ["berenjena", "berenjena_relleno", "verdura"],
+  "pobre": 1,
   "macarron_bolonesa": [
       "carne",
       "cebolla",

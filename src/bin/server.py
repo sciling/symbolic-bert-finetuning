@@ -6,6 +6,7 @@ from typing import Optional
 from collections import defaultdict
 
 from fastapi import Depends, FastAPI, Request, HTTPException, status
+from fastapi.encoders import jsonable_encoder
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -14,7 +15,7 @@ from pydantic import BaseModel  # pylint: disable=no-name-in-module
 
 
 from medp.utils import SearchEngine, DescriptionType, clean_spaces, Database
-from bin.classifier import Classifier
+from bin.classifier import Classifier, Tagger
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -42,6 +43,8 @@ CACHED = {
 
 for entity in CACHED:
     CACHED[entity] = SearchEngine(f"db/{entity}.json", vocab_fn='vocab.json', ignore_fn='ignore.json')
+
+CACHED['food'] = Tagger('./train-ma.dir')
 
 
 @app.get("/search/{entity}")
@@ -73,7 +76,37 @@ def search(
     return res
 
 
+@app.get("/parse-food")
+def parse_food(
+    text: str, nbest: int = 4, summarized: bool = True,
+    multinomial: bool = True, description_type: DescriptionType = DescriptionType.LONG,
+    reuse_description: bool = False, fuzzy: bool = True, max_ngram: int = 5,
+    username: str = Depends(check_credentials)
+):
+    tagger = CACHED['food']
+    searcher = CACHED['alimento_tipo']
+
+    res = tagger.tag(text)
+
+    for food in res.get('foods', []):
+        food.search = searcher.search(
+            food.food, nbest, summarized=summarized, multinomial=multinomial,
+            description_type=description_type, reuse_description=reuse_description,
+            fuzzy=fuzzy, max_ngram=max_ngram
+        )
+
+    TAGGER_DB[text] = {
+        'text': text,
+        'result': jsonable_encoder(res),
+    }
+
+    print(f"RES: {res}")
+
+    return res
+
+
 SEARCH_DB = Database('food-search.json')
+TAGGER_DB = Database('food-tagger.json')
 REQUEST_DB = Database('request.json')
 
 

@@ -2735,6 +2735,14 @@ python-versions = ">=3.6"
 doc = ["reno", "sphinx", "tornado (>=4.5)"]
 
 [[package]]
+name = "text2num"
+version = "2.4.0"
+description = "Parse and convert numbers written in French, Spanish, English or Portuguese into their digit representation."
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[[package]]
 name = "thinc"
 version = "8.1.0"
 description = "A refreshing functional take on deep learning, compatible with your favorite libraries"
@@ -3175,7 +3183,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "~3.10"
-content-hash = "0033aab7829befdbae7cdbf57d7d0e42b61c3d96f0bd3c614bccc260f22ca54e"
+content-hash = "23c0161e286602ccfc340b00dd32147d0cc1b3f5659f7d3440218f8a9e1dc1b5"
 
 [metadata.files]
 anyio = []
@@ -4416,6 +4424,9 @@ stevedore = []
 tenacity = [
     {file = "tenacity-8.0.1-py3-none-any.whl", hash = "sha256:f78f4ea81b0fabc06728c11dc2a8c01277bfc5181b321a4770471902e3eb844a"},
     {file = "tenacity-8.0.1.tar.gz", hash = "sha256:43242a20e3e73291a28bcbcacfd6e000b02d3857a9a9fff56b297a27afdc932f"},
+]
+text2num = [
+    {file = "text2num-2.4.0.tar.gz", hash = "sha256:a4cec0a75911796b179dd2a060df55506e6a843814d2689846a52e561937d3c0"},
 ]
 thinc = [
     {file = "thinc-8.1.0-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:bb45c8aabb3d4e646a25939096cc751cb4e0e4ff9d3bfdcce9fa64ff0622d348"},
