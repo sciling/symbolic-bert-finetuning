@@ -65,7 +65,7 @@
           });
 
           if (!food.search || !food.search.nbests || food.search.nbests.length == 0) {
-            console.warning("No search result found!");
+            console.warn("No search result found!");
           } else {
             let best = food.search.nbests[0].entity;
             food.search.nbests.forEach(function(sr) {
