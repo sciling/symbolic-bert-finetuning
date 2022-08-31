@@ -349,6 +349,8 @@ class NLP:
 
     @classmethod
     def normalize(cls, sentence, fuzzy=None):
+        if not sentence:
+            return sentence
         # print(f"SENT: {sentence}")
         seq = cls.nlp(clean_spaces(note_re.sub('', sentence.lower())))
         # print(f"SEQ: {list(seq)}")
@@ -446,8 +448,11 @@ class NLP:
 
     @classmethod
     def tokenize(cls, sentence, vocab, fuzzy=None, subtokens=False, max_ngram_len=None):
+        if not sentence:
+            return sentence
+
         if vocab and not max_ngram_len:
-            max_ngram_len = max(1, max([len(w.split('_')) for w in vocab]))
+            max_ngram_len = max(1, max([len(w.split('_')) for w in vocab if w]))
 
         sentence = cls.normalize(sentence, fuzzy=fuzzy)
         total_words = len(sentence)
@@ -741,6 +746,12 @@ class SearchEngine:
     def search(self, sentence, nbest=4, summarized=False, multinomial=False, description_type=DescriptionType.DEFAULT, reuse_description=True, fuzzy=True, use_alts=False, max_ngram=5):
         literal_entity = sentence
         sentence = clean_spaces(sentence)
+
+        if not sentence:
+            return {
+                "error": "empty search"
+            }
+
         tokens = NLP.tokenize(sentence, self.vocab, fuzzy=fuzzy)
         print(f"EXACT: {sentence} {tokens}")
 
