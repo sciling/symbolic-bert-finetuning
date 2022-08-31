@@ -229,6 +229,16 @@ async def fix_mood(sentence: Sentence):
     return await fix('mood', sentence)
 
 
+@app.get("/unsupervised-mood", response_class=JSONResponse)
+async def unsupervised_mood():
+    unsupervised = set()
+    for model_name in ['sentiment', 'mood']:
+        classifier = load_model(model_name)
+        unsupervised |= classifier.get_unsupervised()
+
+    return sorted(unsupervised)
+
+
 @app.get("/estado_animo", response_class=JSONResponse)
 async def estado_animo(text: str):
     sentence = Sentence(text=text)

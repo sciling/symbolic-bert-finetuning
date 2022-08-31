@@ -32,6 +32,14 @@ cos = CosineSimilarity(dim=1, eps=1e-6)
 class Database(dict):
     def __init__(self, filename):
         self.filename = filename
+        if exists(self.filename):
+            with open(self.filename) as file:
+                try:
+                    data = json.load(file)
+                    super().update(data)
+                except json.decoder.JSONDecodeError:
+                    pass
+
 
     def set(self, parent, key, value):
         with FileLock(f"{self.filename}.lock"):

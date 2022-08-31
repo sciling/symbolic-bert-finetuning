@@ -23,6 +23,8 @@
     <div class="form-group">
       <label for"text">Text:</label>
       <input id="text" class="form-control" autocomplete="off" />
+      <select id="unsupervised" class="form-select">
+      </select>
     </div>
     <button id="classify" class="btn btn-primary">classify</button>
   </div>
@@ -36,19 +38,20 @@
   </div>
 
   <script type="text/javascript">
-    function request(url, data) {
+    function request(url, data, method="POST") {
       var settings = {
         "url": url,
-        "method": "POST",
+        "method": method,
         "timeout": 0,
         "dataType": "json",
         "headers": {
           "Authorization": "Basic c2NpbGluZzpzY2lsaW5n",
           "Content-Type": "application/json",
         },
-        "data": JSON.stringify(data),
+        "data": method == "POST"?JSON.stringify(data):data,
       };
 
+      console.log("AJAX", settings);
       return $.ajax(settings);
     }
 
@@ -63,7 +66,8 @@
         sorted.forEach(function(e, i) {
           let $button = $('<button class="btn"></button>');
           $button.attr('id', e[0]);
-          $button.html(e[0].replace('estado_animo_', '') + ": " + e[1].toFixed(2));
+          let score = e[1] > 1.1 ? '*' : e[1].toFixed(2);
+          $button.html(e[0].replace('estado_animo_', '') + ": " + score);
           $button.addClass(e[0]==best?'btn-success':'btn-danger');
           $button.click(fixLabel(id, e[0]));
           $result.append($button);
@@ -90,22 +94,45 @@
         return request("/" + id + "-fix", {"text": sentence, "label": name})
         .done(function (response) {
           console.log('Done', response);
-          return classify(id)();
+          return classify(id)()
+          then(updateUnsupervised);
         });
       }
     }
 
     function doClick() {
-      classify('sentiment')()
+      return classify('sentiment')()
       .then(classify('mood'));
     }
 
     $('#classify').click(doClick);
+    $('#unsupervised').on('change', function(e) {
+      var optionSelected = $("option:selected", this);
+      var valueSelected = this.value;
+      $('#text').val(valueSelected);
+      return doClick();
+    });
 
     $('#text').keypress(function(e) {
       if (e.which == 13) doClick();
     });
 
+    function updateUnsupervised() {
+      return request('/unsupervised-mood', {}, 'GET')
+      .then(function(res) {
+        console.log("UNSU", res);
+        $('#unsupervised').empty();
+        $('#unsupervised').append($(`<option>---</option>`));
+        res.forEach(function(text) {
+          $('#unsupervised').append($(`<option>${text}</option>`));
+        });
+      });
+    }
+    updateUnsupervised();
+
+    $(document).on("keydown", "input", function(e) {
+      console.log('DOWN', e);
+    });
   </script>
 
 

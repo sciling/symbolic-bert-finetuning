@@ -110,7 +110,9 @@ class Classifier:
         if self.database is not None and text in self.database:
             part = {k: .0 for k in self.labels}
             if 'correction' in self.database[text]:
-                part[self.database[text]['correction']] = 1.0
+                part[self.database[text]['correction']] = 1.11
+            elif 'result' in self.database[text]:
+                return self.database[text]['result']
             else:
                 part[self.database[text]['label']] = 1.0
             return sorted([(s, c) for c, s in part.items()], reverse=True)
@@ -122,7 +124,9 @@ class Classifier:
         if self.database is not None and text in self.database:
             part = {k: .0 for k in self.labels}
             if 'correction' in self.database[text]:
-                part[self.database[text]['correction']] = 1.0
+                part[self.database[text]['correction']] = 1.11
+            elif 'result' in self.database[text]:
+                return self.database[text]['result']
             else:
                 part[self.database[text]['label']] = 1.0
             return sorted([(s, c) for c, s in part.items()], reverse=True)
@@ -135,6 +139,9 @@ class Classifier:
         res = sorted(zip(proba, self.labels), reverse=True)
         self.store(text, res[0][1], res)
         return res
+
+    def get_unsupervised(self):
+        return {k for k, d in self.database.items() if 'correction' not in d}
 
 
 def remove_tokens(doc, index_to_del, list_attr=[LOWER, POS, ENT_TYPE, IS_ALPHA, DEP, LEMMA, IS_PUNCT, IS_DIGIT, IS_SPACE, IS_STOP]):
