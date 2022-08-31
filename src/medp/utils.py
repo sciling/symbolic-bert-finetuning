@@ -174,6 +174,8 @@ def join_blocks(blocks, sep=' '):
 
 
 def clean_spaces(string):
+    if not string:
+        return string
     return spaces_re.sub(r"\1", string.replace('/', ' '))
 
 
