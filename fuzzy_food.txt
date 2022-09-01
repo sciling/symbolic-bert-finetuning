@@ -9,7 +9,7 @@ arroz con pollo;Paella
 arroz con pollo y conejo;Paella
 arroz de pollo y conejo;Paella
 berenjena pimiento cebolla;Pisto
-berenjena pimiento cebolla asada;Pisto;Esgarraet
+berenjena pimiento cebolla asada;Esgarraet
 cafe;Café, infusión
 café;Café, infusión
 cafe con chocolate;Café, infusión
@@ -23,7 +23,7 @@ lentejas con chorizo;Lentejas estofadas con chorizo
 manzana;Manzana
 manzanas;Manzana
 paella;Paella
-papas a lo pobre;Papas arrugás con mojo picón
+papas a lo pobre;Patatas, fritas, chips;Patatas fritas
 pimiento  asada;Pimiento rojo, crudo;Esgarraet
 pimiento  asado;Pimiento rojo, crudo;Esgarraet
 pimiento  frito;Pimiento, frito
@@ -39,7 +39,7 @@ un vaso té;Té, infusión, con leche
 tostada con aceite;Tostadas con tomate y aceite
 croisant de chocolate;Croissant de chocolate
 curasan de chocolate;Croissant de chocolate
-yogur;Yogur, enriquecido, natural;Yogur, enriquecido, sabor, s e
+yogur;Yogur, enriquecido, natural;Yogur, enriquecido, sabor, s/e
 papas arrugadas;Papas arrugás con mojo picón
 papas arrugás;Papas arrugás con mojo picón
 cerveza;Cerveza con alcohol
@@ -49,7 +49,7 @@ mouse de chocolate;Mousse de chocolate
 mus de chocolate;Mousse de chocolate
 mus;Mousse de chocolate
 queso asado con mojo;Queso asado con mojo picón
-vaso de samorejo;Salmorejo
+vaso de samorejo;Salmorejo;None
 croisant;Croissant
 curasán;Croissant
 arroz_horno;Arroz con costra
@@ -62,7 +62,7 @@ Pan;Pan blanco, de barra
 macarrones boloñesa;Macarrones a la boloñesa
 bebida de avena;Bebida de soja
 leche de avena;Bebida de soja
-salmorejo;Salmorejo
+salmorejo;Salmorejo;None
 arroz a la cubana;Arroz a la cubana
 arroz a banda;Arroz a banda
 caracoles;Caracol

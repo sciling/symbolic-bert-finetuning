@@ -795,7 +795,14 @@ def search(_texts: List[str], db_fn: Path = typer.Option(None), vocab_fn: Path =
         print(f"Searching: '{text}'")
         res = searcher.search(text, nbest, summarized=summarized, multinomial=multinomial, description_type=description_type, reuse_description=reuse_description, fuzzy=fuzzy, max_ngram=max_ngram, use_alts=use_alts)
         resl = {e['entity'] for e in res['nbests']}
+        exact = False
+        if 'None' in labels:
+            exact = True
+            labels.remove('None')
+
         found = all([label in resl for label in labels])
+        if exact:
+            found = found and all([label in labels for label in resl])
         print(f"FOUND: {found}")
         if not found:
             errors.add(text)

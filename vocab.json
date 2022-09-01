@@ -52,9 +52,14 @@
       "leche"
   ],
   "pan_blanco_barra": [
-      "blanco",
       "pan",
       "pan_blanco"
+  ],
+  "bocadillo": [
+      "bocadillo"
+  ],
+  "granada": [
+      "granada"
   ],
   "bebida_avena": ["leche", "bebida", "avena", "soja"],
   "manzana": ["manzana", "fruta"],
@@ -239,7 +244,6 @@
   "bizcochos": 2,
   "blanco": 97,
   "blanquet": 1,
-  "bocadillo": 12,
   "bocanegra": 2,
   "bogavante": 4,
   "bola": 2,
@@ -623,7 +627,6 @@
   "gouda": 2,
   "gr": 5,
   "gramo": 52,
-  "granada": 5,
   "granja": 2,
   "granny": 1,
   "grano": 6,

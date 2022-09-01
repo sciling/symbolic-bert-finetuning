@@ -70,4 +70,4 @@ entities:
         - ({no}|) me gusta estar ({neutral})
         - ({no}) ({querer}) ({sentir}) ({neutral})
         - ({querer}) ({sentir}) ({neutral})
-
+        - ({querer}) (acabar|terminar|apartarme|borrarme|despedirme|desprenderme|inmolarme|matarme) ({neutral})

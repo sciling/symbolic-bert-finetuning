@@ -391,6 +391,7 @@ class NLP:
             csvreader = csv.reader(file, delimiter=',', quotechar='"')
             rows = list(csvreader)
             for row in tqdm(rows, desc=f"Loading '{vocab_fn}'"):
+                label = row[0].strip(' ')
                 row = [clean_spaces(r) for r in row]
                 token = join_blocks(cls.normalize(row[0]), sep='_')
                 # print(f"TOK: {cls.normalize(row[0])} {token}")
@@ -409,7 +410,7 @@ class NLP:
 
                 if token not in vocab:
                     vocab[token] = {
-                        'label': row[0],
+                        'label': label,
                         'normalized': token,
                         'description': desc,
                         'embedding': embedding,
@@ -424,7 +425,7 @@ class NLP:
 
                 if is_entity:
                     vocab[token]['is_entity'] = True
-                    vocab[token]['label'] = row[0]
+                    vocab[token]['label'] = label
 
                 vocab[token]['alternatives'] = list(set(vocab[token]['alternatives']) | {join_blocks(cls.normalize(alt), sep='_') for alt in row[2:]})
                 vocab[token]['synonyms'] = list(set(vocab[token]['synonyms']) | {join_blocks(cls.normalize(alt), sep='_') for alt in [row[0]] + row[2:]})
