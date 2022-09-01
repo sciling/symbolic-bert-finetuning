@@ -17,10 +17,8 @@ import sys
 import csv
 import json
 import random
-from collections import Counter
-from collections import OrderedDict
-from collections import defaultdict
-from itertools import product
+from collections import Counter, OrderedDict, defaultdict
+from itertools import product, islice
 from pathlib import Path
 from typing import List
 
@@ -41,7 +39,7 @@ from ruamel.yaml import YAML
 from ruamel.yaml.representer import RoundTripRepresenter
 from medp.utils import (
     SearchEngine, NLP, EmbeddingsProcessor, DescriptionType,
-    get_syns, expand_template, clean_spaces, load_db
+    get_syns, expand_template, clean_spaces, load_db, random_combinations,
 )
 
 
@@ -959,6 +957,30 @@ def entities_to_intents(entities_fn: Path, save_fn: Path, max_examples: int = 0)
                 examples = random.sample(examples, k=max_examples)
             for cell in sorted(examples):
                 csvwriter.writerow([clean_spaces(cell), intent_name])
+
+
+@app.command()
+def recombine_intents(intents_fn: Path, save_fn: Path, separators: str = 'y,por,con,a causa de,porque', max_length: int = 3, max_examples: int = 1000):
+    with open(intents_fn) as file:
+        csvreader = csv.reader(file, delimiter=',', quotechar='"')
+        intents = [row for row in csvreader]
+        del intents[0]
+
+    random.shuffle(intents)
+    separators = separators.split(',')
+
+    with open(save_fn, "w") as file:
+        csvwriter = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        for size in range(2, max_length + 1):
+            for pack in tqdm(random_combinations(intents, size, max_examples), total=max_examples):
+                text = [pack[0][0]]
+                intent_names = {pack[0][1]}
+                for r in pack[1:]:
+                    text.append(random.choice(separators))
+                    text.append(r[0])
+                    intent_names.add(r[1])
+
+                csvwriter.writerow([clean_spaces(' '.join(text)), ';'.join(intent_names)])
 
 
 @app.command()

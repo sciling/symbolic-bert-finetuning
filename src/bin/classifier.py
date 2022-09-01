@@ -26,6 +26,7 @@ from transformers import (
 )
 from datasets import load_metric, load_dataset
 from spellchecker import SpellChecker
+from sklearn.metrics import f1_score, roc_auc_score, accuracy_score
 import spacy
 from spacy.attrs import LOWER, POS, ENT_TYPE, IS_ALPHA, DEP, LEMMA, IS_PUNCT, IS_DIGIT, IS_SPACE, IS_STOP  # pylint: disable=no-name-in-module
 from spacy.tokens.doc import Doc  # pylint: disable=no-name-in-module
@@ -74,23 +75,19 @@ def to_number(string):
             except ValueError:
                 return string
 
+
 def p(doc):
     print([f"{t.text}:{t.lemma_}:{t.pos_}:{t.dep_}:{t.head.text}->{[child for child in t.children]}" for t in doc])
 
 
 class Classifier:
-    def __init__(self, model_name, is_multilabel=False, database_fn=None, spellcheck=True, **kwargs):
+    def __init__(self, model_name, database_fn=None, spellcheck=True, **kwargs):
         self.model_name = model_name
         self.spellchecker = SpellChecker(language='es') if spellcheck else None
 
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name)
-        if is_multilabel:
-            print('multi_label_classification')
-            self.model = BertForSequenceClassification.from_pretrained(model_name, problem_type="multi_label_classification")
-        else:
-            print('single_label_classification')
-            self.model = BertForSequenceClassification.from_pretrained(model_name)
-        self.labels = [label for _, label in sorted(self.model.config.id2label.items())]
+        self.classifier = pipeline("text-classification", model=model_name, top_k=None)
+        self.labels = [label for _, label in sorted(self.classifier.model.config.id2label.items())]
+        self.is_multilabel = self.classifier.model.config.problem_type == 'multi_label_classification'
 
         self.database = None
         if database_fn:
@@ -103,13 +100,21 @@ class Classifier:
 
     def fix(self, text, label):
         if self.database is not None:
-            self.database.set(text, 'correction', label)
+            if self.is_multilabel:
+                self.database.set(text, 'multicorrection', label)
+            else:
+                self.database.set(text, 'correction', label)
 
     def classify(self, text):
         # If literal match is found return from database.
         if self.database is not None and text in self.database:
             part = {k: .0 for k in self.labels}
-            if 'correction' in self.database[text]:
+            if self.is_multilabel and 'multicorrection' in self.database[text]:
+                multilabel = self.database[text]['multicorrection'].strip(' ')
+                if multilabel:
+                    for label in multilabel.split(';'):
+                        part[label] = 1.11
+            elif 'correction' in self.database[text]:
                 part[self.database[text]['correction']] = 1.11
             elif 'result' in self.database[text]:
                 return self.database[text]['result']
@@ -123,7 +128,12 @@ class Classifier:
         # If spell corrected match is found return from database.
         if self.database is not None and text in self.database:
             part = {k: .0 for k in self.labels}
-            if 'correction' in self.database[text]:
+            if self.is_multilabel and 'multicorrection' in self.database[text]:
+                multilabel = self.database[text]['multicorrection'].strip(' ')
+                if multilabel:
+                    for label in multilabel.split(';'):
+                        part[label] = 1.11
+            elif 'correction' in self.database[text]:
                 part[self.database[text]['correction']] = 1.11
             elif 'result' in self.database[text]:
                 return self.database[text]['result']
@@ -132,16 +142,14 @@ class Classifier:
             return sorted([(s, c) for c, s in part.items()], reverse=True)
 
         # Otherwise, classify
-        inputs = self.tokenizer(text, return_tensors="pt")
-        with torch.no_grad():
-            logits = self.model(**inputs).logits.flatten()
-            proba = [p.item() for p in nn.functional.softmax(logits, dim=0)]
-        res = sorted(zip(proba, self.labels), reverse=True)
+        proba = self.classifier(text)[0]
+        res = [(s['score'], s['label']) for s in proba]
         self.store(text, res[0][1], res)
         return res
 
     def get_unsupervised(self):
-        return {k for k, d in self.database.items() if 'correction' not in d}
+        field = 'multicorrection' if self.is_multilabel else 'correction'
+        return {k for k, d in self.database.items() if field not in d}
 
 
 def remove_tokens(doc, index_to_del, list_attr=[LOWER, POS, ENT_TYPE, IS_ALPHA, DEP, LEMMA, IS_PUNCT, IS_DIGIT, IS_SPACE, IS_STOP]):
@@ -334,7 +342,7 @@ def train(train_fn: Path, dev_fn: Path, output_dir: Path = 'train.dir', model_na
         cache_dir=str(cache_dir)
     )
 
-    label_list = dataset["train"].unique("label")
+    label_list = list({label for labels in dataset["train"].unique("label") for label in labels.split(';')})
     label_list.sort()  # Let's sort it for determinism
     num_labels = len(label_list)
     label_to_id = {v: i for i, v in enumerate(label_list)}
@@ -346,7 +354,19 @@ def train(train_fn: Path, dev_fn: Path, output_dir: Path = 'train.dir', model_na
         result = tokenizer([t if t else '' for t in examples["sentence"]], padding="max_length", max_length=max_seq_length, truncation=True)
         # Map labels to IDs (not necessary for GLUE tasks)
         if label_to_id is not None and "label" in examples:
-            result["label"] = [(label_to_id[label] if label != -1 else -1) for label in examples["label"]]
+            if problem_type == 'single_label_classification':
+                result["label"] = [(label_to_id[label] if label != -1 else -1) for label in examples["label"]]
+            elif problem_type == 'multi_label_classification':
+                zero = [.0] * len(label_to_id)
+                result["label"] = [zero[:] for label in examples["label"]]
+                for label_list, vector in zip(examples["label"], result["label"]):
+                    for label in label_list.split(';'):
+                        # print(f"LABELS: {label} <- {label_list}")
+                        idx = label_to_id[label] if label != -1 else -1
+                        if idx != -1:
+                            vector[idx] = 1.0
+            else:
+                raise Exception(f"Unknown problem type {problem_type}")
 
         return result
 
@@ -371,12 +391,40 @@ def train(train_fn: Path, dev_fn: Path, output_dir: Path = 'train.dir', model_na
         num_train_epochs=num_train_epochs
     )
 
-    metric = load_metric("accuracy")
+    if problem_type == "single_label_classification":
+        metric = load_metric("accuracy")
 
-    def compute_metrics(eval_pred):
-        logits, labels = eval_pred
-        predictions = np.argmax(logits, axis=-1)
-        return metric.compute(predictions=predictions, references=labels)
+        def compute_metrics(eval_pred):
+            logits, labels = eval_pred
+            predictions = np.argmax(logits, axis=-1)
+            return metric.compute(predictions=predictions, references=labels)
+
+    elif problem_type == "multi_label_classification":
+        # source: https://jesusleal.io/2021/04/21/Longformer-multilabel-classification/
+        def multi_label_metrics(predictions, labels, threshold=0.5):
+            # first, apply sigmoid on predictions which are of shape (batch_size, num_labels)
+            sigmoid = torch.nn.Sigmoid()
+            probs = sigmoid(torch.Tensor(predictions))
+            # next, use threshold to turn them into integer predictions
+            y_pred = np.zeros(probs.shape)
+            y_pred[np.where(probs >= threshold)] = 1
+            # finally, compute metrics
+            y_true = labels
+            f1_micro_average = f1_score(y_true=y_true, y_pred=y_pred, average='micro')
+            roc_auc = roc_auc_score(y_true, y_pred, average='micro')
+            accuracy = accuracy_score(y_true, y_pred)
+            # return as dictionary
+            metrics = {'f1': f1_micro_average,
+                       'roc_auc': roc_auc,
+                       'accuracy': accuracy}
+            return metrics
+
+        def compute_metrics(eval_pred):
+            preds = eval_pred.predictions[0] if isinstance(eval_pred.predictions, tuple) else eval_pred.predictions
+            result = multi_label_metrics(predictions=preds, labels=eval_pred.label_ids)
+            return result
+    else:
+        raise Exception(f"Unknown problem type {problem_type}")
 
     trainer = Trainer(
         model=model,

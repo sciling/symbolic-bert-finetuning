@@ -151,6 +151,11 @@ async def mood_html(request: Request):
     return templates.TemplateResponse("mood.html", {"request": request})
 
 
+@app.get("/multimood", response_class=HTMLResponse)
+async def multi_mood_html(request: Request):
+    return templates.TemplateResponse("multimood.html", {"request": request})
+
+
 @app.get("/food", response_class=HTMLResponse)
 async def food_html(request: Request):
     return templates.TemplateResponse("food.html", {"request": request})
@@ -170,6 +175,11 @@ models = {
     'mood': {
         'model': None,
         'model_name': 'train2.dir',
+        'database_fn': 'mood-database.json',
+    },
+    'multimood': {
+        'model': None,
+        'model_name': 'train-ml.dir',
         'database_fn': 'mood-database.json',
     },
 }
@@ -233,6 +243,26 @@ async def fix_mood(sentence: Sentence):
 async def unsupervised_mood():
     unsupervised = set()
     for model_name in ['sentiment', 'mood']:
+        classifier = load_model(model_name)
+        unsupervised |= classifier.get_unsupervised()
+
+    return sorted(unsupervised)
+
+
+@app.post("/multimood", response_class=JSONResponse)
+async def classify_multimood(sentence: Sentence):
+    return await classify('multimood', sentence)
+
+
+@app.post("/multimood-fix", response_class=JSONResponse)
+async def fix_multimood(sentence: Sentence):
+    return await fix('multimood', sentence)
+
+
+@app.get("/unsupervised-multimood", response_class=JSONResponse)
+async def unsupervised_multimood():
+    unsupervised = set()
+    for model_name in ['sentiment', 'multimood']:
         classifier = load_model(model_name)
         unsupervised |= classifier.get_unsupervised()
 

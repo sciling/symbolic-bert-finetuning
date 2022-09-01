@@ -1,15 +1,18 @@
 import re
+import sys
 import json
 import csv
+import random
 from typing import Iterable
 from enum import Enum
 from queue import Queue
 from os.path import exists
-# import itertools
+from itertools import combinations
 
 from tqdm.contrib import itertools
 from unidecode import unidecode
 import spacy
+from scipy.special import comb
 from inflector import Inflector, Spanish
 from sentence_transformers import SentenceTransformer
 from sentence_transformers import util
@@ -27,6 +30,20 @@ from filelock import FileLock
 
 
 cos = CosineSimilarity(dim=1, eps=1e-6)
+
+
+# From https://stackoverflow.com/a/30594814
+def random_combinations(matrix, size, max_num=sys.maxsize):
+    n = len(matrix)
+    max_num = min(comb(n, size, exact=True), max_num)
+    seen = set()
+    while len(seen) < max_num:
+        new_sample = random.sample(range(n), size)
+        random.shuffle(new_sample)
+        new_sample = tuple(new_sample)
+        if new_sample not in seen:
+            seen.add(new_sample)
+            yield tuple(matrix[i] for i in new_sample)
 
 
 class Database(dict):

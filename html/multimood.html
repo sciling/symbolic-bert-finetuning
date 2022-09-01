@@ -34,7 +34,8 @@
   </div>
   <hr/>
   <div class="container">
-    <div id="mood" class=form-group"></div>
+    <div id="multimood" class=form-group"></div>
+    <button id="correct" class="btn btn-primary">corregir</button>
   </div>
 
   <script type="text/javascript">
@@ -59,7 +60,7 @@
       return function (response) {
         let $result = $("#" + id);
         $result.empty();
-        console.log('response', response)
+        console.log('response', id, response)
         let best = response.result[0][0];
         let sorted =[... response.result];
         sorted.sort((a, b) => a[0].localeCompare(b[0]));
@@ -68,8 +69,12 @@
           $button.attr('id', e[0]);
           let score = e[1] > 1.1 ? '*' : e[1].toFixed(2);
           $button.html(e[0].replace('estado_animo_', '') + ": " + score);
-          $button.addClass(e[0]==best?'btn-success':'btn-danger');
-          $button.click(fixLabel(id, e[0]));
+          $button.addClass(e[1] >= 0.5?'btn-success':'btn-danger');
+          if (id == "multimood") {
+            $button.click(toggleLabel(id, e[0]));
+          } else {
+            $button.click(fixLabel(id, e[0]));
+          }
           $result.append($button);
         });
       }
@@ -83,6 +88,13 @@
 
         return request("/" + id, {"text": sentence})
         .done(setResponse(id));
+      }
+    }
+
+    function toggleLabel(id, name) {
+      return function() {
+        $('#' + name).toggleClass('btn-success');
+        $('#' + name).toggleClass('btn-danger');
       }
     }
 
@@ -100,12 +112,28 @@
       }
     }
 
+    function fixMultiLabel(id) {
+      return function() {
+        let sentence = $('#text').val();
+        let labels = $(".btn-success", '#' + id).map(function(){return this.id}).get().join(';');
+        console.log('fix', sentence, labels);
+
+        return request("/" + id + "-fix", {"text": sentence, "label": labels})
+        .done(function (response) {
+          console.log('Done', response);
+          return classify(id)()
+          then(updateUnsupervised);
+        });
+      }
+    }
+
     function doClick() {
       return classify('sentiment')()
-      .then(classify('mood'));
+      .then(classify('multimood'));
     }
 
     $('#classify').click(doClick);
+    $('#correct').click(fixMultiLabel('multimood'));
     $('#unsupervised').on('change', function(e) {
       var optionSelected = $("option:selected", this);
       var valueSelected = this.value;
@@ -118,7 +146,7 @@
     });
 
     function updateUnsupervised() {
-      return request('/unsupervised-mood', {}, 'GET')
+      return request('/unsupervised-multimood', {}, 'GET')
       .then(function(res) {
         console.log("UNSU", res);
         $('#unsupervised').empty();
@@ -129,10 +157,6 @@
       });
     }
     updateUnsupervised();
-
-    $(document).on("keydown", "input", function(e) {
-      console.log('DOWN', e);
-    });
   </script>
 
 
