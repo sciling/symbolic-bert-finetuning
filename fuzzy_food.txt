@@ -8,7 +8,7 @@ arroz con conejo;Paella
 arroz con pollo;Paella
 arroz con pollo y conejo;Paella
 arroz de pollo y conejo;Paella
-berenjena pimiento cebolla;Pisto
+berenjena pimiento cebolla;Pisto Navarro
 berenjena pimiento cebolla asada;Esgarraet
 cafe;Café, infusión
 café;Café, infusión
