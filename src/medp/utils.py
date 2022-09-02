@@ -691,6 +691,11 @@ def load_db(db_fn, vocab_fn, ignore_fn):
             data = json.load(file)
 
         ignore |= {w for w, v in data.items() if v is None}
+        entities = {d['label']: d for d in db.values() if d.get('is_entity', False)}
+        for token in ignore:
+            if token in entities:
+                entities[token]['is_entity'] = False
+
         synonyms = {v: d for v, d in data.items() if d is not None}
         for token, syns in list(synonyms.items()):
             if token in db:

@@ -16,7 +16,7 @@ cafe con chocolate;Café, infusión
 café con leche;Café, con leche
 curry;Curry
 escalivada;Esgarraet
-garbanzos;Garbanzo, hervido;Garbanzo, en conserva
+garbanzos;Garbanzo, hervido
 Habas con ajetes, setas y gambas;Habas con ajetes, setas y gambas
 lentejas;Lenteja, en conserva;Lenteja, hervida
 lentejas con chorizo;Lentejas estofadas con chorizo
@@ -47,7 +47,7 @@ empanadilla de atún;Empanadilla
 leche de soja;Bebida de soja
 mouse de chocolate;Mousse de chocolate
 mus de chocolate;Mousse de chocolate
-mus;Mousse de chocolate
+mus;Mousse de yogur, natural;Mousse de yogur, con frutas
 queso asado con mojo;Queso asado con mojo picón
 vaso de samorejo;Salmorejo;None
 croisant;Croissant
