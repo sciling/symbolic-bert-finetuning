@@ -28,14 +28,19 @@
     </div>
     <button id="classify" class="btn btn-primary">valorar</button>
   </div>
-  <hr/>
-  <div class="container">
-    <div id="sentiment" class=form-group"></div>
-  </div>
-  <hr/>
-  <div class="container">
-    <div id="multimood" class=form-group"></div>
-    <button id="correct" class="btn btn-primary">corregir</button>
+  <div id="results" class="hidden">
+    <hr/>
+    <div class="container">
+      <div id="sentiment" class=form-group"></div>
+    </div>
+    <hr/>
+    <div class="container">
+      <div id="multimood" class=form-group"></div>
+    </div>
+    <hr/>
+    <div class="container">
+      <button id="correct" class="btn btn-primary">corregir</button>
+    </div>
   </div>
 
   <script type="text/javascript">
@@ -58,10 +63,13 @@
 
     function setResponse(id) {
       return function (response) {
+        $('#results').toggleClass('hidden', false);
+
         let $result = $("#" + id);
         $result.empty();
         console.log('response', id, response)
         let best = response.result[0][0];
+        let isCached = response.result[0][1] > 1.1;
         let sorted =[... response.result];
         sorted.sort((a, b) => a[0].localeCompare(b[0]));
         sorted.forEach(function(e, i) {
@@ -69,11 +77,15 @@
           $button.attr('id', e[0]);
           let score = e[1] > 1.1 ? '*' : e[1].toFixed(2);
           $button.html(e[0].replace('estado_animo_', '') + ": " + score);
-          $button.addClass(e[1] >= 0.5?'btn-success':'btn-danger');
+          if (isCached) {
+            $button.addClass(e[1] > 1.1?'btn-success':'btn-danger');
+          } else {
+            $button.addClass(e[1] >= 0.5?'btn-success':'btn-danger');
+          }
           if (id == "multimood") {
             $button.click(toggleLabel(id, e[0]));
           } else {
-            $button.click(fixLabel(id, e[0]));
+            $button.click(toggleOneLabel(id, e[0]));
           }
           $result.append($button);
         });
@@ -88,6 +100,16 @@
 
         return request("/" + id, {"text": sentence})
         .done(setResponse(id));
+      }
+    }
+
+    function toggleOneLabel(id, name) {
+      return function() {
+        let $parent = $('#' + name).parent();
+        $('button', $parent).toggleClass('btn-danger', true);
+        $('button', $parent).toggleClass('btn-success', false);
+        $('#' + name).toggleClass('btn-danger', false);
+        $('#' + name).toggleClass('btn-success', true);
       }
     }
 
@@ -133,7 +155,11 @@
     }
 
     $('#classify').click(doClick);
-    $('#correct').click(fixMultiLabel('multimood'));
+    $('#correct').click(function() {
+      let labels = $(".btn-success", '#sentiment').map(function(){return this.id}).get();
+      return fixLabel('sentiment', labels[0])()
+             .then(fixMultiLabel('multimood'));
+    });
     $('#unsupervised').on('change', function(e) {
       var optionSelected = $("option:selected", this);
       var valueSelected = this.value;

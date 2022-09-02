@@ -106,45 +106,47 @@ class Classifier:
                 self.database.set(text, 'correction', label)
 
     def classify(self, text):
-        # If literal match is found return from database.
-        if self.database is not None and text in self.database:
-            part = {k: .0 for k in self.labels}
-            if self.is_multilabel and 'multicorrection' in self.database[text]:
-                multilabel = self.database[text]['multicorrection'].strip(' ')
-                if multilabel:
-                    for label in multilabel.split(';'):
-                        part[label] = 1.11
-            elif 'correction' in self.database[text]:
-                part[self.database[text]['correction']] = 1.11
-            elif 'result' in self.database[text]:
-                return self.database[text]['result']
-            else:
-                part[self.database[text]['label']] = 1.0
-            return sorted([(s, c) for c, s in part.items()], reverse=True)
-
         if self.spellchecker:
-            text = ' '.join(self.spellchecker.correction(d.text) for d in nlp(text))
+            sptext = ' '.join(self.spellchecker.correction(d.text) for d in nlp(text))
 
-        # If spell corrected match is found return from database.
-        if self.database is not None and text in self.database:
-            part = {k: .0 for k in self.labels}
-            if self.is_multilabel and 'multicorrection' in self.database[text]:
-                multilabel = self.database[text]['multicorrection'].strip(' ')
+        res = None
+        cache = None
+        # If literal match is found return from database.
+        if self.database is not None:
+            if text in self.database:
+                sptext = text
+
+            if sptext in self.database and 'result' in self.database[sptext]:
+                res = self.database[sptext]['result']
+                cache = self.database[sptext]
+
+        if res is None:
+            proba = self.classifier(sptext)[0]
+            res = [(s['score'], s['label']) for s in proba]
+
+        print(f"TEXT[{self.is_multilabel}]: {sptext}")
+        print(f"CACHE: {cache}")
+        print(f"RES: {res}")
+
+        # If text is found return from database.
+        if cache:
+            part = {k: s for s, k in res}
+            if self.is_multilabel and 'multicorrection' in cache:
+                multilabel = cache['multicorrection'].strip(' ')
                 if multilabel:
                     for label in multilabel.split(';'):
                         part[label] = 1.11
-            elif 'correction' in self.database[text]:
-                part[self.database[text]['correction']] = 1.11
-            elif 'result' in self.database[text]:
-                return self.database[text]['result']
-            else:
-                part[self.database[text]['label']] = 1.0
+            elif 'correction' in cache:
+                part[cache['correction']] = 1.11
+            elif 'result' in cache:
+                return cache['result']
+
             return sorted([(s, c) for c, s in part.items()], reverse=True)
 
         # Otherwise, classify
-        proba = self.classifier(text)[0]
-        res = [(s['score'], s['label']) for s in proba]
-        self.store(text, res[0][1], res)
+        if not cache:
+            self.store(text, res[0][1], res)
+
         return res
 
     def get_unsupervised(self):
