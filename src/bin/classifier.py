@@ -344,7 +344,7 @@ def train(train_fn: Path, dev_fn: Path, output_dir: Path = 'train.dir', model_na
         cache_dir=str(cache_dir)
     )
 
-    label_list = list({label for labels in dataset["train"].unique("label") for label in (labels.split(';') if labels else [])})
+    label_list = list({label for labels in dataset["train"].unique("label") for label in (labels.split(';') if labels else []) if label})
     label_list.sort()  # Let's sort it for determinism
     num_labels = len(label_list)
     label_to_id = {v: i for i, v in enumerate(label_list)}
@@ -364,10 +364,11 @@ def train(train_fn: Path, dev_fn: Path, output_dir: Path = 'train.dir', model_na
                 for label_list, vector in zip(examples["label"], result["label"]):
                     if label_list:
                         for label in label_list.split(';'):
-                            # print(f"LABELS: {label} <- {label_list}")
-                            idx = label_to_id[label] if label != -1 else -1
-                            if idx != -1:
-                                vector[idx] = 1.0
+                            if label:
+                                # print(f"LABELS: {label} <- {label_list}")
+                                idx = label_to_id[label] if label != -1 else -1
+                                if idx != -1:
+                                    vector[idx] = 1.0
             else:
                 raise Exception(f"Unknown problem type {problem_type}")
 

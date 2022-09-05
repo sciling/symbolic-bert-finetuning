@@ -302,3 +302,37 @@ async def estado_animo(text: str):
     print(f"RES: {text} = {res}")
 
     return res
+
+@app.get("/estado_animo_multiple", response_class=JSONResponse)
+async def estado_animo_multiple(text: str):
+    sentence = Sentence(text=text)
+    tasks = [classify('sentiment', sentence), classify('multimood', sentence)]
+    sentiment, mood = await asyncio.gather(*tasks)
+    sentiment = {m.replace('estado_animo_', ''): c for m, c in sentiment['result']}
+    mood = {m.replace('estado_animo_', ''): c for m, c in mood['result']}
+
+    results = {
+        'neutral': sentiment.get('neutral', .0),
+        'emociones_positivas': sentiment.get('positive', .0) + sentiment.get('negative', .0) * mood.get('emociones_positivas', .0),
+    }
+    results.update({m: s * sentiment.get('negative', .0) for m, s in mood.items() if m != 'emociones_positivas'})
+    print(f"SENTIMENT: {sentiment}")
+    print(f"MOOD: {mood}")
+    print(f"RESULTS: {results}")
+
+    nbests = [
+        {
+            'entity': m.replace('_', ' '),
+            'score': c,
+        }
+        for c, m in sorted([(c, m) for m, c in results.items()], reverse=True) if c > 0.01
+    ]
+
+    res = {
+        "text": sentence.text,
+        "nbests": nbests,
+    }
+
+    print(f"RES: {text} = {res}")
+
+    return res
