@@ -41,8 +41,11 @@
     <div class="container">
       <button id="correct" class="btn btn-primary">corregir</button>
     </div>
-    <div class="container">
-      <label for"text">Simulación de opciones</label>
+    <hr/>
+    <div class="container form-inline">
+      <label for"text">Simulación de opciones:</label>
+      n-best: <input id="nbest" type="number" value="4" step="1" class="form-control" autocomplete="off" />
+      score threshold: <input id="threshold" type="number" value="0.5" step="0.01" class="form-control" autocomplete="off" />
       <ul id="simulation">
       </ul>
     </div>
@@ -158,8 +161,12 @@
       return classify('sentiment')()
       .then(classify('multimood'))
       .then(function () {
-        let sentence = $('#text').val();
-        return request("/estado_animo_multiple", {"text": sentence}, "GET")
+        let data = {
+          "text": $('#text').val(),
+          "nbest": $('#nbest').val(),
+          "threshold": $('#threshold').val(),
+        }
+        return request("/estado_animo_multiple", data, "GET")
         .done(function (res) {
           let $sim = $('#simulation').empty();
           let nbests = res.nbests.filter(e => e.score >= 0.5).slice(0, 4);

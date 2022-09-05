@@ -270,7 +270,7 @@ async def unsupervised_multimood():
 
 
 @app.get("/estado_animo", response_class=JSONResponse)
-async def estado_animo(text: str):
+async def estado_animo(text: str, nbest: int = 4, threshold: float = 0.01):
     sentence = Sentence(text=text)
     tasks = [classify('sentiment', sentence), classify('mood', sentence)]
     sentiment, mood = await asyncio.gather(*tasks)
@@ -291,7 +291,7 @@ async def estado_animo(text: str):
             'entity': m.replace('_', ' '),
             'score': c,
         }
-        for c, m in sorted([(c, m) for m, c in results.items()], reverse=True) if c > 0.01
+        for c, m in sorted([(c, m) for m, c in results.items() if c >= threshold], reverse=True)[:nbest]
     ]
 
     res = {
@@ -303,8 +303,9 @@ async def estado_animo(text: str):
 
     return res
 
+
 @app.get("/estado_animo_multiple", response_class=JSONResponse)
-async def estado_animo_multiple(text: str):
+async def estado_animo_multiple(text: str, nbest: int = 4, threshold: float = 0.01):
     sentence = Sentence(text=text)
     tasks = [classify('sentiment', sentence), classify('multimood', sentence)]
     sentiment, mood = await asyncio.gather(*tasks)
@@ -315,7 +316,11 @@ async def estado_animo_multiple(text: str):
         'neutral': sentiment.get('neutral', .0),
         'emociones_positivas': sentiment.get('positive', .0) + sentiment.get('negative', .0) * mood.get('emociones_positivas', .0),
     }
-    results.update({m: s * sentiment.get('negative', .0) for m, s in mood.items() if m != 'emociones_positivas'})
+    negative_emotions = {m: s * sentiment.get('negative', .0) for m, s in mood.items() if m != 'emociones_positivas'}
+    print(f"NEGATIVE[{sentiment.get('negative', .0)}][{all([s < threshold for s in negative_emotions.values()])}]: {negative_emotions}")
+    if sentiment.get('negative', .0) >= threshold and all([s < threshold for s in negative_emotions.values()]):
+        negative_emotions = {'emociones_negativas': sentiment.get('negative', .0)}
+    results.update(negative_emotions)
     print(f"SENTIMENT: {sentiment}")
     print(f"MOOD: {mood}")
     print(f"RESULTS: {results}")
@@ -325,7 +330,7 @@ async def estado_animo_multiple(text: str):
             'entity': m.replace('_', ' '),
             'score': c,
         }
-        for c, m in sorted([(c, m) for m, c in results.items()], reverse=True) if c > 0.01
+        for c, m in sorted([(c, m) for m, c in results.items() if c >= threshold], reverse=True)[:nbest]
     ]
 
     res = {
