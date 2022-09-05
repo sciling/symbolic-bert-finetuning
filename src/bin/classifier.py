@@ -344,7 +344,7 @@ def train(train_fn: Path, dev_fn: Path, output_dir: Path = 'train.dir', model_na
         cache_dir=str(cache_dir)
     )
 
-    label_list = list({label for labels in dataset["train"].unique("label") for label in labels.split(';')})
+    label_list = list({label for labels in dataset["train"].unique("label") for label in (labels.split(';') if labels else [])})
     label_list.sort()  # Let's sort it for determinism
     num_labels = len(label_list)
     label_to_id = {v: i for i, v in enumerate(label_list)}
@@ -357,16 +357,17 @@ def train(train_fn: Path, dev_fn: Path, output_dir: Path = 'train.dir', model_na
         # Map labels to IDs (not necessary for GLUE tasks)
         if label_to_id is not None and "label" in examples:
             if problem_type == 'single_label_classification':
-                result["label"] = [(label_to_id[label] if label != -1 else -1) for label in examples["label"]]
+                result["label"] = [(label_to_id[label] if label is not None and label != -1 else -1) for label in examples["label"]]
             elif problem_type == 'multi_label_classification':
                 zero = [.0] * len(label_to_id)
                 result["label"] = [zero[:] for label in examples["label"]]
                 for label_list, vector in zip(examples["label"], result["label"]):
-                    for label in label_list.split(';'):
-                        # print(f"LABELS: {label} <- {label_list}")
-                        idx = label_to_id[label] if label != -1 else -1
-                        if idx != -1:
-                            vector[idx] = 1.0
+                    if label_list:
+                        for label in label_list.split(';'):
+                            # print(f"LABELS: {label} <- {label_list}")
+                            idx = label_to_id[label] if label != -1 else -1
+                            if idx != -1:
+                                vector[idx] = 1.0
             else:
                 raise Exception(f"Unknown problem type {problem_type}")
 
