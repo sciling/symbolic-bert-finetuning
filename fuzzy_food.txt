@@ -78,3 +78,4 @@ yema de huevo;
 Chía;
 Vegetales salteados;Menestra vegetariana;Variado de verduras y legumbres
 Vegetales;Menestra vegetariana;Variado de verduras y legumbres
+Verdura;Menestra vegetariana;Variado de verduras y legumbres
