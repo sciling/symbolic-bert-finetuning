@@ -775,7 +775,7 @@ class SearchEngine:
         return None
 
     def is_valid_token(self, token, is_new=False):
-        return len(token) >= 2 and token not in self.ignore
+        return len(token) >= 2 and token not in self.ignore and not token.isnumeric()
 
     def search(self, sentence, nbest=4, summarized=False, multinomial=False, description_type=DescriptionType.DEFAULT, reuse_description=True, fuzzy=True, use_alts=False, max_ngram=5):
         literal_entity = sentence

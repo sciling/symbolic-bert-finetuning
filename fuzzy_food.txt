@@ -1,4 +1,4 @@
-8 unidades de manzana;Manzana
+8 unidades de manzana;Manzana;None
 albahaca con piñones;Albahaca;Piñon
 arroz;Arroz
 arroz a banda;Arroz a banda
@@ -20,8 +20,9 @@ garbanzos;Garbanzo, hervido
 Habas con ajetes, setas y gambas;Habas con ajetes, setas y gambas
 lentejas;Lenteja, en conserva;Lenteja, hervida
 lentejas con chorizo;Lentejas estofadas con chorizo
-manzana;Manzana
-manzanas;Manzana
+manzana;Manzana;None
+manzanas;Manzana;None
+130 gramos de manzana;Manzana;None
 paella;Paella
 papas a lo pobre;Patatas, fritas, chips;Patatas fritas
 pimiento  asada;Pimiento rojo, crudo;Esgarraet
