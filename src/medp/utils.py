@@ -749,13 +749,16 @@ class SearchEngine:
             self.tok2id.update({tok: self.tok2id[self.entity_syns.get(word, word)] for tok in data['synonyms'] if tok not in entities})
             self.vocab.update({tok: self.vocab[self.entity_syns.get(word, word)] for tok in data['synonyms'] if tok not in entities})
 
+        for word, data in list(self.vocab.items()):
+            data['summary'] = list({self.normalize(tok) for tok in data.get('summary', [])})
+
         with open('/tmp/vocab.json', 'w') as file:
             json.dump(self.vocab, file, indent=2, ensure_ascii=False)
 
         # Update spellchecker after synonymous have been added to the vocab
         NLP.update_spellchecker({v: 1 for v in self.vocab})
 
-        # print(f"ID2TOK: {json.dumps(self.tok2id, indent=2, ensure_ascii=False)}")
+        # print(f"TOK2ID: {json.dumps(self.tok2id, indent=2, ensure_ascii=False)}")
         # print(f"ID2TOK: {json.dumps(self.id2tok, indent=2, ensure_ascii=False)}")
         self.entity_multinomial = []
         for ent, data in self.entities:

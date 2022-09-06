@@ -75,3 +75,6 @@ vino tinto;Vino tinto
 tinto;Vino tinto
 rosado;Vino rosado
 yema de huevo;
+Chía;
+Vegetales salteados;Menestra vegetariana;Variado de verduras y legumbres
+Vegetales;Menestra vegetariana;Variado de verduras y legumbres

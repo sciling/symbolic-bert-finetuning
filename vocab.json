@@ -11,6 +11,25 @@
   "vinagre_venir": ["vinagre", "vino", "vinagre_vino"],
   "boqueron_frito": ["boqueron", "frito", "pescadito_frito"],
   "cava": ["cava"],
+  "menestro": [
+    "verdura",
+    "jamon",
+    "huevo",
+    "menestro"
+  ],
+  "variado_verdura_legumbr": [
+    "legumbre",
+    "verdura"
+  ],
+  "menestro_verdura_congelado": [
+      "congelado",
+      "menestro",
+      "verdura"
+  ],
+  "menestro_vegetarian": [
+    "verdura",
+    "menestro"
+  ],
   "guacamole": [
     "aguacate",
     "pimiento"
@@ -826,7 +845,6 @@
   "melocoton": 19,
   "melon": 2,
   "membrillo": 2,
-  "menestra": 6,
   "menta": 4,
   "merengadamente": 2,
   "merluza": 24,
