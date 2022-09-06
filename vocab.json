@@ -11,6 +11,25 @@
   "vinagre_venir": ["vinagre", "vino", "vinagre_vino"],
   "boqueron_frito": ["boqueron", "frito", "pescadito_frito"],
   "cava": ["cava"],
+  "plancha": 1,
+  "vaca_buey_solomillo_plancha": [
+      "buey",
+      "solomillo",
+      "vaca",
+      "carne",
+      "filete",
+      "plancha"
+  ],
+  "huevo_gallina_yema_crudo": [
+      "yema",
+      "gallina",
+      "huevo"
+  ],
+  "pollo_pechuga_plancha": [
+      "pechuga",
+      "pollo",
+      "plancha"
+  ],
   "menestro": [
     "verdura",
     "jamon",
@@ -25,6 +44,33 @@
       "congelado",
       "menestro",
       "verdura"
+  ],
+  "huevo_duro_relleno_gratinado": [
+    "atun",
+    "huevo",
+    "duro",
+    "huevo_duro",
+    "queso",
+    "tomate"
+  ],
+  "sandwich_vegetal_huevo_atun": [
+    "lechuga",
+    "sandwich",
+    "tomate",
+    "huevo",
+    "huevo_cocido",
+    "duro",
+    "atun"
+  ],
+  "ensalada_mixto_huevo_atun": [
+    "aceituna",
+    "atun",
+    "ensalada",
+    "huevo",
+    "cocido",
+    "huevo_cocido",
+    "lechuga",
+    "tomate"
   ],
   "menestro_vegetarian": [
     "verdura",
@@ -1353,6 +1399,7 @@
   "yanahoria": 1,
   "yemas": 3,
   "yemo": 5,
+  "yema": 5,
   "yocido": 11,
   "yodada": 2,
   "yogur": 91,

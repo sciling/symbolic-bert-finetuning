@@ -75,8 +75,18 @@ vino blanco;Vino blanco
 vino tinto;Vino tinto
 tinto;Vino tinto
 rosado;Vino rosado
-yema de huevo;
-Chía;
+Chía;Tostada de requesón, mango y semillas de chia
+huevo cocido;Huevos duros rellenos gratinados
+huevo sancochado;Huevos duros rellenos gratinados
 Vegetales salteados;Menestra vegetariana;Variado de verduras y legumbres
 Vegetales;Menestra vegetariana;Variado de verduras y legumbres
 Verdura;Menestra vegetariana;Variado de verduras y legumbres
+filete ternera;Ternera, parte sin especificar, cruda, con grasa separable;Ternera, parte s/e, asada
+filete carne;Vaca/buey, solomillo, a la plancha
+filete;Vaca/buey, solomillo, a la plancha
+bistec;Vaca/buey, solomillo, a la plancha
+carne a la plancha;Pollo, pechuga, plancha;Vaca/buey, solomillo, a la plancha
+pollo a la plancha;Pollo, pechuga, plancha
+pechuga a la plancha;Pollo, pechuga, plancha
+pechuga de pollo a la plancha;Pollo, pechuga, plancha
+yema de huevo;Huevo de gallina, yema, cruda
