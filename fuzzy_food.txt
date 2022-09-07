@@ -90,3 +90,4 @@ pollo a la plancha;Pollo, pechuga, plancha
 pechuga a la plancha;Pollo, pechuga, plancha
 pechuga de pollo a la plancha;Pollo, pechuga, plancha
 yema de huevo;Huevo de gallina, yema, cruda
+zanahoria;Zanahoria, cruda

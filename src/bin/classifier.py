@@ -552,7 +552,10 @@ class Tagger:
         current_mtag = None
         text = []
         for sid, (tag, next_tag) in enumerate(zip_longest(labels, labels[1:])):
-            bare_tag = tag.replace('B-', '').replace('E-', '')
+            if tag:
+                bare_tag = tag.replace('B-', '').replace('E-', '')
+            else:
+                bare_tag = None
 
             # if it's the start of a new slot
             if tag.startswith('B-') or not current_tag and tag.startswith('E-'):

@@ -15,6 +15,26 @@
     #result button {
       margin: 10px;
     }
+    dl {
+      width: 100%;
+      overflow: hidden;
+      padding: 0;
+      margin: 0;
+    }
+    dt:after {
+      content: ":";
+    }
+    dt {
+      float: left;
+      padding: 0;
+      padding-right: 1em;
+      margin: 0;
+    }
+    dd {
+      float: left;
+      padding: 0;
+      margin: 0;
+    }
   </style>
 </head>
 <body>
@@ -22,12 +42,14 @@
     <h1>Food test</h1>
     <div class="form-group">
       <label for"text">Text:</label>
-      <input id="text" class="form-control" autocomplete="off" value="100ml de leche y una yema de huevo" />
+      <input id="text" class="form-control" autocomplete="off" value="Hoy para desayunar 200ml de leche desnatada y 30gr de cereales de chocolate" />
     </div>
     <button id="classify" class="btn btn-primary">classify</button>
   </div>
   <hr/>
   <div class="container">
+    <dl id="vars" class=form-group"></dl>
+    <hr/>
     <div id="food" class=form-group"></div>
   </div>
 
@@ -54,6 +76,13 @@
         let $result = $("#" + id);
         $result.empty();
         console.log('response', response)
+
+        let $vars = $('#vars');
+        let vars = Object.keys(response).filter(k=>k!='foods');
+        vars.forEach(function(v) {
+          $vars.append(`<dt>${v.replace('B-', '').replace('E-', '').toLowerCase()}</dt><dd>${response[v]}</dd>`);
+        });
+
         let foods = response.foods;
         foods.forEach(function(food, i) {
           let $info = $('<div class="container"></div>');

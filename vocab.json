@@ -12,6 +12,9 @@
   "boqueron_frito": ["boqueron", "frito", "pescadito_frito"],
   "cava": ["cava"],
   "plancha": 1,
+  "zanahorio_crudo": [
+    "zanahoria"
+  ],
   "vaca_buey_solomillo_plancha": [
       "buey",
       "solomillo",
@@ -1406,7 +1409,6 @@
   "yolleria": 1,
   "zamburino": 1,
   "zamorano": 2,
-  "zanahoria": 54,
   "zarzuela": 2,
   "zumo": 47
 }

@@ -102,6 +102,7 @@ async def parse_food(
     searcher = CACHED['alimento_tipo']
 
     res = tagger.tag(text)
+    print(f"PARSEFOOD: {text}: {res}")
 
     for food in res.get('foods', []):
         food.search = searcher.search(
