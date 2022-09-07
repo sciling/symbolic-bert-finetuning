@@ -558,7 +558,7 @@ class Tagger:
                 bare_tag = None
 
             # if it's the start of a new slot
-            if tag.startswith('B-') or not current_tag and tag.startswith('E-'):
+            if tag and (tag.startswith('B-') or not current_tag and tag.startswith('E-')):
                 current_tag = f"E-{bare_tag}"
                 current_mtag = mtag = mapping.get(bare_tag, None)
                 print(f"START: {bare_tag} {mtag} {current_mtag and getattr(current, current_mtag, None) or None}")
