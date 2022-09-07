@@ -558,7 +558,7 @@ class Tagger:
             if tag.startswith('B-') or not current_tag and tag.startswith('E-'):
                 current_tag = f"E-{bare_tag}"
                 current_mtag = mtag = mapping.get(bare_tag, None)
-                print(f"START: {bare_tag} {mtag} {getattr(current, current_mtag, None)}")
+                print(f"START: {bare_tag} {mtag} {current_mtag and getattr(current, current_mtag, None) or None}")
                 # and the tag is a Food attribute
                 if mtag is not None:
                     # and the slot is already filled, then create a new food.
