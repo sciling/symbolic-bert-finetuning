@@ -502,13 +502,24 @@ class Food(BaseModel):
 
 
 class Tagger:
-    def __init__(self, model_name, max_seq_length=128, **kwargs):
+    def __init__(self, model_name, max_seq_length=128, normalization_fn=None, **kwargs):
         self.model_name = model_name
         self.max_seq_length = max_seq_length
 
         self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
         self.model = AutoModelForTokenClassification.from_pretrained(model_name)
         self.labels = [label for _, label in sorted(self.model.config.id2label.items())]
+
+        self.normalization = None
+        if normalization_fn:
+            with open(normalization_fn) as file:
+                self.normalization = json.load(file)
+
+    def normalize(self, value, qtag):
+        if not self.normalization or qtag not in self.normalization:
+            return value
+
+        return self.normalization[qtag].get(value, value)
 
     def tag(self, sentence):
         # Otherwise, classify
@@ -541,6 +552,7 @@ class Tagger:
             'CANTIDAD': 'quantity',
             'UNIDAD': 'unit',
             'FOOD': 'food',
+            'CLEAR': 'clear',
         }
 
         res = {
@@ -581,15 +593,22 @@ class Tagger:
                 else:
                     text.append(tokens[sid])
                     print(f"SET: {tokens[sid]} {tag} |{current}|, {current_mtag}, '{' '.join(text)}'")
-                    if current and current_mtag:
-                        print(f"NEWSETATTR: |{current}|, {current_mtag}, '{' '.join(text)}'")
-                        if mtag == 'quantity':
-                            value = to_number(' '.join(text))
-                        else:
-                            value = ' '.join(text)
-                        setattr(current, current_mtag, value)
+
+                    if mtag == 'quantity':
+                        value = to_number(' '.join(text))
                     else:
-                        res[current_tag] = ' '.join(text)
+                        value = ' '.join(text)
+
+                    qtag = current_mtag if current and current_mtag else current_tag
+                    if qtag:
+                        qtag = qtag.replace('B-', '').replace('E-', '').lower()
+                        value = self.normalize(qtag, value)
+
+                    if current and current_mtag:
+                        print(f"NEWSETATTR: |{current}|, {current_mtag}, '{value}'")
+                        setattr(current, current_mtag, value)
+                    elif current_tag:
+                        res[current_tag.replace('B-', '').replace('E-', '').lower()] = value
 
                     text = []
                     current_tag = None
@@ -618,7 +637,7 @@ def train_token(train_fn: Path, dev_fn: Path, output_dir: Path = 'train.dir', mo
     dataset = dataset.map(remove_columns=['label'])
     print(dataset)
 
-    label_list = ['B-FOOD', 'E-FOOD', 'B-UNIDAD', 'E-UNIDAD', 'B-CANTIDAD', 'E-CANTIDAD', 'B-TOMA', 'E-TOMA', 'O']
+    label_list = ['B-FOOD', 'E-FOOD', 'B-CLEAR', 'E-CLEAR', 'B-UNIDAD', 'E-UNIDAD', 'B-CANTIDAD', 'E-CANTIDAD', 'B-TOMA', 'E-TOMA', 'O']
     label_list.sort()  # Let's sort it for determinism
     num_labels = len(label_list)
     label_to_id = {v: i for i, v in enumerate(label_list)}

@@ -80,7 +80,7 @@
         let $vars = $('#vars');
         let vars = Object.keys(response).filter(k=>k!='foods');
         vars.forEach(function(v) {
-          $vars.append(`<dt>${v.replace('B-', '').replace('E-', '').toLowerCase()}</dt><dd>${response[v]}</dd>`);
+          $vars.append(`<dt>${v}</dt><dd>${response[v]}</dd>`);
         });
 
         let foods = response.foods;
