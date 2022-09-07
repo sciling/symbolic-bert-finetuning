@@ -12,9 +12,7 @@
   "boqueron_frito": ["boqueron", "frito", "pescadito_frito"],
   "cava": ["cava"],
   "plancha": 1,
-  "zanahorio_crudo": [
-    "zanahoria"
-  ],
+  "bistec": ["filete", "carne"],
   "vaca_buey_solomillo_plancha": [
       "buey",
       "solomillo",
@@ -334,6 +332,7 @@
   "brandy": 2,
   "brava": 2,
   "breca": 2,
+  "breco": 2,
   "brecol": 8,
   "breva": 2,
   "brie": 2,
@@ -401,6 +400,7 @@
   "cazon": 3,
   "cda": 2,
   "cebada": 7,
+  "cebar": 1,
   "cebo": 2,
   "cebolla": 107,
   "cebolleta": 8,
@@ -1192,6 +1192,7 @@
   "rio": 2,
   "riojano": 2,
   "risotto": 4,
+  "rizado": 2,
   "rizada": 2,
   "rodaballo": 2,
   "rodaja": 5,
@@ -1410,5 +1411,553 @@
   "zamburino": 1,
   "zamorano": 2,
   "zarzuela": 2,
-  "zumo": 47
+  "zumo": 47,
+
+  "this_is_a_list_of_curated_elements": 0,
+  "list_of_raw_food": 0,
+  "acelga_crudo": [
+    "acelga"
+  ],
+  "achicorio_crudo": [
+    "achicorio"
+  ],
+  "alcachofa_crudo": [
+    "alcachofa"
+  ],
+  "almendra_crudo": [
+    "almendra"
+  ],
+  "almendra_crudo_cascara": [
+    "almendra",
+    "cascara",
+    "crudo"
+  ],
+  "alubia_blanco_seco_crudo": [
+    "alubia",
+    "blanco"
+  ],
+  "anacardo_crudo": [
+    "anacardo"
+  ],
+  "anguila_crudo": [
+    "anguila"
+  ],
+  "angula_crudo": [
+    "angula"
+  ],
+  "apio_crudo": [
+    "apio"
+  ],
+  "arroz_integral_crudo": [
+    "arroz",
+    "integral"
+  ],
+  "atun_crudo": [
+    "atun"
+  ],
+  "avellana_crudo_cascara": [
+    "avellan"
+  ],
+  "avena_crudo": [
+    "avena"
+  ],
+  "avestruz_solomillo_crudo": [
+    "avestruz"
+  ],
+  "bacalao_crudo": [
+    "bacalao"
+  ],
+  "bacalao_salado_crudo": [
+    "bacalao",
+    "salado"
+  ],
+  "bacalao_salado_remojado_crudo": [
+    "bacalao",
+    "remojado",
+    "salado"
+  ],
+  "bacon_crudo_grasa_separable": [
+    "bacon",
+    "grasa",
+    "separable"
+  ],
+  "bambu_crudo": [
+    "bambu"
+  ],
+  "berro_crudo": [
+    "berro"
+  ],
+  "boniato_batata_crudo": [
+    "boniato"
+  ],
+  "breco_crudo": [
+    "breca"
+  ],
+  "brecol_crudo": [
+    "brecol"
+  ],
+  "caballa_crudo": [
+    "caballa"
+  ],
+  "cabracho_bocanegra_rascacio_crudo": [
+    "cabracho"
+  ],
+  "cabrito_s_crudo_grasa_separable": [
+    "cabrito"
+  ],
+  "cacahuete_crudo_cascara": [
+    "cacahuete"
+  ],
+  "calabaza_crudo": [
+    "calabaza"
+  ],
+  "calamar_crudo": [
+    "calamar"
+  ],
+  "cangrejo_rio_crudo": [
+    "cangrejo",
+    "rio"
+  ],
+  "carpa_crudo": [
+    "carpa"
+  ],
+  "castano_crudo": [
+    "castano"
+  ],
+  "cebar_crudo": [
+    "cebar"
+  ],
+  "cebollino_crudo": [
+    "cebollino"
+  ],
+  "centeno_crudo": [
+    "centeno"
+  ],
+  "centollo_crudo": [
+    "centollo"
+  ],
+  "cerdo_chuleta_crudo": [
+    "cerdo",
+    "chuleta"
+  ],
+  "cerdo_costilla_crudo": [
+    "cerdo",
+    "costilla"
+  ],
+  "cerdo_lomo_crudo": [
+    "cerdo",
+    "lomo"
+  ],
+  "cerdo_panceta_crudo": [
+    "cerdo",
+    "panceta"
+  ],
+  "cerdo_pierna_crudo_grasa_separable": [
+    "cerdo",
+    "pierna"
+  ],
+  "cerdo_solomillo_crudo": [
+    "cerdo",
+    "solomillo"
+  ],
+  "chayote_crudo": [
+    "chayote"
+  ],
+  "chufa_crudo": [
+    "chufa"
+  ],
+  "ciervo_s_crudo_grasa_separable": [
+    "ciervo"
+  ],
+  "ciruela_piel_crudo": [
+    "ciruela"
+  ],
+  "col_blanca_crudo": [
+    "blanco",
+    "col"
+  ],
+  "col_brusela_crudo": [
+    "brusela",
+    "col"
+  ],
+  "col_rizado_crudo": [
+    "col",
+    "rizado"
+  ],
+  "coliflor_congelado_crudo": [
+    "coliflor"
+  ],
+  "conejo_granja_carne_crudo": [
+    "conejo"
+  ],
+  "corazon_vaca_crudo": [
+    "corazon",
+    "vaca"
+  ],
+  "corazon_cordero_crudo": [
+    "corazon",
+    "cordero"
+  ],
+  "corazon_pollo_crudo": [
+    "corazon",
+    "pollo"
+  ],
+  "corazon_cerdo_crudo": [
+    "cerdo",
+    "corazon"
+  ],
+  "corazon_vaca_buey_crudo": [
+    "buey",
+    "corazon"
+  ],
+  "cordero_costilla_crudo": [
+    "cordero",
+    "costilla"
+  ],
+  "dorado_sama_crudo": [
+    "dorado"
+  ],
+  "espinaca_picado_congelado_crudo": [
+    "espinaca"
+  ],
+  "faneco_crudo": [
+    "faneco"
+  ],
+  "fletan_crudo": [
+    "fletan"
+  ],
+  "frambues_crudo": [
+    "frambuesa"
+  ],
+  "gallina_entero_crudo": [
+    "gallina"
+  ],
+  "gamba_rojo_crudo": [
+    "gamba"
+  ],
+  "garbanzo_seco_crudo": [
+    "garbanzo"
+  ],
+  "grosella_negro_crudo": [
+    "grosella",
+    "negro"
+  ],
+  "grosella_crudo": [
+    "grosella"
+  ],
+  "guayaba_sin_piel_crudo": [
+    "guayaba"
+  ],
+  "guisante_congelado_crudo": [
+    "guisante"
+  ],
+  "guisante_seco_crudo": [
+    "guisante",
+    "seco"
+  ],
+  "higado_pollo_crudo": [
+    "higado",
+    "pollo"
+  ],
+  "huevo_codorniz_entero_crudo": [
+    "codorniz",
+    "huevo"
+  ],
+  "huevo_gallina_claro_crudo": [
+    "gallina",
+    "huevo"
+  ],
+  "huevo_gallina_yema_crudo": [
+    "gallina",
+    "huevo",
+    "yema"
+  ],
+  "huevo_pato_crudo": [
+    "huevo",
+    "pato"
+  ],
+  "huevo_pavo_entero_crudo": [
+    "huevo",
+    "pavo"
+  ],
+  "higado_cerdo_crudo": [
+    "cerdo",
+    "higado"
+  ],
+  "higado_vaca_buey_crudo": [
+    "buey",
+    "higado",
+    "vaca"
+  ],
+  "judio_verde_congelado_crudo": [
+    "congelado",
+    "judio",
+    "verde"
+  ],
+  "judio_verde_crudo": [
+    "judio",
+    "verde"
+  ],
+  "jurel_chicharro_crudo": [
+    "jurel"
+  ],
+  "lengua_cerdo_crudo": [
+    "cerdo",
+    "lengua"
+  ],
+  "lengua_cordero_crudo": [
+    "cordero",
+    "lengua"
+  ],
+  "lengua_buey_crudo": [
+    "buey",
+    "lengua"
+  ],
+  "lengua_ternera_crudo": [
+    "lengua",
+    "ternera"
+  ],
+  "lentejo_seco_crudo": [
+    "lenteja"
+  ],
+  "liebre_entero_crudo": [
+    "liebre"
+  ],
+  "lija_crudo": [
+    "lija"
+  ],
+  "lima_crudo": [
+    "lima"
+  ],
+  "litchi_crudo": [
+    "litchi"
+  ],
+  "mango_crudo": [
+    "mango"
+  ],
+  "masa_hojaldre_crudo": [
+    "hojaldre"
+  ],
+  "maiz_mazorca_congelado_crudo": [
+    "congelado",
+    "maiz",
+    "mazorca"
+  ],
+  "maiz_mazorca_crudo": [
+    "maiz",
+    "mazorca"
+  ],
+  "membrillo_crudo": [
+    "membrillo"
+  ],
+  "merluza_congelado_crudo": [
+    "merluza"
+  ],
+  "mero_cherne_crudo": [
+    "mero"
+  ],
+  "mujol_crudo": [
+    "mujol"
+  ],
+  "nabo_pelado_crudo": [
+    "nabo"
+  ],
+  "nuez_crudo_cascara": [
+    "nuez"
+  ],
+  "niscalo_crudo": [
+    "niscalo"
+  ],
+  "nispero_piel_crudo": [
+    "nispero"
+  ],
+  "ostra_crudo": [
+    "ostra"
+  ],
+  "palometa_crudo": [
+    "palometa"
+  ],
+  "panga_crudo": [
+    "panga"
+  ],
+  "papaya_crudo": [
+    "papaya"
+  ],
+  "pasta_alimenticio_huevo_crudo": [
+    "huevo",
+    "pasta"
+  ],
+  "pasta_alimenticio_vegetal_crudo": [
+    "pasta",
+    "vegetal"
+  ],
+  "pasta_alimenticio_crudo": [
+    "pasta"
+  ],
+  "pasta_alimenticio_integral_crudo": [
+    "integral",
+    "pasta"
+  ],
+  "patata_crudo": [
+    "patata"
+  ],
+  "pato_entero_crudo": [
+    "pato"
+  ],
+  "pavo_crudo": [
+    "pavo"
+  ],
+  "pavo_muslo_piel_crudo": [
+    "muslo",
+    "piel",
+    "pavo"
+  ],
+  "pavo_pechuga_piel_crudo": [
+    "pavo",
+    "piel",
+    "pechuga"
+  ],
+  "perca_crudo": [
+    "perca"
+  ],
+  "perdiz_crudo": [
+    "perdiz"
+  ],
+  "pescadilla_congelado_crudo": [
+    "pescadilla"
+  ],
+  "pez_espada_crudo": [
+    "espada",
+    "pez"
+  ],
+  "pijota_crudo": [
+    "pijota"
+  ],
+  "pimiento_rojo_crudo": [
+    "pimiento"
+  ],
+  "pinon_crudo_cascara": [
+    "pinon"
+  ],
+  "platija_crudo": [
+    "platija"
+  ],
+  "pollo_ala_piel_crudo": [
+    "ala",
+    "piel",
+    "pollo"
+  ],
+  "pollo_entero_piel_crudo": [
+    "piel",
+    "pollo"
+  ],
+  "pollo_muslo_piel_crudo": [
+    "muslo",
+    "piel",
+    "pollo"
+  ],
+  "pollo_pechuga_piel_crudo": [
+    "pechuga",
+    "piel",
+    "pollo"
+  ],
+  "puerro_crudo_congelado": [
+    "puerro"
+  ],
+  "pulmon_cerdo_crudo": [
+    "cerdo",
+    "pulmon"
+  ],
+  "pulmon_cordero_crudo": [
+    "cordero",
+    "pulmon"
+  ],
+  "pulmon_ternera_crudo": [
+    "pulmon",
+    "ternera"
+  ],
+  "quinoa_crudo": [
+    "quinoa"
+  ],
+  "rape_crudo": [
+    "rape"
+  ],
+  "raya_crudo": [
+    "raya"
+  ],
+  "rinon_cordero_crudo": [
+    "cordero",
+    "rinon"
+  ],
+  "rinon_ternera_crudo": [
+    "rinon",
+    "ternera"
+  ],
+  "salema_crudo": [
+    "salema"
+  ],
+  "sargo_crudo": [
+    "sargo"
+  ],
+  "seso_cerdo_crudo": [
+    "cerdo",
+    "seso"
+  ],
+  "seso_cordero_crudo": [
+    "cordero",
+    "seso"
+  ],
+  "seso_ternera_crudo": [
+    "seso",
+    "ternera"
+  ],
+  "soja_seco_crudo": [
+    "soja"
+  ],
+  "semola_trigo_crudo": [
+    "semola",
+    "trigo"
+  ],
+  "tenca_crudo": [
+    "tenca"
+  ],
+  "ternera_costilla_crudo": [
+    "costilla",
+    "ternera"
+  ],
+  "ternera_lomo_crudo_grasa_separable": [
+    "lomo",
+    "ternera"
+  ],
+  "ternera_sin_especificar_crudo_grasa_separable": [
+    "ternera"
+  ],
+  "ternera_solomillo_sin_grasa_crudo": [
+    "solomillo",
+    "ternera"
+  ],
+  "trigo_entero_crudo": [
+    "trigo"
+  ],
+  "trufa_crudo": [
+    "trufa"
+  ],
+  "uva_negro_crudo": [
+    "uva"
+  ],
+  "vaca_buey_solomillo_crudo": [
+    "buey",
+    "solomillo",
+    "vaca"
+  ],
+  "viejo_crudo": [
+    "viejo"
+  ],
+  "volador_crudo": [
+    "volador"
+  ],
+  "zanahorio_crudo": [
+    "zanahorio"
+  ]
+
 }
