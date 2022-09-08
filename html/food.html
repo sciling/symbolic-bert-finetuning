@@ -78,6 +78,7 @@
         console.log('response', response)
 
         let $vars = $('#vars');
+        $vars.empty();
         let vars = Object.keys(response).filter(k=>k!='foods');
         vars.forEach(function(v) {
           $vars.append(`<dt>${v}</dt><dd>${response[v]}</dd>`);
