@@ -1003,7 +1003,8 @@ def convert_form(words: List[str], depth: int=1, threshold: float=None):
 @app.command()
 def expand_entities(
         templates_fn: List[Path] = typer.Argument(None), entities_fn: Path = typer.Option(None), vars_fn: List[Path] = typer.Option(None),
-        save_fn: Path = typer.Option(None), depth: int = 1, threshold: float = None, max_syns: int = 0, prefix: str = '', entity_values: str = None
+        save_fn: Path = typer.Option(None), depth: int = 1, threshold: float = None, max_syns: int = 0, prefix: str = '', entity_values: str = None,
+        max_permutations: int = sys.maxsize
 ):
     seen = {}
     entities = defaultdict(set)
@@ -1028,71 +1029,92 @@ def expand_entities(
     if templates_fn is None:
         templates_fn = []
 
-    for template_fn in tqdm(templates_fn):
-        print(f"PROCESSING: {template_fn}")
-        templates = []
-        yaml = YAML(typ="safe")  # default, if not specfied, is 'rt' (round-trip)
-        with open(template_fn) as file:
-            data = yaml.load(file)
-            variables = data.get('variables', {})
+    with tqdm(templates_fn, position=0) as pbar:
+        for template_fn in pbar:
+            print(f"PROCESSING: {template_fn}")
+            templates = []
+            yaml = YAML(typ="safe")  # default, if not specfied, is 'rt' (round-trip)
+            with open(template_fn) as file:
+                data = yaml.load(file)
+                variables = data.get('variables', {})
 
-            if vars_fn:
-                for var_fn in vars_fn:
-                    with open(var_fn) as file:
-                        csvreader = csv.reader(file, delimiter=',', quotechar='"')
-                        for row in csvreader:
-                            if row[0] not in variables:
-                                variables[row[0]] = row[1]
+                if vars_fn:
+                    for var_fn in tqdm(vars_fn, position=1, leave=False):
+                        with open(var_fn) as file:
+                            csvreader = csv.reader(file, delimiter=',', quotechar='"')
+                            varls = defaultdict(set)
+                            for row in tqdm(list(csvreader), position=2, leave=False):
+                                pbar.set_description(f"VAR_FN: {var_fn}: {row}")
+                                varls[row[0]].add(row[1])
+
+                            for vl, vs in tqdm(varls.items(), position=2, leave=False):
+                                pbar.set_description(f"VAR_DS: {var_fn}: {vl}")
+                                if vl not in variables:
+                                    variables[vl] = '|'.join(vs)
+                                else:
+                                    variables[vl] += '|' + '|'.join(vs)
+
+                for ent, values in tqdm(data.get('entities', {}).items(), position=1, leave=False):
+                    pbar.set_description(f"TEMPLATE: {ent}")
+                    for val in tqdm(values, position=2, leave=False):
+                        if entity_values and val['value'] not in entity_values:
+                            continue
+                        pbar.set_description(f"TEMPLATE: {ent}: {val['value'][:80]}")
+                        entity = f"{ent}:{prefix}{val['value']}"
+                        # print(f"VAL: {val}: {variables}")
+                        temps = []
+                        for temp in tqdm(val.get('templates', []), position=3, leave=False):
+                            if isinstance(temp, str):
+                                text, params = temp, {}
+                            elif isinstance(temp, dict):
+                                text, params = temp['template'], temp
                             else:
-                                variables[row[0]] += "|" + row[1]
+                                raise Exception(f"Invalid template {temp}")
+                            pbar.set_description(f"TEMPLATE: {ent}: {val['value'][:80]}: {text[:80]}")
+                            temps.append((text.format(**variables), params))
+                        templates.append((entity, temps))
 
-            for ent, values in data.get('entities', {}).items():
-                for val in values:
-                    if entity_values and val['value'] not in entity_values:
-                        continue
-                    entity = f"{ent}:{prefix}{val['value']}"
-                    # print(f"VAL: {val}: {variables}")
-                    temps = [temp.format(**variables) for temp in val.get('templates', [])]
-                    templates.append((entity, temps))
+            for entity, elems in tqdm(templates, position=1, leave=False):
+                vocab = set()
+                pbar.set_description(f"GENERATE: {entity}")
+                for template, params in tqdm(elems, position=2, leave=False):
+                    # print(f"PROCESSING: {entity} {template[:80]} ...")
+                    pbar.set_description(f"GENERATE: {entity}: {template[:80]}")
+                    for sentence in tqdm(expand_template(template, max_num=params.get('max', max_permutations)), position=3, leave=False):
+                        pbar.set_description(f"GENERATE: {entity}: {template[:80]}: {sentence[:80]}")
+                        # print(f"TEMPLATE: {template}: {sentence}")
+                        words = {sentence}
 
-        for entity, elems in tqdm(templates, leave=False):
-            vocab = set()
-            for template in tqdm(elems, leave=False):
-                print(f"PROCESSING: {entity} {template}")
-                for sentence in tqdm(expand_template(template), leave=False):
-                    # print(f"TEMPLATE: {template}: {sentence}")
-                    words = {sentence}
+                        if False:
+                            analysis = NLP.tag(sentence)
+                            if len(analysis) == 1:
+                                words |= NLP.convert_form_recursive(sentence, depth=depth, threshold=threshold)
 
-                    if False:
-                        analysis = NLP.tag(sentence)
-                        if len(analysis) == 1:
-                            words |= NLP.convert_form_recursive(sentence, depth=depth, threshold=threshold)
+                        if False:
+                            for word in list(words):
+                                subanalysis = NLP.tag(word)
+                                # print(f"SUB: {word}: {subanalysis}")
+                                for number in ('sg', ):  # 'pl'):
+                                    tokens = [
+                                        NLP.get_variations(token, number, pretoken)
+                                        for pretoken, token in zip([None] + subanalysis, subanalysis)
+                                    ]
+                                    alts = generate_alternatives([t for t in tokens])
+                                    # print(f"ALTS[{number}] = {alts}")
+                                    words |= alts
 
-                    if False:
-                        for word in list(words):
-                            subanalysis = NLP.tag(word)
-                            # print(f"SUB: {word}: {subanalysis}")
-                            for number in ('sg', ):  # 'pl'):
-                                tokens = [
-                                    NLP.get_variations(token, number, pretoken)
-                                    for pretoken, token in zip([None] + subanalysis, subanalysis)
-                                ]
-                                alts = generate_alternatives([t for t in tokens])
-                                # print(f"ALTS[{number}] = {alts}")
-                                words |= alts
+                        for syn in list(words):
+                            if seen.get(syn, entity) != entity:
+                                # print(f"WARNING: '{syn}' in '{entity}' from template '{template}' is already a synonym of '{seen[syn]}'")
+                                print(f"WARNING: '{syn}' in '{entity}' is already a synonym of '{seen[syn]}'")
+                                words.remove(syn)
+                            else:
+                                seen[syn] = entity
 
-                    for syn in list(words):
-                        if seen.get(syn, entity) != entity:
-                            # print(f"WARNING: '{syn}' in '{entity}' from template '{template}' is already a synonym of '{seen[syn]}'")
-                            print(f"WARNING: '{syn}' in '{entity}' is already a synonym of '{seen[syn]}'")
-                            words.remove(syn)
-                        else:
-                            seen[syn] = entity
+                        vocab |= words
 
-                    vocab |= words
-
-            # print(f"ENTITY: {entity} = {vocab}")
-            entities[entity] |= vocab
+                # print(f"ENTITY: {entity} = {vocab}")
+                entities[entity] |= vocab
 
     if save_fn:
         with open(save_fn, 'w') as file:

@@ -5,6 +5,7 @@ import csv
 import json
 from pathlib import Path
 from typing import Optional, List, Any
+from collections import defaultdict
 from itertools import zip_longest
 import random
 
@@ -17,7 +18,6 @@ from transformers import (
     pipeline,
     AutoTokenizer,
     PreTrainedTokenizerFast,
-    BertForSequenceClassification,
     AutoModelForTokenClassification,
     AutoModelForSequenceClassification,
     TrainingArguments,
@@ -30,11 +30,10 @@ from sklearn.metrics import f1_score, roc_auc_score, accuracy_score
 import spacy
 from spacy.attrs import LOWER, POS, ENT_TYPE, IS_ALPHA, DEP, LEMMA, IS_PUNCT, IS_DIGIT, IS_SPACE, IS_STOP  # pylint: disable=no-name-in-module
 from spacy.tokens.doc import Doc  # pylint: disable=no-name-in-module
-from spacy.tokenizer import Tokenizer
-import numpy as np
-from pydantic import BaseModel
+from spacy.tokenizer import Tokenizer  # pylint: disable=no-name-in-module
 from text_to_num import text2num
-import text_to_num
+import numpy as np
+from pydantic import BaseModel  # pylint: disable=no-name-in-module
 
 from medp.utils import EmbeddingsProcessor, Database
 
@@ -42,8 +41,8 @@ app = typer.Typer()
 
 cos = CosineSimilarity(dim=1, eps=1e-6)
 
-spanish_bert = 'dccuchile/bert-base-spanish-wwm-uncased'
-spanish_zeroshot = 'Recognai/zeroshot_selectra_medium'
+SPANISH_BERT = 'dccuchile/bert-base-spanish-wwm-uncased'
+SPANISH_ZEROSHOT = 'Recognai/zeroshot_selectra_medium'
 
 
 def my_tokenizer_pri(nlp):
@@ -58,30 +57,35 @@ def my_tokenizer_pri(nlp):
         token_match=nlp.tokenizer.token_match
     )
 
-# nlp = spacy.load('es_dep_news_trf')
-nlp = spacy.load('es_core_news_lg')
-nlp.tokenizer = my_tokenizer_pri(nlp)
+
+# NLP = spacy.load('es_dep_news_trf')
+NLP = spacy.load('es_core_news_lg')
+NLP.tokenizer = my_tokenizer_pri(NLP)
 
 
-def to_number(string):
+def to_number(string, return_none=True):
     try:
         return text2num(string, 'es')
     except ValueError:
         if string == 'una':
             return 1
-        else:
-            try:
-                return int(string)
-            except ValueError:
-                return string
+
+        try:
+            return int(string)
+
+        except ValueError:
+            if return_none:
+                return None
+
+            return string
 
 
-def p(doc):
-    print([f"{t.text}:{t.lemma_}:{t.pos_}:{t.dep_}:{t.head.text}->{[child for child in t.children]}" for t in doc])
+# def p(doc):
+#     print([f"{t.text}:{t.lemma_}:{t.pos_}:{t.dep_}:{t.head.text}->{[child for child in t.children]}" for t in doc])
 
 
 class Classifier:
-    def __init__(self, model_name, database_fn=None, spellcheck=True, **kwargs):
+    def __init__(self, model_name, database_fn=None, spellcheck=True, **kwargs):  # pylint: disable=unused-argument
         self.model_name = model_name
         self.spellchecker = SpellChecker(language='es') if spellcheck else None
 
@@ -107,7 +111,7 @@ class Classifier:
 
     def classify(self, text):
         if self.spellchecker:
-            sptext = ' '.join(self.spellchecker.correction(d.text) for d in nlp(text))
+            sptext = ' '.join(self.spellchecker.correction(d.text) for d in NLP(text))
 
         res = None
         cache = None
@@ -154,7 +158,10 @@ class Classifier:
         return {k for k, d in self.database.items() if field not in d}
 
 
-def remove_tokens(doc, index_to_del, list_attr=[LOWER, POS, ENT_TYPE, IS_ALPHA, DEP, LEMMA, IS_PUNCT, IS_DIGIT, IS_SPACE, IS_STOP]):
+def remove_tokens(  # pylint: disable=too-many-locals
+        doc, index_to_del,
+        list_attr=(LOWER, POS, ENT_TYPE, IS_ALPHA, DEP, LEMMA, IS_PUNCT, IS_DIGIT, IS_SPACE, IS_STOP)
+):
     """
     Remove tokens from a Spacy *Doc* object without losing
     associated information (PartOfSpeech, Dependance, Lemma, extensions, ...)
@@ -174,7 +181,7 @@ def remove_tokens(doc, index_to_del, list_attr=[LOWER, POS, ENT_TYPE, IS_ALPHA, 
         Filtered version of doc
     """
 
-    np_array = doc.to_array(list_attr) # Array representation of Doc
+    np_array = doc.to_array(list_attr)  # Array representation of Doc
 
     # Creating a mask: boolean array of the indexes to delete
     mask_to_del = np.ones(len(np_array), np.bool)
@@ -191,23 +198,27 @@ def remove_tokens(doc, index_to_del, list_attr=[LOWER, POS, ENT_TYPE, IS_ALPHA, 
     #  More info here: https://github.com/explosion/spaCy/issues/2532
     arr = np.arange(len(doc))
     new_index_to_old = arr[mask_to_del]
-    doc_offset_2_token = {tok.idx : tok.i  for tok in doc}  # needed for the user data
-    doc2_token_2_offset = {tok.i : tok.idx  for tok in doc2}  # needed for the user data
+    doc_offset_2_token = {tok.idx : tok.i for tok in doc}  # needed for the user data
+    doc2_token_2_offset = {tok.i : tok.idx for tok in doc2}  # needed for the user data
     new_user_data = {}
-    for ((prefix, ext_name, offset, x), val) in doc.user_data.items():
+    for ((prefix, ext_name, offset, xval), val) in doc.user_data.items():
         old_token_index = doc_offset_2_token[offset]
         new_token_index = np.where(new_index_to_old == old_token_index)[0]
         if new_token_index.size == 0:  # Case this index was deleted
             continue
         new_char_index = doc2_token_2_offset[new_token_index[0]]
-        new_user_data[(prefix, ext_name, new_char_index, x)] = val
+        new_user_data[(prefix, ext_name, new_char_index, xval)] = val
     doc2.user_data = new_user_data
 
     return doc2
 
 
 @app.command()
-def entities_to_dataset(entities_fn: Path, train_fn: Path, dev_fn: Path, test_fn: Path, dev: float = 0.05, test: float = 0.05, max_examples: int = 0, entities: str = typer.Option(None), randomize: bool = True):
+def entities_to_dataset(  # pylint: disable=too-many-arguments,too-many-locals
+    entities_fn: Path, train_fn: Path, dev_fn: Path, test_fn: Path,
+    dev: float = 0.05, test: float = 0.05, max_examples: int = 0,
+    entities: str = typer.Option(None), randomize: bool = True
+):
     if entities:
         entities = set(entities.split(','))
         print(f"Filter entities: {entities}")
@@ -255,14 +266,16 @@ def entities_to_dataset(entities_fn: Path, train_fn: Path, dev_fn: Path, test_fn
 
 @app.command()
 def get_embeddings(sentences: List[str]):
-    EmbeddingsProcessor.get_model(spanish_bert)
+    EmbeddingsProcessor.get_model(SPANISH_BERT)
     embeddings = EmbeddingsProcessor.pages_to_embeddings(sentences)
     scores = cos(embeddings[0], embeddings)
     print(list(zip(sentences, embeddings)), scores)
 
 
 @app.command()
-def few_shot(entities_fn: Path, new_samples: List[str] = typer.Argument(None), interactive: bool = False):
+def few_shot(  # pylint: disable=too-many-locals
+    entities_fn: Path, new_samples: List[str] = typer.Argument(None)
+):
     typer.echo(f"Processing terms {entities_fn}' ...")
 
     if entities_fn.suffix in ('.yaml', '.yml'):
@@ -315,7 +328,7 @@ def zero_shot(entities_fn: Path, multi_label: bool = False):
     samples = [sample for value in entities.values() for sample in value]
     labels = [label for label, value in entities.items() for sample in value]
 
-    classifier = pipeline("zero-shot-classification", model=spanish_zeroshot, device=0)
+    classifier = pipeline("zero-shot-classification", model=SPANISH_ZEROSHOT, device=0)
 
     res = classifier(
         samples,
@@ -330,7 +343,7 @@ def zero_shot(entities_fn: Path, multi_label: bool = False):
 
 
 @app.command()
-def train(train_fn: Path, dev_fn: Path, output_dir: Path = 'train.dir', model_name: str = spanish_bert, cache_dir: Path = 'cache.dir', max_seq_length: int = 128, num_train_epochs: int = 3, learning_rate: float = 2e-5, problem_type: str = 'single_label_classification'):
+def train(train_fn: Path, dev_fn: Path, output_dir: Path = 'train.dir', model_name: str = SPANISH_BERT, cache_dir: Path = 'cache.dir', max_seq_length: int = 128, num_train_epochs: int = 3, learning_rate: float = 2e-5, problem_type: str = 'single_label_classification'):
 
     data_files = {
         'train': str(train_fn),
@@ -456,7 +469,7 @@ def post_tokenize(sentences, marks):
     tokens_list = []
     tags_list = []
     for sentence in sentences:
-        tokens = [t.text for t in nlp(sentence)]
+        tokens = [t.text for t in NLP(sentence)]
         new_tokens = []
         tags = []
         tag = 'O'
@@ -502,9 +515,10 @@ class Food(BaseModel):
 
 
 class Tagger:
-    def __init__(self, model_name, max_seq_length=128, normalization_fn=None, **kwargs):
+    def __init__(self, model_name, max_seq_length=128, normalization_fn=None, strict_fields=None, **kwargs):
         self.model_name = model_name
         self.max_seq_length = max_seq_length
+        self.strict_fields = strict_fields
 
         self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=True)
         self.model = AutoModelForTokenClassification.from_pretrained(model_name)
@@ -513,17 +527,26 @@ class Tagger:
         self.normalization = None
         if normalization_fn:
             with open(normalization_fn) as file:
-                self.normalization = json.load(file)
+                self.normalization = defaultdict(dict)
+                for field, elements in json.load(file).items():
+                    for key, items in elements.items():
+                        self.normalization[field].update({syn: key for syn in items})
+                        self.normalization[field][key] = key
+
+        print(f"NORMALIZATION: {self.normalization}")
 
     def normalize(self, value, qtag):
         if not self.normalization or qtag not in self.normalization:
+            if self.strict_fields and qtag in self.strict_fields:
+                return None
             return value
 
+        print(f"NORMALIZE: {qtag} {value} {self.normalization[qtag].get(value, value)}")
         return self.normalization[qtag].get(value, value)
 
     def tag(self, sentence):
         # Otherwise, classify
-        tokens = [t.text for t in nlp(sentence)]
+        tokens = [t.text for t in NLP(sentence)]
         inputs = self.tokenizer(
             tokens,
             padding=False,
@@ -602,9 +625,9 @@ class Tagger:
                     qtag = current_mtag if current and current_mtag else current_tag
                     if qtag:
                         qtag = qtag.replace('B-', '').replace('E-', '').lower()
-                        value = self.normalize(qtag, value)
+                        value = self.normalize(value, qtag)
 
-                    if current and current_mtag:
+                    if current and current_mtag and hasattr(current, current_mtag):
                         print(f"NEWSETATTR: |{current}|, {current_mtag}, '{value}'")
                         setattr(current, current_mtag, value)
                     elif current_tag:
@@ -621,7 +644,7 @@ class Tagger:
 
 
 @app.command()
-def train_token(train_fn: Path, dev_fn: Path, output_dir: Path = 'train.dir', model_name: str = spanish_bert, cache_dir: Path = 'cache.dir', max_seq_length: int = 128, num_train_epochs: int = 3, learning_rate: float = 2e-5):
+def train_token(train_fn: Path, dev_fn: Path, output_dir: Path = 'train.dir', model_name: str = SPANISH_BERT, cache_dir: Path = 'cache.dir', max_seq_length: int = 128, num_train_epochs: int = 3, learning_rate: float = 2e-5):
 
     data_files = {
         'train': str(train_fn),

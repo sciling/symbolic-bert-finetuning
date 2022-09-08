@@ -45,7 +45,7 @@ for entity in CACHED:
     CACHED[entity] = SearchEngine(f"db/{entity}.json", vocab_fn='vocab.json', ignore_fn='ignore.json')
 
 if os.path.exists('./train-ma.dir'):
-    CACHED['food'] = Tagger('./train-ma.dir')
+    CACHED['food'] = Tagger('./train-ma.dir', normalization_fn="./multialimento-normalization.json", strict_fields={'unit'})
 
 
 @app.get("/search/{entity}")
@@ -110,10 +110,13 @@ async def parse_food(
             description_type=description_type, reuse_description=reuse_description,
             fuzzy=fuzzy, max_ngram=max_ngram
         )
-        for sr in food.search.get('nbests',[]):
-            key = f"{food.food}~{sr['entity']}"
-            sr['sign'] = FOOD_FIX_DB.get(key, {}).get('sign', '~')
-            print(f"SR: {sr}; KEY: {key}")
+        if 'error' in food.search:
+            food.search = None
+        else:
+            for sr in food.search.get('nbests', []):
+                key = f"{food.food}~{sr['entity']}"
+                sr['sign'] = FOOD_FIX_DB.get(key, {}).get('sign', '~')
+                print(f"SR: {sr}; KEY: {key}")
 
     TAGGER_DB[text] = {
         'text': text,

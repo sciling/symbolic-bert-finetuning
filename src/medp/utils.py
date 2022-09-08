@@ -2,6 +2,7 @@ import re
 import sys
 import json
 import csv
+import math
 import random
 from typing import Iterable
 from enum import Enum
@@ -30,20 +31,6 @@ from filelock import FileLock
 
 
 cos = CosineSimilarity(dim=1, eps=1e-6)
-
-
-# From https://stackoverflow.com/a/30594814
-def random_combinations(matrix, size, max_num=sys.maxsize):
-    n = len(matrix)
-    max_num = min(comb(n, size, exact=True), max_num)
-    seen = set()
-    while len(seen) < max_num:
-        new_sample = random.sample(range(n), size)
-        random.shuffle(new_sample)
-        new_sample = tuple(new_sample)
-        if new_sample not in seen:
-            seen.add(new_sample)
-            yield tuple(matrix[i] for i in new_sample)
 
 
 class Database(dict):
@@ -179,6 +166,35 @@ FORMS = {
 }
 
 
+# From https://stackoverflow.com/a/30594814
+def random_combinations(matrix, size, max_num=sys.maxsize):
+    n = len(matrix)
+    max_num = min(comb(n, size, exact=True), max_num)
+    seen = set()
+    while len(seen) < max_num:
+        new_sample = random.sample(range(n), size)
+        random.shuffle(new_sample)
+        new_sample = tuple(new_sample)
+        if new_sample not in seen:
+            seen.add(new_sample)
+            yield tuple(matrix[i] for i in new_sample)
+
+
+# From https://stackoverflow.com/a/30594814
+def random_permutations(matrix, max_num=sys.maxsize):
+    num_permutations = math.prod([len(col) for col in matrix])
+    if num_permutations <= max_num:
+        yield from permutations(matrix)
+
+    else:
+        seen = set()
+        while len(seen) < max_num:
+            new_sample = tuple([random.choice(col) for col in matrix])
+            if new_sample not in seen:
+                seen.add(new_sample)
+                yield new_sample
+
+
 def permutations(obj):
     if isinstance(obj, list):
         return itertools.product(*obj)
@@ -204,12 +220,13 @@ def clean_spaces(string):
     return spaces_re.sub(r"\1", string.replace('/', ' '))
 
 
-def expand_template(template):
+def expand_template(template, max_num=sys.maxsize):
     blocks = [m.group(1).strip() if m.group(1) else m.group().strip() for m in template_re.finditer(template)]
     blocks = [block.split('|') for block in blocks if block]
-    print(f"BLOCKS: {[t[:5] for t in blocks]}")
+    print(f"BLOCKS: {len(blocks)} {[len(b) for b in blocks[:10]]} ...")
+    # print(f"BLOCKS: {[t[:5] for t in blocks]}")
     # print(f"EXP: {template}: {blocks}: {list(permutations(blocks))}")
-    return {join_blocks(parts) for parts in permutations(blocks)}
+    return {join_blocks(parts) for parts in random_permutations(blocks, max_num)}
 
 
 class DescriptionType(Enum):
