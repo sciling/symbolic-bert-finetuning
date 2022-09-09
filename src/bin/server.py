@@ -110,7 +110,8 @@ async def parse_food(
             description_type=description_type, reuse_description=reuse_description,
             fuzzy=fuzzy, max_ngram=max_ngram
         )
-        if 'error' in food.search:
+        if 'error' in food.search or not food.search.get('nbests', []):
+            food.food = None
             food.search = None
         else:
             for sr in food.search.get('nbests', []):

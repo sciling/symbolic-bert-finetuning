@@ -59,6 +59,7 @@ ruamel.yaml.add_representer(OrderedDict, MyRepresenter.represent_dict, represent
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
 
+
 food_hyps = {"food.n.01", "food.n.02", "meal.n.01", "animal.n.01", "fungus.n.01", "plant.n.02"}
 food_hyps.update({s.name() for s in wn.all_synsets("n") if s.name().startswith("edible_")})
 # we don't want oil.n.01 because that's also used for petroleum
@@ -1287,6 +1288,55 @@ def pre_classify_vocab(sent_fn: Path, text_fns: List[Path], save_fn: Path = type
                     csvwriter.writerow([pos, word, count, positive.get(word, None), negative.get(word, None)])
     else:
         print(json.dumps(vocab, indent=2, ensure_ascii=False))
+
+
+@app.command()
+def other_ngrams(text_fns: List[Path], vocab_fns: List[Path] = (), save_fn: Path = typer.Option(None), entity_name: str = 'noalimento', min_count: int = 3):
+    try:
+        nlp = spacy.load('es_core_news_lg')
+
+        vocab = set()
+        for vocab_fn in vocab_fns:
+            with open(vocab_fn) as file:
+                csvreader = csv.reader(file, delimiter=',', quotechar='"')
+                for row in tqdm(csvreader):
+                    vocab.update(row)
+
+        ngrams = Counter()
+        with tqdm(text_fns) as pbar:
+            for text_fn in pbar:
+                pbar.set_description(f"{len(ngrams)} ngrams: {text_fn}")
+                with open(text_fn) as file:
+                    lines = file.read().split('\n')
+
+                random.shuffle(lines)
+
+                for line in tqdm(lines, leave=False):
+                    pbar.set_description(f"{len(ngrams)} ngrams: {text_fn}: {line[:80]}")
+                    line = clean_spaces(line)
+                    if not line:
+                        continue
+
+                    try:
+                        doc = nlp(line)
+                        for chunk in doc.noun_chunks:
+                            words = {token.text for token in chunk}
+                            if not words.intersection(vocab):
+                                ngrams.update([chunk.text])
+                                # print(f"ADD NGRAM: {chunk.text}")
+                    except Exception as err:
+                        print(f"ERROR LINE: {line} {err}")
+                        continue
+
+    finally:
+        if save_fn:
+            with open(save_fn, 'w') as file:
+                csvwriter = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                for ngram, count in ngrams.items():
+                    if count >= min_count:
+                        csvwriter.writerow([entity_name, ngram])
+        else:
+            print(json.dumps(vocab, indent=2, ensure_ascii=False))
 
 
 if __name__ == "__main__":
