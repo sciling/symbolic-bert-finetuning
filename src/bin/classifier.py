@@ -515,7 +515,7 @@ class Food(BaseModel):
 
 
 class Tagger:
-    def __init__(self, model_name, max_seq_length=128, normalization_fn=None, strict_fields=None, **kwargs):
+    def __init__(self, model_name, max_seq_length=128, normalization_fn=None, token_fixes_fn=None, strict_fields=None, **kwargs):
         self.model_name = model_name
         self.max_seq_length = max_seq_length
         self.strict_fields = strict_fields
@@ -534,6 +534,14 @@ class Tagger:
                         self.normalization[field][key] = key
 
         print(f"NORMALIZATION: {self.normalization}")
+
+        self.token_fixes = {}
+        if token_fixes_fn:
+            with open(token_fixes_fn) as file:
+                for label, tokens in json.load(file).items():
+                    self.token_fixes.update({tok: label for tok in tokens})
+
+        print(f"TOKEN_FIXES: {self.token_fixes}")
 
     def normalize(self, value, qtag):
         if not self.normalization or qtag not in self.normalization:
@@ -570,6 +578,13 @@ class Tagger:
 
         print(f"PAIRS: {list(zip(self.tokenizer.convert_ids_to_tokens(inputs['input_ids'][0]), sublabels))}")
         print(f"PAIRS: {list(zip(tokens, labels))}")
+
+
+        for pos, token in enumerate(tokens):
+            if token in self.token_fixes:
+                labels[pos] = self.token_fixes[token]
+
+        print(f"PAIRF: {list(zip(tokens, labels))}")
 
         mapping = {
             'CANTIDAD': 'quantity',

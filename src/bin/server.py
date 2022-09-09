@@ -45,7 +45,7 @@ for entity in CACHED:
     CACHED[entity] = SearchEngine(f"db/{entity}.json", vocab_fn='vocab.json', ignore_fn='ignore.json')
 
 if os.path.exists('./train-ma.dir'):
-    CACHED['food'] = Tagger('./train-ma.dir', normalization_fn="./multialimento-normalization.json", strict_fields={'unit'})
+    CACHED['food'] = Tagger('./train-ma.dir', normalization_fn="./multialimento-normalization.json", token_fixes_fn="./multialimento-token-fixes.json", strict_fields={'unit'})
 
 
 @app.get("/search/{entity}")
