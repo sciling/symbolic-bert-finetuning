@@ -93,3 +93,5 @@ yema de huevo;Huevo de gallina, yema, cruda
 zanahoria;Zanahoria, cruda
 Huevos al plato;Huevos al plato
 mango de postre;Mango, crudo;None
+galleta;Galleta, tipo "Digestiva"
+galleta digestiva;Galleta, tipo "Digestiva"

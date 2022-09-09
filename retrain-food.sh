@@ -9,7 +9,7 @@ grep -h '\(cena\|desayun\|comer\|comida\|merienda\|postre\|hoy\|ayer\|mañana\)'
   | tr -d '"|()' | awk -OFS=, '{print "otras,\""$0"\""}' | sort -u > otras.vocab
 
 poetry run src/bin/wn.py expand-entities --depth 2 --threshold 0.5  multialimentos.yaml \
-  --max-permutations 20000 \
+  --max-permutations 5000 \
   --save-fn multialimentos.csv \
   --vars-fn alimentos.vocab --vars-fn token-alimentos.vocab --vars-fn alimento-cantidad.vocab \
   --vars-fn alimento-unidad.vocab --vars-fn alimento-toma.vocab \
@@ -17,7 +17,7 @@ poetry run src/bin/wn.py expand-entities --depth 2 --threshold 0.5  multialiment
 
 poetry run src/bin/classifier.py entities-to-dataset multialimentos.csv \
   multialimentos-train.csv multialimentos-dev.csv multialimentios-test.csv \
-  --test 0 --max-examples 100000
+  --test 0 # --max-examples 100000
 
 echo "para" >> multialimentos-train.csv
 

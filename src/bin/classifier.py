@@ -554,7 +554,7 @@ class Tagger:
 
     def tag(self, sentence):
         # Otherwise, classify
-        tokens = [t.text for t in NLP(sentence)]
+        tokens = [t.text for t in NLP(sentence) if not t.is_space]
         inputs = self.tokenizer(
             tokens,
             padding=False,
