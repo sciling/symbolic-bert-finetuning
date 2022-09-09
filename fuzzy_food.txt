@@ -53,7 +53,6 @@ queso asado con mojo;Queso asado con mojo picón
 vaso de samorejo;Salmorejo;None
 croisant;Croissant
 curasán;Croissant
-arroz_horno;Arroz con costra
 piña;Piña
 perejil fresco;Perejil, fresco
 aceite de oliva;Aceite de oliva
@@ -82,6 +81,7 @@ Vegetales salteados;Menestra vegetariana;Variado de verduras y legumbres
 Vegetales;Menestra vegetariana;Variado de verduras y legumbres
 Verdura;Menestra vegetariana;Variado de verduras y legumbres
 filete ternera;Ternera, parte sin especificar, cruda, con grasa separable;Ternera, parte s/e, asada
+filete de ternera a la plancha;Vaca/buey, solomillo, a la plancha;Ternera, parte sin especificar, cruda, con grasa separable
 filete carne;Vaca/buey, solomillo, a la plancha
 filete;Vaca/buey, solomillo, a la plancha
 bistec;Vaca/buey, solomillo, a la plancha
@@ -93,5 +93,18 @@ yema de huevo;Huevo de gallina, yema, cruda
 zanahoria;Zanahoria, cruda
 Huevos al plato;Huevos al plato
 mango de postre;Mango, crudo;None
-galleta;Galleta, tipo "Digestiva"
+conejo al horno sin patatas;Conejo al horno con patatas panaderas;Chuletitas de conejo al horno
+hamburguesa;Carne picada;Hamburguesa de pollo
+pan integral de semillas;Pan integral, sin sal;Pan integral, tostado
+leche de avena;Bebida de soja
+clóchinas;Mejillon
+pulguita;Bocadillo
+tostada de aceite;Tostadas con tomate y aceite;Tostada con tomate y aceite de oliva
+lasagna de verduras;Lasaña;Lasaña de verduras;Lasaña de verduras vegana
+té verde;Té, infusión, con leche
+batido de proteínas;Suplemento proteico;None
+arroz_horno;Arroz con costra
+arroz al horno;Arroz con costra
+galleta;Galletas tipo maria
 galleta digestiva;Galleta, tipo "Digestiva"
+leche de arroz;Bebida de soja

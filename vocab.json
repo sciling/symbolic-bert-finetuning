@@ -13,6 +13,77 @@
   "cava": ["cava"],
   "plancha": 1,
   "bistec": ["filete", "carne"],
+  "mostaza": [
+      "mostaza"
+    ],
+
+  "leche_arroz": ["bebida", "soja", "arroz"],
+  "suplemento_proteico": [
+    "batido",
+    "proteina",
+    "suplemento"
+  ],
+  "hamburguesa_pollo":  [
+      "hamburguesa",
+      "hamburguesa_pollo",
+      "pollo"
+    ],
+  "hamburguesa_atun": [
+      "atun",
+      "hamburguesa",
+      "hamburguesa_atun"
+    ],
+  "hamburguesa_lenteja_mijo": [
+      "hamburguesa",
+      "garbanzo",
+      "harina_garbanzo",
+      "mijo"
+    ],
+  "hamburguesa_verdura": [
+      "hamburguesa",
+      "hamburguesa_verdura",
+      "verdura"
+    ],
+  "carne_picado": [
+      "hamburguesa",
+      "carne",
+      "carne_picado"
+    ],
+
+  "sin_solanum_tuberosum": 2,
+  "conejo_horno_patata_panadera": [
+      "conejo",
+      "horno",
+      "patata"
+    ],
+  "conejo_granja_carne_crudo": [
+      "carne",
+      "conejo",
+      "crudo"
+    ],
+  "conejo_salmorejo": [
+      "conejo",
+      "salmorejo"
+    ],
+  "conejo_entero_estofado": [
+      "conejo",
+      "estofado"
+    ],
+
+  "lasano": [
+    "lasana"
+  ],
+  "lasana_verdura": [
+    "lasana",
+    "lasana_verdura",
+    "verdura"
+  ],
+  "lasana_verdura_vegan": [
+    "lasana",
+    "lasana_verdura",
+    "vegan",
+    "verdura"
+  ],
   "vaca_buey_solomillo_plancha": [
       "buey",
       "solomillo",
@@ -938,7 +1009,6 @@
   "morron": 4,
   "mortadela": 2,
   "moscada": 7,
-  "mostaza": 9,
   "mousse": 17,
   "moya": 4,
   "mozzarela": 1,
@@ -1122,6 +1192,7 @@
   "principe": 2,
   "produccion": 2,
   "proteico": 2,
+  "proteina": 2,
   "provenzal": 4,
   "puchero": 2,
   "pudding": 2,
