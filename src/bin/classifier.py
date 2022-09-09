@@ -579,7 +579,6 @@ class Tagger:
         print(f"PAIRS: {list(zip(self.tokenizer.convert_ids_to_tokens(inputs['input_ids'][0]), sublabels))}")
         print(f"PAIRS: {list(zip(tokens, labels))}")
 
-
         for pos, token in enumerate(tokens):
             if token in self.token_fixes:
                 labels[pos] = self.token_fixes[token]
@@ -615,7 +614,7 @@ class Tagger:
                 # and the tag is a Food attribute
                 if mtag is not None:
                     # and the slot is already filled, then create a new food.
-                    if not current or (current_mtag and getattr(current, current_mtag, None) is not None):
+                    if not current or mtag in ('clear', ) or (current_mtag and getattr(current, current_mtag, None) is not None):
                         print("New food")
                         current = Food()
                         res['foods'].append(current)

@@ -19,7 +19,7 @@ poetry run src/bin/classifier.py entities-to-dataset multialimentos.csv \
   multialimentos-train.csv multialimentos-dev.csv multialimentios-test.csv \
   --test 0 # --max-examples 100000
 
-echo "para" >> multialimentos-train.csv
+echo "para,estado_animo_multialimentos" >> multialimentos-train.csv
 
 poetry run src/bin/classifier.py train-token multialimentos-train.csv multialimentos-dev.csv \
   --num-train-epochs 3 --output-dir train-ma.dir
