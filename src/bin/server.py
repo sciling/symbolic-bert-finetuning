@@ -104,7 +104,7 @@ async def parse_food(
     res = tagger.tag(text)
     print(f"PARSEFOOD: {text}: {res}")
 
-    for food in res.get('foods', []):
+    for food in res.get('foods', [])[:]:
         food.search = searcher.search(
             food.food, nbest, summarized=summarized, multinomial=multinomial,
             description_type=description_type, reuse_description=reuse_description,
@@ -118,6 +118,9 @@ async def parse_food(
                 key = f"{food.food}~{sr['entity']}"
                 sr['sign'] = FOOD_FIX_DB.get(key, {}).get('sign', '~')
                 print(f"SR: {sr}; KEY: {key}")
+
+        if not food.search and not food.unit and not food.quantity:
+            res.get('foods', []).remove(food)
 
     TAGGER_DB[text] = {
         'text': text,

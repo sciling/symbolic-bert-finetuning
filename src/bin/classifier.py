@@ -31,6 +31,7 @@ import spacy
 from spacy.attrs import LOWER, POS, ENT_TYPE, IS_ALPHA, DEP, LEMMA, IS_PUNCT, IS_DIGIT, IS_SPACE, IS_STOP  # pylint: disable=no-name-in-module
 from spacy.tokens.doc import Doc  # pylint: disable=no-name-in-module
 from spacy.tokenizer import Tokenizer  # pylint: disable=no-name-in-module
+from spacy.util import compile_prefix_regex, compile_infix_regex, compile_suffix_regex
 from text_to_num import text2num
 import numpy as np
 from pydantic import BaseModel  # pylint: disable=no-name-in-module
@@ -46,14 +47,23 @@ SPANISH_ZEROSHOT = 'Recognai/zeroshot_selectra_medium'
 
 
 def my_tokenizer_pri(nlp):
-    prefix_re = re.compile(r'''^[±\-\+0-9., ]+[0-9 ]+''')
-    infix_re = re.compile(r'''[/]''')
+    prefixes = nlp.Defaults.prefixes
+    infixes = nlp.Defaults.infixes
+    suffixes = nlp.Defaults.suffixes
+
+    prefixes.append(r'''[±\-\+0-9., ]+[0-9 ]+''')
+    infixes.append(r'''[/]''')
+
+    prefix_re = compile_prefix_regex(prefixes)
+    infix_re = compile_infix_regex(infixes)
+    suffix_re = compile_suffix_regex(suffixes)
+
     return Tokenizer(
         nlp.vocab,
         {},
         prefix_search=prefix_re.search,
-        suffix_search=nlp.tokenizer.suffix_search,
         infix_finditer=infix_re.finditer,
+        suffix_search=suffix_re.search,
         token_match=nlp.tokenizer.token_match
     )
 
@@ -469,7 +479,7 @@ def post_tokenize(sentences, marks):
     tokens_list = []
     tags_list = []
     for sentence in sentences:
-        tokens = [t.text for t in NLP(sentence)]
+        tokens = tokenize(sentence)
         new_tokens = []
         tags = []
         tag = 'O'
@@ -498,13 +508,15 @@ def post_tokenize(sentences, marks):
 
 def get_most_likely(sentence_logits, labels):
     res = []
+    probs = []
     for logits in sentence_logits:
         proba = [p.item() for p in nn.functional.softmax(logits, dim=0)]
         proba = sorted(zip(proba, labels), reverse=True)
 
         tag = proba[0][1]
         res.append(tag)
-    return res
+        probs.append(proba[0][0])
+    return res, probs
 
 
 class Food(BaseModel):
@@ -512,6 +524,11 @@ class Food(BaseModel):
     unit: Optional[str]
     food: Optional[str]
     search: Optional[Any]
+
+
+def tokenize(sentence):
+    tokens = [t.text for t in NLP(sentence) if not t.is_space]
+    return tokens
 
 
 class Tagger:
@@ -529,19 +546,44 @@ class Tagger:
             with open(normalization_fn) as file:
                 self.normalization = defaultdict(dict)
                 for field, elements in json.load(file).items():
+                    norm = self.normalization
                     for key, items in elements.items():
-                        self.normalization[field].update({syn: key for syn in items})
-                        self.normalization[field][key] = key
+                        norm[field].update({syn: key for syn in items})
+                        norm[field][key] = key
 
         print(f"NORMALIZATION: {self.normalization}")
 
         self.token_fixes = {}
+        self.context = {}
         if token_fixes_fn:
             with open(token_fixes_fn) as file:
                 for label, tokens in json.load(file).items():
-                    self.token_fixes.update({tok: label for tok in tokens})
+                    if ':' in label:
+                        if label in self.context:
+                            fixes = self.context[label]
+                        else:
+                            fixes = self.context[label] = defaultdict(dict)
+
+                        for slabel, stokens in tokens.items():
+                            fixes.update({tok: slabel for tok in stokens})
+                    else:
+                        self.token_fixes.update({tok: label for tok in tokens})
 
         print(f"TOKEN_FIXES: {self.token_fixes}")
+        print(f"TOKEN_FIXES (CONTEXT): {self.context}")
+
+    def fix_tag(self, token, context):
+        context_str = ':'.join([str(c) for c in context])
+        context_fix = self.context.get(context_str, {}).get(token, None)
+        if context_fix:
+            print(f"FIX CONTEXT TAG: {token} in {context}: {context[1]} -> {context_fix}")
+            return context_fix
+
+        if token in self.token_fixes:
+            print(f"FIX TAG: {token}: {context[1]} -> {self.token_fixes[token]}")
+            return self.token_fixes[token]
+
+        return context[1]
 
     def normalize(self, value, qtag):
         if not self.normalization or qtag not in self.normalization:
@@ -554,7 +596,8 @@ class Tagger:
 
     def tag(self, sentence):
         # Otherwise, classify
-        tokens = [t.text for t in NLP(sentence) if not t.is_space]
+        tokens = tokenize(sentence)
+        print(f"TOKENS: {tokens}")
         inputs = self.tokenizer(
             tokens,
             padding=False,
@@ -568,7 +611,7 @@ class Tagger:
         with torch.no_grad():
             subtoken_logits = self.model(**inputs).logits[0]
 
-        sublabels = get_most_likely(subtoken_logits, self.labels)
+        sublabels, subprobs = get_most_likely(subtoken_logits, self.labels)
 
         subtoken_ids = inputs.word_ids(batch_index=0)
         labels = [None] * len(tokens)
@@ -576,12 +619,11 @@ class Tagger:
             if sid is not None and sid not in labels:
                 labels[sid] = sublabels[pos]
 
-        print(f"PAIRS: {list(zip(self.tokenizer.convert_ids_to_tokens(inputs['input_ids'][0]), sublabels))}")
+        print(f"PAIRS: {list(zip(self.tokenizer.convert_ids_to_tokens(inputs['input_ids'][0]), sublabels, subprobs))}")
         print(f"PAIRS: {list(zip(tokens, labels))}")
 
-        for pos, token in enumerate(tokens):
-            if token in self.token_fixes:
-                labels[pos] = self.token_fixes[token]
+        for pos, (token, prev_tag, tag, next_tag) in enumerate(zip_longest(tokens, [None] + labels[:-1], labels[:], labels[1:])):
+            labels[pos] = self.fix_tag(token, (prev_tag, tag, next_tag))
 
         print(f"PAIRF: {list(zip(tokens, labels))}")
 
@@ -600,7 +642,7 @@ class Tagger:
         current_tag = None
         current_mtag = None
         text = []
-        for sid, (tag, next_tag) in enumerate(zip_longest(labels, labels[1:])):
+        for sid, (prev_tag, tag, next_tag) in enumerate(zip_longest([None] + labels[:-1], labels, labels[1:])):
             if tag:
                 bare_tag = tag.replace('B-', '').replace('E-', '')
             else:

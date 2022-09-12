@@ -1,4 +1,14 @@
 {
+  "E-FOOD:O:E-FOOD": {
+    "E-FOOD": [
+      "de"
+    ]
+  },
+  "B-FOOD:O:E-FOOD": {
+    "E-FOOD": [
+      "de"
+    ]
+  },
   "E-FOOD": [
     "digestiva",
     "digestivo",

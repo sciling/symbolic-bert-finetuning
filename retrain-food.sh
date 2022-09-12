@@ -9,7 +9,7 @@ grep -h '\(cena\|desayun\|comer\|comida\|merienda\|postre\|hoy\|ayer\|mañana\)'
   | tr -d '"|()' | awk -OFS=, '{print "otras,\""$0"\""}' | sort -u > otras.vocab
 
 poetry run src/bin/wn.py expand-entities --depth 2 --threshold 0.5  multialimentos.yaml \
-  --max-permutations 5000 \
+  --max-permutations 20000 \
   --save-fn multialimentos.csv \
   --vars-fn alimentos.vocab --vars-fn token-alimentos.vocab --vars-fn alimento-cantidad.vocab \
   --vars-fn alimento-unidad.vocab --vars-fn alimento-toma.vocab \
