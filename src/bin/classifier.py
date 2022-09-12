@@ -53,7 +53,7 @@ def my_tokenizer_pri(nlp):
     suffixes = nlp.Defaults.suffixes
 
     prefixes.append(r'''[±\-\+0-9., ]+[0-9 ]+''')
-    infixes.append(r'''[/,]''')
+    infixes.append(r'''[/,:;]''')
 
     prefix_re = compile_prefix_regex(prefixes)
     infix_re = compile_infix_regex(infixes)

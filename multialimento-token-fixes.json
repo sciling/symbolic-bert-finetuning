@@ -1,4 +1,14 @@
 {
+  "E-FOOD:B-CANTIDAD:E-FOOD": {
+    "E-FOOD": [
+      "más", "mas"
+    ]
+  },
+  "B-FOOD:B-CANTIDAD:E-FOOD": {
+    "E-FOOD": [
+      "más", "mas"
+    ]
+  },
   "E-FOOD:O:E-FOOD": {
     "E-FOOD": [
       "de"
