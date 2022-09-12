@@ -109,3 +109,4 @@ galleta;Galletas tipo maria
 galleta digestiva;Galleta, tipo "Digestiva"
 leche de arroz;Bebida de soja
 cortado;Café, con leche
+huevo frito;Huevo de gallina, frito;None

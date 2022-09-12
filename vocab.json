@@ -13,6 +13,11 @@
   "cava": ["cava"],
   "plancha": 1,
   "bistec": ["filete", "carne"],
+  "huevo_gallina_frito": [
+    "huevo",
+    "huevo_frito",
+    "frito"
+  ],
   "mostaza": [
       "mostaza"
     ],
