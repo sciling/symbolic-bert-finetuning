@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Optional, List, Any
 from collections import defaultdict
 from itertools import zip_longest
+from fractions import Fraction
 import random
 
 import typer
@@ -52,7 +53,7 @@ def my_tokenizer_pri(nlp):
     suffixes = nlp.Defaults.suffixes
 
     prefixes.append(r'''[±\-\+0-9., ]+[0-9 ]+''')
-    infixes.append(r'''[/]''')
+    infixes.append(r'''[/,]''')
 
     prefix_re = compile_prefix_regex(prefixes)
     infix_re = compile_infix_regex(infixes)
@@ -80,14 +81,23 @@ def to_number(string, return_none=True):
         if string == 'una':
             return 1
 
+        if any([text in string for text in ['medio', 'media', 'mitad']]):
+            return 0.5
+
+        if any([text in string for text in ['cuarto', 'cuarta']]):
+            return 0.25
+
         try:
-            return int(string)
-
+            return float(Fraction(string.replace(' ', '')))
         except ValueError:
-            if return_none:
-                return None
+            try:
+                return float(string)
 
-            return string
+            except ValueError:
+                if return_none:
+                    return None
+
+                return string
 
 
 # def p(doc):

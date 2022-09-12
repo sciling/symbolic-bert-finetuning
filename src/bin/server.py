@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
 import os
+import math
 import asyncio
 from typing import Optional
 from collections import defaultdict
@@ -110,6 +111,8 @@ async def parse_food(
             description_type=description_type, reuse_description=reuse_description,
             fuzzy=fuzzy, max_ngram=max_ngram
         )
+        # NOTE: backend only admits ints
+        food.quantity = math.ceil(food.quantity) if food.quantity else None
         if 'error' in food.search or not food.search.get('nbests', []):
             food.food = None
             food.search = None
