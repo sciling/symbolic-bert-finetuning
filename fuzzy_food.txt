@@ -100,7 +100,8 @@ leche de avena;Bebida de soja
 clóchinas;Mejillon
 pulguita;Bocadillo
 tostada de aceite;Tostadas con tomate y aceite;Tostada con tomate y aceite de oliva
-lasagna de verduras;Lasaña;Lasaña de verduras;Lasaña de verduras vegana
+lasagna de verduras;Lasaña de verduras;None
+lasagna de verduras vegana;Lasaña de verduras vegana;None
 té verde;Té, infusión, con leche
 batido de proteínas;Suplemento proteico;None
 arroz_horno;Arroz con costra
@@ -110,3 +111,4 @@ galleta digestiva;Galleta, tipo "Digestiva"
 leche de arroz;Bebida de soja
 cortado;Café, con leche
 huevo frito;Huevo de gallina, frito;None
+sándwich integral con cereales con queso fresco de cabra y oveja;Queso fresco, cabra

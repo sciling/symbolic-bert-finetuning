@@ -18,9 +18,31 @@
     "huevo_frito",
     "frito"
   ],
+
   "mostaza": [
       "mostaza"
     ],
+  "sandwich_aguacate_tomate_pechuga_pavo_pollo": [
+      "aguacate",
+      "pechuga",
+      "pollo",
+      "sandwich",
+      "tomate"
+    ]
+  ,
+  "sandwich_jamon_queso": [
+      "jamon",
+      "queso",
+      "sandwich"
+    ]
+  ,
+  "sandwich_vegetal_huevo_atun": [
+      "atun",
+      "huevo",
+      "sandwich",
+      "vegetal"
+    ]
+  ,
 
   "leche_arroz": ["bebida", "soja", "arroz"],
   "suplemento_proteico": [
@@ -1316,7 +1338,6 @@
   "sancocho": 2,
   "sandia": 2,
   "sandwich": 3,
-  "sandwicha": 3,
   "sangria": 2,
   "sardina": 10,
   "sardino": 4,
