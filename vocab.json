@@ -13,12 +13,94 @@
   "cava": ["cava"],
   "plancha": 1,
   "bistec": ["filete", "carne"],
+  "jamon_iberico_bellota": [
+      "jamon",
+      "jamon_iberico",
+      "bellota"
+    ]
+  ,
+  "huevo_codorniz_entero_crudo": [
+      "codorniz",
+      "huevo"
+    ]
+  ,
+
   "huevo_gallina_frito": [
     "huevo",
     "huevo_frito",
     "frito"
   ],
 
+
+  "huevo_gallina_fresco": [
+      "huevo"
+    ]
+  ,
+  "huevo_gallina_claro_crudo": [
+      "claro",
+      "huevo"
+    ]
+  ,
+  "huevo_gallina_escalfado": [
+      "escalfado",
+      "huevo",
+      "huevo_escalfado"
+    ]
+  ,
+  "huevo_gallina_hervido_duro": [
+      "duro",
+      "huevo",
+      "huevo_duro"
+    ]
+  ,
+  "huevo_gallina_agua": [
+      "agua",
+      "huevo"
+    ]
+  ,
+  "huevo_gallina_revuelto_mantequilla": [
+      "huevo",
+      "mantequilla",
+      "revuelto"
+    ]
+  ,
+  "huevo_gallina_yema_crudo": [
+      "yema",
+      "huevo",
+      "yema_huevo"
+    ]
+  ,
+  "huevo_gallina_yema_desecado": [
+      "desecado",
+      "huevo",
+      "yema",
+      "yema_huevo"
+    ]
+  ,
+  "huevo_pato_crudo": [
+      "huevo",
+      "pato"
+    ]
+  ,
+  "huevo_pavo_entero_crudo": [
+      "entero",
+      "huevo",
+      "pavo"
+    ]
+  ,
+
+
+  "jamon_iberico_cebo": [
+      "jamon"
+    ]
+  ,
+  "pan_blanco_frito": [
+      "frito",
+      "pan",
+      "pan_blanco",
+      "pan_blanco_frito"
+    ]
+  ,
   "mostaza": [
       "mostaza"
     ],
@@ -73,7 +155,6 @@
     ],
   "carne_picado": [
       "hamburguesa",
-      "carne",
       "carne_picado"
     ],
 

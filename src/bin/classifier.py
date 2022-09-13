@@ -386,7 +386,14 @@ def train(train_fn: Path, dev_fn: Path, output_dir: Path = 'train.dir', model_na
     max_seq_length = min(max_seq_length, tokenizer.model_max_length)
 
     def tokenize_function(examples):
-        result = tokenizer([t if t else '' for t in examples["sentence"]], padding="max_length", max_length=max_seq_length, truncation=True)
+        sentences = [tokenize(sentence) for sentence in examples["sentence"]]
+        result = tokenizer(
+            [t for t in sentences],
+            padding="max_length", max_length=max_seq_length, truncation=True,
+            # We use this argument because the texts in our dataset are lists of words (with a label for each word).
+            is_split_into_words=True
+        )
+
         # Map labels to IDs (not necessary for GLUE tasks)
         if label_to_id is not None and "label" in examples:
             if problem_type == 'single_label_classification':
@@ -537,6 +544,8 @@ class Food(BaseModel):
 
 
 def tokenize(sentence):
+    if not sentence:
+        return []
     tokens = [t.text for t in NLP(sentence) if not t.is_space]
     return tokens
 
@@ -583,6 +592,9 @@ class Tagger:
         print(f"TOKEN_FIXES (CONTEXT): {self.context}")
 
     def fix_tag(self, token, context):
+        if token.isnumeric():
+            return 'E-CANTIDAD'
+
         context_str = ':'.join([str(c) for c in context])
         context_fix = self.context.get(context_str, {}).get(token, None)
         if context_fix:

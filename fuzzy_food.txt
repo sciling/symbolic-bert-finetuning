@@ -75,8 +75,6 @@ vino tinto;Vino tinto
 tinto;Vino tinto
 rosado;Vino rosado
 Chía;Tostada de requesón, mango y semillas de chia
-huevo cocido;Huevos duros rellenos gratinados
-huevo sancochado;Huevos duros rellenos gratinados
 Vegetales salteados;Menestra vegetariana;Variado de verduras y legumbres
 Vegetales;Menestra vegetariana;Variado de verduras y legumbres
 Verdura;Menestra vegetariana;Variado de verduras y legumbres
@@ -112,3 +110,7 @@ leche de arroz;Bebida de soja
 cortado;Café, con leche
 huevo frito;Huevo de gallina, frito;None
 sándwich integral con cereales con queso fresco de cabra y oveja;Queso fresco, cabra
+jamón;Jamón ibérico de cebo;None
+huevo;Huevo de gallina fresco;None
+huevo cocido;Huevo de gallina, hervido, duro;None
+huevo sancochado;Huevo de gallina, hervido, duro;None
