@@ -604,6 +604,18 @@ class Tagger:
             print(f"FIX CONTEXT TAG: {token} in {context}: {context[1]} -> {context_fix}")
             return context_fix
 
+        context_str = ':'.join([str(c) for c in list(context[:-1]) + ['']])
+        context_fix = self.context.get(context_str, {}).get(token, None)
+        if context_fix:
+            print(f"FIX CONTEXT TAG: {token} in {context}: {context[1]} -> {context_fix}")
+            return context_fix
+
+        context_str = ':'.join([str(c) for c in [''] + list(context[:-1])])
+        context_fix = self.context.get(context_str, {}).get(token, None)
+        if context_fix:
+            print(f"FIX CONTEXT TAG: {token} in {context}: {context[1]} -> {context_fix}")
+            return context_fix
+
         if token in self.token_fixes:
             print(f"FIX TAG: {token}: {context[1]} -> {self.token_fixes[token]}")
             return self.token_fixes[token]

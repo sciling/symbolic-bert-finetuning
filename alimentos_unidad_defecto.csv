@@ -1,4 +1,3 @@
-alimento,unidad
 Aceite de algodón,cucharada
 Aceite de cacahuete,cucharada
 Aceite de coco,cucharada
@@ -15,72 +14,119 @@ Aceite de oliva virgen extra,cucharada
 Aceite de palma,cucharada
 Aceite de sésamo,cucharada
 Aceite de soja,cucharada
-Aceituna,ración
 "Aceituna negra, con hueso",ración
+Aceituna,ración
 "Acelga, cruda",ración
 "Acelga, en conserva",ración
+"Acelgas, hervidas",ración
+Acelgas rehogadas con ajos y piñones,ración
 "Achicoria, cruda",ración
-Agua,vaso
-"Agua mineral, mineralización debil",vaso
-"Agua, con gas, embotellada",vaso
-Aguacate,ración
 Aguacate congelado,ración
+Aguacate,ración
+"Agua, con gas, embotellada",vaso
+"Agua mineral, mineralización debil",vaso
 Aguardiente,vaso
+Agua,vaso
+Ajoblanco,ración
 Ajo,cucharada
 "Ajo, en polvo",pizca
 "Ajo, frito",cucharada
 Albahaca,pizca
 Albaricoque,ración
+Albóndigas de lenteja con tomate,ración
+Albóndigas de lenteja roja,ración
+Albóndigas de pollo con salsa de tomate y coliflor rehogada,ración
 Albondigas en conserva,ración
+Albondigón,ración
 "Alcachofa, cruda",ración
+Alcachofas al horno,ración
+Alcachofas con calabaza,ración
+Alcachofas con jamón y cebolla,ración
 Alcachofas en conserva,ración
 Alcaparra,cucharada
+alimento,unidad
 Alioli,cucharada sopera
+All i pebre de anguila,ración
 Almeja,ración
 Almejas en conserva,ración
-"Almendra, cruda",puñado
 "Almendra, cruda, con cáscara",puñado
+"Almendra, cruda",puñado
 "Almendra, frita, salada",puñado
 "Almendra, tostada",puñado
 Almidón de arroz,cucharada colmada
 Almidón de maíz,cucharada colmada
 Almidón de trigo,cucharada colmada
+Almoixàvena o monjavina,ración
 Altramuz,puñado
 "Alubia blanca, en conserva",ración
 "Alubia blanca, seca, cruda",ración
+"Alubia negra, seca, remojada, hervida",ración
+Alubias blancas con verduras,ración
+Alubias con champiñones,ración
+Alubias con morcilla y chorizo,ración
+Alubias con vinagreta,ración
 "Anacardo, crudo",puñado
 Anchoas en aceite vegetal,ración
+"Anguila, al horno",ración
 "Anguila, cruda",ración
+"Anguila, hervida",ración
 "Angula, cruda",ración
 "Anís, seco",vaso
 Aperitivos de trigo,ración
 "Apio, crudo",ración
 "Apio, en conserva en salmuera",ración
 Arandano,ración
+"Arenque, ahumado",ración
 "Arenque, salado",ración
-Arroz,ración
+Arròs amb fesols y naps,ración
+Arroz a banda,ración
+Arroz a la cubana,ración
+Arroz caldoso,ración
+Arroz con costra,ración
+Arroz con leche,ración
+Arroz con leche,unidad individual
+Arroz con salsa de calamares,ración
+"Arroz, hervido",ración
 "Arroz hinchado, para el desayuno, enriquecido",ración
+Arroz integral con setas,ración
+Arroz integral con verduras,ración
 "Arroz integral, crudo",ración
+"Arroz integral, hervido",ración
+Arroz,ración
+Arroz tres delicias,ración
+Asado de cerdo con frutos secos,ración
+"Atún, al horno",ración
+"Atún, al natural",ración
+Atún con tomate,ración
+"Atún, crudo",ración
 Atún en aceite de oliva isabel,ración
 Atun en aceite vegetal,ración
 Atún en escabeche,ración
-"Atún, al natural",ración
-"Atún, crudo",ración
-Avellana,puñado
+"Atún, plancha",ración
 "Avellana, cruda, con cáscara",puñado
+Avellana,puñado
 "Avena, cruda",cucharada colmada
 "Avestruz, solomillo, crudo",ración
 Azafrán,pizca
 Azúcar blanca,cucharadita
 "Azúcar, moreno",cucharadita
-Bacaladilla,ración
+Bacaladilla,unidad
+"Bacalao, ahumado",ración
+Bacalao a la montañeta,ración
+Bacalao al pil pil,ración
+Bacalao con tomate,ración
 "Bacalao, crudo",ración
+Bacalao económica,ración
+"Bacalao, fresco, al horno",ración
+"Bacalao, frito",ración
 "Bacalao, salado, crudo",ración
 "Bacalao, salado, remojado, crudo",ración
+"Bacón, ahumado, a la parrilla",ración
 "Bacon, crudo, con grasa separable",ración
 "Bambú, crudo",ración
 "Barra chocolate, tipo ""bounty""",unidad
 "Barra de chocolate, tipo ""Kit-kat""",unidad
+"Barra de chocolate, tipo ""Mars""",unidad
 Barrita cereales con chocolate,ración
 Barrita cereales con frutas,ración
 Barrita cereales maíz y trigo,ración
@@ -94,67 +140,100 @@ Batido fermentado de soja,vaso
 Bebida de soja,vaso
 Bebida energética,vaso
 Bebida isotónica,vaso
-Berberechos,ración
 Berberechos en conserva,ración
+Berberechos,ración
+"Berenjena, frita, en aceite de girasol",ración
 Berenjena,ración
+Berenjenas rellenas de verduras,ración
+Berenjenas rellenas,ración
 "Berro, crudo",ración
 Besugo,ración
+Bienmesabe,ración
+"Bígaro, hervido",ración
 Bizcocho,ración
+Bizcochos de Moya,ración
+Bocadillo de chorizo,ración
+Bocadillo de jamón cocido,ración
+Bocadillo de jamón serrano con tomate y aceite,ración
+Bocadillo de jamón serrano,ración
+Bocadillo de tortilla francesa,ración
 Bocadillo,ración
+"Bogavante, hervido",ración
 Bogavante,ración
+Bolitas de queso,ración
 "Bollería, genérico",ración
 Bombón,ración
 "Boniato/batata, crudo",ración
+"Bonito del norte, al vapor",ración
 "Bonito del norte, enlatado en aceite de soja",ración
 Bonito en aceite vegetal,ración
+Bonito encebollado,ración
 "Bonito, enlatado en aceite, escurrido",ración
+"Boquerón, frito",ración
 Boquerón,ración
+Borraja con guisantes,ración
 Borraja,ración
+Borreta,ración
 "Breca, cruda",ración
 "Brécol, crudo",ración
+"Brécol, hervido",ración
+Brócoli con bechamel,ración
 Butifarra,ración
+"Caballa, al horno",ración
 "Caballa, cruda",ración
 "Caballa, enlatada en aceite, escurrida",ración
 "Cabracho, bocanegra o rascacio, crudo",ración
+Cabrito estofado,ración
 "Cabrito, parte s/e, crudo, con grasa separable",ración
 "Cacahuete, crudo, con cáscara",puñado
 "Cacahuete, frito, salado",puñado
 "Cacahuete, tostado, salado",puñado
-"Cacao en polvo, azucarado",cucharada
 "Cacao, en polvo, azucarado, bajo en calorías",vaso
+"Cacao en polvo, azucarado",cucharada
 "Café, con leche",vaso
 "Café, en grano o molido, descafeinado",vaso
 "Café, en polvo, sin reconstituir",vaso
 "Café, en polvo, soluble",vaso
-"Café, infusión",vaso
 "Café, infusión, descafeinado",vaso
+"Café, infusión",vaso
 "Café, sucedáneo, soluble",vaso
+"Calabacín, asado",ración
 Calabacín,ración
+"Calabaza con garbanzos, aguacate y aliño de yogur",ración
 "Calabaza, cruda",ración
+"Calabaza, hervida",ración
+"Calamar, asado",ración
 "Calamar, conserva",ración
 "Calamar, crudo",ración
+Calamares a la plancha,ración
 Calamares en aceite vegetal,ración
+Calamares en su tinta,ración
+Caldo de millo,ración
 Caldo vegetal,vaso
 Callos de ternera,ración
 Camarón,ración
 "Canela, en polvo",pizca
 Canelones,ración
-Cangrejo,ración
 Cangrejo de río crudo,ración
 "Cangrejo, en conserva",ración
+Cangrejo,ración
 Canonigos,ración
 Caqui,ración
 Caracol,ración
 Caramelo,unidad
 Cardo,ración
 "Cardo, tallo, en conserva",ración
+Carne de cabra ,ración
 Carne picada,ración
+"Carpa, al horno",ración
 "Carpa, cruda",ración
 "Castaña, cruda",puñado
 "Castaña, tostada",puñado
 Cava,vaso
 Caviar,ración
 "Cebada, cruda",ración
+"Cebolla, asada",ración
+"Cebolla, hervida",ración
 Cebolla,ración
 "Cebollino, crudo",pizca
 Cecina,ración
@@ -162,35 +241,40 @@ Cecina,ración
 "Centollo, crudo",ración
 "Cerdo, chuleta, crudo",ración
 "Cerdo, costilla, crudo",ración
+"Cerdo, lomo, asado",ración
 "Cerdo, lomo, crudo",ración
 "Cerdo, panceta, cruda",ración
 "Cerdo, parte sin especificar",ración
 "Cerdo, pierna, cruda, con grasa separable",ración
+"Cerdo, solomillo, asado",ración
 "Cerdo, solomillo, crudo",ración
 Cereales base trigo y chocolate,ración
 Cereales desayuno base de arroz chocolateado,ración
-Cereales desayuno base de arroz y miel,ración
 "Cereales desayuno base de arroz, trigo y fruta",ración
+Cereales desayuno base de arroz y miel,ración
+"Cereales desayuno base de maíz, trigo y avena",ración
 Cereales desayuno base de maíz y miel,ración
 Cereales desayuno base de maíz y trigo,ración
-"Cereales desayuno base de maíz, trigo y avena",ración
+"Cereales desayuno base de trigo, avena, maíz, miel y nueces",ración
+"Cereales desayuno base de trigo, avena, maiz y miel",ración
 Cereales desayuno base de trigo azucarado,ración
 Cereales desayuno base de trigo y arroz,ración
 Cereales desayuno base de trigo y frutas,ración
 Cereales desayuno base de trigo y miel,ración
-"Cereales desayuno base de trigo, avena, maiz y miel",ración
-"Cereales desayuno base de trigo, avena, maíz, miel y nueces",ración
 Cereales desayuno base muesli,ración
 "Cereales desayuno, maíz azucarado",ración
 "Cereales, en polvo, solubles (eko)",ración
+"Cereales para el desayuno, ricos en fibra, tipo ""all-bran""",ración
 Cereza,ración
-Cerveza con alcohol,vaso
-Cerveza sin alcohol,vaso
 "Cerveza, baja en alcohol",vaso
+Cerveza con alcohol,vaso
 "Cerveza, oscura, 8°- 9°",vaso
-Champiñon,ración
+Cerveza sin alcohol,vaso
 Champiñones en conserva,ración
+Champiñones rellenos,ración
+Champiñon,ración
 "Chayote, crudo",ración
+Chicharro al horno,ración
 "Chicle, sin azúcar",ración
 "Chile, rojo",cucharada
 "Chile, verde",cucharada
@@ -209,137 +293,257 @@ Chocolate con nueces de macadamia,ración
 Choped pork,ración
 Chorizo,ración
 "Chufa, cruda",puñado
+Chuletas de cochino,ración
+Chuletitas de conejo al horno,ración
 Churro,ración
+Churros de pescado,ración
 "Ciervo, parte s/e, crudo, con grasa separable",ración
 Cigala,ración
 "Ciruela, con piel, cruda",ración
 "Ciruela, sin piel",ración
+Coca de llanda,ración
+Coca de tomate,ración
+Cocido de alubias blancas con brécol,ración
 "Coco, desecado",cucharada
 "Coco, fresco",ración
 "Col blanca, cruda",ración
 "Col de bruselas, cruda",ración
-"Col rizada, cruda",ración
+Coles de bruselas salteadas,ración
 "Coliflor, congelada, cruda",ración
+Coliflor con refrito,ración
+"Coliflor, hervida",ración
+Col lombarda con manzana y champiñones,ración
+"Col lombarda, hervida",ración
+"Col rizada, cruda",ración
 Comino,pizca
 Complejo vitaminico,ración
+Coñac,vaso
+Conejo al horno con patatas panaderas,ración
 "Conejo de granja, carne, cruda",ración
+Conejo en salmorejo,ración
 "Conejo, entero, estofado",ración
 "Confitura, frutas s/e, baja en calorías",cucharada
 Congrio,ración
-Coñac,vaso
+"Corazón, de cerdo, crudo",ración
 "Corazón de cordero, crudo",ración
 "Corazón de pollo, crudo",ración
-"Corazon de vaca, crudo",ración
-"Corazón, de cerdo, crudo",ración
 "Corazón, de vaca/buey, cocido",ración
 "Corazón, de vaca/buey, crudo",ración
+"Corazon de vaca, crudo",ración
 "Cordero, costilla, crudo",ración
 "Cordero, parte sin especificar",ración
+"Cordero, pierna, con grasa, asada",ración
 Corteza de trigo,ración
+Crema catalana,ración
+Crema catalana,unidad individual
 Crema de almendras,puñado
+Crema de cacahuete,puñado
+"Crema de calabaza, zanahoria, naranja y jengibre",ración
+Crema de champiñones,ración
+"Crema de chocolate, baja en calorías",cucharada
 Crema de chocolate con avellanas,cucharada
 Crema de chocolate y nata,cucharada
-"Crema de chocolate, baja en calorías",cucharada
 Crema de coco,cucharada
 Crema de vainilla y mousse de chocolate,cucharada
+Crema de verduras,ración
+Crema de zanahoria,ración
+Crema fría de pepino,ración
 Crema inglesa,cucharada
 Crema pastelera,cucharada
 Cremoso san millan,unidad individual
-Croissant,ración
 Croissant de chocolate,ración
+Croissant,ración
+Croquetas de jamón,ración
+Croquetas de pescado,ración
+Croquetas de pollo,ración
+Croquetas de zanahorias,ración
 Cuajada,unidad individual
 Cubata,vaso
 Cubito de caldo,pizca
 Curry,pizca
+Cuscús al azafrán con berenjena y pimiento asados,ración
+Cuscús de pollo y verdura,ración
 Dátil,ración
-Donut,ración
 "Donut, de chocolate",ración
+Donut,ración
+Dorada a la sal,ración
 "Dorada o sama, cruda",ración
 "Dorada o sama, plancha",ración
+"Dorada, plancha",ración
 Empanada de carne,ración
+Empanadilla,ración
 Endibia,ración
 "Eneldo, seco",pizca
 Ensaimada,ración
+Ensalada campera,ración
+Ensalada de alubias,ración
+Ensalada de arroz y lentejas,ración
+Ensalada de berros,ración
+Ensalada de garbanzos con nueces,ración
+Ensalada de garbanzos y tomate,ración
+"Ensalada de lechuga, tomate y cebolla",ración
+Ensalada de lentejas,ración
+"Ensalada de pasta integral con atún, queso fresco",ración
+"Ensalada de pasta integral con atún, queso fresco y jamón cocido",ración
+Ensalada de pescado con arroz,ración
+Ensalada de pollo,ración
+Ensalada de queso fresco y salmón ahumado,ración
+"Ensalada de quinoa, pollo y verduras",ración
+Ensalada de rúcula y queso ricota,ración
+"Ensalada de sardinas, tomate y huevo duro",ración
+"Ensalada de tomate, aceitunas negras y atún",ración
+"Ensalada griega de espinacas, queso de cabra, naranja y pistachos",ración
+Ensalada mixta con huevo y atún,ración
+Ensalada nizarda,ración
 Ensalada,ración
+Ensaladilla rusa,ración
+Escaldón de gofio y leche,ración
 Escarola,ración
-"Espárrago, verde",ración
+Esgarraet,ración
+Espagueti a la carbonara,ración
+Espaguetis a la carbonara vegetal,ración
+Espaguetis al pesto,ración
+Espaguetis con gambas,ración
+Espaguetis integrales con verduras,ración
 Esparragos blancos en conserva,ración
+"Espárrago, verde",ración
 "Espinaca, en conserva",ración
+"Espinaca, hervida",ración
 "Espinaca, picada, congelada, cruda",ración
+Espinacas salteadas con pasas y piñones,ración
+Espirales de lenteja roja con berenjena y albahaca,ración
+Esqueixada,ración
+Estofado de pavo y verduras,ración
+Estofado de ternera con patatas,ración
 Fabada,ración
+Fajitas de seitán,ración
 "Faneca, cruda",ración
+Fartons,ración
+Fideuá con marisco,ración
+Fideuá,ración
+Filetes de pechuga de pollo marinados en limón y romero,ración
+Filetes de pechuga de pollo marinados en mostaza y limón,ración
 Flamenquín,ración
 "Flan de huevo, bajo en calorías",unidad individual
+Flan de huevo,ración
+Flan de huevo,unidad individual
 "Fletan, crudo",ración
 Foie gras,ración
 "Frambuesa, cruda",ración
+Frangollo canario,ración
 Fresa,ración
 Fritos de maíz,ración
+Frittata de brócoli y tomates cherry,ración
+Frittata de espinacas y queso de cabra,ración
 Fructosa,cucharadita
 Frutos secos,puñado
 Fuet,ración
-Galleta salada,ración
 "Galleta, barquillo, con jalea de frutas",ración
 "Galleta, cubierta de chocolate",ración
 "Galleta, genérico",ración
+Galleta salada,ración
+"Galletas, con chocolate, tipo ""cookies""",ración
+"Galletas, de mantequilla",ración
 Galletas integrales,ración
 "Galletas saladas, con queso",ración
 Galletas tipo maria,ración
-"Galletas, de mantequilla",ración
+"Galleta ,tipo ""digestiva"", con chocolate",ración
+"Galleta, tipo ""Digestiva""",ración
 "Gallina, entera, cruda",ración
-"Galletas, con chocolate, tipo ""cookies""",ración
 Gallo,ración
+"Gamba, hervida",ración
 "Gamba quisquilla, congelada",ración
 "Gamba roja, cruda",ración
+Gambones con limón y perejil,ración
 "Garbanzo, en conserva",ración
+"Garbanzo, hervido",ración
+Garbanzos al curry,ración
+Garbanzos con brécol y parmesano,ración
 "Garbanzo, seco, crudo",ración
+Garbanzos salteados con espinacas,ración
+Gazpacho,ración
 Gelatina,cucharada sopera
 Germen de trigo,cucharada colmada
 Ginebra,vaso
+Gofio escaldado,ración
 Gofio,ración
 Gomasio,ración
 "Gominola, genérica",unidad
 Granada,ración
 Grasa de pollo,ración
 Grelo,ración
-"Grosella negra, cruda",ración
 "Grosella, cruda",ración
+"Grosella negra, cruda",ración
 "Guayaba, enlatada en almíbar",ración
 "Guayaba, sin piel, cruda",ración
 "Guindilla, en polvo",pizca
 "Guindilla, picante",pizca
 "Guisante, congelado, crudo",ración
+"Guisante, congelado, hervido",ración
 "Guisante, seco, crudo",ración
 Guisantes en conserva,ración
+Guiso de ternera con patata y zanahoria,ración
 Gusanito,ración
 "Haba, fresca",ración
 "Haba, frita",ración
+Haba frita,ración
+"Habas con ajetes, setas y gambas",ración
 "Haba, seca",ración
 "Haba, seca, remojada, hervida",ración
-Harina de avena,cucharada colmada
+Hamburguesa de pollo,ración
+Hamburguesas de atún,ración
+Hamburguesas de lenteja y mijo,ración
+Hamburguesas de verduras,ración
 "Harina de avena, cocida en agua",cucharada colmada
+Harina de avena,cucharada colmada
 Harina de cebada,cucharada colmada
 Harina de centeno,cucharada colmada
 Harina de maíz,cucharada colmada
 Harina de soja,puñado
 Harina de trigo,cucharada colmada
 "Harina de trigo, integral",cucharada colmada
-"Higado de pollo, crudo",ración
+Helado de chocolate,ración
+Helado de chocolate,unidad individual
+Helado de fresa,ración
+Helado de fresa,unidad individual
+Helado de nata,ración
+Helado de nata,unidad individual
 "Hígado, de cerdo, crudo",ración
+"Higado de pollo, crudo",ración
 "Hígado, de vaca/buey, crudo",ración
-Higos y brevas,ración
+Higos y brevas,unidad
 Hinojo,pizca
 Hojaldre,ración
+Horchata de chufa,ración
 Horchata,vaso
 "Huevo de codorniz, entero, crudo",unidad
-Huevo de gallina fresco,unidad
 "Huevo de gallina, clara, cruda",unidad
+"Huevo de gallina, escalfado",ración
+"Huevo de gallina, escalfado",unidad
+Huevo de gallina fresco,unidad
+"Huevo de gallina, frito",ración
+"Huevo de gallina, frito",unidad
+"Huevo de gallina, hervido, duro",ración
+"Huevo de gallina, hervido, duro",unidad
+"Huevo de gallina, pasado por agua",ración
+"Huevo de gallina, pasado por agua",unidad
+"Huevo de gallina, revuelto, con mantequilla",ración
+"Huevo de gallina, revuelto, con mantequilla",unidad
 "Huevo de gallina, yema, cruda",unidad
 "Huevo de gallina, yema, desecada",unidad
 "Huevo de pato, crudo",unidad
 "Huevo de pavo, entero, crudo",unidad
+Huevos al plato,ración
+Huevos cubiertos,ración
+Huevos duros rellenos gratinados,ración
+Huevos escalfados con esparragos,ración
+Huevos moles,ración
+Huevos rellenos con aguacate,ración
+Huevos rellenos,ración
+Hummus,ración
 Infusión,vaso
 Jalea real,unidad
+Jamón asado,ración
 "Jamón cocido, categoría s/e",ración
 "Jamón cocido, enlatado",ración
 Jamón ibérico de bellota,ración
@@ -348,10 +552,12 @@ Jamon serrano,ración
 Jengibre,pizca
 Judía blanca,ración
 Judía pinta,ración
+"Judías blancas, cocidas",ración
+Judías verdes con setas rehogadas,ración
+Judias verdes en conserva,ración
 "Judía verde, congelada, cruda",ración
 "Judía verde, cruda",ración
-"Judías blancas, cocidas",ración
-Judias verdes en conserva,ración
+"Judia verde, hervida",ración
 "Jurel o chicharro, crudo",ración
 Kebab,ración
 Kefir,unidad individual
@@ -361,6 +567,9 @@ Lacón,ración
 Lactosa,unidad individual
 Langosta,ración
 Langostino,ración
+Lapas a la plancha,ración
+Lasaña de verduras,ración
+Lasaña de verduras vegana,ración
 Lasaña,ración
 "Laurel, hoja",pizca
 "Leche condensada, entera, con azúcar",unidad individual
@@ -368,23 +577,33 @@ Leche de almendra,vaso
 Leche de cabra,vaso
 Leche de coco,vaso
 Leche de oveja,vaso
+"Leche, desnatada, pasteurizada",vaso
 "Leche de vaca, desnatada, condensada, con azúcar",unidad individual
 "Leche de vaca, entera",vaso
 "Leche en polvo, semidesnatada",unidad individual
 "Leche fermentada, bifidobacterium, entera, natural",vaso
+Leche materna,vaso
 Leche merengada,vaso
-"Leche, desnatada, pasteurizada",vaso
 "Leche, semidesnatada, pasteurizada",vaso
 Lechuga,ración
 Lecitina de soja,ración
+"Lengua, de buey, cruda",ración
 "Lengua de cerdo, cruda",ración
 "Lengua de cordero, cruda",ración
-"Lengua, de buey, cruda",ración
 "Lengua, de ternera, cruda",ración
-Lenguado,ración
+Lenguado a la plancha con puré de brocoli y espaguetis de zanahoria,ración
+"Lenguado, al horno",ración
+Lenguado con champiñones y jengibre,ración
+"Lenguado, frito",ración
 "Lenguado, plancha",ración
+Lenguado,ración
 "Lenteja, en conserva",ración
+"Lenteja, hervida",ración
+Lentejas con arroz,ración
+Lentejas con verduras,ración
 "Lenteja, seca, cruda",ración
+Lentejas estofadas con chorizo,ración
+Lentejas estofadas con verduras y arroz integral,ración
 Licor apricot,vaso
 Licor benedictine,vaso
 Licor curaçao,vaso
@@ -399,68 +618,99 @@ Limonada,vaso
 Lombarda,ración
 Lomo embuchado,ración
 Longaniza,ración
+Lubina al horno,ración
 Lubina,ración
+"Lucio, al horno",ración
+Macarrones a la boloñesa,ración
+Macarrones con chorizo y queso gratinados (cuanto queso),ración
+Macarrones con tomate y atún,ración
+Macarrones de legumbre con verduras,ración
+Macarrones de lenteja con verduras y almendras,ración
 "Macedonia de frutas, conserva en su jugo",ración
+Machanga,ración
 Magdalena,ración
 "Maíz, en mazorca, congelado, crudo",cucharada
 "Maíz, en mazorca, crudo",cucharada
-Mandarina,ración
 "Mandarina, congelada",ración
+Mandarina,ración
 "Mango, crudo",ración
 Manteca,ración
-Mantequilla salada,ración
 "Mantequilla, baja en calorías",ración
+Mantequilla salada,ración
 Manzana,ración
-Margarina de maíz,ración
 "Margarina, baja en calorías",ración
+Margarina de maíz,ración
 "Masa de hojaldre, cruda",ración
-Mayonesa con aceite de girasol,ración
+Masa de pizza casera con harina integral,ración
+Masa de pizza casera,ración
 "Mayonesa, aceite de oliva",cucharada sopera
 "Mayonesa, aceite de soja",cucharada sopera
 "Mayonesa, baja en calorías",ración
-Mejillon,ración
+Mayonesa con aceite de girasol,ración
 "Mejillón, en conserva, al natural",ración
 "Mejillón, en escabeche",ración
-Melocotón,ración
-Melocotón en almíbar,ración
+Mejillones a la marinera,ración
+"Mejillón, hervido",ración
+Mejillon,ración
 "Melocotón, desecado",cucharada
+Melocotón en almíbar,ración
+Melocotón,ración
 Melón,ración
 "Membrillo, crudo",ración
 "Menestra de verduras, congelada",ración
+Menestra,ración
+Menestra vegetariana,ración
 "Menta, fresca",pizca
-Merluza fresca,ración
+Merluza con almejas,ración
+Merluza con champiñones y gambas,ración
 "Merluza, congelada, cruda",ración
+Merluza en papillote con calabacín,ración
+Merluza en salsa verde,ración
+Merluza fresca,ración
+Merluza hornezada,ración
+"Merluza, rebozada, frita",ración
 Mermelada de albaricoque,cucharada
 "Mermelada de albaricoque y melocotón, baja en calorías",cucharada
 Mermelada de ciruela,cucharada
 Mermelada de frambuesa,cucharada
-Mermelada de fresa,cucharada
 "Mermelada de fresa, baja en calorías",cucharada
+Mermelada de fresa,cucharada
 Mermelada de grosella roja,cucharada
 Mermelada de mora,cucharada
 Mermelada de naranja,cucharada
 "Mero o cherne, crudo",ración
 "Mero o cherne, plancha",ración
+"Mero, plancha",ración
 Miel,cucharada
 Mijo,ración
 Miso,ración
 Mojo picon,ración
+Mojo picón rojo,ración
+Mojo verde,ración
 Molleja de cordero,ración
+"Morcilla, frita",ración
 Morcilla,ración
 Mortadela,ración
 Mostaza,pizca
+Mousse de chocolate,ración
+Mousse de chocolate,vaso
+Mousse de gofio,ración
 "Mousse de queso fresco, con frutas",unidad individual
 "Mousse de queso fresco, desnatado, azucarado",unidad individual
 "Mousse de queso fresco, desnatado, con frutas",unidad individual
 "Mousse de yogur, con frutas",unidad individual
 "Mousse de yogur, natural",unidad individual
 Muesli,ración
+"Mújol, al horno",ración
 "Mújol, crudo",ración
+Muslos de pollo con patatas al horno,ración
 "Nabo, pelado, crudo",ración
 "Napolitana, rellena con crema de cacao",ración
 Naranja,ración
-Nata montada,ración
 "Nata, líquida, para cocinar, 18% de grasa",ración
+Nata montada,ración
+Natillas sabor vainilla,ración
+Natillas sabor vainilla,unidad individual
 Nécora,ración
 "Néctar de albaricoque, envasado",vaso
 Néctar de ciruela,vaso
@@ -477,14 +727,15 @@ Nectarina,ración
 "Níspero, con piel, crudo",ración
 "Nispero, conserva en su jugo",ración
 "Nispero, sin piel , congelado",ración
-Nuez,puñado
-Nuez moscada,pizca
 "Nuez, cruda, con cáscara",puñado
+Nuez moscada,pizca
+Nuez,puñado
 "Oca, sin piel, asada",ración
 "Orégano, seco",pizca
 "Ostra, cruda",ración
-Paella,ración
 Paella marinera,ración
+Paella,ración
+Paella valenciana,ración
 Palmera,ración
 "Palmito, en conserva",ración
 "Palometa, cruda",ración
@@ -493,106 +744,160 @@ Palmera,ración
 "Pan blanco, de barra, sin sal",ración
 "Pan blanco, de molde, tostado",ración
 "Pan blanco, frito",ración
+"Pan blanco, tipo ""baguette""",ración
 "Pan blanco, tostado",ración
 "Pan blanco, tostado sin sal",ración
+"Panceta, frita",ración
+Panceta frita,ración
 Pan de avena,ración
 Pan de cebada,ración
 Pan de centeno,ración
 Pan de leche,ración
 Pan de maíz,ración
-Pan integral,ración
+"Panga, cruda",ración
 "Pan integral, de molde, tostado",ración
+Pan integral,ración
 "Pan integral, sin sal",ración
 "Pan integral, tostado",ración
+Panquemao,ración
 Pan rallado,ración
-Pan tostado integral,ración
 "Pan, tipo hamburguesa",ración
-"Panceta, frita",ración
-"Panga, cruda",ración
+Pan tostado integral,ración
+Papas arrugás con mojo picón,ración
 "Papaya, cruda",ración
+Papillote de bacalao,ración
+Papillote de pescado blanco,ración
 Paraguaya,ración
 "Pasta alimenticia, con huevo, cruda",ración
 "Pasta alimenticia, con huevo, hervida",ración
 "Pasta alimenticia, con vegetales, cruda",ración
 "Pasta alimenticia, cruda",ración
 "Pasta alimenticia, integral, cruda",ración
+"Pasta alimenticia, integral, hervida",ración
+"Pasta alimenticia, rellena con carne, hervida",ración
+Pasta boloñesa vegana,ración
+Pasta con crema de pollo y champiñones,ración
 Pasta de fruta,ración
 Pastas de te,ración
-Pastel,ración
 Pastel con fruta confitada,ración
 Pastel de chocolate,ración
+Pastel de fruta confitada,ración
 Pastel de manzana,ración
+Pastel,ración
+Pata asada canaria,ración
+"Patata, asada",ración
 "Patata, cruda",ración
 "Patata, frita con aceite s/e, sin sal",ración
+"Patata, hervida",ración
 "Patata, prefrita, congelada",ración
+Patatas a la riojana,ración
 "Patata, salteada con aceite girasol",cucharada
+"Patatas chips, ""lights""",ración
 "Patatas, fritas, chips",ración
+Patatas fritas,ración
 "Pate de higado de cerdo, 30% de grasa",ración
 Paté de pimienta,ración
+Pato a la naranja,ración
 "Pato, entero, asado",ración
 "Pato, entero, crudo",ración
+Pato guisado con ciruelas pasas y piñones,ración
+Pavo con guisantes y zanahoria,ración
 "Pavo, crudo",ración
-"Pavo, fiambre",ración
 "Pavo, fiambre, bajo en grasa",ración
+"Pavo, fiambre",ración
 "Pavo, muslo, con piel, crudo",ración
 "Pavo, pechuga, con piel, crudo",ración
+"Pavo, pechuga, sin piel, a la plancha",ración
+Pechuga de pollo empanada,ración
+Pella de gofio,ración
 Pepinillos en vinagre,ración
 Pepino,ración
-Pera,ración
 "Pera, enlatada en almíbar",ración
+Pera,ración
+"Perca, al horno",ración
 "Perca, cruda",ración
 Percebe,ración
 "Perdiz, cruda",ración
 "Perejil, fresco",pizca
 "Pescadilla, congelada, cruda",ración
+"Pescadilla, rebozada en harina, frita",ración
 "Pescado, genérico",ración
 "Petit líquido, sabor fresa",unidad individual
 "Petit suïsse, cereales y fruta",unidad individual
 "Petit suisse, chocolate",unidad individual
 "Petit suisse, fresa",unidad individual
 "Petit Suisse, natural azucarado",unidad individual
-Piña,ración
 "Pez espada, crudo",ración
+"Pez espada, emperador, plancha",ración
 "Pichón, sin piel, asado",ración
 "Pijota, cruda",ración
 "Pimentón, en polvo",pizca
 "Pimienta, blanca",pizca
 "Pimienta, negra",pizca
+"Pimiento, frito",ración
 "Pimiento morrón, en conserva",ración
 "Pimiento rojo, crudo",ración
-"Pimiento, frito",ración
 Piña en almíbar,ración
 "Piña, enlatada en su jugo",ración
-Piñon,cucharada
+Piña,ración
 "Piñón, crudo, con cáscara",cucharada
+Piñon,cucharada
 Pipa de calabaza,cucharada
 Pipa de girasol,cucharada
 "Pipas de girasol, peladas, con sal",cucharada
 Pistacho,puñado
+Pisto Navarro,ración
+Pisto,ración
 "Pizza, precocinada",ración
 Plátano,ración
+"Platija, al vapor",ración
 "Platija, cruda",ración
+Pochas con guindillas fritas y tomates asados,ración
 "Pollo, ala, con piel, cruda",ración
+Pollo asado con manzanas y setas,ración
+Pollo asado,ración
+"Pollo empanado, frito",ración
+"Pollo, entero, con piel, asado",ración
 "Pollo, entero, con piel, crudo",ración
-"Pollo, fiambre",ración
 "Pollo, fiambre, bajo en grasa",ración
+"Pollo, fiambre",ración
+"Pollo, frito",ración
+Pollo marinado al curry,ración
+"Pollo, muslo, con piel, asado",ración
 "Pollo, muslo, con piel, crudo",ración
 "Pollo, parte sin especificar",ración
 "Pollo, pechuga, con piel, crudo",ración
+"Pollo, pechuga, plancha",ración
 Pomelo,ración
+Porridge de avena con manzana y canela,ración
+Porridge de avena con plátano,ración
+Porridge frío de avena y manzana,ración
+Potaje de berros,ración
 Preparado lácteo con omega 3,unidad individual
+Príncipe Alberto,ración
+Puchero o potaje canario,ración
 Pudding de pasas,ración
+Pudin de pasas,ración
 "Puerro, crudo y congelado",ración
 "Pulmón, de cerdo, crudo",ración
 "Pulmón, de cordero, crudo",ración
 "Pulmón, de ternera, crudo",ración
+Pulpo a la gallega,ración
+"Pulpo, hervido",ración
 Pulpo,ración
-"Puré de patata y queso, en copos",cucharada
+Puré de batata o boniato,ración
+Puré de calabacín,ración
+Puré de calabaza,ración
+"Puré, de patata, con leche",cucharada
 "Puré de patata, con verduras, en copos",cucharada
 "Puré de patata, en copos",cucharada
 "Puré de patatas y champiñones, en copos",cucharada
-"Puré, de patata, con leche",cucharada
+"Puré de patata y queso, en copos",cucharada
+Quesadillas,ración
+Quesillo canario,ración
 Queso afuega'l pitu,ración
+Queso ahumado de aliva,ración
+Queso asado con mojo picón,ración
 Queso azul,ración
 Queso brie,ración
 "Queso cabra, curado",ración
@@ -609,8 +914,8 @@ Queso de aracena,ración
 Queso de arzúa,ración
 Queso de bola,ración
 Queso de cádiz,ración
-"Queso de Castilla-La Mancha, oveja y cabra",ración
 "Queso de Castilla-La Mancha, oveja, vaca y cabra",ración
+"Queso de Castilla-La Mancha, oveja y cabra",ración
 "Queso de castilla-león, oveja y vaca",ración
 "Queso de murcia, al vino",ración
 Queso de tenerife,ración
@@ -619,8 +924,8 @@ Queso edam,ración
 Queso emmental,ración
 Queso en porciones,ración
 Queso flor de guía,ración
-Queso fresco de burgos,ración
 "Queso fresco, cabra",ración
+Queso fresco de burgos,ración
 "Queso fresco, desnatado, con frutas",ración
 "Queso fundido, extragraso (>60% MG/ES)",ración
 Queso gata-hurdes,ración
@@ -632,14 +937,14 @@ Queso herreño,ración
 Queso Ibores,ración
 Queso Mahón,ración
 Queso majorero,ración
-Queso manchego,ración
 "Queso manchego, en aceite",ración
+Queso manchego,ración
 Queso mozzarella,ración
 Queso munster,ración
-Queso para untar,ración
 "Queso para untar, con finas hierbas",ración
 "Queso para untar, con salmón",ración
 "Queso para untar, natural, bajo en calorías",ración
+Queso para untar,ración
 Queso parmesano,ración
 Queso pasiego,ración
 Queso pedroches,ración
@@ -658,51 +963,70 @@ Queso Tetilla,ración
 Queso torta del casar,ración
 Queso tupí,ración
 Queso Zamorano,ración
+Quinoa con espinacas,ración
+Quinoa con verduras,ración
 "Quinoa, cruda",ración
 Rábano,ración
 Rabo de toro,ración
+Rancho canario,ración
 "Rape, a la parrilla",ración
+Rape con gambas y mejillones,ración
 "Rape, crudo",ración
+"Rape, plancha",ración
 "Raya, cruda",ración
-"Refresco con gas, sabor cola, sin cafeina",vaso
 "Refresco con gas, sabor cola, sin cafeina, bajo en calorías",vaso
-Refresco de té,vaso
-"Refresco de té, bajo en calorías",vaso
-"Refresco ""tipo gaseosa""",vaso
+"Refresco con gas, sabor cola, sin cafeina",vaso
 "Refresco, con gas, sabor naranja",vaso
-"Refresco, sabor cola",vaso
+"Refresco de té, bajo en calorías",vaso
+Refresco de té,vaso
 "Refresco, sabor cola, bajo en calorías",vaso
+"Refresco, sabor cola",vaso
 "Refresco, sabor limón, con gas",vaso
 "Refresco, sabor naranja, sin gas",vaso
+"Refresco ""tipo gaseosa""",vaso
+"Refresco tipo ""tónica""",vaso
 Regaliz,unidad
 "Remolacha, en conserva",ración
 Repollo,ración
 Requesón,ración
+Revuelto de huevo y tomate,ración
+Revuelto de setas,ración
 "Riñón, de cordero, crudo",ración
 "Riñón, de ternera, crudo",ración
+Risotto de setas frescas y secas,ración
+Risotto integral con setas y crema de quesos,ración
 Rodaballo,ración
 Rollito de primavera,ración
 Romero,pizca
 Ron,vaso
+Ropa vieja,ración
 Rosquilla,ración
 Rúcula,ración
-Sal de mar,pizca
-Sal yodada,pizca
 Salami,ración
 Salchicha de pollo fresca,ración
 "Salchicha, fresca",ración
+"Salchicha, tipo ""frankfurt""",ración
+"Salchicha, tipo país, a la plancha",ración
 "Salchicha, tipo viena",ración
 Salchichón,ración
+Sal de mar,pizca
 "Salema, cruda",ración
-Salmón,ración
-"Salchicha, tipo ""frankfurt""",ración
+Salmón ahumado,ración
+"Salmón a las finas hierbas con ensalada de aguacate, tomate y queso fresco",ración
+Salmón al papillote con verduras,ración
 Salmonete,ración
+Salmón marinado al curry,ración
+"Salmón, plancha",ración
+Salmón,ración
+Salmorejo,ración
+Salpicón de pulpo canario,ración
 Salsa agridulce,cucharada sopera
 Salsa al curry,cucharada sopera
 Salsa al roquefort,cucharada sopera
 Salsa barbacoa,cucharada sopera
 Salsa bechamel,cucharada sopera
 Salsa boloñesa,cucharada sopera
+Salsa brava,ración
 Salsa carbonara,cucharada sopera
 Salsa de queso,cucharada sopera
 Salsa de sésamo,cucharada
@@ -711,13 +1035,21 @@ Salsa napolitana,cucharada sopera
 "Salsa siciliana, picante",cucharada sopera
 "Salsa vinagreta, con aceite de oliva",cucharada sopera
 Salvado de trigo,cucharada colmada
-"San jacobo, congelado",ración
+Sal yodada,pizca
+Sancocho canario,ración
 Sandía,ración
+"Sandwich de aguacate, tomate y pechuga de pavo/pollo",ración
+Sandwich de jamón y queso,ración
+Sandwich vegetal con huevo y atún,ración
 Sangría,vaso
-Sardina,ración
+"San jacobo, congelado",ración
+"Sardina, asada",ración
 "Sardina, enlatada, en aceite, escurrida",ración
 "Sardina, enlatada, en escabeche",ración
+Sardina,ración
+Sardinas al horno con perejil,ración
 "Sargo, crudo",ración
+Seitán a la plancha,ración
 Seitán,ración
 Semilla de lino,cucharada
 "Sémola de trigo, cruda",cucharada colmada
@@ -728,20 +1060,29 @@ Sésamo molido,cucharada
 "Sesos, de cerdo, crudos",ración
 "Sesos, de cordero, crudos",ración
 "Sesos, de ternera, crudos",ración
+"Seta, plancha",ración
 Seta,ración
 Sidra,vaso
 Sobao,ración
+Sobrasada,ración
 Soda,vaso
+Sofrito,ración
 "Soja, fresca",ración
 "Soja, frita",ración
 "Soja, germinada, en conserva",cucharada
 "Soja, seca, cruda",ración
 "Soja, seca, remojada, hervida",ración
+Sopa de pescado,ración
 Sopa de sobre maravilla,ración
 "Sopa de sobre, sin reconstituir",ración
 Suplemento proteico,ración
 Surimi,ración
+Suspiros de Moya,ración
 Tabasco,cucharada
+Tabulé de lentejas,ración
+"Tapioca, hervida",ración
+Tarta de chocolate,ración
+Tarta de manzana,ración
 "Té, infusión, con leche",vaso
 "Tenca, cruda",ración
 Tequila,vaso
@@ -749,28 +1090,92 @@ Tequila,vaso
 "Ternera, lomo, crudo, con grasa separable",ración
 "Ternera, parte s/e, asada",ración
 "Ternera, parte sin especificar, cruda, con grasa separable",ración
+"Ternera, solomillo, asado",ración
 "Ternera, solomillo, sin grasa, crudo",ración
+Titaina,ración
 Tocino,ración
 Tofu,ración
-Tomate,ración
+Tollos con mojo verde,ración
+Tollos encebollados,ración
+Tollos en salsa,ración
+"Tomate, asado",ración
+Tomate frito,cucharada
+Tomate frito,ración
 "Tomate, maduro, pelado y triturado, enlatado",cucharada
 "Tomate, maduro, puré",cucharada
+Tomate,ración
+Tomates con mozzarella,ración
+Tomates rellenos de requesón,ración
+Tomates rellenos,ración
+Tombet de cordero,ración
 "Tomillo, seco",pizca
 Torta de aceite,ración
 "Tortilla, a la francesa",unidad
+Tortilla de bacalao,ración
+Tortilla de calabacín,ración
+Tortilla de calabacín vegana,ración
+Tortilla de coliflor,ración
+Tortilla de espinacas,ración
+Tortilla de patata con cebolla,ración
+Tortilla de patatas vegana,ración
+Tortilla francesa de atún y cebolla,ración
+Tortilla francesa de champiñones,ración
+Tortilla francesa de gambas y espárragos trigueros,ración
+Tortilla francesa,ración
+Tortillas de carnaval,ración
+Tortilla vegana de calabacín,ración
+Tortilla vegana de champiñones y espinacas,ración
+Tortitas de avena y plátano,ración
+Tortitas de calabaza,ración
+Tostada con tomate y aceite de oliva,ración
+Tostada de aguacate con granada,ración
+"Tostada de aguacate, lechuga y queso fresco",ración
+"Tostada de aguacate, queso y anchoas",ración
+"Tostada de aguacate, tomate y salmón",ración
+"Tostada de mantequila de cacahuete, naranja y canela",ración
+"Tostada de mantequilla de almendras, fresas y coco",ración
+Tostada de mantequilla de cacahuete con plátano,ración
+"Tostada de mantequilla de cacahuete, manzana y almendras",ración
+"Tostada de pan integral con tofu tipo ""revuelto""",ración
+Tostada de plátano y canela,ración
+Tostada de queso de cabra e higos,ración
+Tostada de queso fresco con moras,ración
+"Tostada de queso fresco, rúcula y aceite de oliva",ración
+Tostada de queso fresco y kiwi,ración
+"Tostada de requesón, espinacas babys y aceite de oliva",ración
+"Tostada de requesón, mango y semillas de chia",ración
+"Tostada de requeson, manzana y canela",ración
+"Tostada de requesón, melocotón y pipas de calabaza",ración
+"Tostada de tomate, queso feta y aceitunas negras",ración
+"Tostada de yogur, naranja y coco desecado",ración
+"Tostada de yogur, pera y nueces",ración
+Tostadas con aguacate y tomate,ración
+Tostadas con atún y tomate,ración
+Tostadas con jamón serrano y tomate,ración
+Tostadas con tomate y aceite,ración
+"Tostadas de aguacate, huevo y tomate",ración
+"Tostadas de aguacate, queso y pepino",ración
+"Tostadas de requesón, rúcula y rábanos",ración
 "Trigo, entero, crudo",ración
+"Trucha, ahumada",ración
 Trucha,ración
+Truchas de batata,ración
 "Trufa, cruda",ración
 "Turrón, tipo Alicante",ración
-Uva blanca,ración
 "Uva blanca, congelada",ración
+Uva blanca,ración
 "Uva negra, cruda",ración
 Uva pasa,cucharada
+"Vaca/buey, asado",ración
+"Vaca/buey, estofado",ración
 "Vaca/buey, parte s/e, asado",ración
 "Vaca/buey, parte s/e, estofado",ración
+"Vaca/buey, solomillo, a la plancha",ración
 "Vaca/buey, solomillo, crudo",ración
 Vainilla,pizca
+Variado de verduras y legumbres,ración
 "Vermut, s/e",vaso
+Vichyssoise,ración
 Vieira,ración
 "Vieja, cruda",ración
 Vinagre balsámico,cucharada
@@ -783,47 +1188,48 @@ Vino tinto,vaso
 Vodka,vaso
 "Volador, crudo",ración
 Whisky,vaso
-Yogur griego,unidad individual
-"Yogur líquido, aromatizado sabor s/e",unidad individual
-"Yogur líquido, con frutas s/e",unidad individual
-"Yogur líquido, entero, con cereales",unidad individual
-"Yogur líquido, natural, azucarado",unidad individual
+Wok de verduras y tempeh con curry,ración
 "Yogur, búlgaro",unidad individual
 "Yogur, desnatado, aromatizado sabor s/e",unidad individual
-"Yogur, desnatado, con cereales",unidad individual
 "Yogur, desnatado, con cereales, manzana y ciruela",unidad individual
-Zumo de piña,vaso
+"Yogur, desnatado, con cereales",unidad individual
 "Yogur, desnatado, con cereza y frambuesa",unidad individual
 "Yogur, desnatado, con ciruela, albaricoque y fibra",unidad individual
 "Yogur, desnatado, con fresa, grosella y fibra",unidad individual
-"Yogur, desnatado, con frutas",unidad individual
 "Yogur, desnatado, con frutas del bosque",unidad individual
 "Yogur, desnatado, con frutas tropicales",unidad individual
+"Yogur, desnatado, con frutas",unidad individual
 "Yogur, desnatado, con manzana",unidad individual
-"Yogur, desnatado, con melocotón y maracuyá",unidad individual
 "Yogur, desnatado, con melocotón, frambuesa y fibra",unidad individual
+"Yogur, desnatado, con melocotón y maracuyá",unidad individual
 "Yogur, desnatado, con piña y pomelo",unidad individual
-"Yogur, desnatado, sabor natural",unidad individual
 "Yogur, desnatado, sabor natural, azucarado",unidad individual
+"Yogur, desnatado, sabor natural",unidad individual
 "Yogur, desnatado, sabor vainilla",unidad individual
 "Yogur, enriquecido, con frutas",unidad individual
-"Yogur, enriquecido, natural",unidad individual
 "Yogur, enriquecido, natural, azucarado",unidad individual
 "Yogur, enriquecido, natural, con nata",unidad individual
+"Yogur, enriquecido, natural",unidad individual
 "Yogur, enriquecido, sabor, s/e",unidad individual
-Zumo de piña y uva,vaso
 "Yogur, entero, con cereales y fresas",unidad individual
 "Yogur, entero, con fresas",unidad individual
 "Yogur, entero, con frutas del bosque",unidad individual
+Yogur griego,unidad individual
+"Yogur líquido, aromatizado sabor s/e",unidad individual
+"Yogur líquido, con frutas s/e",unidad individual
 "Yogur, líquido, desnatado, natural",unidad individual
+"Yogur líquido, entero, con cereales",unidad individual
 "Yogur, líquido, entero, con fresas",unidad individual
 "Yogur, líquido, entero, con frutas",unidad individual
 "Yogur, líquido, entero, sabor fresa",unidad individual
 "Yogur, líquido, entero, sabor fresa y plátano",unidad individual
 "Yogur, líquido, entero, sabor frutas del bosque",unidad individual
 "Yogur, líquido, entero, sabor piña y coco",unidad individual
+"Yogur líquido, natural, azucarado",unidad individual
+"Yogur líquido, ""tipo actimel""",unidad individual
 Zamburiñas,ración
 "Zanahoria, cruda",ración
+Zarzuela de pescado,ración
 Zumo de grosella negra,vaso
 Zumo de grosella roja,vaso
 "Zumo de lima, envasado",vaso
@@ -831,495 +1237,10 @@ Zumo de grosella roja,vaso
 Zumo de mango,vaso
 Zumo de manzana,vaso
 Zumo de naranja,vaso
+Zumo de piña,vaso
+Zumo de piña y uva,vaso
 "Zumo de pomelo, envasado",vaso
 "Zumo de tomate, fresco",vaso
 Zumo de uva,vaso
 Zumo de uva y melocotón,vaso
 "Zumo de zanahoria, fresco",vaso
-Lubina al horno,ración
-Quinoa con verduras,ración
-Tostada de plátano y canela,ración
-Salmón al papillote con verduras,ración
-Lenguado a la plancha con puré de brocoli y espaguetis de zanahoria,ración
-Espinacas salteadas con pasas y piñones,ración
-Tomates rellenos,ración
-Esqueixada,ración
-Gambones con limón y perejil,ración
-Gazpacho,ración
-Espaguetis integrales con verduras,ración
-Acelgas rehogadas con ajos y piñones,ración
-Bacalao económica,ración
-Tortilla de calabacín,ración
-Ensalada de alubias,ración
-Huevos al plato,ración
-"Crema de calabaza, zanahoria, naranja y jengibre",ración
-Papillote de pescado blanco,ración
-Asado de cerdo con frutos secos,ración
-Croquetas de pescado,ración
-Huevos duros rellenos gratinados,ración
-Crema de verduras,ración
-Pato guisado con ciruelas pasas y piñones,ración
-Mejillones a la marinera,ración
-"Calamar, asado",ración
-Pulpo a la gallega,ración
-Sopa de pescado,ración
-Espaguetis al pesto,ración
-Bacalao al pil pil,ración
-"Guisante, congelado, hervido",ración
-Arroz integral con setas,ración
-Ensalada nizarda,ración
-Lasaña de verduras,ración
-Arroz caldoso,ración
-Pato a la naranja,ración
-Arroz tres delicias,ración
-Zarzuela de pescado,ración
-Espaguetis con gambas,ración
-Fideuá con marisco,ración
-Ensalada de rúcula y queso ricota,ración
-Brócoli con bechamel,ración
-Vichyssoise,ración
-Puré de calabacín,ración
-Puré de calabaza,ración
-Crema de champiñones,ración
-Crema de zanahoria,ración
-Tostadas con jamón serrano y tomate,ración
-Tostadas con aguacate y tomate,ración
-Tostadas con tomate y aceite,ración
-Tostadas con atún y tomate,ración
-Tortilla francesa,ración
-Frittata de espinacas y queso de cabra,ración
-Frittata de brócoli y tomates cherry,ración
-Tortilla francesa de champiñones,ración
-Tortilla francesa de gambas y espárragos trigueros,ración
-Tortilla francesa de atún y cebolla,ración
-Porridge de avena con manzana y canela,ración
-Helado de chocolate,unidad individual
-Porridge de avena con plátano,ración
-Ensalada de garbanzos y tomate,ración
-Garbanzos salteados con espinacas,ración
-Hummus,ración
-"Ensalada de pasta integral con atún, queso fresco",ración
-"Ensalada de pasta integral con atún, queso fresco y jamón cocido",ración
-"Ensalada de tomate, aceitunas negras y atún",ración
-Ensalada campera,ración
-"Ensalada de sardinas, tomate y huevo duro",ración
-Ensalada de queso fresco y salmón ahumado,ración
-Lentejas estofadas con verduras y arroz integral,ración
-"Salmón a las finas hierbas con ensalada de aguacate, tomate y queso fresco",ración
-Albóndigas de pollo con salsa de tomate y coliflor rehogada,ración
-Guiso de ternera con patata y zanahoria,ración
-"Sandwich de aguacate, tomate y pechuga de pavo/pollo",ración
-Merluza en papillote con calabacín,ración
-"Calabacín, asado",ración
-Cuscús de pollo y verdura,ración
-Estofado de pavo y verduras,ración
-Pasta con crema de pollo y champiñones,ración
-Ensalada de pollo,ración
-Tostada de mantequilla de cacahuete con plátano,ración
-Ensalada de pescado con arroz,ración
-Filetes de pechuga de pollo marinados en limón y romero,ración
-Filetes de pechuga de pollo marinados en mostaza y limón,ración
-Pollo marinado al curry,ración
-Salmón marinado al curry,ración
-Ensalada de garbanzos con nueces,ración
-Garbanzos con brécol y parmesano,ración
-Lentejas con arroz,ración
-Tomates con mozzarella,ración
-Ensalada de berros,ración
-Lenguado con champiñones y jengibre,ración
-Tortilla de bacalao,ración
-Arroz integral con verduras,ración
-Rape con gambas y mejillones,ración
-Risotto de setas frescas y secas,ración
-Espaguetis a la carbonara vegetal,ración
-Arroz con salsa de calamares,ración
-"Tostada de aguacate, queso y anchoas",ración
-Judías verdes con setas rehogadas,ración
-Pisto,ración
-Menestra,ración
-Menestra vegetariana,ración
-Ajoblanco,ración
-Helado de fresa,unidad individual
-Atún con tomate,ración
-Hamburguesas de atún,ración
-Bacalao con tomate,ración
-Chicharro al horno,ración
-Dorada a la sal,ración
-"Tostada de yogur, pera y nueces",ración
-Merluza con almejas,ración
-Merluza con champiñones y gambas,ración
-Merluza en salsa verde,ración
-"Ensalada de quinoa, pollo y verduras",ración
-Berenjenas rellenas,ración
-Calamares a la plancha,ración
-Sardinas al horno con perejil,ración
-Alcachofas al horno,ración
-Huevos rellenos con aguacate,ración
-"Ensalada griega de espinacas, queso de cabra, naranja y pistachos",ración
-Revuelto de huevo y tomate,ración
-Variado de verduras y legumbres,ración
-Cocido de alubias blancas con brécol,ración
-"Habas con ajetes, setas y gambas",ración
-Quinoa con espinacas,ración
-Alubias con champiñones,ración
-Helado de nata,unidad individual
-Hamburguesas de verduras,ración
-Tortilla de patatas vegana,ración
-Hamburguesas de lenteja y mijo,ración
-Albóndigas de lenteja con tomate,ración
-Huevos escalfados con esparragos,ración
-"Cebolla, asada",ración
-Macarrones de legumbre con verduras,ración
-Champiñones rellenos,ración
-Pasta boloñesa vegana,ración
-Tortilla de calabacín vegana,ración
-Alcachofas con calabaza,ración
-Tortilla vegana de champiñones y espinacas,ración
-Borraja con guisantes,ración
-Tortilla de coliflor,ración
-Cuscús al azafrán con berenjena y pimiento asados,ración
-Tortilla de espinacas,ración
-Tostada de queso fresco con moras,ración
-Col lombarda con manzana y champiñones,ración
-Coles de bruselas salteadas,ración
-Coliflor con refrito,ración
-Alcachofas con jamón y cebolla,ración
-Chuletitas de conejo al horno,ración
-"Tostadas de aguacate, huevo y tomate",ración
-"Tostadas de aguacate, queso y pepino",ración
-"Tostada de requeson, manzana y canela",ración
-Tostada de queso fresco y kiwi,ración
-"Tostada de queso fresco, rúcula y aceite de oliva",ración
-"Tostada de requesón, melocotón y pipas de calabaza",ración
-Tostada de aguacate con granada,ración
-"Tostada de requesón, espinacas babys y aceite de oliva",ración
-"Tostada de yogur, naranja y coco desecado",ración
-"Tostada de mantequilla de cacahuete, manzana y almendras",ración
-"Tostada de aguacate, lechuga y queso fresco",ración
-"Tostada de tomate, queso feta y aceitunas negras",ración
-"Tostada de aguacate, tomate y salmón",ración
-"Tostada de mantequilla de almendras, fresas y coco",ración
-"Tostadas de requesón, rúcula y rábanos",ración
-Tostada con tomate y aceite de oliva,ración
-Tostada de queso de cabra e higos,ración
-"Tostada de mantequila de cacahuete, naranja y canela",ración
-Pavo con guisantes y zanahoria,ración
-Sandwich de jamón y queso,ración
-Pollo asado con manzanas y setas,ración
-Pochas con guindillas fritas y tomates asados,ración
-Pisto Navarro,ración
-Macarrones de lenteja con verduras y almendras,ración
-Sandwich vegetal con huevo y atún,ración
-Revuelto de setas,ración
-Conejo al horno con patatas panaderas,ración
-Macarrones con tomate y atún,ración
-Lentejas con verduras,ración
-Lentejas estofadas con chorizo,ración
-Ensalada de lentejas,ración
-Alubias blancas con verduras,ración
-Alubias con morcilla y chorizo,ración
-Tortilla de patata con cebolla,ración
-Papas arrugás con mojo picón,ración
-Patatas a la riojana,ración
-Salsa brava,ración
-Bocadillo de jamón serrano con tomate y aceite,ración
-Bocadillo de jamón serrano,ración
-Bocadillo de chorizo,ración
-Bocadillo de jamón cocido,ración
-Bocadillo de tortilla francesa,ración
-Espagueti a la carbonara,ración
-Macarrones con chorizo y queso gratinados (cuanto queso),ración
-Macarrones a la boloñesa,ración
-Ensaladilla rusa,ración
-Gofio escaldado,ración
-Masa de pizza casera,ración
-Masa de pizza casera con harina integral,ración
-Arroz a la cubana,ración
-Churros de pescado,ración
-Caldo de millo,ración
-Ropa vieja,ración
-Rancho canario,ración
-Muslos de pollo con patatas al horno,ración
-Pechuga de pollo empanada,ración
-Pollo asado,ración
-Fartons,ración
-Frangollo canario,ración
-Mojo picón rojo,ración
-Mojo verde,ración
-Sancocho canario,ración
-Pella de gofio,ración
-Puchero o potaje canario,ración
-Queso asado con mojo picón,ración
-Tortillas de carnaval,ración
-Tortitas de calabaza,ración
-Potaje de berros,ración
-Carne de cabra ,ración
-Escaldón de gofio y leche,ración
-Pata asada canaria,ración
-Conejo en salmorejo,ración
-Tollos en salsa,ración
-Salpicón de pulpo canario,ración
-Mousse de gofio,ración
-Titaina,ración
-Esgarraet,ración
-Coca de tomate,ración
-Horchata de chufa,ración
-Jamón asado,ración
-Coca de llanda,ración
-Panquemao,ración
-Arroz con costra,ración
-Paella valenciana,ración
-Arroz a banda,ración
-"Lenteja, hervida",ración
-Almoixàvena o monjavina,ración
-All i pebre de anguila,ración
-Arròs amb fesols y naps,ración
-Fideuá,ración
-Sobrasada,ración
-Tombet de cordero,ración
-"Cerdo, lomo, asado",ración
-"Huevo de gallina, pasado por agua",ración
-"Cerdo, solomillo, asado",ración
-"Cordero, pierna, con grasa, asada",ración
-"Pollo, entero, con piel, asado",ración
-"Ternera, solomillo, asado",ración
-"Pollo, muslo, con piel, asado",ración
-"Patata, asada",ración
-"Tomate, asado",ración
-"Sardina, asada",ración
-"Huevo de gallina, revuelto, con mantequilla",ración
-"Bacón, ahumado, a la parrilla",ración
-"Berenjena, frita, en aceite de girasol",ración
-"Huevo de gallina, frito",ración
-"Pescadilla, rebozada en harina, frita",ración
-Sofrito,ración
-"Morcilla, frita",ración
-"Pollo empanado, frito",ración
-"Pollo, frito",ración
-"Bacalao, frito",ración
-"Boquerón, frito",ración
-"Lenguado, frito",ración
-"Merluza, rebozada, frita",ración
-Tomate frito,ración
-Patatas fritas,ración
-"Anguila, al horno",ración
-"Atún, al horno",ración
-"Bacalao, fresco, al horno",ración
-"Caballa, al horno",ración
-"Carpa, al horno",ración
-"Lenguado, al horno",ración
-"Lucio, al horno",ración
-"Mújol, al horno",ración
-"Perca, al horno",ración
-"Salchicha, tipo país, a la plancha",ración
-"Pavo, pechuga, sin piel, a la plancha",ración
-"Vaca/buey, solomillo, a la plancha",ración
-"Atún, plancha",ración
-"Pollo, pechuga, plancha",ración
-"Dorada, plancha",ración
-"Mero, plancha",ración
-"Pez espada, emperador, plancha",ración
-"Seta, plancha",ración
-"Rape, plancha",ración
-"Salmón, plancha",ración
-"Anguila, hervida",ración
-"Huevo de gallina, escalfado",ración
-"Bígaro, hervido",ración
-"Bogavante, hervido",ración
-"Mejillón, hervido",ración
-"Tapioca, hervida",ración
-"Alubia negra, seca, remojada, hervida",ración
-"Arroz integral, hervido",ración
-"Guisante, congelado, hervido",ración
-"Pasta alimenticia, integral, hervida",ración
-"Pasta alimenticia, rellena con carne, hervida",ración
-"Col lombarda, hervida",ración
-"Calabaza, hervida",ración
-"Huevo de gallina, hervido, duro",ración
-"Garbanzo, hervido",ración
-"Lenteja, hervida",ración
-"Gamba, hervida",ración
-"Acelgas, hervidas",ración
-"Brécol, hervido",ración
-"Pulpo, hervido",ración
-"Cebolla, hervida",ración
-"Coliflor, hervida",ración
-"Espinaca, hervida",ración
-"Judia verde, hervida",ración
-"Patata, hervida",ración
-Queso ahumado de aliva,ración
-"Arenque, ahumado",ración
-"Bacalao, ahumado",ración
-"Bonito del norte, al vapor",ración
-"Platija, al vapor",ración
-"Trucha, ahumada",ración
-Salmón ahumado,ración
-"Arroz, hervido",ración
-Arroz con leche,ración
-Crema catalana,ración
-Flan de huevo,ración
-Helado de chocolate,ración
-Helado de fresa,ración
-Helado de nata,ración
-Mousse de chocolate,ración
-Natillas sabor vainilla,ración
-Croquetas de pollo,ración
-Croquetas de jamón,ración
-"Ensalada de lechuga, tomate y cebolla",ración
-Ensalada mixta con huevo y atún,ración
-Empanadilla,ración
-Tarta de manzana,ración
-Pastel de fruta confitada,ración
-Tarta de chocolate,ración
-"Atún, plancha",ración
-Seitán a la plancha,ración
-Haba frita,ración
-"Vaca/buey, estofado",ración
-"Vaca/buey, asado",ración
-Panceta frita,ración
-Pudin de pasas,ración
-Croquetas de zanahorias,ración
-Merluza hornezada,ración
-Calamares en su tinta,ración
-Cabrito estofado,ración
-Chuletas de cochino,ración
-Huevos rellenos,ración
-Bolitas de queso,ración
-Huevos cubiertos,ración
-Albondigón,ración
-Quesadillas,ración
-Tollos encebollados,ración
-Tollos con mojo verde,ración
-Bacalao a la montañeta,ración
-"Bacalao, ahumado",ración
-Estofado de ternera con patatas,ración
-Truchas de batata,ración
-Suspiros de Moya,ración
-Bizcochos de Moya,ración
-Príncipe Alberto,ración
-Machanga,ración
-Bienmesabe,ración
-Quesillo canario,ración
-Huevos moles,ración
-Lapas a la plancha,ración
-Tortilla vegana de calabacín,ración
-Ensalada de arroz y lentejas,ración
-Garbanzos al curry,ración
-Fajitas de seitán,ración
-Tabulé de lentejas,ración
-Espirales de lenteja roja con berenjena y albahaca,ración
-Wok de verduras y tempeh con curry,ración
-Berenjenas rellenas de verduras,ración
-Porridge frío de avena y manzana,ración
-Lasaña de verduras vegana,ración
-"Calabaza con garbanzos, aguacate y aliño de yogur",ración
-Crema fría de pepino,ración
-Alubias con vinagreta,ración
-Tortitas de avena y plátano,ración
-"Atún, al horno",ración
-Tomates rellenos de requesón,ración
-Puré de batata o boniato,ración
-Hamburguesa de pollo,ración
-Albóndigas de lenteja roja,ración
-"Coliflor, hervida",ración
-"Acelgas, hervidas",ración
-"Alubia negra, seca, remojada, hervida",ración
-"Anguila, al horno",ración
-"Anguila, hervida",ración
-"Arenque, ahumado",ración
-Arroz con leche,unidad individual
-"Arroz integral, hervido",ración
-"Arroz, hervido",ración
-"Bacalao, fresco, al horno",ración
-"Bacalao, frito",ración
-"Bacón, ahumado, a la parrilla",ración
-"Berenjena, frita, en aceite de girasol",ración
-"Bígaro, hervido",ración
-"Bogavante, hervido",ración
-"Bonito del norte, al vapor",ración
-"Boquerón, frito",ración
-"Brécol, hervido",ración
-"Caballa, al horno",ración
-"Calabacín, asado",ración
-"Calabaza, hervida",ración
-"Calamar, asado",ración
-"Carpa, al horno",ración
-"Cebolla, asada",ración
-"Cebolla, hervida",ración
-"Cerdo, lomo, asado",ración
-"Cerdo, solomillo, asado",ración
-"Col lombarda, hervida",ración
-"Cordero, pierna, con grasa, asada",ración
-Crema catalana,unidad individual
-Croquetas de pollo,ración
-Empanadilla,ración
-Ensaladilla rusa,ración
-"Espinaca, hervida",ración
-Flan de huevo,unidad individual
-"Gamba, hervida",ración
-"Garbanzo, hervido",ración
-Gazpacho,ración
-"Huevo de gallina, escalfado",unidad
-"Huevo de gallina, frito",unidad
-"Huevo de gallina, hervido, duro",unidad
-"Huevo de gallina, pasado por agua",unidad
-"Huevo de gallina, revuelto, con mantequilla",unidad
-Jamón asado,ración
-"Judia verde, hervida",ración
-"Lenguado, al horno",ración
-"Lenguado, frito",ración
-"Lucio, al horno",ración
-"Mejillón, hervido",ración
-"Merluza, rebozada, frita",ración
-"Morcilla, frita",ración
-Mousse de chocolate,vaso
-"Mújol, al horno",ración
-Natillas sabor vainilla,unidad individual
-"Pasta alimenticia, integral, hervida",ración
-"Pasta alimenticia, rellena con carne, hervida",ración
-"Patata, asada",ración
-"Patata, hervida",ración
-"Pavo, pechuga, sin piel, a la plancha",ración
-"Perca, al horno",ración
-"Pescadilla, rebozada en harina, frita",ración
-"Pez espada, emperador, plancha",ración
-"Platija, al vapor",ración
-"Pollo empanado, frito",ración
-"Pollo, entero, con piel, asado",ración
-"Pollo, frito",ración
-"Pollo, muslo, con piel, asado",ración
-"Pollo, pechuga, plancha",ración
-Pudin de pasas,ración
-"Pulpo, hervido",ración
-Queso ahumado de aliva,ración
-"Rape, plancha",ración
-"Salchicha, tipo país, a la plancha",ración
-Salmón ahumado,ración
-"Salmón, plancha",ración
-"Sardina, asada",ración
-"Seta, plancha",ración
-Sobrasada,ración
-Sofrito,ración
-"Tapioca, hervida",ración
-"Ternera, solomillo, asado",ración
-Tomate frito,cucharada
-"Tomate, asado",ración
-"Trucha, ahumada",ración
-"Vaca/buey, solomillo, a la plancha",ración
-Leche materna,vaso
-"Refresco tipo ""tónica""",vaso
-Salmorejo,ración
-Bonito encebollado,ración
-Borreta,ración
-Papillote de bacalao,ración
-Risotto integral con setas y crema de quesos,ración
-"Tostada de requesón, mango y semillas de chia",ración
-"Galleta, tipo ""Digestiva""",ración
-"Patatas chips, ""lights""",ración
-"Cereales para el desayuno, ricos en fibra, tipo ""all-bran""",ración
-"Galleta ,tipo ""digestiva"", con chocolate",ración
-"Tostada de pan integral con tofu tipo ""revuelto""",ración
-"Yogur líquido, ""tipo actimel""",unidad individual
-"Pan blanco, tipo ""baguette""",ración
-"Barra de chocolate, tipo ""Mars""",unidad
-Crema de cacahuete,puñado

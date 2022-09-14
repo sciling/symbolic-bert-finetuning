@@ -180,6 +180,16 @@ async def multi_mood_html(request: Request):
     return templates.TemplateResponse("multimood.html", {"request": request})
 
 
+@app.get("/chatbot", response_class=HTMLResponse)
+async def chatbot_html(request: Request):
+    return templates.TemplateResponse("chatbot.html", {"request": request})
+
+
+@app.get("/chatbot-dev", response_class=HTMLResponse)
+async def chatbot_html(request: Request):
+    return templates.TemplateResponse("chatbot-dev.html", {"request": request})
+
+
 @app.get("/food", response_class=HTMLResponse)
 async def food_html(request: Request):
     return templates.TemplateResponse("food.html", {"request": request})

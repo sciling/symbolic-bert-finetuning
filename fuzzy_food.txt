@@ -122,3 +122,7 @@ empanada;Empanadilla;None
 empanadilla de carne;Empanada de carne;None
 empanada de carne;Empanada de carne;None
 jamón York;Jamón cocido, enlatado;None
+huevo hervido;Huevo de gallina, hervido, duro;None
+patata cocida;Patata, hervida;None
+patata hervida;Patata, hervida;None
+tortilla francesa;Tortilla, a la francesa;None

@@ -19,6 +19,16 @@
       "de"
     ]
   },
+  "E-FOOD:E-FOOD:": {
+    "E-FOOD": [
+      "lata"
+    ]
+  },
+  "B-FOOD:E-FOOD:": {
+    "E-FOOD": [
+      "lata"
+    ]
+  },
   "E-FOOD": [
     "digestiva",
     "digestivo",

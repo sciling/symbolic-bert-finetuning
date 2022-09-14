@@ -14,17 +14,19 @@
         <div class="form-group">
           <label>Selecciona un chatbot: </label>
           <select class="form-control" id="chatbotName" style="padding-top:10px">
-            <option value="CU1"> CU1 </option>
-            <option value="CU2"> CU2 </option>
-            <option value="CU3"> CU3 </option>
-            <option value="CU4.1"> CU4.1 </option>
-            <option value="CU4.2"> CU4.2 </option>
-            <option value="CU4.3"> CU4.3 </option>
-            <option value="CU4.4"> CU4.4 </option>
-            <option value="CU5"> CU5 </option>
+            <option value="CU1"> CU1 - Cuchara Inteligente</option>
+            <option value="CU2"> CU2 - Contamos Contigo</option>
+            <option value="CU3"> CU3 - Sonrisa Saludable</option>
+            <option value="CU4.1"> CU4.1 - Alcohol</option>
+            <option value="CU4.2"> CU4.2 - Tabaco</option>
+            <option value="CU4.3"> CU4.3 - Psicofármacos</option>
+            <option value="CU4.4"> CU4.4 - Otras</option>
+            <option value="CU4.4b"> CU4.4b - Cannabis </option>
+            <option value="CU5"> CU5 - Mejor en Compañía</option>
             <option value="test"> test </option>
           </select>
         </div>
+
 
         <!--div class="form-group row">
             <input id="username" class="form-control col-sm-2" type="text" placeholder="Enter Username" name="username" required>
@@ -32,29 +34,43 @@
             <button id="login" class="btn btn-primary col-sm-2" type="submit">Login</button>
         </div-->
 
-        <div class="form-group">
+        <div id="token-block" class="form-group">
           <label for="chatbotToken">Token</label>
           <textarea class="form-control" id="chatbotToken" rows="10"></textarea>
         </div>
 
-      <button type="submit" class="btn btn-primary d-none">Abrir Chatbot</button>
+        <button id="login" type="submit" class="btn btn-primary">Abrir Chatbot</button>
+      </form>
 
-      <div class="form-group"  style="padding-top:10px">
+      <div id="context-block" class="form-group d-none" style="padding-top:10px">
+          <label>Debug</label>
+          <pre id="debug">
+          </pre>
+      </div>
+
+      <div id="test-yaml" class="form-group" style="padding-top:10px">
         <label for="test">Test code:</label>
         <textarea class="form-control" id="test" rows="10"></textarea>
       </div>
-    </form>
-    <button type="" onclick="sendMessage()" class="btn btn-secondary" style="margin-top:20px">Enviar mensaje</button>
+    <button id="send" class="btn btn-secondary" style="margin-top:20px">Enviar mensaje</button>
   </div>
 
 
 
 <script>
-  const chats_integration = {"CU1":"cb8f4908-a4f9-44cd-8d64-e00875d920a5","CU2":"a5b8006b-2ca7-4cec-b293-d75550ed269e","CU3":"880d695b-6535-4ac6-9b2b-0690427d73cd", "CU4.1":"f5a443dd-0ff4-4e26-977c-e809b3b6ecfa", "CU4.2":"8385d843-273e-476d-8de3-c29a0b96b52d", "CU4.3":"a7a5904e-b74b-46e0-9984-444daf9e36f7", "CU4.4":"88c34e3d-6da9-4cef-affe-a1319816ba38", "CU5":"f8923f44-6edb-45bb-ba8f-605e4d537826", "test": "7659ae17-bc19-4fe5-8345-8b749b340db3"}
+  const chats_integration = {
+    "CU1":"cb8f4908-a4f9-44cd-8d64-e00875d920a5",
+    "CU2":"a5b8006b-2ca7-4cec-b293-d75550ed269e",
+    "CU3":"880d695b-6535-4ac6-9b2b-0690427d73cd",
+    "CU4.1":"f5a443dd-0ff4-4e26-977c-e809b3b6ecfa",
+    "CU4.2":"8385d843-273e-476d-8de3-c29a0b96b52d",
+    "CU4.3":"a7a5904e-b74b-46e0-9984-444daf9e36f7",
+    "CU4.4":"88c34e3d-6da9-4cef-affe-a1319816ba38",
+    "CU4.4b":"eb55ef1e-ff98-448c-a68e-5d1bf22eba88",
+    "CU5":"f8923f44-6edb-45bb-ba8f-605e4d537826",
+    "test": "7659ae17-bc19-4fe5-8345-8b749b340db3"
+  };
 
-  let integration_id = ""
-  let bot_token = ""
-  let instance_custom = ""
   // let url = 'https://medp-api.laberit.com'
   let url = 'https://pre-medp-api.laberit.com'
 
@@ -62,7 +78,7 @@
     let username = $('#username').val();
     let password = $('#password').val();
 
-    var settings = {
+    let settings = {
       "url": `{url}/oauth/token`,
       "method": "POST",
       "timeout": 0,
@@ -83,7 +99,7 @@
   }
 
   function get_chatbot_token(access_token) {
-    var settings = {
+    let settings = {
       "url": `{url}/oauth/token`,
       "method": "POST",
       "timeout": 0,
@@ -104,12 +120,7 @@
     });
   }
 
-
-  $('#login').click(get_backend_token);
-
-
   function sendMessage(){
-
     const sendObject = {
     "input": {
       "intents":[{
@@ -130,21 +141,24 @@
     restartPromise.then(function(value){
       window.WebChatInstance.send(sendObject, sendOptions).catch(function(error) {
         console.error('This message did not send!');
+      });
 
-    });
-
-    //para abrir el chat si no está abierto
+      //para abrir el chat si no está abierto
       window.WebChatInstance.openWindow();
     });
   }
+  $('#send').click(sendMessage);
 
 
   function setAction() {
-    integration_id = chats_integration[document.getElementById("chatbotName").value];
-    bot_token = document.getElementById("chatbotToken").value;
-    createAssistant();
+    let integration_id = chats_integration[document.getElementById("chatbotName").value];
+    let bot_token = document.getElementById("chatbotToken").value.trim();
+    $('#token-block').toggleClass('d-none', true);
+    $('#context-block').toggleClass('d-none', false);
+    createAssistant(integration_id, bot_token);
   }
 
+  $('#login').click(setAction);
 
   async function fetchAsync (url) {
     let response = await fetch(url);
@@ -153,10 +167,10 @@
   }
 
 
-  function createAssistant(){
+  function createAssistant(integration_id, bot_token){
 
-    steps = [];
-    test = {
+    let steps = [];
+    let test = {
       dialog: [{
         name: 'test',
         initial_context: {},
@@ -165,7 +179,7 @@
     }
 
     $('#test').val(jsyaml.dump(test))
-    step = null;
+    let step = null;
 
     window.watsonAssistantChatOptions = {
       integrationID: integration_id, // The ID of this integration. CU1
@@ -182,7 +196,7 @@
 
         function update() {
           $('#test').val(jsyaml.dump(test))
-          var textarea = document.getElementById('test');
+          let textarea = document.getElementById('test');
           textarea.scrollTop = textarea.scrollHeight;
         }
 
@@ -201,6 +215,8 @@
         instance.on({ type: "receive", handler: function(msg) {
           data = msg.data;
           console.log('receive', data);
+
+          $('#debug').html(`<code>${jsyaml.dump(data.output.debug)}</code>`);
 
           res = {
             confidence: 0.7,
@@ -237,24 +253,29 @@
       }
     };
 
-    setTimeout(function(){
-      var e_to_remove = document.getElementById("chatbot_script") || false;
-      if (e_to_remove){
-        document.head.removeChild(e_to_remove)
-      }
-      var chatbot_div = document.getElementsByClassName("WatsonAssistantChatHost")[0] || false;
-      if (chatbot_div){
-        document.body.removeChild(chatbot_div)
-      }
-      const t=document.createElement('script');
-      t.id = "chatbot_script";
-      t.src="https://web-chat.global.assistant.watson.appdomain.cloud/versions/" + (window.watsonAssistantChatOptions.clientVersion || 'latest') + "/WatsonAssistantChatEntry.js";
-      document.head.appendChild(t);
-    });
+    startChatbot();
+  }
+
+  function startChatbot() {
+    let e_to_remove = document.getElementById("chatbot_script") || false;
+    if (e_to_remove){
+      document.head.removeChild(e_to_remove)
+    }
+    let chatbot_div = document.getElementsByClassName("WatsonAssistantChatHost")[0] || false;
+    if (chatbot_div){
+      document.body.removeChild(chatbot_div)
+    }
+    const t=document.createElement('script');
+    t.id = "chatbot_script";
+    t.src="https://web-chat.global.assistant.watson.appdomain.cloud/versions/" + ((window.watsonAssistantChatOptions && window.watsonAssistantChatOptions.clientVersion) || 'latest') + "/WatsonAssistantChatEntry.js";
+    document.head.appendChild(t);
   }
 
 
-
+  $.when($.ready)
+  .then(function() {
+    // $('#login').click(get_backend_token);
+  });
 </script>
 </body>
 </html>

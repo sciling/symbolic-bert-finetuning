@@ -19,6 +19,11 @@
       "bellota"
     ]
   ,
+  "tortilla_frances": [
+      "tortilla",
+      "tortilla_frances"
+    ]
+  ,
   "huevo_codorniz_entero_crudo": [
       "codorniz",
       "huevo"
@@ -48,9 +53,9 @@
     ]
   ,
   "huevo_gallina_hervido_duro": [
-      "duro",
+      "cocido",
       "huevo",
-      "huevo_duro"
+      "huevo_cocido"
     ]
   ,
   "huevo_gallina_agua": [
@@ -234,8 +239,8 @@
   "huevo_duro_relleno_gratinado": [
     "atun",
     "huevo",
-    "duro",
-    "huevo_duro",
+    "cocido",
+    "huevo_cocido",
     "queso",
     "tomate"
   ],
@@ -245,7 +250,7 @@
     "tomate",
     "huevo",
     "huevo_cocido",
-    "duro",
+    "cocido",
     "atun"
   ],
   "ensalada_mixto_huevo_atun": [
