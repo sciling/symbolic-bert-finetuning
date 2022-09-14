@@ -117,3 +117,8 @@ huevo sancochado;Huevo de gallina, hervido, duro;None
 patata asada;Patata, asada;None
 higo pequeño;Higos y brevas;None
 queque;Bizcocho;None
+empanadilla de espinaca;Empanadilla
+empanada;Empanadilla;None
+empanadilla de carne;Empanada de carne;None
+empanada de carne;Empanada de carne;None
+jamón York;Jamón cocido, enlatado;None

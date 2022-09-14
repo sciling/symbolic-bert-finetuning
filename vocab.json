@@ -282,11 +282,15 @@
     "pimiento_asado"
   ],
   "empanadilla": [
-     "carne",
-     "empanadilla",
-     "atun",
-     "pisto"
+     "empanadilla"
   ],
+  "empanadilla_carne": 2,
+  "empanada_carne": [
+      "carne",
+      "empanadilla",
+      "empanadilla_carne"
+    ]
+  ,
   "pescado_frito": ["pescado", "frito"],
   "leche_materno": ["never", "ever", "you", "should", "appear", "except", "for", "exact", "match"],
   "leche_vaca": ["leche", "vaca"],
@@ -302,6 +306,11 @@
       "semidesnatado",
       "leche"
   ],
+  "jamon_cocido_enlatado": [
+      "jamon",
+      "jamon_cocido"
+    ]
+  ,
   "pan_blanco_barra": [
       "pan",
       "pan_blanco"
