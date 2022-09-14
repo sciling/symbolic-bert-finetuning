@@ -153,6 +153,12 @@
       "hamburguesa_verdura",
       "verdura"
     ],
+  "pan_hamburguesa": [
+      "pan",
+      "pan_hamburguesa"
+    ]
+  ,
+
   "carne_picado": [
       "hamburguesa",
       "carne_picado"
@@ -306,6 +312,7 @@
   "granada": [
       "granada"
   ],
+  "verdura": [ "berenjena", "pimiento", "cebolla" ],
   "bebida_avena": ["leche", "bebida", "avena", "soja"],
   "manzana": ["manzana", "fruta"],
   "arroz_horno": ["arroz", "horno", "garbanzos", "morcilla", "patata", "longaniza", "tomate", "caldo"],

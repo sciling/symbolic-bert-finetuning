@@ -24,6 +24,8 @@
   "lenteja": ["lenteja", "lentejo"],
   "huevo_duro": ["huevo_duro", "huevo_cocido", "huevo_sancochado"],
   "patata_asado": ["patata_asada", "solanum_tuberosum_asado"],
+  "berenjena": ["berenjena", "berenjeno", "berenjenamente", "berenjen"],
+  "higo": ["higo", "higa", "breva"],
   "perejil": null,
   "ternera": ["ternera", "ternerar"],
   "yema": ["yema", "yemo", "yemas"],
