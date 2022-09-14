@@ -37,6 +37,9 @@ scikit-learn = "^1.1.2"
 apertium = "^0.2.3"
 filelock = "^3.8.0"
 text2num = "^2.4.0"
+chromedriver-autoinstaller = "^0.4.0"
+selenium = "^4.4.3"
+xvfbwrapper = "^0.2.9"
 
 
 [tool.poetry.dev-dependencies]

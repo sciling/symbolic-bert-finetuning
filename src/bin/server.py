@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
 import os
+import csv
 import math
 import asyncio
 from typing import Optional
@@ -45,8 +46,13 @@ CACHED = {
 for entity in CACHED:
     CACHED[entity] = SearchEngine(f"db/{entity}.json", vocab_fn='vocab.json', ignore_fn='ignore.json')
 
+default_units = None
 if os.path.exists('./train-ma.dir'):
     CACHED['food'] = Tagger('./train-ma.dir', normalization_fn="./multialimento-normalization.json", token_fixes_fn="./multialimento-token-fixes.json", strict_fields={'unit'})
+    default_units = {}
+    with open('alimentos_unidad_defecto.csv') as file:
+        for row in csv.reader(file, delimiter=',', quotechar='"'):
+            default_units[row[0]] = row[1]
 
 
 @app.get("/search/{entity}")
@@ -117,6 +123,13 @@ async def parse_food(
             food.food = None
             food.search = None
         else:
+            if len(food.search.get('nbests', [])) >= 1 and not food.unit:
+                entities = [unit['entity'] for unit in food.search['nbests']]
+                units = list({default_units[entity] for entity in entities if entity in default_units})
+                print("UNITS", entities, units, {entity: default_units.get(entity, None) for entity in entities if entity in default_units})
+                if len(units) == 1:
+                    food.unit = units[0]
+
             for sr in food.search.get('nbests', []):
                 key = f"{food.food}~{sr['entity']}"
                 sr['sign'] = FOOD_FIX_DB.get(key, {}).get('sign', '~')
