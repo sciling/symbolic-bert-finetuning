@@ -10,98 +10,102 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
+from xvfbwrapper import Xvfb
+
 
 
 def get_assistant_sid(export_dn=None):
     is_chrome = True
 
-    if is_chrome:
-        import chromedriver_autoinstaller
-        from selenium.webdriver.chrome.options import Options
+    with Xvfb(width=1280, height=740, colordepth=16) as xvfb:
 
-        chromedriver_autoinstaller.install()  # Check if the current version of chromedriver exists
-                                              # and if it doesn't exist, download it automatically,
-                                              # then add chromedriver to path
+        if is_chrome:
+            import chromedriver_autoinstaller
+            from selenium.webdriver.chrome.options import Options
 
-        options = Options()
-        # undetectable chrome driver https://stackoverflow.com/a/70709308
-        options.add_argument("start-maximized")
-        options.add_argument("--window-size=1920,1200")
-        options.add_argument("--no-sandbox")
-        # options.add_argument("--headless")
-        options.add_argument("--disable-gpu")
-        options.add_experimental_option("excludeSwitches", ["enable-automation"])
-        options.add_experimental_option('excludeSwitches', ['enable-logging'])
-        options.add_experimental_option('useAutomationExtension', False)
-        options.add_argument('--disable-blink-features=AutomationControlled')
+            chromedriver_autoinstaller.install()  # Check if the current version of chromedriver exists
+                                                  # and if it doesn't exist, download it automatically,
+                                                  # then add chromedriver to path
 
-        driver = webdriver.Chrome(options=options)
+            options = Options()
+            # undetectable chrome driver https://stackoverflow.com/a/70709308
+            options.add_argument("start-maximized")
+            options.add_argument("--window-size=1920,1200")
+            options.add_argument("--no-sandbox")
+            # options.add_argument("--headless")
+            options.add_argument("--disable-gpu")
+            options.add_experimental_option("excludeSwitches", ["enable-automation"])
+            options.add_experimental_option('excludeSwitches', ['enable-logging'])
+            options.add_experimental_option('useAutomationExtension', False)
+            options.add_argument('--disable-blink-features=AutomationControlled')
 
-        driver.execute_cdp_cmd('Network.setUserAgentOverride', {
-            "userAgent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
-            'AppleWebKit/537.36 (KHTML, like Gecko) '
-            'Chrome/85.0.4183.102 Safari/537.36'
-        })
+            driver = webdriver.Chrome(options=options)
 
-    else:
-        from selenium.webdriver.firefox.options import Options
-        options = Options()
-        driver = webdriver.Firefox(options=options)
+            driver.execute_cdp_cmd('Network.setUserAgentOverride', {
+                "userAgent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
+                'AppleWebKit/537.36 (KHTML, like Gecko) '
+                'Chrome/85.0.4183.102 Safari/537.36'
+            })
 
-    # https://piprogramming.org/articles/How-to-make-Selenium-undetectable-and-stealth--7-Ways-to-hide-your-Bot-Automation-from-Detection-0000000017.html
-    # Remove navigator.webdriver Flag using JavaScript
-    driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
-
-    driver.get("https://cloud.ibm.com/")
-
-    def take_screenshot():
-        if not hasattr(take_screenshot, 'num_screenshot'):
-            take_screenshot.num_screenshot = 0
         else:
-            take_screenshot.num_screenshot += 1
+            from selenium.webdriver.firefox.options import Options
+            options = Options()
+            driver = webdriver.Firefox(options=options)
 
-        if export_dn:
-            print(f"taking screenshot: {export_dn}/{take_screenshot.num_screenshot}.png")
-            driver.save_screenshot(f"{export_dn}/{take_screenshot.num_screenshot}.png")
+        # https://piprogramming.org/articles/How-to-make-Selenium-undetectable-and-stealth--7-Ways-to-hide-your-Bot-Automation-from-Detection-0000000017.html
+        # Remove navigator.webdriver Flag using JavaScript
+        driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
 
-    def get(name, condition=EC.element_to_be_clickable, timeout=10, retry=3):
-        take_screenshot()
-        element = None
+        driver.get("https://cloud.ibm.com/")
 
-        while retry > 0:
-            try:
-                print(f"GET BY CSS ({retry} remaining retries): {name}")
-                element = WebDriverWait(driver, timeout).until(
-                    condition((By.CSS_SELECTOR, name))
-                )
-                retry = 0
-            except TimeoutException:
-                print(f"Timed out")
-                retry -= 1
+        def take_screenshot():
+            if not hasattr(take_screenshot, 'num_screenshot'):
+                take_screenshot.num_screenshot = 0
+            else:
+                take_screenshot.num_screenshot += 1
+
+            if export_dn:
+                print(f"taking screenshot: {export_dn}/{take_screenshot.num_screenshot}.png")
+                driver.save_screenshot(f"{export_dn}/{take_screenshot.num_screenshot}.png")
+
+        def get(name, condition=EC.element_to_be_clickable, timeout=10, retry=3):
             take_screenshot()
+            element = None
 
-        if not element:
-            raise Exception(f"Could not get {name}")
+            while retry > 0:
+                try:
+                    print(f"GET BY CSS ({retry} remaining retries): {name}")
+                    element = WebDriverWait(driver, timeout).until(
+                        condition((By.CSS_SELECTOR, name))
+                    )
+                    retry = 0
+                except TimeoutException:
+                    print(f"Timed out")
+                    retry -= 1
+                take_screenshot()
 
-        print(f"ELEMENT: {element} {element.get_attribute('outerHTML')[:100]} ...")
-        return element
+            if not element:
+                raise Exception(f"Could not get {name}")
 
-    get('input#userid').send_keys(os.getenv('WATSON_USER'))
-    get('button[name="login"]').click()
+            print(f"ELEMENT: {element} {element.get_attribute('outerHTML')[:100]} ...")
+            return element
 
-    get('input#password').send_keys(os.getenv('WATSON_PASSWORD'))
-    submit = get('button[name="login"]', EC.presence_of_element_located)
-    driver.execute_script("arguments[0].click();", submit)
+        get('input#userid').send_keys(os.getenv('WATSON_USER'))
+        get('button[name="login"]').click()
 
-    get('#main-content')
-    driver.get("https://eu-de.assistant.watson.cloud.ibm.com/crn%3Av1%3Abluemix%3Apublic%3Aconversation%3Aeu-de%3Aa%2Fcc77cd568abe4954913135fed5d4d917%3A59a05c17-afcb-4374-afc6-caba0754ee4c%3A%3A/assistants/2fa458ff-8c40-43be-b69c-bbb78ff05dbd/home")
+        get('input#password').send_keys(os.getenv('WATSON_PASSWORD'))
+        submit = get('button[name="login"]', EC.presence_of_element_located)
+        driver.execute_script("arguments[0].click();", submit)
 
-    get('div[role="main"]')
+        get('#main-content')
+        driver.get("https://eu-de.assistant.watson.cloud.ibm.com/crn%3Av1%3Abluemix%3Apublic%3Aconversation%3Aeu-de%3Aa%2Fcc77cd568abe4954913135fed5d4d917%3A59a05c17-afcb-4374-afc6-caba0754ee4c%3A%3A/assistants/2fa458ff-8c40-43be-b69c-bbb78ff05dbd/home")
 
-    sid = next((unquote(cookie['value']) for cookie in driver.get_cookies() if cookie['name'] == 'assistant.sid'))
+        get('div[role="main"]')
 
-    print(f"SID: {sid}")
-    driver.quit()
+        sid = next((unquote(cookie['value']) for cookie in driver.get_cookies() if cookie['name'] == 'assistant.sid'))
+
+        print(f"SID: {sid}")
+        driver.quit()
 
     return sid
 
