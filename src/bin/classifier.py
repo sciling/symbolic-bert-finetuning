@@ -592,6 +592,9 @@ class Tagger:
         print(f"TOKEN_FIXES (CONTEXT): {self.context}")
 
     def fix_tag(self, token, context):
+        if not token:
+            return context[1]
+
         if token.isnumeric():
             return 'E-CANTIDAD'
 
@@ -617,9 +620,16 @@ class Tagger:
         return self.normalization[qtag].get(value, value)
 
     def tag(self, sentence):
+        res = {
+            'foods': []
+        }
+
         # Otherwise, classify
         tokens = tokenize(sentence)
         print(f"TOKENS: {tokens}")
+        if not tokens:
+            return res
+
         inputs = self.tokenizer(
             tokens,
             padding=False,
@@ -654,10 +664,6 @@ class Tagger:
             'UNIDAD': 'unit',
             'FOOD': 'food',
             'CLEAR': 'clear',
-        }
-
-        res = {
-            'foods': []
         }
 
         current = None
