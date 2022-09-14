@@ -25,6 +25,7 @@
   "huevo_duro": ["huevo_duro", "huevo_cocido", "huevo_sancochado"],
   "patata_asado": ["patata_asada", "solanum_tuberosum_asado"],
   "berenjena": ["berenjena", "berenjeno", "berenjenamente", "berenjen"],
+  "bizcocho": ["bizcocho", "queque", "bizcochuelo"],
   "higo": ["higo", "higa", "breva"],
   "perejil": null,
   "ternera": ["ternera", "ternerar"],

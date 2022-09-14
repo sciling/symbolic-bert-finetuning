@@ -116,3 +116,4 @@ huevo cocido;Huevo de gallina, hervido, duro;None
 huevo sancochado;Huevo de gallina, hervido, duro;None
 patata asada;Patata, asada;None
 higo pequeño;Higos y brevas;None
+queque;Bizcocho;None
