@@ -123,7 +123,7 @@ async def parse_food(
             food.food = None
             food.search = None
         else:
-            if len(food.search.get('nbests', [])) >= 1 and not food.unit:
+            if len(food.search.get('nbests', [])) >= 1 and not food.unit and (not food.quantity or food.quantity <= 5):
                 entities = [unit['entity'] for unit in food.search['nbests']]
                 units = list({default_units[entity] for entity in entities if entity in default_units})
                 print("UNITS", entities, units, {entity: default_units.get(entity, None) for entity in entities if entity in default_units})
