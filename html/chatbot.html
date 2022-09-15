@@ -19,399 +19,439 @@
     .collapsable.d-none:after {
       content: ' 🔼'
     }
+    .cover-container {
+      padding-right: 400px;
+      height: 100vh;
+    }
+
+    .flex-fill {
+      flex: 1 1 auto;
+    }
+
+    #WACWidget {
+      margin-right: -16px !important;
+    }
+
+    #debug-block > div.row > div {
+      overflow: scroll;
+      height: 60vh;
+    }
+
+    #debug-block > div.row > div > pre {
+      height: auto;
+      overflow: visible;
+    }
   </style>
 </head>
 <body>
-    <title>Chatbot Test - Web widget</title>
+  <div class="container-fluid cover-container d-flex flex-column">
+    <div class="row bg-light flex-fill">
+      <div class="col-12">
+        <main>
+          <title>Chatbot Test - Web widget</title>
 
-    <div style="margin:20px;margin-right: 400px">
-      <h4 class="collapsable">
-        Selecciona un chatbot y escribe un token
-      </h4>
-      <form id="form" action="javascript:setAction()">
-        <div class="form-group">
-          <label>Selecciona un chatbot: </label>
-          <select class="form-control" id="chatbotName" style="padding-top:10px">
-            <option value="CU1"> CU1 - Cuchara Inteligente</option>
-            <option value="CU2"> CU2 - Contamos Contigo</option>
-            <option value="CU3"> CU3 - Sonrisa Saludable</option>
-            <option value="CU4.1"> CU4.1 - Alcohol</option>
-            <option value="CU4.2"> CU4.2 - Tabaco</option>
-            <option value="CU4.3"> CU4.3 - Psicofármacos</option>
-            <option value="CU4.4"> CU4.4 - Otras</option>
-            <option value="CU4.4b"> CU4.4b - Cannabis </option>
-            <option value="CU5"> CU5 - Mejor en Compañía</option>
-            <option value="test"> test </option>
-          </select>
-        </div>
+          <h4 class="collapsable">
+            Selecciona un chatbot y escribe un token
+          </h4>
+          <form id="form" action="javascript:setAction()">
+            <div class="form-group">
+              <label>Selecciona un chatbot: </label>
+              <select class="form-control" id="chatbotName" style="padding-top:10px">
+                <option value="CU1"> CU1 - Cuchara Inteligente</option>
+                <option value="CU2"> CU2 - Contamos Contigo</option>
+                <option value="CU3"> CU3 - Sonrisa Saludable</option>
+                <option value="CU4.1"> CU4.1 - Alcohol</option>
+                <option value="CU4.2"> CU4.2 - Tabaco</option>
+                <option value="CU4.3"> CU4.3 - Psicofármacos</option>
+                <option value="CU4.4"> CU4.4 - Otras</option>
+                <option value="CU4.4b"> CU4.4b - Cannabis </option>
+                <option value="CU5"> CU5 - Mejor en Compañía</option>
+                <option value="test"> test </option>
+              </select>
+            </div>
 
-        <div id="login-block" class="form-group row">
-            <input id="username" class="form-control col-sm-2" type="text" placeholder="Enter Username" name="username" required>
-            <input id="password" class="form-control col-sm-2" type="password" placeholder="Enter Password" name="password" required>
-            <button id="login" class="btn btn-primary col-sm-2" type="submit">Login</button>
-        </div>
+            <div id="login-block" class="form-group row">
+                <input id="username" class="form-control col-sm-2" type="text" placeholder="Enter Username" name="username" required>
+                <input id="password" class="form-control col-sm-2" type="password" placeholder="Enter Password" name="password" required>
+                <button id="login" class="btn btn-primary col-sm-2" type="submit">Login</button>
+            </div>
 
-        <div id="token-block" class="form-group">
-          <label for="chatbotToken">Token</label>
-          <textarea class="form-control" id="chatbotToken" rows="10"></textarea>
-        </div>
+            <div id="token-block" class="form-group">
+              <label for="chatbotToken">Token</label>
+              <textarea class="form-control" id="chatbotToken" rows="10"></textarea>
+            </div>
 
-        <button id="open" type="submit" class="btn btn-primary">Abrir Chatbot</button>
-      </form>
-      <div id="command-block" class="form-group d-none" style="padding-top:10px">
-        <label for="commands">Commands</label>
-        <textarea class="form-control" id="commands" rows="5"></textarea>
-        <button id="restart" class="btn btn-primary">restart</button>
-      </div>
+            <button id="open" type="submit" class="btn btn-primary">Abrir Chatbot</button>
+          </form>
 
-      <div id="context-block" class="form-group d-none" style="padding-top:10px">
-          <label class="collapsable" for="debug-block">Debug</label>
-          <select class="form-control" id="command-list" style="padding-top:10px">
-          </select>
-          <div id="debug-block" class="container-fluid">
-            <div class="row">
-              <pre id="debug" class="col-sm-3">
-              </pre>
-              <pre id="context" class="col-sm-3">
-              </pre>
-              <pre id="context-diff" class="col-sm-3">
-              </pre>
-              <pre id="entities" class="col-sm-3">
-              </pre>
+          <div id="command-block" class="form-group d-none" style="padding-top:10px">
+            <label for="commands">Commands</label>
+            <textarea class="form-control" id="commands" rows="5"></textarea>
+            <button id="restart" class="btn btn-primary">restart</button>
+          </div>
+
+          <div id="context-block" class="form-group d-none" style="padding-top:10px">
+            <label class="collapsable" for="debug-block">Debug</label>
+            <select class="form-control" id="command-list" style="padding-top:10px">
+            </select>
+            <div id="debug-block" class="container-fluid">
+              <div class="row">
+                <div class="col-sm-3"><pre id="debug"></pre></div>
+                <div class="col-sm-3"><pre id="context"></pre></div>
+                <div class="col-sm-3"><pre id="context-diff"></pre></div>
+                <div class="col-sm-3"><pre id="entities"></pre></div>
+              </div>
             </div>
           </div>
-      </div>
 
-      <div id="test-block" class="form-group d-none" style="padding-top:10px">
-        <label class="collapsable" for="test">Test code:</label>
-        <textarea class="form-control d-none" id="test" rows="10"></textarea>
+          <div id="test-block" class="form-group d-none" style="padding-top:10px">
+            <label class="collapsable" for="test">Test code:</label>
+            <textarea class="form-control d-none" id="test" rows="10"></textarea>
+          </div>
+          <button id="send" class="btn btn-secondary d-none" style="margin-top:20px">Enviar mensaje</button>
+        </main>
       </div>
-    <button id="send" class="btn btn-secondary d-none" style="margin-top:20px">Enviar mensaje</button>
+    </div>
   </div>
 
-
-
-<script>
-  const chats_integration = {
-    "CU1":"cb8f4908-a4f9-44cd-8d64-e00875d920a5",
-    "CU2":"a5b8006b-2ca7-4cec-b293-d75550ed269e",
-    "CU3":"880d695b-6535-4ac6-9b2b-0690427d73cd",
-    "CU4.1":"f5a443dd-0ff4-4e26-977c-e809b3b6ecfa",
-    "CU4.2":"8385d843-273e-476d-8de3-c29a0b96b52d",
-    "CU4.3":"a7a5904e-b74b-46e0-9984-444daf9e36f7",
-    "CU4.4":"88c34e3d-6da9-4cef-affe-a1319816ba38",
-    "CU4.4b":"eb55ef1e-ff98-448c-a68e-5d1bf22eba88",
-    "CU5":"f8923f44-6edb-45bb-ba8f-605e4d537826",
-    "test": "7659ae17-bc19-4fe5-8345-8b749b340db3"
-  };
-
-  // let url = 'https://medp-api.laberit.com'
-  let url = 'https://pre-medp-api.laberit.com';
-
-  function get_backend_token() {
-    let username = $('#username').val();
-    let password = $('#password').val();
-
-    let settings = {
-      "url": `${url}/oauth/token`,
-      "method": "POST",
-      "timeout": 0,
-      "headers": {
-        "Authorization": "Basic TmFiZWxpYVN5c3RlbTpKZWFsekQxc3RyQnV0cjY2Ng==",
-        "Content-Type": "application/x-www-form-urlencoded"
-      },
-      "data": {
-        "username": username,
-        "password": password,
-        "grant_type": "password"
-      }
+  <script>
+    const chats_integration = {
+      "CU1":"cb8f4908-a4f9-44cd-8d64-e00875d920a5",
+      "CU2":"a5b8006b-2ca7-4cec-b293-d75550ed269e",
+      "CU3":"880d695b-6535-4ac6-9b2b-0690427d73cd",
+      "CU4.1":"f5a443dd-0ff4-4e26-977c-e809b3b6ecfa",
+      "CU4.2":"8385d843-273e-476d-8de3-c29a0b96b52d",
+      "CU4.3":"a7a5904e-b74b-46e0-9984-444daf9e36f7",
+      "CU4.4":"88c34e3d-6da9-4cef-affe-a1319816ba38",
+      "CU4.4b":"eb55ef1e-ff98-448c-a68e-5d1bf22eba88",
+      "CU5":"f8923f44-6edb-45bb-ba8f-605e4d537826",
+      "test": "7659ae17-bc19-4fe5-8345-8b749b340db3"
     };
 
-    $.ajax(settings).done(function (response) {
-      get_chatbot_token(response.access_token);
-    });
-  }
+    // let url = 'https://medp-api.laberit.com'
+    let url = 'https://pre-medp-api.laberit.com';
 
-  function get_chatbot_token(access_token) {
-    let settings = {
-      "url": `${url}/oauth/token`,
-      "method": "POST",
-      "timeout": 0,
-      "headers": {
-        "Authorization": "Basic TmFiZWxpYUNoYXRib3Q6amhyZURuN2JCWjZlQ0M3Mw==",
-        "Content-Type": "application/x-www-form-urlencoded"
-      },
-      "data": {
-        "token": access_token,
-        "grant_type": "token"
-      }
-    };
+    function get_backend_token() {
+      let username = $('#username').val();
+      let password = $('#password').val();
 
-    $.ajax(settings).done(function (response) {
-      $('#chatbotToken').val(response.access_token);
-      console.log(`ACCESS_TOKEN: ${response.access_token}`)
-      setAction();
-    });
-  }
+      let settings = {
+        "url": `${url}/oauth/token`,
+        "method": "POST",
+        "timeout": 0,
+        "headers": {
+          "Authorization": "Basic TmFiZWxpYVN5c3RlbTpKZWFsekQxc3RyQnV0cjY2Ng==",
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        "data": {
+          "username": username,
+          "password": password,
+          "grant_type": "password"
+        }
+      };
 
-  function sendMessage(){
-    const sendObject = {
-    "input": {
-      "intents":[{
-        "intent":"volver_inicio",
-        "confidence":1
-        }]
-      }
-    };
-    const sendOptions = {
-      "silent": true
+      $.ajax(settings).done(function (response) {
+        get_chatbot_token(response.access_token);
+      });
     }
 
-    let restartPromise = new Promise(function(resolve, reject) {
-      window.WebChatInstance.restartConversation();
-      resolve();
-    });
+    function get_chatbot_token(access_token) {
+      let settings = {
+        "url": `${url}/oauth/token`,
+        "method": "POST",
+        "timeout": 0,
+        "headers": {
+          "Authorization": "Basic TmFiZWxpYUNoYXRib3Q6amhyZURuN2JCWjZlQ0M3Mw==",
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        "data": {
+          "token": access_token,
+          "grant_type": "token"
+        }
+      };
 
-    restartPromise.then(function(value){
-      window.WebChatInstance.send(sendObject, sendOptions).catch(function(error) {
-        console.error('This message did not send!');
+      $.ajax(settings).done(function (response) {
+        $('#chatbotToken').val(response.access_token);
+        console.log(`ACCESS_TOKEN: ${response.access_token}`)
+        setAction();
+      });
+    }
+
+    function sendMessage(){
+      const sendObject = {
+      "input": {
+        "intents":[{
+          "intent":"volver_inicio",
+          "confidence":1
+          }]
+        }
+      };
+      const sendOptions = {
+        "silent": true
+      }
+
+      let restartPromise = new Promise(function(resolve, reject) {
+        window.WebChatInstance.restartConversation();
+        resolve();
       });
 
-      //para abrir el chat si no está abierto
-      window.WebChatInstance.openWindow();
-    });
-  }
-  $('#send').click(sendMessage);
-
-
-  function setAction() {
-    let integration_id = chats_integration[document.getElementById("chatbotName").value];
-    let bot_token = document.getElementById("chatbotToken").value.trim();
-    $('#form').toggleClass('d-none', true);
-    // $('#login-block').toggleClass('d-none', true);
-    // $('#token-block').toggleClass('d-none', true);
-    $('#command-block').toggleClass('d-none', false);
-    $('#context-block').toggleClass('d-none', false);
-    $('#test-block').toggleClass('d-none', false);
-    $('#restart-block').toggleClass('d-none', false);
-    createAssistant(integration_id, bot_token);
-  }
-
-  $('#open').click(setAction);
-
-  async function fetchAsync (url) {
-    let response = await fetch(url);
-    let data = await response.json();
-    return data;
-  }
-
-  $('.collapsable').click(function() {
-    $(this).next().toggleClass('d-none');
-  });
-
-  function createAssistant(integration_id, bot_token){
-
-    let responses = [];
-    let steps = [];
-    let test = {
-      dialog: [{
-        name: 'test',
-        initial_context: {},
-        steps: steps,
-      }]
-    }
-
-    $('#test').val(jsyaml.dump(test))
-    let step = null;
-    let commandsStr = [];
-    let commands = [];
-
-    window.watsonAssistantChatOptions = {
-      integrationID: integration_id, // The ID of this integration. CU1
-      region: "eu-de", // The region your integration is hosted in.
-      serviceInstanceID: "59a05c17-afcb-4374-afc6-caba0754ee4c", // The ID of your service instance.
-      showCloseAndRestartButton: true,
-      debug: false,
-      onError: function(error) {
-        console.log('error', error);
-      },
-      onLoad: function(instance) {
-
-        function consumeCommands() {
-          console.log('consumeCommands', commands);
-          if (commands.length) {
-            let command = commands.shift();
-            console.log('command', command);
-            return instance.send({
-              "input": {
-                "message_type": "text",
-                "text": command,
-                "options": {
-                  "export": true,
-                  "debug": true,
-                  "return_context": true,
-                  "alternate_responses": false,
-                  "disambiguation": {
-                      "alternate_responses": false
-                  },
-                },
-              }
-            });
-          }
-        }
-
-        $('#restart').unbind('click').click(function() {
-          instance.restartConversation()
-          .then(function(restart) {
-            commands = $('#commands').val().split('\n').filter(e => e);
-            console.log('commands', commands, restart);
-            return consumeCommands();
-          });
+      restartPromise.then(function(value){
+        window.WebChatInstance.send(sendObject, sendOptions).catch(function(error) {
+          console.error('This message did not send!');
         });
 
-        instance.on({ type: 'identityTokenExpired', handler: function(event) {
-          return new Promise(function(resolve, reject) {
-            event.identityToken = bot_token;
-            resolve();
-          });
-        }});
+        //para abrir el chat si no está abierto
+        window.WebChatInstance.openWindow();
+      });
+    }
+    $('#send').click(sendMessage);
 
-        function update() {
-          $('#test').val(jsyaml.dump(test))
-          let textarea = document.getElementById('test');
-          textarea.scrollTop = textarea.scrollHeight;
-        }
 
-        instance.on({ type: "send", handler: function(msg) {
-          data = msg.data;
-          console.log('send', data);
+    function setAction() {
+      let integration_id = chats_integration[document.getElementById("chatbotName").value];
+      let bot_token = document.getElementById("chatbotToken").value.trim();
+      $('#form').toggleClass('d-none', true);
+      // $('#login-block').toggleClass('d-none', true);
+      // $('#token-block').toggleClass('d-none', true);
+      $('#command-block').toggleClass('d-none', false);
+      $('#context-block').toggleClass('d-none', false);
+      $('#test-block').toggleClass('d-none', false);
+      $('#restart-block').toggleClass('d-none', false);
+      createAssistant(integration_id, bot_token);
+    }
 
-          step = {
-            query: data.input.text,
-          };
-          commandsStr.push(data.input.text);
-          test.dialog[0].steps.push(step);
+    $('#open').click(setAction);
 
-          update();
-        }});
+    async function fetchAsync (url) {
+      let response = await fetch(url);
+      let data = await response.json();
+      return data;
+    }
 
-        let $commandList = $('#command-list');
-        function redraw() {
-          console.log('redraw', responses);
-          let data = responses[$commandList.val()];
-          $('#debug').jsonViewer(data.output.debug, {
-            collapsed: true,
-            withQuotes:false,
-            rootCollapsable:false,
-          });
+    $('.collapsable').click(function() {
+      $(this).next().toggleClass('d-none');
+    });
 
-          $('#context').jsonViewer(data.context.skills['main skill'].user_defined, {
-            collapsed: true,
-            withQuotes:false,
-            rootCollapsable:false,
-          });
+    function createAssistant(integration_id, bot_token){
 
-          let ents = {
-            'entities': data.output.entities,
-            'intents': data.output.intents,
-          };
-          console.log('ents', ents);
+      let responses = [];
+      let steps = [];
+      let test = {
+        dialog: [{
+          name: 'test',
+          initial_context: {},
+          steps: steps,
+        }]
+      }
 
-          $('#entities').jsonViewer(ents, {
-            collapsed: false,
-            withQuotes:false,
-            rootCollapsable:false,
-          });
+      $('#test').val(jsyaml.dump(test))
+      let step = null;
+      let commandsStr = [];
+      let commands = [];
 
-          let length = responses.length;
-          let left = {};
-          if (length > 1) {
-            left = responses[length - 2].context.skills['main skill'].user_defined;
-          }
-          let right = responses[length - 1].context.skills['main skill'].user_defined
-          let delta = jsondiffpatch.diff(left, right);
+      window.watsonAssistantChatOptions = {
+        integrationID: integration_id, // The ID of this integration. CU1
+        region: "eu-de", // The region your integration is hosted in.
+        serviceInstanceID: "59a05c17-afcb-4374-afc6-caba0754ee4c", // The ID of your service instance.
+        showCloseAndRestartButton: true,
+        debug: false,
+        onError: function(error) {
+          console.log('error', error);
+        },
+        onLoad: function(instance) {
 
-          if (delta) {
-            $('#context-diff').html(jsondiffpatch.formatters.html.format(delta, left));
-            jsondiffpatch.formatters.html.hideUnchanged();
+          function consumeCommands() {
+            console.log('consumeCommands', commands, responses);
 
-          }
+            $commandList.empty();
+            responses.forEach(function(e, i) {
+              $commandList.append(`<option value="${i}">${i}: ${commandsStr[i]}</option>`);
+            });
+            $commandList.val(responses.length - 1).change();
 
-          res = {
-            confidence: 0.7,
-          };
-
-          step['response'] = res;
-
-          if (data.output.entities.length) {
-            if (data.output.intents.length){
-              res.intent = data.output.intents[0].intent;
+            if (commands.length) {
+              let command = commands.shift();
+              console.log('command', command);
+              return instance.send({
+                "input": {
+                  "message_type": "text",
+                  "text": command,
+                  "options": {
+                    "export": true,
+                    "debug": true,
+                    "return_context": true,
+                    "alternate_responses": false,
+                    "disambiguation": {
+                        "alternate_responses": false
+                    },
+                  },
+                }
+              });
             }
-            else{
-              res.intent = 'entity_recognition';
+          }
+
+          $('#restart').unbind('click').click(function() {
+            responses = [];
+            steps = [];
+            test = {
+              dialog: [{
+                name: 'test',
+                initial_context: {},
+                steps: steps,
+              }]
             }
-            ent = data.output.entities[0];
-            res.entities = data.output.entities.map((ent) => {
-              return {
-                name: ent.entity,
-                value: ent.value,
-                confidence: 0.7,
-              };
+
+            step = null;
+            commandsStr = [];
+            commands = [];
+
+            instance.restartConversation()
+            .then(function(restart) {
+              commands = $('#commands').val().split('\n').filter(e => e);
+              console.log('commands', commands, responses);
+              return consumeCommands();
+            });
+          });
+
+          instance.on({ type: 'identityTokenExpired', handler: function(event) {
+            return new Promise(function(resolve, reject) {
+              event.identityToken = bot_token;
+              resolve();
+            });
+          }});
+
+          function update() {
+            $('#test').val(jsyaml.dump(test))
+            let textarea = document.getElementById('test');
+            textarea.scrollTop = textarea.scrollHeight;
+          }
+
+          instance.on({ type: "send", handler: function(msg) {
+            data = msg.data;
+            console.log('send', data);
+
+            step = {
+              query: data.input.text,
+            };
+            commandsStr.push(data.input.text);
+            test.dialog[0].steps.push(step);
+
+            update();
+          }});
+
+          let $commandList = $('#command-list');
+          function redraw() {
+            if (responses.length == 0) return;
+
+            console.log('redraw', responses);
+            let data = responses[$commandList.val()];
+            $('#debug').jsonViewer(data.output.debug, {
+              collapsed: true,
+              withQuotes:false,
+              rootCollapsable:false,
             });
 
-          } else if (data.output.intents.length) {
-            res.intent = data.output.intents[0].intent;
-          } else {
-            res.intent = 'UNDEFINED';
+            $('#context').jsonViewer(data.context.skills['main skill'].user_defined, {
+              collapsed: true,
+              withQuotes:false,
+              rootCollapsable:false,
+            });
+
+            let ents = {
+              'entities': data.output.entities,
+              'intents': data.output.intents,
+            };
+            console.log('ents', ents);
+
+            $('#entities').jsonViewer(ents, {
+              collapsed: false,
+              withQuotes:false,
+              rootCollapsable:false,
+            });
+
+            let length = responses.length;
+            let left = {};
+            if (length > 1) {
+              left = responses[length - 2].context.skills['main skill'].user_defined;
+            }
+            let right = responses[length - 1].context.skills['main skill'].user_defined
+            let delta = jsondiffpatch.diff(left, right);
+
+            if (delta) {
+              $('#context-diff').html(jsondiffpatch.formatters.html.format(delta, left));
+              jsondiffpatch.formatters.html.hideUnchanged();
+
+            }
+
+            res = {
+              confidence: 0.7,
+            };
+
+            step['response'] = res;
+
+            if (data.output.entities.length) {
+              if (data.output.intents.length){
+                res.intent = data.output.intents[0].intent;
+              }
+              else{
+                res.intent = 'entity_recognition';
+              }
+              ent = data.output.entities[0];
+              res.entities = data.output.entities.map((ent) => {
+                return {
+                  name: ent.entity,
+                  value: ent.value,
+                  confidence: 0.7,
+                };
+              });
+
+            } else if (data.output.intents.length) {
+              res.intent = data.output.intents[0].intent;
+            } else {
+              res.intent = 'UNDEFINED';
+            }
+
+            update();
           }
 
-          update();
+          $commandList.change(redraw);
+
+          instance.on({ type: "receive", handler: function(msg) {
+            data = msg.data;
+            responses.push(data);
+            console.log('receive', responses);
+
+            setTimeout(consumeCommands, 0);
+          }});
+
+          instance.render();
+          window.WebChatInstance = instance;
         }
+      };
 
-        $commandList.change(redraw);
+      startChatbot();
+    }
 
-        instance.on({ type: "receive", handler: function(msg) {
-          data = msg.data;
-          responses.push(data);
-          console.log('receive', responses);
-
-          $commandList.empty();
-          responses.forEach(function(e, i) {
-            $commandList.append(`<option value="${i}">${i}: ${commandsStr[i]}</option>`);
-          });
-          $commandList.val(responses.length - 1).change();
-
-          setTimeout(consumeCommands);
-        }});
-
-        instance.render();
-        window.WebChatInstance = instance;
+    function startChatbot() {
+      let e_to_remove = document.getElementById("chatbot_script") || false;
+      if (e_to_remove){
+        document.head.removeChild(e_to_remove)
       }
-    };
-
-    startChatbot();
-  }
-
-  function startChatbot() {
-    let e_to_remove = document.getElementById("chatbot_script") || false;
-    if (e_to_remove){
-      document.head.removeChild(e_to_remove)
+      let chatbot_div = document.getElementsByClassName("WatsonAssistantChatHost")[0] || false;
+      if (chatbot_div){
+        document.body.removeChild(chatbot_div)
+      }
+      const t=document.createElement('script');
+      t.id = "chatbot_script";
+      t.src="https://web-chat.global.assistant.watson.appdomain.cloud/versions/" + ((window.watsonAssistantChatOptions && window.watsonAssistantChatOptions.clientVersion) || 'latest') + "/WatsonAssistantChatEntry.js";
+      document.head.appendChild(t);
     }
-    let chatbot_div = document.getElementsByClassName("WatsonAssistantChatHost")[0] || false;
-    if (chatbot_div){
-      document.body.removeChild(chatbot_div)
-    }
-    const t=document.createElement('script');
-    t.id = "chatbot_script";
-    t.src="https://web-chat.global.assistant.watson.appdomain.cloud/versions/" + ((window.watsonAssistantChatOptions && window.watsonAssistantChatOptions.clientVersion) || 'latest') + "/WatsonAssistantChatEntry.js";
-    document.head.appendChild(t);
-  }
 
 
-  $.when($.ready)
-  .then(function() {
-    $('#login').click(get_backend_token);
-  });
-</script>
+    $.when($.ready)
+    .then(function() {
+      $('#login').click(get_backend_token);
+    });
+  </script>
 </body>
 </html>
