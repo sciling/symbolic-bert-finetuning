@@ -25,7 +25,7 @@
   "huevo_cocido": ["huevo_duro", "huevo_cocido", "huevo_sancochado", "huevo_hervido"],
   "patata_asado": ["patata_asada", "solanum_tuberosum_asado"],
   "berenjena": ["berenjena", "berenjeno", "berenjenamente", "berenjen"],
-  "bizcocho": ["bizcocho", "queque", "bizcochuelo", "bizcochos", "biscot"],
+  "bizcocho": ["bizcocho", "queque", "bizcochuelo", "bizcochos"],
   "tortilla": ["tortilla", "tortilla_maiz"],
   "tortilla_frances": ["tortilla_maiz_frances"],
   "higo": ["higo", "higa", "breva"],
