@@ -127,3 +127,5 @@ patata cocida;Patata, hervida;None
 patata hervida;Patata, hervida;None
 tortilla francesa;Tortilla, a la francesa;None
 biscotes;Bizcocho;None
+horchata;Horchata;None
+Horchata;Horchata;None
