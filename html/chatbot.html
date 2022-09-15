@@ -27,19 +27,18 @@
           </select>
         </div>
 
-
-        <!--div class="form-group row">
+        <div id="login-block" class="form-group row">
             <input id="username" class="form-control col-sm-2" type="text" placeholder="Enter Username" name="username" required>
             <input id="password" class="form-control col-sm-2" type="password" placeholder="Enter Password" name="password" required>
             <button id="login" class="btn btn-primary col-sm-2" type="submit">Login</button>
-        </div-->
+        </div>
 
         <div id="token-block" class="form-group">
           <label for="chatbotToken">Token</label>
           <textarea class="form-control" id="chatbotToken" rows="10"></textarea>
         </div>
 
-        <button id="login" type="submit" class="btn btn-primary">Abrir Chatbot</button>
+        <button id="open" type="submit" class="btn btn-primary">Abrir Chatbot</button>
       </form>
 
       <div id="context-block" class="form-group d-none" style="padding-top:10px">
@@ -48,11 +47,11 @@
           </pre>
       </div>
 
-      <div id="test-yaml" class="form-group" style="padding-top:10px">
+      <div id="test-block" class="form-group d-none" style="padding-top:10px">
         <label for="test">Test code:</label>
         <textarea class="form-control" id="test" rows="10"></textarea>
       </div>
-    <button id="send" class="btn btn-secondary" style="margin-top:20px">Enviar mensaje</button>
+    <button id="send" class="btn btn-secondary d-none" style="margin-top:20px">Enviar mensaje</button>
   </div>
 
 
@@ -72,14 +71,14 @@
   };
 
   // let url = 'https://medp-api.laberit.com'
-  let url = 'https://pre-medp-api.laberit.com'
+  let url = 'https://pre-medp-api.laberit.com';
 
   function get_backend_token() {
     let username = $('#username').val();
     let password = $('#password').val();
 
     let settings = {
-      "url": `{url}/oauth/token`,
+      "url": `${url}/oauth/token`,
       "method": "POST",
       "timeout": 0,
       "headers": {
@@ -100,7 +99,7 @@
 
   function get_chatbot_token(access_token) {
     let settings = {
-      "url": `{url}/oauth/token`,
+      "url": `${url}/oauth/token`,
       "method": "POST",
       "timeout": 0,
       "headers": {
@@ -153,12 +152,15 @@
   function setAction() {
     let integration_id = chats_integration[document.getElementById("chatbotName").value];
     let bot_token = document.getElementById("chatbotToken").value.trim();
+    $('#login-block').toggleClass('d-none', true);
     $('#token-block').toggleClass('d-none', true);
     $('#context-block').toggleClass('d-none', false);
+    $('#test-block').toggleClass('d-none', false);
+    $('#send').toggleClass('d-none', false);
     createAssistant(integration_id, bot_token);
   }
 
-  $('#login').click(setAction);
+  $('#open').click(setAction);
 
   async function fetchAsync (url) {
     let response = await fetch(url);
@@ -274,7 +276,7 @@
 
   $.when($.ready)
   .then(function() {
-    // $('#login').click(get_backend_token);
+    $('#login').click(get_backend_token);
   });
 </script>
 </body>
