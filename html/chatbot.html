@@ -4,13 +4,31 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js" integrity="sha512-CSBhVREyzHAjAFfBlIBakjoRUKp5h7VSweP0InR/pAJyptH7peuhCsqAI/snV+TwZmXZqoUklpXp6R6wMnYf5Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://abodelot.github.io/jquery.json-viewer/json-viewer/jquery.json-viewer.js"></script>
+  <link href="https://abodelot.github.io/jquery.json-viewer/json-viewer/jquery.json-viewer.css" type="text/css" rel="stylesheet">
+  <script type='text/javascript' src="https://cdn.jsdelivr.net/npm/jsondiffpatch/dist/jsondiffpatch.umd.min.js"></script>
+  <link href="https://benjamine.github.io/jsondiffpatch/formatters-styles/html.css" type="text/css" rel="stylesheet">
+  <link href="https://benjamine.github.io/jsondiffpatch/formatters-styles/annotated.css" type="text/css" rel="stylesheet">
+  <style type="text/css">
+    textarea {
+      overflow-y:scroll;
+    }
+    .collapsable:after {
+      content: ' 🔽'
+    }
+    .collapsable.d-none:after {
+      content: ' 🔼'
+    }
+  </style>
 </head>
 <body>
     <title>Chatbot Test - Web widget</title>
 
-    <div class="container" style="margin:100px">
-      <form action="javascript:setAction()">
-        <h4>Selecciona un chatbot y escribe un token</h4>
+    <div style="margin:20px;margin-right: 400px">
+      <h4 class="collapsable">
+        Selecciona un chatbot y escribe un token
+      </h4>
+      <form id="form" action="javascript:setAction()">
         <div class="form-group">
           <label>Selecciona un chatbot: </label>
           <select class="form-control" id="chatbotName" style="padding-top:10px">
@@ -40,16 +58,33 @@
 
         <button id="open" type="submit" class="btn btn-primary">Abrir Chatbot</button>
       </form>
+      <div id="command-block" class="form-group d-none" style="padding-top:10px">
+        <label for="commands">Commands</label>
+        <textarea class="form-control" id="commands" rows="5"></textarea>
+        <button id="restart" class="btn btn-primary">restart</button>
+      </div>
 
       <div id="context-block" class="form-group d-none" style="padding-top:10px">
-          <label>Debug</label>
-          <pre id="debug">
-          </pre>
+          <label class="collapsable" for="debug-block">Debug</label>
+          <select class="form-control" id="command-list" style="padding-top:10px">
+          </select>
+          <div id="debug-block" class="container-fluid">
+            <div class="row">
+              <pre id="debug" class="col-sm-3">
+              </pre>
+              <pre id="context" class="col-sm-3">
+              </pre>
+              <pre id="context-diff" class="col-sm-3">
+              </pre>
+              <pre id="entities" class="col-sm-3">
+              </pre>
+            </div>
+          </div>
       </div>
 
       <div id="test-block" class="form-group d-none" style="padding-top:10px">
-        <label for="test">Test code:</label>
-        <textarea class="form-control" id="test" rows="10"></textarea>
+        <label class="collapsable" for="test">Test code:</label>
+        <textarea class="form-control d-none" id="test" rows="10"></textarea>
       </div>
     <button id="send" class="btn btn-secondary d-none" style="margin-top:20px">Enviar mensaje</button>
   </div>
@@ -152,11 +187,13 @@
   function setAction() {
     let integration_id = chats_integration[document.getElementById("chatbotName").value];
     let bot_token = document.getElementById("chatbotToken").value.trim();
-    $('#login-block').toggleClass('d-none', true);
-    $('#token-block').toggleClass('d-none', true);
+    $('#form').toggleClass('d-none', true);
+    // $('#login-block').toggleClass('d-none', true);
+    // $('#token-block').toggleClass('d-none', true);
+    $('#command-block').toggleClass('d-none', false);
     $('#context-block').toggleClass('d-none', false);
     $('#test-block').toggleClass('d-none', false);
-    $('#send').toggleClass('d-none', false);
+    $('#restart-block').toggleClass('d-none', false);
     createAssistant(integration_id, bot_token);
   }
 
@@ -168,9 +205,13 @@
     return data;
   }
 
+  $('.collapsable').click(function() {
+    $(this).next().toggleClass('d-none');
+  });
 
   function createAssistant(integration_id, bot_token){
 
+    let responses = [];
     let steps = [];
     let test = {
       dialog: [{
@@ -182,13 +223,52 @@
 
     $('#test').val(jsyaml.dump(test))
     let step = null;
+    let commandsStr = [];
+    let commands = [];
 
     window.watsonAssistantChatOptions = {
       integrationID: integration_id, // The ID of this integration. CU1
       region: "eu-de", // The region your integration is hosted in.
       serviceInstanceID: "59a05c17-afcb-4374-afc6-caba0754ee4c", // The ID of your service instance.
       showCloseAndRestartButton: true,
+      debug: false,
+      onError: function(error) {
+        console.log('error', error);
+      },
       onLoad: function(instance) {
+
+        function consumeCommands() {
+          console.log('consumeCommands', commands);
+          if (commands.length) {
+            let command = commands.shift();
+            console.log('command', command);
+            return instance.send({
+              "input": {
+                "message_type": "text",
+                "text": command,
+                "options": {
+                  "export": true,
+                  "debug": true,
+                  "return_context": true,
+                  "alternate_responses": false,
+                  "disambiguation": {
+                      "alternate_responses": false
+                  },
+                },
+              }
+            });
+          }
+        }
+
+        $('#restart').unbind('click').click(function() {
+          instance.restartConversation()
+          .then(function(restart) {
+            commands = $('#commands').val().split('\n').filter(e => e);
+            console.log('commands', commands, restart);
+            return consumeCommands();
+          });
+        });
+
         instance.on({ type: 'identityTokenExpired', handler: function(event) {
           return new Promise(function(resolve, reject) {
             event.identityToken = bot_token;
@@ -209,16 +289,53 @@
           step = {
             query: data.input.text,
           };
+          commandsStr.push(data.input.text);
           test.dialog[0].steps.push(step);
 
           update();
         }});
 
-        instance.on({ type: "receive", handler: function(msg) {
-          data = msg.data;
-          console.log('receive', data);
+        let $commandList = $('#command-list');
+        function redraw() {
+          console.log('redraw', responses);
+          let data = responses[$commandList.val()];
+          $('#debug').jsonViewer(data.output.debug, {
+            collapsed: true,
+            withQuotes:false,
+            rootCollapsable:false,
+          });
 
-          $('#debug').html(`<code>${jsyaml.dump(data.output.debug)}</code>`);
+          $('#context').jsonViewer(data.context.skills['main skill'].user_defined, {
+            collapsed: true,
+            withQuotes:false,
+            rootCollapsable:false,
+          });
+
+          let ents = {
+            'entities': data.output.entities,
+            'intents': data.output.intents,
+          };
+          console.log('ents', ents);
+
+          $('#entities').jsonViewer(ents, {
+            collapsed: false,
+            withQuotes:false,
+            rootCollapsable:false,
+          });
+
+          let length = responses.length;
+          let left = {};
+          if (length > 1) {
+            left = responses[length - 2].context.skills['main skill'].user_defined;
+          }
+          let right = responses[length - 1].context.skills['main skill'].user_defined
+          let delta = jsondiffpatch.diff(left, right);
+
+          if (delta) {
+            $('#context-diff').html(jsondiffpatch.formatters.html.format(delta, left));
+            jsondiffpatch.formatters.html.hideUnchanged();
+
+          }
 
           res = {
             confidence: 0.7,
@@ -247,7 +364,24 @@
           } else {
             res.intent = 'UNDEFINED';
           }
+
           update();
+        }
+
+        $commandList.change(redraw);
+
+        instance.on({ type: "receive", handler: function(msg) {
+          data = msg.data;
+          responses.push(data);
+          console.log('receive', responses);
+
+          $commandList.empty();
+          responses.forEach(function(e, i) {
+            $commandList.append(`<option value="${i}">${i}: ${commandsStr[i]}</option>`);
+          });
+          $commandList.val(responses.length - 1).change();
+
+          setTimeout(consumeCommands);
         }});
 
         instance.render();
