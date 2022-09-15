@@ -340,11 +340,14 @@
           }});
 
           let $commandList = $('#command-list');
+
           function redraw() {
             if (responses.length == 0) return;
 
+            let pos = parseInt($commandList.val());
+
             console.log('redraw', responses);
-            let data = responses[$commandList.val()];
+            let data = responses[pos];
             $('#debug').jsonViewer(data.output.debug, {
               collapsed: true,
               withQuotes:false,
@@ -371,10 +374,10 @@
 
             let length = responses.length;
             let left = {};
-            if (length > 1) {
-              left = responses[length - 2].context.skills['main skill'].user_defined;
+            if (pos > 0) {
+              left = responses[pos - 1].context.skills['main skill'].user_defined;
             }
-            let right = responses[length - 1].context.skills['main skill'].user_defined
+            let right = responses[pos].context.skills['main skill'].user_defined
             let delta = jsondiffpatch.diff(left, right);
 
             if (delta) {
