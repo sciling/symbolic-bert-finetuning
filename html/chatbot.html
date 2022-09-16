@@ -406,6 +406,8 @@ no
               withQuotes:false,
               rootCollapsable:false,
             });
+            var hasLogs = responses.reduce((r, e) => r || e.output.debug.log_messages.length > 0, false);
+            $('#debug').toggleClass('error', hasLogs);
             $('#entities').toggleClass('error', !ents.output || ents.output.length == 0);
 
             let length = responses.length;
