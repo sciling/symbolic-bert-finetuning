@@ -599,19 +599,22 @@ class Tagger:
             return 'E-CANTIDAD'
 
         context_str = ':'.join([str(c) for c in context])
-        context_fix = self.context.get(context_str, {}).get(token, None)
+        dcontext = self.context.get(context_str, {})
+        context_fix = dcontext.get(token, dcontext.get('*', None))
         if context_fix:
             print(f"FIX CONTEXT TAG: {token} in {context}: {context[1]} -> {context_fix}")
             return context_fix
 
         context_str = ':'.join([str(c) for c in list(context[:-1]) + ['']])
-        context_fix = self.context.get(context_str, {}).get(token, None)
+        dcontext = self.context.get(context_str, {})
+        context_fix = dcontext.get(token, dcontext.get('*', None))
         if context_fix:
             print(f"FIX CONTEXT TAG: {token} in {context}: {context[1]} -> {context_fix}")
             return context_fix
 
         context_str = ':'.join([str(c) for c in [''] + list(context[:-1])])
-        context_fix = self.context.get(context_str, {}).get(token, None)
+        dcontext = self.context.get(context_str, {})
+        context_fix = dcontext.get(token, dcontext.get('*', None))
         if context_fix:
             print(f"FIX CONTEXT TAG: {token} in {context}: {context[1]} -> {context_fix}")
             return context_fix
@@ -666,8 +669,9 @@ class Tagger:
         print(f"PAIRS: {list(zip(self.tokenizer.convert_ids_to_tokens(inputs['input_ids'][0]), sublabels, subprobs))}")
         print(f"PAIRS: {list(zip(tokens, labels))}")
 
-        for pos, (token, prev_tag, tag, next_tag) in enumerate(zip_longest(tokens, [None] + labels[:-1], labels[:], labels[1:])):
-            labels[pos] = self.fix_tag(token, (prev_tag, tag, next_tag))
+        for _ in range(2):
+            for pos, (token, prev_tag, tag, next_tag) in enumerate(zip_longest(tokens, [None] + labels[:-1], labels[:], labels[1:])):
+                labels[pos] = self.fix_tag(token, (prev_tag, tag, next_tag))
 
         print(f"PAIRF: {list(zip(tokens, labels))}")
 

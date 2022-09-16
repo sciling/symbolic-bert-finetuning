@@ -29,6 +29,16 @@
       "lata"
     ]
   },
+  "E-CANTIDAD:O:": {
+    "E-FOOD": [
+      "*"
+    ]
+  },
+  "B-CANTIDAD:O:": {
+    "E-FOOD": [
+      "*"
+    ]
+  },
   "E-FOOD": [
     "cervecita",
     "digestiva",
