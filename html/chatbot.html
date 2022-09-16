@@ -33,6 +33,7 @@
     }
 
     #debug-block > div.row > div {
+      padding: 0px;
       overflow: scroll;
       height: 60vh;
     }
@@ -40,6 +41,10 @@
     #debug-block > div.row > div > pre {
       height: auto;
       overflow: visible;
+    }
+
+    .error {
+      border: 3px solid red;
     }
   </style>
 </head>
@@ -86,7 +91,14 @@
 
           <div id="command-block" class="form-group d-none" style="padding-top:10px">
             <label for="commands">Commands</label>
-            <textarea class="form-control" id="commands" rows="5"></textarea>
+            <textarea class="form-control" id="commands" rows="5">
+registrar ingesta
+el lunes a la merienda chocolate
+Chocolate, negro
+1 tableta de chocolate negro
+unidades
+no
+            </textarea>
             <button id="restart" class="btn btn-primary">restart</button>
           </div>
 
@@ -128,8 +140,21 @@
       "test": "7659ae17-bc19-4fe5-8345-8b749b340db3"
     };
 
+    const node_urls = {
+      "CU1": "https://eu-de.assistant.watson.cloud.ibm.com/crn%3Av1%3Abluemix%3Apublic%3Aconversation%3Aeu-de%3Aa%2Fcc77cd568abe4954913135fed5d4d917%3A59a05c17-afcb-4374-afc6-caba0754ee4c%3A%3A/assistants/75ee9c37-df5d-47fc-bf2e-123b8aad578d/dialog/dialog#node=",
+    }
+
     // let url = 'https://medp-api.laberit.com'
     let url = 'https://pre-medp-api.laberit.com';
+
+    function getNodeUrl(node) {
+      let urlTemplate = node_urls[document.getElementById("chatbotName").value];
+      if (urlTemplate) {
+        return urlTemplate + node;
+      } else {
+        return undefined;
+      }
+    }
 
     function get_backend_token() {
       let username = $('#username').val();
@@ -307,7 +332,7 @@
 
             instance.restartConversation()
             .then(function(restart) {
-              commands = $('#commands').val().split('\n').filter(e => e);
+              commands = $('#commands').val().split('\n').map(e => e.trim()).filter(e => e);
               console.log('commands', commands, responses);
               return consumeCommands();
             });
@@ -347,11 +372,21 @@
             let pos = parseInt($commandList.val());
 
             console.log('redraw', responses);
-            let data = responses[pos];
+            let data = JSON.parse(JSON.stringify(responses[pos]));
+
+            data.output.debug.nodes_visited.forEach((e) => {
+              let link = getNodeUrl(e.dialog_node);
+              if (link) {
+                e.dialog_node_link = link;
+              }
+              return e;
+            });
+
             $('#debug').jsonViewer(data.output.debug, {
               collapsed: true,
               withQuotes:false,
               rootCollapsable:false,
+              withLinks:true,
             });
 
             $('#context').jsonViewer(data.context.skills['main skill'].user_defined, {
@@ -361,16 +396,17 @@
             });
 
             let ents = {
-              'entities': data.output.entities,
-              'intents': data.output.intents,
+              "entities": data.output.entities,
+              "intents": data.output.intents,
+              "output": data.output.generic,
             };
             console.log('ents', ents);
-
             $('#entities').jsonViewer(ents, {
               collapsed: false,
               withQuotes:false,
               rootCollapsable:false,
             });
+            $('#entities').toggleClass('error', !ents.output || ents.output.length == 0);
 
             let length = responses.length;
             let left = {};

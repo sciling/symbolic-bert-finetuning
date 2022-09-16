@@ -55,7 +55,7 @@ dialogs:
         response:
           confidence: 0.7
           intent: welcome
-  
+
   - name: welcome_test_2
     initial_context: {}
     steps:
@@ -71,7 +71,7 @@ dialogs:
         response:
           confidence: 0.7
           intent: welcome
-          
+
   - name: welcome_test_4
     initial_context: {}
     steps:
@@ -79,7 +79,7 @@ dialogs:
         response:
           confidence: 0.7
           intent: welcome
-  
+
   - name: welcome_test_5
     initial_context: {}
     steps:
@@ -87,7 +87,7 @@ dialogs:
         response:
           confidence: 0.7
           intent: welcome
-          
+
   - name: welcome_test_6
     initial_context: {}
     steps:
@@ -97,7 +97,7 @@ dialogs:
           intent: welcome
 
   #endregion
-  
+
   #region onboarding Tests
 
   - name: bad_onboarding_test_1
@@ -137,9 +137,9 @@ dialogs:
           intent: onboarding
 
   #endregion
-              
+
   #region Extreme Chat Tests
-  
+
   #1 Test de entrada: testea que no acepta 0 cm como respuesta de altura
   - name: extreme_test_1
     initial_context: {}
@@ -173,7 +173,7 @@ dialogs:
             - name: sys-number
               value: '170'
               confidence: 0.7
-  
+
   #2 Testea que existe rango de valores min + max en la 1ra parte del onboarding + "no soy vegano"
   - name: extreme_test_2
     initial_context: {}
@@ -317,7 +317,7 @@ dialogs:
             - name: tipo_dieta
               value: Dieta vegana
               confidence: 0.7
-  
+
   #3 Testea que no se acepten metros como altura
   - name: extreme_test_3
     initial_context: {}
@@ -541,7 +541,7 @@ dialogs:
             - name: enfermedad
               value: Ninguna
               confidence: 0.7
-  
+
   #7 Testea la respuesta de alergias "huevo" (se espera Huevos)
   - name: extreme_test_7
     initial_context: {}
@@ -638,7 +638,7 @@ dialogs:
             - name: alergia
               value: Huevos
               confidence: 0.7
-  
+
   #8 Testea la respuesta de alergias "frutos secos" (se espera frutos de cáscara)
   - name: extreme_test_8
     initial_context: {}
@@ -736,7 +736,7 @@ dialogs:
             - name: alergia
               value: Frutos de cáscara
               confidence: 0.7
-  
+
     #3 Testea que no se acepten metros como altura
 
   #9 Testea que se acepte el peso con el numero +kg junto
@@ -826,7 +826,7 @@ dialogs:
             - name: sys-number
               value: '100000000'
               confidence: 0.7
-  
+
   #12 Test de texto sin sentido
   - name: extreme_test_12
     initial_context: {}
@@ -852,7 +852,7 @@ dialogs:
         response:
           confidence: 0.7
           intent: welcome
-  
+
   - name: extreme_test_13
     initial_context: {}
     steps:
@@ -945,9 +945,9 @@ dialogs:
             - name: sys-number
               value: '0.5'
               confidence: 0.7
-  
+
     #16 Testea si ingesta de agua admite decimales
-  
+
   #17 Testea si ingesta de agua admite datos en ml
   - name: extreme_test_17
     initial_context: {}
@@ -972,7 +972,7 @@ dialogs:
               value: ml
               confidence: 0.7
 
-  
+
   #endregion
 
   #region Normal Chat Tests
@@ -1345,7 +1345,7 @@ dialogs:
             - name: enfermedad
               value: Ninguna
               confidence: 0.7
-  
+
   - name: normal_test_4
     initial_context: {}
     steps:
@@ -1477,7 +1477,7 @@ dialogs:
         response:
           confidence: 0.7
           intent: volver_inicio
-  
+
   - name: normal_test_8
     initial_context: {}
     steps:
@@ -1705,3 +1705,57 @@ dialogs:
           intent: onboarding_comenzar
 
   #endregion
+  - name: el lunes a la merienda chocolate
+    initial_context: {}
+    steps:
+      - query: registrar ingesta
+        response:
+          confidence: 0.7
+          intent: Registrar_ingesta
+      - query: el lunes a la merienda chocolate
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-date
+              value: '2022-09-19'
+              confidence: 0.7
+            - name: toma
+              value: tentempié
+              confidence: 0.7
+            - name: alimento_tipo
+              value: vocabulario
+              confidence: 0.7
+            - name: alimento_tipo
+              value: Chocolate, negro
+              confidence: 0.7
+      - query: Chocolate, negro
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: alimento_tipo
+              value: Chocolate, negro
+              confidence: 0.7
+      - query: 1 tableta de chocolate negro
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: sys-number
+              value: '1'
+              confidence: 0.7
+            - name: alimento_tipo
+              value: Chocolate, negro
+              confidence: 0.7
+            - name: alimento_tipo
+              value: Chocolate negro, con almendras
+              confidence: 0.7
+      - query: unidades
+        response:
+          confidence: 0.7
+          intent: entity_recognition
+          entities:
+            - name: alimento_unidad
+              value: unidad
+              confidence: 0.7
