@@ -20,6 +20,45 @@
     ]
   ,
   "biscot": ["pan", "tostado"],
+  "espagueti_carbonara": [
+      "carbonara",
+      "espagueti",
+      "espagueti_carbonara",
+      "queso"
+    ]
+  ,
+  "espagueti_carbonara_vegetal": [
+      "carbonara",
+      "espagueti",
+      "espagueti_carbonara",
+      "queso",
+      "tomate",
+      "vegetal"
+    ]
+  ,
+  "espagueti_pesto": [
+      "espagueti",
+      "espagueti_pesto",
+      "pesto",
+      "queso"
+    ]
+  ,
+  "espagueti_gamba": [
+      "espagueti",
+      "espagueti_gamba",
+      "gamba",
+      "tomate"
+    ]
+  ,
+  "espagueti_integral_verdura": [
+      "espagueti",
+      "espagueti_integral_verdura",
+      "integral",
+      "tomate",
+      "verdura"
+    ]
+  ,
+
   "tortilla": [
     "tortilla"
   ],
