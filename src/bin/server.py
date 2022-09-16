@@ -121,7 +121,7 @@ async def parse_food(
         food.quantity = math.ceil(food.quantity) if food.quantity else None
         if 'error' in food.search or not food.search.get('nbests', []):
             food.food = None
-            food.search = None
+            food.search = {'nbests': []}
         else:
             if len(food.search.get('nbests', [])) >= 1 and not food.unit and (not food.quantity or food.quantity <= 5):
                 entities = [unit['entity'] for unit in food.search['nbests']]
