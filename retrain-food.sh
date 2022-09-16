@@ -17,7 +17,7 @@ poetry run src/bin/wn.py expand-entities --depth 2 --threshold 0.5  multialiment
 
 poetry run src/bin/classifier.py entities-to-dataset multialimentos.csv \
   multialimentos-train.csv multialimentos-dev.csv multialimentios-test.csv \
-  --test 0 # --max-examples 100000
+  --test 0 --max-examples 100000
 
 echo "para,estado_animo_multialimentos" >> multialimentos-train.csv
 

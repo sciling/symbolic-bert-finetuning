@@ -29,6 +29,16 @@
       "lata"
     ]
   },
+  "E-UNIDAD:O:": {
+    "E-FOOD": [
+      "*"
+    ]
+  },
+  "B-UNIDAD:O:": {
+    "E-FOOD": [
+      "*"
+    ]
+  },
   "E-CANTIDAD:O:": {
     "E-FOOD": [
       "*"
@@ -40,6 +50,7 @@
     ]
   },
   "E-FOOD": [
+    "bibimbap",
     "cervecita",
     "digestiva",
     "digestivo",

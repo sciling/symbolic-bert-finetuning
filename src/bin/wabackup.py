@@ -107,6 +107,14 @@ def get_assistant_sid(export_dn=None):
         print(f"SID: {sid}")
         driver.quit()
 
+    with open('config.json') as file:
+        config = json.load(file)
+
+    config['credentials']['assistant.sid'] = sid
+
+    with open('config.json', 'w') as file:
+        json.dump(config, file)
+
     return sid
 
 
