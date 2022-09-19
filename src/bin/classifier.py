@@ -3,6 +3,7 @@
 import re
 import csv
 import json
+import math
 from pathlib import Path
 from typing import Optional, List, Any
 from collections import defaultdict
@@ -11,6 +12,7 @@ from fractions import Fraction
 import random
 
 import typer
+from tqdm import tqdm
 from ruamel.yaml import YAML
 import torch
 from torch import nn
@@ -25,6 +27,7 @@ from transformers import (
     Trainer,
     DataCollatorForTokenClassification,
 )
+from fastapi.encoders import jsonable_encoder
 from datasets import load_metric, load_dataset
 from spellchecker import SpellChecker
 from sklearn.metrics import f1_score, roc_auc_score, accuracy_score
@@ -37,7 +40,10 @@ from text_to_num import text2num
 import numpy as np
 from pydantic import BaseModel  # pylint: disable=no-name-in-module
 
-from medp.utils import EmbeddingsProcessor, Database
+from medp.utils import (
+    EmbeddingsProcessor, Database,
+    SearchEngine, DescriptionType, clean_spaces
+)
 
 app = typer.Typer()
 
@@ -890,6 +896,79 @@ def train_token(train_fn: Path, dev_fn: Path, output_dir: Path = 'train.dir', mo
     metrics = trainer.evaluate(eval_dataset=tokenized_datasets['validation'])
     trainer.log_metrics("eval", metrics)
     trainer.save_metrics("eval", metrics)
+
+
+def parse_food(
+    text: str, tagger: Tagger, searcher: SearchEngine, nbest: int = 4, summarized: bool = True,
+    multinomial: bool = True, description_type: DescriptionType = DescriptionType.LONG,
+    reuse_description: bool = False, fuzzy: bool = True, max_ngram: int = 5,
+    default_units: dict = None, food_fix_db: dict = None
+):
+    if default_units is None:
+        default_units = {}
+
+    res = tagger.tag(text)
+    print(f"PARSEFOOD: {text}: {res}")
+
+    for food in res.get('foods', [])[:]:
+        # NOTE: backend only admits ints
+        food.quantity = math.ceil(food.quantity) if food.quantity else None
+
+        if searcher:
+            food.search = searcher.search(
+                food.food, nbest, summarized=summarized, multinomial=multinomial,
+                description_type=description_type, reuse_description=reuse_description,
+                fuzzy=fuzzy, max_ngram=max_ngram
+            )
+            if 'error' in food.search or not food.search.get('nbests', []):
+                # food.food = None
+                food.search = {'nbests': []}
+            else:
+                if len(food.search.get('nbests', [])) >= 1 and not food.unit and (not food.quantity or food.quantity <= 5):
+                    entities = [unit['entity'] for unit in food.search['nbests']]
+                    units = list({default_units[entity] for entity in entities if entity in default_units})
+                    print("UNITS", entities, units, {entity: default_units.get(entity, None) for entity in entities if entity in default_units})
+                    if len(units) == 1:
+                        food.unit = units[0]
+
+                if food_fix_db is not None:
+                    for sr in food.search.get('nbests', []):
+                        key = f"{food.food}~{sr['entity']}"
+                        sr['sign'] = food_fix_db.get(key, {}).get('sign', '~')
+                        print(f"SR: {sr}; KEY: {key}")
+
+            if not food.search and not food.unit and not food.quantity:
+                res.get('foods', []).remove(food)
+    return res
+
+
+@app.command()
+def evaluate_food(
+    text_fn: Path, output_fn: Path, nbest: int = 4, summarized: bool = True,
+    multinomial: bool = True, description_type: DescriptionType = 'long',
+    reuse_description: bool = False, fuzzy: bool = True, max_ngram: int = 5
+):
+    searcher = SearchEngine(f"db/alimento_tipo.json", vocab_fn='vocab.json', ignore_fn='ignore.json')
+    tagger = Tagger('./train-ma.dir', normalization_fn="./multialimento-normalization.json", token_fixes_fn="./multialimento-token-fixes.json", strict_fields={'unit'})
+
+    data = []
+    with open(text_fn) as file:
+        texts = [text for text in file.read().split('\n') if text]
+
+    default_units = {}
+    with open('alimentos_unidad_defecto.csv') as file:
+        for row in csv.reader(file, delimiter=',', quotechar='"'):
+            default_units[row[0]] = row[1]
+
+    try:
+        for text in tqdm(texts):
+            res = parse_food(text, tagger, searcher)
+            score = len(res.get('foods', []))
+            data.append((score, text, res))
+
+    finally:
+        with open(output_fn, 'w') as file:
+            json.dump(sorted(jsonable_encoder(data), reverse=True), file, indent=2, ensure_ascii=False)
 
 
 if __name__ == "__main__":

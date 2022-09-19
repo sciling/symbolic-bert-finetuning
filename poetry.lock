@@ -806,6 +806,17 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
+name = "demoji"
+version = "1.1.0"
+description = "Accurately remove and replace emojis in text strings"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.extras]
+ujson = ["ujson"]
+
+[[package]]
 name = "dependency-check"
 version = "0.6.0"
 description = "Shim to easily install OWASP dependency-check-cli into Python projects"
@@ -3292,7 +3303,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "~3.10"
-content-hash = "b6256d85690848bf4f1a3860de6bc4c6581eaa05ae2d2bc029c0d82552329813"
+content-hash = "b23580b6e214085e650aa0d065c80420f3b72dba5e11757e5fbd0102d9c96079"
 
 [metadata.files]
 anyio = []
@@ -3537,6 +3548,10 @@ decorator = [
 defusedxml = [
     {file = "defusedxml-0.7.1-py2.py3-none-any.whl", hash = "sha256:a352e7e428770286cc899e2542b6cdaedb2b4953ff269a210103ec58f6198a61"},
     {file = "defusedxml-0.7.1.tar.gz", hash = "sha256:1bb3032db185915b62d7c6209c5a8792be6a32ab2fedacc84e01b52c51aa3e69"},
+]
+demoji = [
+    {file = "demoji-1.1.0-py3-none-any.whl", hash = "sha256:6d3256c909aea299e97fe984f827a2a060c2a8f8bfcbafa7ec9659967c5df50f"},
+    {file = "demoji-1.1.0.tar.gz", hash = "sha256:072efaeca725e6f63ab59d83abeb55b178842538ed9256455a82ebbd055ff216"},
 ]
 dependency-check = [
     {file = "dependency-check-0.6.0.zip", hash = "sha256:6fa00b63fbdba57210825675956467ea67693a47b6ef192046f9a51732f22c7f"},

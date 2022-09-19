@@ -17,7 +17,7 @@ from pydantic import BaseModel  # pylint: disable=no-name-in-module
 
 
 from medp.utils import SearchEngine, DescriptionType, clean_spaces, Database
-from bin.classifier import Classifier, Tagger
+from bin.classifier import Classifier, Tagger, parse_food
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -99,7 +99,7 @@ async def food_fix(food_fix: FoodFix):
 
 
 @app.get("/parse-food")
-async def parse_food(
+async def parse_food_endpoint(
     text: str, nbest: int = 4, summarized: bool = True,
     multinomial: bool = True, description_type: DescriptionType = DescriptionType.LONG,
     reuse_description: bool = False, fuzzy: bool = True, max_ngram: int = 5,
@@ -108,35 +108,13 @@ async def parse_food(
     tagger = CACHED['food']
     searcher = CACHED['alimento_tipo']
 
-    res = tagger.tag(text)
-    print(f"PARSEFOOD: {text}: {res}")
-
-    for food in res.get('foods', [])[:]:
-        food.search = searcher.search(
-            food.food, nbest, summarized=summarized, multinomial=multinomial,
-            description_type=description_type, reuse_description=reuse_description,
-            fuzzy=fuzzy, max_ngram=max_ngram
-        )
-        # NOTE: backend only admits ints
-        food.quantity = math.ceil(food.quantity) if food.quantity else None
-        if 'error' in food.search or not food.search.get('nbests', []):
-            food.food = None
-            food.search = {'nbests': []}
-        else:
-            if len(food.search.get('nbests', [])) >= 1 and not food.unit and (not food.quantity or food.quantity <= 5):
-                entities = [unit['entity'] for unit in food.search['nbests']]
-                units = list({default_units[entity] for entity in entities if entity in default_units})
-                print("UNITS", entities, units, {entity: default_units.get(entity, None) for entity in entities if entity in default_units})
-                if len(units) == 1:
-                    food.unit = units[0]
-
-            for sr in food.search.get('nbests', []):
-                key = f"{food.food}~{sr['entity']}"
-                sr['sign'] = FOOD_FIX_DB.get(key, {}).get('sign', '~')
-                print(f"SR: {sr}; KEY: {key}")
-
-        if not food.search and not food.unit and not food.quantity:
-            res.get('foods', []).remove(food)
+    res = parse_food(
+        text, tagger, searcher,
+        nbest=nbest, summarized=summarized, multinomial=multinomial,
+        description_type=description_type, reuse_description=reuse_description,
+        fuzzy=fuzzy, max_ngram=max_ngram,
+        default_units=default_units, food_fix_db=FOOD_FIX_DB
+    )
 
     TAGGER_DB[text] = {
         'text': text,

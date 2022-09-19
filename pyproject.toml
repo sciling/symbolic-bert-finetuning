@@ -40,6 +40,7 @@ text2num = "^2.4.0"
 chromedriver-autoinstaller = "^0.4.0"
 selenium = "^4.4.3"
 xvfbwrapper = "^0.2.9"
+demoji = "^1.1.0"
 
 
 [tool.poetry.dev-dependencies]
