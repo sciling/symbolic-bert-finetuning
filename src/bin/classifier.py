@@ -542,6 +542,9 @@ class Food(BaseModel):
     food: Optional[str]
     search: Optional[Any]
 
+    def is_empty(self):
+        return self.quantity is None and self.unit is None and self.food is None
+
 
 def tokenize(sentence):
     if not sentence:
@@ -601,22 +604,33 @@ class Tagger:
         context_str = ':'.join([str(c) for c in context])
         dcontext = self.context.get(context_str, {})
         context_fix = dcontext.get(token, dcontext.get('*', None))
+        print(f"FIXING CONTEXT TAG: {token} in {context_str}")
         if context_fix:
-            print(f"FIX CONTEXT TAG: {token} in {context}: {context[1]} -> {context_fix}")
+            print(f"FIX CONTEXT TAG: {token} in {context_str}: {context[1]} -> {context_fix}")
             return context_fix
 
         context_str = ':'.join([str(c) for c in list(context[:-1]) + ['']])
         dcontext = self.context.get(context_str, {})
         context_fix = dcontext.get(token, dcontext.get('*', None))
+        print(f"FIXING CONTEXT TAG: {token} in {context_str}")
         if context_fix:
-            print(f"FIX CONTEXT TAG: {token} in {context}: {context[1]} -> {context_fix}")
+            print(f"FIX CONTEXT TAG: {token} in {context_str}: {context[1]} -> {context_fix}")
             return context_fix
 
-        context_str = ':'.join([str(c) for c in [''] + list(context[:-1])])
+        context_str = ':'.join([str(c) for c in [''] + list(context[1:])])
         dcontext = self.context.get(context_str, {})
         context_fix = dcontext.get(token, dcontext.get('*', None))
+        print(f"FIXING CONTEXT TAG: {token} in {context_str}")
         if context_fix:
-            print(f"FIX CONTEXT TAG: {token} in {context}: {context[1]} -> {context_fix}")
+            print(f"FIX CONTEXT TAG: {token} in {context_str}: {context[1]} -> {context_fix}")
+            return context_fix
+
+        context_str = ':'.join(['', context[1], ''])
+        dcontext = self.context.get(context_str, {})
+        context_fix = dcontext.get(token, dcontext.get('*', None))
+        print(f"FIXING CONTEXT TAG: {token} in {context_str}")
+        if context_fix:
+            print(f"FIX CONTEXT TAG: {token} in {context_str}: {context[1]} -> {context_fix}")
             return context_fix
 
         if token in self.token_fixes:
@@ -739,6 +753,7 @@ class Tagger:
             else:
                 print(f"IGNORE: {tokens[sid]} {tag}")
 
+        res['foods'] = [food for food in res['foods'] if not food.is_empty()]
         print(res)
         return res
 

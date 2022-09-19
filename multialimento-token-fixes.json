@@ -29,26 +29,17 @@
       "lata"
     ]
   },
-  "E-UNIDAD:O:": {
-    "E-FOOD": [
-      "*"
+  ":B-FOOD:": {
+    "B-CLEAR": [
+      ".",
+      ",",
+      ";",
+      ":"
     ]
   },
-  "B-UNIDAD:O:": {
-    "E-FOOD": [
-      "*"
-    ]
-  },
-  "E-CANTIDAD:O:": {
-    "E-FOOD": [
-      "*"
-    ]
-  },
-  "B-CANTIDAD:O:": {
-    "E-FOOD": [
-      "*"
-    ]
-  },
+  "B-CLEAR": [
+    "."
+  ],
   "E-FOOD": [
     "bibimbap",
     "cervecita",
