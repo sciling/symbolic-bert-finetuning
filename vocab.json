@@ -20,6 +20,7 @@
     ]
   ,
   "biscot": ["pan", "tostado"],
+  "arepa": ["pan", "maiz"],
   "espagueti_carbonara": [
       "carbonara",
       "espagueti",
