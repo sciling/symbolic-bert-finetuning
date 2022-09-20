@@ -737,7 +737,8 @@ class Tagger:
                 [None, None] + tokens[:-2], [None] + tokens[:-1], tokens[:], tokens[1:],
                 [None, None] + labels[:-2], [None] + labels[:-1], labels[:], labels[1:]
             )):
-                labels[pos] = self.fix_tag((pprev_token, prev_token, token, next_token), (pprev_tag, prev_tag, tag, next_tag))
+                if pos < len(labels):
+                    labels[pos] = self.fix_tag((pprev_token, prev_token, token, next_token), (pprev_tag, prev_tag, tag, next_tag))
 
             print(f"PAIRF[{it}]: {list(zip(tokens, labels))}")
 
