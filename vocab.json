@@ -19,6 +19,25 @@
       "bellota"
     ]
   ,
+  "cacao_polvo": 3,
+  "cao": 3,
+  "caloria": 3,
+  "cacao_polvo_azucarado": [
+      "cao",
+      "cacao",
+      "cacao_polvo",
+      "caloria",
+      "polvo"
+    ]
+  ,
+  "cacao_polvo_azucarado_caloria": [
+      "cao",
+      "cacao",
+      "cacao_polvo",
+      "caloria",
+      "polvo"
+    ]
+  ,
   "biscot": ["pan", "tostado"],
   "arepa": ["pan", "maiz"],
   "espagueti_carbonara": [

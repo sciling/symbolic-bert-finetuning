@@ -19,6 +19,12 @@
       "de"
     ]
   },
+  ",:E-FOOD:": {
+    "B-FOOD": [
+      "café",
+      "cafe"
+    ]
+  },
   "E-FOOD:E-FOOD:": {
     "E-FOOD": [
       "lata"
@@ -35,9 +41,22 @@
       ":"
     ]
   },
+  "B-UNIDAD:E-FOOD:": {
+    "O": [
+      "de"
+    ]
+  },
   "E-UNIDAD:E-UNIDAD:": {
     "O": [
       ".",
+      ":"
+    ]
+  },
+  "E-CANTIDAD:E-FOOD:E-FOOD:": {
+    "B-CLEAR": [
+      ".",
+      ",",
+      ";",
       ":"
     ]
   },
@@ -51,6 +70,14 @@
   },
   ":E-FOOD:": {
     "B-CLEAR": [
+      ".",
+      ";",
+      ":"
+    ]
+  },
+  ":E-FOOD:B-FOOD": {
+    "B-CLEAR": [
+      ",",
       ".",
       ";",
       ":"
@@ -171,5 +198,9 @@
     "vasos",
     "baso",
     "basos"
+  ],
+  "B-TOMA": [
+    "Desayuno",
+    "desayuno"
   ]
 }

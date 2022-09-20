@@ -604,40 +604,72 @@ class Tagger:
         print(f"TOKEN_FIXES: {self.token_fixes}")
         print(f"TOKEN_FIXES (CONTEXT): {self.context}")
 
-    def fix_tag(self, token, context):
+    def fix_tag(self, tokens, context):
+        pprev_token, prev_token, token, next_token = tokens
+        fullcontext = list(context)
+        context = fullcontext[1:]
         if not token:
             return context[1]
 
         if token.isnumeric():
             return 'E-CANTIDAD'
 
-        context_str = ':'.join([str(c) for c in context])
-        dcontext = self.context.get(context_str, {})
-        context_fix = dcontext.get(token, dcontext.get('*', None))
-        if context_fix:
-            print(f"FIX CONTEXT TAG: {token} in {context_str}: {context[1]} -> {context_fix}")
-            return context_fix
+        contexts = {
+            ':'.join([str(c) for c in context]),
+            ':'.join([str(c) for c in context[:-1] + ['']]),
+            ':'.join([str(c) for c in [''] + context[1:]]),
+            ':'.join(['', context[1], '']),
+        }
+        ccontext = context[:2] + [next_token]
+        contexts.update({
+            ':'.join([str(c) for c in ccontext]),
+            ':'.join([str(c) for c in ccontext[:-1] + ['']]),
+            ':'.join([str(c) for c in [''] + ccontext[1:]]),
+        })
+        ccontext = [prev_token] + context[1:]
+        contexts.update({
+            ':'.join([str(c) for c in ccontext]),
+            ':'.join([str(c) for c in ccontext[:-1] + ['']]),
+            ':'.join([str(c) for c in [''] + ccontext[1:]]),
+        })
+        ccontext = [prev_token, context[1], next_token]
+        contexts.update({
+            ':'.join([str(c) for c in ccontext]),
+            ':'.join([str(c) for c in ccontext[:-1] + ['']]),
+            ':'.join([str(c) for c in [''] + ccontext[1:]]),
+        })
 
-        context_str = ':'.join([str(c) for c in list(context[:-1]) + ['']])
-        dcontext = self.context.get(context_str, {})
-        context_fix = dcontext.get(token, dcontext.get('*', None))
-        if context_fix:
-            print(f"FIX CONTEXT TAG: {token} in {context_str}: {context[1]} -> {context_fix}")
-            return context_fix
+        # full context
+        contexts.update({
+            ':'.join([str(c) for c in fullcontext]),
+            ':'.join([str(c) for c in fullcontext[:-1] + ['']]),
+        })
+        ccontext = fullcontext[:3] + [next_token]
+        contexts.update({
+            ':'.join([str(c) for c in fullcontext]),
+        })
+        ccontext = [pprev_token] + fullcontext[1:]
+        contexts.update({
+            ':'.join([str(c) for c in ccontext]),
+            ':'.join([str(c) for c in ccontext[:-1] + ['']]),
+        })
+        ccontext = [pprev_token, prev_token, context[1], next_token]
+        contexts.update({
+            ':'.join([str(c) for c in ccontext]),
+            ':'.join([str(c) for c in ccontext[:-1] + ['']]),
+        })
+        ccontext = [fullcontext[0], prev_token, context[1], next_token]
+        contexts.update({
+            ':'.join([str(c) for c in ccontext]),
+            ':'.join([str(c) for c in ccontext[:-1] + ['']]),
+        })
 
-        context_str = ':'.join([str(c) for c in [''] + list(context[1:])])
-        dcontext = self.context.get(context_str, {})
-        context_fix = dcontext.get(token, dcontext.get('*', None))
-        if context_fix:
-            print(f"FIX CONTEXT TAG: {token} in {context_str}: {context[1]} -> {context_fix}")
-            return context_fix
-
-        context_str = ':'.join(['', context[1], ''])
-        dcontext = self.context.get(context_str, {})
-        context_fix = dcontext.get(token, dcontext.get('*', None))
-        if context_fix:
-            print(f"FIX CONTEXT TAG: {token} in {context_str}: {context[1]} -> {context_fix}")
-            return context_fix
+        for context_str in contexts:
+            dcontext = self.context.get(context_str, {})
+            context_fix = dcontext.get(token, dcontext.get('*', None))
+            if context_fix:
+                print(f"FIX CONTEXT TAG: {token} in {context_str}: {context[1]} -> {context_fix}")
+                return context_fix
 
         if token in self.token_fixes:
             print(f"FIX TAG: {token}: {context[1]} -> {self.token_fixes[token]}")
@@ -689,11 +721,25 @@ class Tagger:
         print(f"PAIRS: {list(zip(self.tokenizer.convert_ids_to_tokens(inputs['input_ids'][0]), sublabels, subprobs))}")
         print(f"PAIRS: {list(zip(tokens, labels))}")
 
-        for _ in range(2):
-            for pos, (token, prev_tag, tag, next_tag) in enumerate(zip_longest(tokens, [None] + labels[:-1], labels[:], labels[1:])):
-                labels[pos] = self.fix_tag(token, (prev_tag, tag, next_tag))
+        # Fix tags based on parentheses
+        blocks = [(i, t, labels[i]) for i, t in enumerate(tokens) if t in ('(', ')', '{', '}', '[', ']')]
+        for start, end in zip_longest(blocks, blocks[1:]):
+            if start[1] not in ('(', '{', '['):
+                continue
 
-        print(f"PAIRF: {list(zip(tokens, labels))}")
+            end_pos = end[0] + 1 if end is not None else len(tokens)
+            for pos in range(start[0], end_pos):
+                labels[pos] = start[2]
+
+        # Fix tags based on context
+        for it in range(2):
+            for pos, (pprev_token, prev_token, token, next_token, pprev_tag, prev_tag, tag, next_tag) in enumerate(zip_longest(
+                [None, None] + tokens[:-2], [None] + tokens[:-1], tokens[:], tokens[1:],
+                [None, None] + labels[:-2], [None] + labels[:-1], labels[:], labels[1:]
+            )):
+                labels[pos] = self.fix_tag((pprev_token, prev_token, token, next_token), (pprev_tag, prev_tag, tag, next_tag))
+
+            print(f"PAIRF[{it}]: {list(zip(tokens, labels))}")
 
         mapping = {
             'CANTIDAD': 'quantity',
