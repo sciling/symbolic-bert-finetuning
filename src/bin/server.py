@@ -348,6 +348,7 @@ async def estado_animo_multiple(text: str, nbest: int = 4, threshold: float = 0.
     res = {
         "text": sentence.text,
         "nbests": nbests,
+        "suggestions": [m for _, m in sorted([(c, m) for m, c in results.items()], reverse=True)],
     }
 
     print(f"RES: {text} = {res}")

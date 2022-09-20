@@ -58,7 +58,10 @@ def my_tokenizer_pri(nlp):
     infixes = nlp.Defaults.infixes
     suffixes = nlp.Defaults.suffixes
 
-    prefixes.append(r'''[±\-\+0-9., ]+[0-9 ]+''')
+    prefixes.remove('%')
+    suffixes = [p.replace('%', '') for p in suffixes]
+
+    prefixes.append(r'''[±\-\+/0-9.,]+[0-9]*[%]?''')
     infixes.append(r'''[/,:;]''')
 
     prefix_re = compile_prefix_regex(prefixes)
@@ -82,6 +85,7 @@ NLP.tokenizer = my_tokenizer_pri(NLP)
 
 def to_number(string, return_none=True):
     try:
+        string = string.lower()
         return text2num(string, 'es')
     except ValueError:
         if string == 'una':
@@ -610,7 +614,6 @@ class Tagger:
         context_str = ':'.join([str(c) for c in context])
         dcontext = self.context.get(context_str, {})
         context_fix = dcontext.get(token, dcontext.get('*', None))
-        print(f"FIXING CONTEXT TAG: {token} in {context_str}")
         if context_fix:
             print(f"FIX CONTEXT TAG: {token} in {context_str}: {context[1]} -> {context_fix}")
             return context_fix
@@ -618,7 +621,6 @@ class Tagger:
         context_str = ':'.join([str(c) for c in list(context[:-1]) + ['']])
         dcontext = self.context.get(context_str, {})
         context_fix = dcontext.get(token, dcontext.get('*', None))
-        print(f"FIXING CONTEXT TAG: {token} in {context_str}")
         if context_fix:
             print(f"FIX CONTEXT TAG: {token} in {context_str}: {context[1]} -> {context_fix}")
             return context_fix
@@ -626,7 +628,6 @@ class Tagger:
         context_str = ':'.join([str(c) for c in [''] + list(context[1:])])
         dcontext = self.context.get(context_str, {})
         context_fix = dcontext.get(token, dcontext.get('*', None))
-        print(f"FIXING CONTEXT TAG: {token} in {context_str}")
         if context_fix:
             print(f"FIX CONTEXT TAG: {token} in {context_str}: {context[1]} -> {context_fix}")
             return context_fix
@@ -634,7 +635,6 @@ class Tagger:
         context_str = ':'.join(['', context[1], ''])
         dcontext = self.context.get(context_str, {})
         context_fix = dcontext.get(token, dcontext.get('*', None))
-        print(f"FIXING CONTEXT TAG: {token} in {context_str}")
         if context_fix:
             print(f"FIX CONTEXT TAG: {token} in {context_str}: {context[1]} -> {context_fix}")
             return context_fix
