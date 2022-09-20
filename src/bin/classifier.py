@@ -808,6 +808,11 @@ class Tagger:
                 print(f"IGNORE: {tokens[sid]} {tag}")
 
         res['foods'] = [food for food in res['foods'] if not food.is_empty()]
+
+        # if multiple foods, remove those without food field
+        if len(res['foods']) > 1:
+            res['foods'] = [food for food in res['foods'] if food.food]
+
         print(res)
         return res
 
