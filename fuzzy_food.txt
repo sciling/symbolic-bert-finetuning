@@ -145,3 +145,4 @@ magdalena de espelta;Magdalena
 leche de nueces;Leche de almendra;None
 pizza de erduras con pollo;Pizza, precocinada
 leche condensada;Leche condensada, entera, con azúcar;Leche de vaca, desnatada, condensada, con azúcar
+dulce;Chocolate, negro

@@ -20,6 +20,10 @@
       "leche_condensado"
     ]
   ,
+  "dulce": [
+    "pastel",
+    "chocolate"
+  ],
   "leche_vaca_desnatado_condensado_azucar": [
       "condensado",
       "desnatado",
@@ -851,7 +855,6 @@
   "donut": 4,
   "dorada": 4,
   "dorado": 6,
-  "dulce": 21,
   "duro": 11,
   "ecologicameno": 2,
   "economico": 2,
