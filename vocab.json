@@ -13,12 +13,43 @@
   "cava": ["cava"],
   "plancha": 1,
   "bistec": ["filete", "carne"],
+  "leche_condensado_entero_azucar": [
+      "condensado",
+      "leche",
+      "entero",
+      "leche_condensado"
+    ]
+  ,
+  "leche_vaca_desnatado_condensado_azucar": [
+      "condensado",
+      "desnatado",
+      "leche",
+      "leche_condensado"
+    ]
+  ,
   "jamon_iberico_bellota": [
       "jamon",
       "jamon_iberico",
       "bellota"
     ]
   ,
+  "pizza_precocinado": [
+      "pizza"
+    ]
+  ,
+  "masa_pizza_casero": [
+      "masa",
+      "pizza"
+    ]
+  ,
+  "masa_pizza_casero_harina_integral": [
+      "integral",
+      "masa",
+      "pizza"
+    ]
+  ,
+  "triticum_spelta": ["triticum_spelta"],
+  "magdalena": ["magdalena"],
   "cacao_polvo": 3,
   "cao": 3,
   "caloria": 3,
@@ -746,6 +777,7 @@
   "conac": 2,
   "concentrado": 2,
   "condensadamonsado": 6,
+  "condensado": 6,
   "conejo": 16,
   "confitado": 5,
   "confitura": 2,
@@ -1105,7 +1137,6 @@
   "machanga": 2,
   "maduro": 9,
   "maduros": 8,
-  "magdalena": 2,
   "magra": 1,
   "magrets": 1,
   "magro": 2,
