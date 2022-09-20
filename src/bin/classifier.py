@@ -678,13 +678,14 @@ class Tagger:
         return context[1]
 
     def normalize(self, value, qtag):
+        lvalue = value.lower() if isinstance(value, str) else value
         if not self.normalization or qtag not in self.normalization:
             if self.strict_fields and qtag in self.strict_fields:
                 return None
             return value
 
-        print(f"NORMALIZE: {qtag} {value} {self.normalization[qtag].get(value, value)}")
-        return self.normalization[qtag].get(value, value)
+        print(f"NORMALIZE: {qtag} {value} {self.normalization[qtag].get(lvalue, value)}")
+        return self.normalization[qtag].get(lvalue, value)
 
     def tag(self, sentence):
         res = {
