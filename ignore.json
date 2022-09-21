@@ -4,6 +4,7 @@
   "sal": null,
   "azafran": null,
   "morron": null,
+  "pipa": ["pipas", "pipa", "semilla_girasol"],
   "vino": ["vino", "venir"],
   "arruga": ["arrugado", "arrugada"],
   "tostada": ["tostado"],

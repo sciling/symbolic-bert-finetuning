@@ -20,6 +20,13 @@
       "leche_condensado"
     ]
   ,
+  "pipa_girasol_pelada_sal": [
+      "girasol",
+      "pelada",
+      "pipa",
+      "pipa_girasol"
+    ]
+  ,
   "dulce": [
     "pastel",
     "chocolate"
