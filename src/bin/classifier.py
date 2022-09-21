@@ -550,6 +550,7 @@ class Food(BaseModel):
     quantity: Optional[str]
     unit: Optional[str]
     food: Optional[str]
+    item: Optional[str]
     search: Optional[Any]
 
     def is_empty(self):
@@ -966,6 +967,7 @@ def parse_food(
     for food in res.get('foods', [])[:]:
         # NOTE: backend only admits ints
         food.quantity = math.ceil(food.quantity) if food.quantity else None
+        food.item = food.food.capitalize()
 
         if searcher:
             food.search = searcher.search(
