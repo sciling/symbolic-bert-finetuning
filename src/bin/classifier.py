@@ -967,7 +967,7 @@ def parse_food(
     for food in res.get('foods', [])[:]:
         # NOTE: backend only admits ints
         food.quantity = math.ceil(food.quantity) if food.quantity else None
-        food.item = food.food.capitalize()
+        food.item = food.food.capitalize() if food.food else None
 
         if searcher:
             food.search = searcher.search(
