@@ -27,6 +27,7 @@ scp medp-gpu:ibm_watson_test/mood-database.json .
 # poetry run src/bin/classifier.py train mood-train.csv mood-dev.csv --num-train-epochs 3 --output-dir train2.dir
 
 get_multicorpus mood-database.json | sort -u > manual-multimood.csv
+get_multicorpus mood-database2.json | sort -u >> manual-multimood.csv
 poetry run src/bin/wn.py expand-entities --depth 2 --threshold 0.5 estado_animo_entity_template.yaml --save-fn estado_animo_entity_custom.csv --vars-fn custom.vocab
 cat estado_animo_entity_expanded.csv estado_animo_entity_custom.csv | sort -u > estado_animo_entity_expanded_custom.csv
 poetry run src/bin/classifier.py entities-to-dataset estado_animo_entity_expanded_custom.csv multimood-train.csv multimood-dev.csv multimood-test.csv --max-examples 20000 --dev 0.1 --test 0
