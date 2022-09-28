@@ -52,7 +52,7 @@
   "boniato": ["boniato", "batata"],
   "yema_huevo": null,
   "pico": null,
-  "croissant": ["curasan"],
+  "croissant": ["curasan", "cruasan"],
   "pollo_especificar": null,
   "arroz_conejo": ["arroz_liebre"],
   "cocido": ["duro", "cocido", "sancocho", "hervido"],

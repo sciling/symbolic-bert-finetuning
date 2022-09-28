@@ -51,8 +51,9 @@ mus de chocolate;Mousse de chocolate
 mus;Mousse de yogur, natural;Mousse de yogur, con frutas
 queso asado con mojo;Queso asado con mojo picón
 vaso de samorejo;Salmorejo;None
-croisant;Croissant
-curasán;Croissant
+croisant;Croissant;None
+curasán;Croissant;None
+cruasán;Croissant;None
 piña;Piña
 perejil fresco;Perejil, fresco
 aceite de oliva;Aceite de oliva
