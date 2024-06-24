@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "ibm_watson_test"
+name = "symbolic_bert_finetuning"
 version = "0.1.0"
 description = ""
 authors = ["Vicent Alabau <valabau@sciling.com>"]

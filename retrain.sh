@@ -13,7 +13,7 @@ function get_multicorpus() {
 
 TRAIN_SENTIMENT=n
 if test "$TRAIN_SENTIMENT" = "y"; then
-  scp medp-gpu:ibm_watson_test/sentiment-database.json .
+  scp sbf-gpu:symbolic_bert_finetuning/sentiment-database.json .
   get_corpus sentiment-database.json | sort -u > manual-sentiment.csv
   poetry run src/bin/wn.py expand-entities --depth 2 --threshold 0.5  template.yaml --save-fn sentiment.csv --vars-fn neutral.vocab --vars-fn negative.vocab --vars-fn positive.vocab --max-syns 10000
   poetry run src/bin/classifier.py entities-to-dataset sentiment.csv sentiment-train.csv sentiment-dev.csv sentiment-test.csv --max-examples 20000 --entities "positive,negative,neutral" --dev 0.1 --test 0
@@ -21,7 +21,7 @@ if test "$TRAIN_SENTIMENT" = "y"; then
   poetry run src/bin/classifier.py train sentiment-train.csv sentiment-dev.csv --num-train-epochs 3 --output-dir train.dir
 fi
 
-scp medp-gpu:ibm_watson_test/mood-database.json .
+scp sbf-gpu:symbolic_bert_finetuning/mood-database.json .
 
 TRAIN_MULTILABEL=y
 if test "$TRAIN_MULTILABEL" = "n"; then
