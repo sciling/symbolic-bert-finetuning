@@ -1,32 +1,3 @@
-# ibm_watson_test
+# Symbolic BERT finetuning
 
-config.json
-```json
-{
-    "credentials": {
-        "version": "2017-05-26",
-        "versionV2": "2018-11-08",
-        "apikey": "XXXXXX",  # pragma: allowlist secret
-        "url": "https://XXXXXX.watson.cloud.ibm.com/instances/XXXXXX"
-    }
-}
-```
-
-```bash
-make virtual-environment
-poetry run src/bin/watool.py test tests/basic-test.yaml
-```
-
-Convert template into watson assistant compatible json:
-```bash
-poetry run src/bin/watool.py apply chatbots/cu2-contamos-contigo/sections/faq.yml --flatten --to-json
-```
-
-Describe text:
-```bash
-poetry run src/bin/wn.py describe  "hummus con aceite de ólivA virgen" data/foods-wd.csv data/dish-wd.csv data/entities-wn.csv
-```
-Search:
-```bash
-poetry run src/bin/wn.py search --db-fn food-db.json "arroz de pollo y conejo"
-```
+This project contains a series of tools to fine-tune BERT models on symbolic data. The main goal is to provide a simple way to fine-tune BERT models on symbolic data, such as knowledge graphs, ontologies, wikipedia databases, etc...
